@@ -1,13 +1,16 @@
 
-import Login from "./Login"
+import LoginForm from "./LoginForm";
+import RegisterForm from "./RegisterForm";
+
 
 const Authenticate = () => {
-  return (
-    <div className=" flex flex-col gap-2 p-12 border-spacing-2 border-white rounded-md">
-        <p>client component</p>
-        <Login />
-    </div>
-  )
-}
 
-export default Authenticate
+  return (
+    <div className="p-4 flex justify-around gap-4">
+   <RegisterForm /> 
+   <LoginForm />
+    </div>
+  );
+};
+
+export default Authenticate;
