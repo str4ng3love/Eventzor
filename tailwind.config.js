@@ -12,6 +12,9 @@ module.exports = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      borderRadius: {
+        smoothLR: "1rem 0rem 0rem 0rem",
+      },
       colors: {
         link: "var(--link)",
         link_active: "var(--link-active)",
@@ -19,6 +22,7 @@ module.exports = {
         secondary: "var(--secondary)",
         bg: "var(--bg)",
         bg_interactive: "var(--bg-interactive)",
+        bg_sidebar: "var(--bg-sidebar)",
         text: "var(--text)",
         interactive_text: "var(--interactive-text)",
       },
@@ -34,33 +38,22 @@ module.exports = {
             transform: "rotate(360deg)",
           },
         },
-        grow: {
+        fadeIn: {
           "0%": {
-            padding: "0rem 0rem",
-            "margin-top": "0rem",
             opacity: "0",
-            height: "0rem",
           },
-          "60%": {},
+
           "100%": {
-            padding: "1rem 0rem",
-            "margin-top": "1rem",
-            opacity: "1",
+            opacity: "100",
           },
         },
-        shrink: {
-          "100%": {
-            "margin-top": "0rem",
-            height: "0rem",
-            padding: "0rem",
-          },
-          "60%": {
-            height: "2.2rem",
-          },
+        fadeOut: {
           "0%": {
-            "margin-top": "1rem",
-            height: "2rem",
-            padding: "2rem",
+            opacity: "100",
+          },
+
+          "100%": {
+            opacity: "0",
           },
         },
         growAndShrink: {
@@ -89,9 +82,11 @@ module.exports = {
       },
       animation: {
         rotateRight: "rotateRight linear 10s infinite",
-        grow: "grow ease-in-out 500ms forwards",
-        shrink: "shrink ease-in-out 500ms forwards",
+        fadeIn: "fadeIn ease-in-out 500ms forwards",
+        fadeOut: "fadeOut ease-in-out 500ms forwards",
         growAndShrink: "growAndShrink ease-in-out 5s forwards",
+        pingSlower: "ping 6s cubic-bezier(0, 0, 0.2, 1) infinite",
+        pingSlower2: "ping 6s 3s cubic-bezier(0, 0, 0.2, 1) infinite",
       },
     },
   },
