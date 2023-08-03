@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient, Prisma } from "@prisma/client";
+import { NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
 import {prisma} from "../../../../lib/ConnectPrisma"
 
-export const handler = async (req: NextRequest) => {
+const handler = async (req: Request) => {
   if (req.method !== "POST" && !req.body) {
     return NextResponse.json({ error: "Bad Request" }, { status: 400 });
   }
@@ -115,4 +115,4 @@ export const handler = async (req: NextRequest) => {
   }
 };
 
-export { handler as POST };
+export { handler as POST, handler as GET };

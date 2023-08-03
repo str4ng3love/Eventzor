@@ -22,12 +22,13 @@ export const options: NextAuthOptions = {
         },
       },
       async authorize(credentials, req) {
+
         let user = await prisma.user.findFirst({
-          where: { username: credentials?.username },
+          where: { username: credentials?.username, AND: {password: credentials?.password} },
         });
-        console.log("user is: " + user?.email + " " + user);
 
         if (user?.username) {
+ 
           return user
         }
         return null;
