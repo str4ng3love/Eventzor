@@ -6,7 +6,7 @@ interface Props {
 
 const Logo = ({ text, Icon }: Props) => {
   return (
-    <div className="p-4 flex items-center gap-4 text-2xl dark:text-text">
+    <div className="p-4 flex items-center gap-4 text-2xl dark:text-text font-bold">
       <Icon />
       {text}
     </div>

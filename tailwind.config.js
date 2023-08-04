@@ -13,7 +13,9 @@ module.exports = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       borderRadius: {
-        smoothLR: "1rem 0rem 0rem 0rem",
+        smoothLT: "1rem 0rem 0rem 0rem",
+        smoothL: "1rem 0rem 0rem 1rem",
+        smoothR: "0rem 0.3rem 0.3rem 0rem",
       },
       colors: {
         link: "var(--link)",
@@ -25,6 +27,7 @@ module.exports = {
         bg_sidebar: "var(--bg-sidebar)",
         text: "var(--text)",
         interactive_text: "var(--interactive-text)",
+        text_inactive: "var(--inactive-text)"
       },
       boxShadow: {
         link: "var(--shadow-link)",

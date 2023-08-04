@@ -9,6 +9,7 @@
   --bg-sidebar:rgb(20, 20, 20);;
   --text: rgb(20, 20, 20);
   --interactive-text: rgb(240, 240, 240);
+  --inactive-text: rgb(177, 177, 177);
   --link: #3191ff;
   --link-active: #53a2fc;
   --primary: #161536;
@@ -25,6 +26,7 @@
     --text: rgb(235, 235, 235);
     --interactive-text: rgb(20, 20, 20);
     --shadowColor:var(--text);
+    --inactive-text: rgb(177, 177, 177);
   }
 }
 
