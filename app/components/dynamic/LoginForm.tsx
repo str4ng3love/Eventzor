@@ -1,47 +1,58 @@
 "use client";
-import { useState, Fragment, useEffect } from "react";
+import { useState, Fragment } from "react";
+import Notification from "../static/Notification";
+import { NotificationObj } from "../static/Notification";
 import Button from "./Button";
 import { Dialog, Transition } from "@headlessui/react";
-import Notification from "./Notification";
-import { NotificationObj } from "./Notification";
-const RegisterForm = () => {
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+
+
+
+const LoginForm = () => {
+
   const [isOpen, setOpen] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [confirm, setConfirm] = useState("");
-  const [email, setEmail] = useState("");
   const [notify, setNotify] = useState<NotificationObj>({
     error: false,
     message: "",
     show: false,
   });
-  const handleRegister = async (
-    username: string,
-    password: string,
-    confirm: string,
-    email: string
-  ) => {
-    const resp = await fetch("/api/auth/create", {
-      method: "POST",
-      headers: {
-        "Content-Type": "Application/Json",
-      },
-      body: JSON.stringify({ username, password, confirm, email }),
+  const router = useRouter()
+  const handleLogin = async (username: string, password: string) => {
+    const resp = await signIn("credentials", {
+      username,
+      password,
+      redirect: false,
     });
-    const respParsed = await resp.json();
-    respParsed.message
-      ? setNotify({ show: true, message: respParsed.message, error: false })
-      : setNotify({ show: true, message: respParsed.error, error: true });
+
+    if (resp?.error) {
+      setNotify({ error: true, show: true, message: "Invalid Credentials" });
+    } else {
+      setNotify({
+        error: false,
+        show: true,
+        message: "Logged in Successfully",
+      });
+      setTimeout(() => {
+        setOpen(false);
+        setNotify({ error: false, message: "", show: false });
+     
+        router.refresh()
+      }, 2000);
+    }
   };
 
   return (
     <>
-      <Button text="register" fn={() => setOpen(true)} />
+      <Button text="login" fn={() => setOpen(true)} />
+
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog
+          onClose={() => {setOpen(false);}}
           as="div"
           className={"z-50 relative"}
-          onClose={() => setOpen(false)}
         >
           <Transition.Child
             enter="ease-out duration-300"
@@ -55,27 +66,17 @@ const RegisterForm = () => {
             <div className="fixed inset-0 flex items-center justify-center p-4">
               <Dialog.Panel
                 className={
-                  "p-8 bg-bg_interactive text-text dark:bg-bg_interactive max-w-md w-[28rem]  shadow-md shadow-black"
+                  "p-8 bg-bg_interactive text-text dark:bg-bg_interactive shadow-md shadow-black"
                 }
               >
                 <Dialog.Title className={"p-2 font-bold text-xl text-center"}>
-                  Register
+                  Log In
                 </Dialog.Title>
                 <Dialog.Description className={"p-8 text-lg font-semibold"}>
-                  Create an account
+                  Log in to your account
                 </Dialog.Description>
                 <form onSubmit={(e) => e.preventDefault()}>
-                  <div className="p-4 flex justify-between ">
-                    <label className="p-1 min-w-[10ch] mr-2">
-                      Email adress
-                    </label>
-                    <input
-                      onChange={(e) => setEmail(e.currentTarget.value)}
-                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text"
-                      type="text"
-                    />
-                  </div>
-                  <div className="p-4 flex justify-between ">
+                  <div className="p-4 flex justify-between">
                     <label className="p-1 min-w-[10ch] mr-2">Username</label>
                     <input
                       onChange={(e) => setUsername(e.currentTarget.value)}
@@ -87,14 +88,6 @@ const RegisterForm = () => {
                     <label className="p-1 min-w-[10ch] mr-2">Password</label>
                     <input
                       onChange={(e) => setPassword(e.currentTarget.value)}
-                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text"
-                      type="password"
-                    />
-                  </div>
-                  <div className="p-4 flex justify-between ">
-                    <label className="p-1 min-w-[10ch] mr-2">Confirm</label>
-                    <input
-                      onChange={(e) => setConfirm(e.currentTarget.value)}
                       className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text"
                       type="password"
                     />
@@ -111,10 +104,8 @@ const RegisterForm = () => {
 
                 <div className="flex justify-around pt-8">
                   <Button
-                    text="register"
-                    fn={() => {
-                      handleRegister(username, password, confirm, email);
-                    }}
+                    text="log in"
+                    fn={() => handleLogin(username, password)}
                   />
                   <Button text="Cancel" fn={() => setOpen(false)}></Button>
                 </div>
@@ -127,4 +118,4 @@ const RegisterForm = () => {
   );
 };
 
-export default RegisterForm;
+export default LoginForm;

@@ -2,7 +2,7 @@
 import { Combobox, Transition } from "@headlessui/react";
 import { useState, Fragment, useRef } from "react";
 import { FaSearch } from "react-icons/fa";
-import Icon from "../../static/Icon";
+import Icon from "../static/Icon";
 const Search = () => {
   const inputEl = useRef<HTMLInputElement>(null);
   const [selected, setSelected] = useState();

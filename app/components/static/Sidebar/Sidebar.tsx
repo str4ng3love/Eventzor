@@ -1,7 +1,7 @@
-import Logo from "../../static/Logo"
-import Nav from "./Nav"
-import Notifications from "./Notifications"
-import Search from "./Search"
+import Logo from "../Logo"
+import Nav from "../../dynamic/Sidebar/Nav"
+import Notifications from "../../dynamic/Sidebar/Notifications"
+import Search from "../../dynamic/Search"
 import {FaIcons} from 'react-icons/fa'
 
 const Sidebar = () => {

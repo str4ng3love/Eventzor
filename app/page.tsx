@@ -1,8 +1,8 @@
 import { getServerSession } from "next-auth";
 import Authenticate from "./components/Authenticate";
 import { options } from "./api/auth/[...nextauth]/options";
-import Logout from "./components/Logout";
-import Button from "./components/Button";
+import Logout from "./components/dynamic/Logout";
+import Button from "./components/dynamic/Button";
 
 export default async function Home() {
 

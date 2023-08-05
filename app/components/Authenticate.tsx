@@ -1,6 +1,6 @@
 
-import LoginForm from "./LoginForm";
-import RegisterForm from "./RegisterForm";
+import LoginForm from "./dynamic/LoginForm";
+import RegisterForm from "./dynamic/RegisterForm";
 
 
 const Authenticate = () => {

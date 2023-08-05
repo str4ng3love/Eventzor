@@ -39,7 +39,7 @@ model Session {
 
 model User {
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  name          String?
+  name          String @unique
   email         String?   
   emailVerified DateTime?
   image         String?
@@ -47,6 +47,7 @@ model User {
   password      String
   accounts      Account[]
   sessions      Session[]
+  events        Event[]
   @@unique([username])
 }
 
@@ -58,3 +59,24 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+
+model Event {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  title String
+  description String
+  tickets Int
+  ticketsSold Int @default(0)
+  date DateTime 
+  location String
+  status Status @default(active)
+  organizer User @relation(fields: [organizerName], references: [name] )
+  organizerName String
+}
+
+enum Status {
+  active
+  inactive
+  paused
+  canceled
+}
+
