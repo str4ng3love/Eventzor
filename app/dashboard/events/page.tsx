@@ -6,8 +6,10 @@ import { Heading2, Heading4 } from "@/app/components/static/Heading"
 const page = () => {
   return (
     <>
+      <div className="flex flex-col pl-10">
       <Heading2 text="events" />
       <Heading4 text="Browse and menage events"/>
+      </div>
       <EventBrowser />
     </>
   )

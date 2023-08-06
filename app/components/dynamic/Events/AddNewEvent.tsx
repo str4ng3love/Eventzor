@@ -16,9 +16,10 @@ enum FormActionKind {
   INPUT_TITLE = "Input event title",
   INPUT_DESC = "Input event description",
   INPUT_TICKETS = "Input amount of available tickets",
-  INPUT_DATE = "Date of the event",
   INPUT_LOCATION = "Location at which the event will take place",
   INPUT_STATUS = "Status of the event",
+  INPUT_ESTART = "Events starting time",
+  INPUT_EEND = "Events ending time",
 }
 interface InputAction {
   type: FormActionKind;
@@ -28,7 +29,8 @@ interface InputState {
   title: string;
   description: string;
   tickets: number;
-  date: number;
+  startDate: number;
+  endDate: number;
   location: string;
   status: Status;
 }
@@ -49,10 +51,16 @@ const reducer = (state: InputState, action: InputAction) => {
         description: payload as string,
       };
     }
-    case FormActionKind.INPUT_DATE: {
+    case FormActionKind.INPUT_ESTART: {
       return {
         ...state,
-        date: payload as number,
+        startDate: payload as number,
+      };
+    }
+    case FormActionKind.INPUT_EEND: {
+      return {
+        ...state,
+        endDate: payload as number,
       };
     }
     case FormActionKind.INPUT_LOCATION: {
@@ -85,7 +93,8 @@ const AddNewEvent = () => {
     status: Status.active,
     tickets: 0,
     location: "",
-    date: Date.now(),
+    startDate: 0,
+    endDate: 0,
   });
 
   const handleCreate = async (state: InputState) => {
@@ -98,7 +107,7 @@ const AddNewEvent = () => {
         body: JSON.stringify(state),
       });
       const dat = await resp.json();
-      console.log(dat)
+      console.log(dat);
       if (dat.error) {
         setNotify({ error: true, show: true, message: dat.error });
       } else {
@@ -160,17 +169,34 @@ const AddNewEvent = () => {
                       className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full resize-none h-80"
                     />
                   </div>
+
                   <div className="p-4 flex justify-between ">
-                    <label className="p-1 min-w-[10ch] mr-2">Date</label>
+                    <label className="p-1 min-w-[10ch] mr-2">
+                      Event Starts
+                    </label>
+                    <input
+                      onChange={(e) => {
+                        dispatch({
+                          type: FormActionKind.INPUT_ESTART,
+                          payload: e.currentTarget.value,
+                        });
+                        console.log(e.currentTarget.value);
+                      }}
+                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full"
+                      type="datetime-local"
+                    />
+                  </div>
+                  <div className="p-4 flex justify-between ">
+                    <label className="p-1 min-w-[10ch] mr-2">Event Ends</label>
                     <input
                       onChange={(e) =>
                         dispatch({
-                          type: FormActionKind.INPUT_DATE,
+                          type: FormActionKind.INPUT_EEND,
                           payload: e.currentTarget.value,
                         })
                       }
                       className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full"
-                      type="date"
+                      type="datetime-local"
                     />
                   </div>
                   <div className="p-4 flex justify-between ">

@@ -18,8 +18,10 @@ async function handler(req: Request) {
         body.location.length < 3 ||
         typeof body.tickets != "string" ||
         body.tickets.length < 0 ||
-        typeof body.date != "string" ||
-        body.date.length < 0
+        typeof body.startDate != "string" ||
+        body.startDate.length < 0 ||
+        typeof body.endDate != "string" ||
+        body.endDate.length < 0
       ) {
         return NextResponse.json(
           { error: "Please provide correct/missing values" },
@@ -32,7 +34,8 @@ async function handler(req: Request) {
           description: body.description,
           location: body.location,
           tickets: parseInt(body.tickets),
-          date: new Date(body.date),
+          startDate:new Date(body.startDate),
+          endDate:new Date(body.endDate),
           organizerName: session.user.name,
         },
       });
