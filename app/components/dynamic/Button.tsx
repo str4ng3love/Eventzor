@@ -4,8 +4,9 @@ interface Props {
   text: string;
   fn?: (e: React.MouseEvent) => void;
   link?: string;
+
 }
-const Button = ({ fn, text, link }: Props) => {
+const Button = ({ fn, text, link}: Props) => {
   return (
     <>
       {fn ? (

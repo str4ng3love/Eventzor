@@ -8,7 +8,7 @@ const page = () => {
     <>
       <div className="flex flex-col pl-10">
       <Heading2 text="events" />
-      <Heading4 text="Browse and menage events"/>
+      <Heading4 text="Browse and manage events"/>
       </div>
       <EventBrowser />
     </>

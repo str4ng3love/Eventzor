@@ -5,7 +5,7 @@ interface Props {
   Icon: IconType;
   text: string;
   href: string;
-  fn: (e: React.MouseEvent, text: string) => void;
+  fn: (e: React.MouseEvent, href: string) => void;
   textColor?: string;
   selected?: string;
   label:string;
@@ -21,11 +21,11 @@ const NavItem = ({
 }: Props) => {
   return (
     <Link
-      onClick={(e) => fn(e, text)}
+      onClick={(e) => fn(e, href)}
       href={href}
       aria-label={label}
-      className={`${textColor} w-full mb-1 flex items-center under ${selected === text ? "after:opacity-100 text-white" : "after:opacity-0" }
-      dark:after:bg-white after:h-5 after:rounded-smoothR dark:hover:text-white text-sm after:absolute after:content-[''] after:w-2 hover:rounded-smoothR
+      className={`${textColor} w-full mb-1 flex items-center under ${href === selected ? "after:opacity-100 text-white" : "after:opacity-0" }
+      after:bg-white after:h-5 after:rounded-smoothR hover:text-white text-sm after:absolute after:content-[''] after:w-2 hover:rounded-smoothR
 after:-translate-x-8`}
     >
       <span className={"text-xl p-2"}>

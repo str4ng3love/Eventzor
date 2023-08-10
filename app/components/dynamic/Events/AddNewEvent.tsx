@@ -98,6 +98,20 @@ const AddNewEvent = () => {
   });
 
   const handleCreate = async (state: InputState) => {
+    if (state.tickets < 0) {
+      return setNotify({
+        error: true,
+        show: true,
+        message: "Amount of tickets cannot be negative.",
+      });
+    }
+    if(state.endDate < state.startDate){
+      return setNotify({
+        error: true,
+        show: true,
+        message: "Event cannot end before it has started.",
+      });
+    }
     try {
       const resp = await fetch("/api/events", {
         method: "POST",
@@ -118,8 +132,8 @@ const AddNewEvent = () => {
     }
   };
   return (
-    <>
-      <Button text="add event" fn={() => setShow(true)} />
+    <div>
+      <Button text="Edd Event" fn={() => setShow(true)} />
       <Transition appear show={show} as={Fragment}>
         <Dialog as="div" onClose={() => setShow(false)}>
           <Transition.Child
@@ -134,7 +148,7 @@ const AddNewEvent = () => {
             <div className="fixed inset-0 flex items-center justify-center p-4 backdrop-blur-sm">
               <Dialog.Panel
                 className={
-                  "p-8 bg-bg_interactive text-text dark:bg-bg_interactive max-w-md w-[28rem]  shadow-md shadow-black"
+                  "relative p-8 bg-bg_interactive text-text dark:bg-bg_interactive  w-[30rem] shadow-md shadow-black overflow-y-scroll"
                 }
               >
                 <Dialog.Title className={"p-2 font-bold text-xl text-center"}>
@@ -144,7 +158,7 @@ const AddNewEvent = () => {
                   Create new Event
                 </Dialog.Description>
                 <form onSubmit={(e) => e.preventDefault()}>
-                  <div className="p-4 flex justify-between ">
+                  <div className="p-4 flex justify-between z-20 ">
                     <label className="p-1 min-w-[10ch] mr-2">Title</label>
                     <input
                       onChange={(e) =>
@@ -153,12 +167,14 @@ const AddNewEvent = () => {
                           payload: e.currentTarget.value,
                         })
                       }
-                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full"
+                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
                       type="text"
                     />
                   </div>
                   <div className="p-4 flex justify-between ">
-                    <label className="p-1 min-w-[10ch] mr-2">Description</label>
+                    <label className="p-1 min-w-[10ch] mr-2 ">
+                      Description
+                    </label>
                     <textarea
                       onChange={(e) =>
                         dispatch({
@@ -166,7 +182,7 @@ const AddNewEvent = () => {
                           payload: e.currentTarget.value,
                         })
                       }
-                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full resize-none h-80"
+                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-24 resize-none "
                     />
                   </div>
 
@@ -175,6 +191,7 @@ const AddNewEvent = () => {
                       Event Starts
                     </label>
                     <input
+                      min={new Date().toISOString().slice(0, -8)}
                       onChange={(e) => {
                         dispatch({
                           type: FormActionKind.INPUT_ESTART,
@@ -182,20 +199,25 @@ const AddNewEvent = () => {
                         });
                         console.log(e.currentTarget.value);
                       }}
-                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full"
+                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
                       type="datetime-local"
                     />
                   </div>
                   <div className="p-4 flex justify-between ">
                     <label className="p-1 min-w-[10ch] mr-2">Event Ends</label>
                     <input
+                      min={
+                        state.startDate
+                          ? new Date(state.startDate).toISOString().slice(0, -8)
+                          : new Date().toISOString().slice(0, -8)
+                      }
                       onChange={(e) =>
                         dispatch({
                           type: FormActionKind.INPUT_EEND,
                           payload: e.currentTarget.value,
                         })
                       }
-                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full"
+                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
                       type="datetime-local"
                     />
                   </div>
@@ -208,7 +230,7 @@ const AddNewEvent = () => {
                           payload: e.currentTarget.value,
                         })
                       }
-                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full"
+                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
                       type="text"
                     />
                   </div>
@@ -223,7 +245,7 @@ const AddNewEvent = () => {
                           payload: e.currentTarget.value,
                         })
                       }
-                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full"
+                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
                       type="number"
                       min={0}
                     />
@@ -251,7 +273,7 @@ const AddNewEvent = () => {
           </Transition.Child>
         </Dialog>
       </Transition>
-    </>
+    </div>
   );
 };
 

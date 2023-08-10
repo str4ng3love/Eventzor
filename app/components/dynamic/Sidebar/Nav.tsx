@@ -2,20 +2,24 @@
 import { FaHouseUser, FaCog } from "react-icons/fa";
 import { BsCalendar3EventFill } from "react-icons/bs";
 import { TbFileSpreadsheet } from "react-icons/tb";
+import { usePathname } from 'next/navigation'
 
 import { useEffect, useState } from "react";
 import NavItem from "./NavItem";
 
 const Nav = () => {
   const [selected, setSelected] = useState('home');
-
+  const currentPath = usePathname()
+  useEffect(()=>{
+    setSelected(currentPath)
+  }, [])
   return (
     <nav className="flex flex-col items-center justify-start w-full py-8">
       <NavItem
         text="home"
         Icon={FaHouseUser}
         href="/dashboard"
-        fn={(e, text) =>{setSelected(text)}}
+        fn={(e, href) =>{setSelected(href)}}
         selected={selected}
         label="navigate to dashboard"
       />
@@ -23,7 +27,7 @@ const Nav = () => {
         text="events"
         Icon={BsCalendar3EventFill}
         href="/dashboard/events"
-        fn={(e, text) =>{setSelected(text)}}
+        fn={(e, href) =>{setSelected(href)}}
         selected={selected}
         label="navigate to events page"
       />
@@ -31,7 +35,7 @@ const Nav = () => {
         text="orders"
         Icon={TbFileSpreadsheet}
         href="/dashboard/orders"
-        fn={(e, text) =>{setSelected(text)}}
+        fn={(e, href) =>{setSelected(href)}}
         selected={selected}
         label="navigate to orders page"
       />
@@ -39,7 +43,7 @@ const Nav = () => {
         text="settings"
         Icon={FaCog}
         href="/dashboard/settings"
-        fn={(e, text) =>{setSelected(text)}}
+        fn={(e, href) =>{setSelected(href)}}
         selected={selected}
         label="navigate to settings page"
       />
