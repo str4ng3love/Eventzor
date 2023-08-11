@@ -98,12 +98,21 @@ const AddNewEvent = () => {
   });
 
   const handleCreate = async (state: InputState) => {
+    const date = new Date()
     if (state.tickets < 0) {
       return setNotify({
         error: true,
         show: true,
         message: "Amount of tickets cannot be negative.",
       });
+    }
+
+    if(state.startDate < date.getHours() - 1 ){
+      return setNotify({
+        error:true,
+        show:true,
+        message:'Event cannot start in the past.'
+      })
     }
     if(state.endDate < state.startDate){
       return setNotify({
@@ -121,7 +130,7 @@ const AddNewEvent = () => {
         body: JSON.stringify(state),
       });
       const dat = await resp.json();
-      console.log(dat);
+
       if (dat.error) {
         setNotify({ error: true, show: true, message: dat.error });
       } else {
@@ -191,7 +200,8 @@ const AddNewEvent = () => {
                       Event Starts
                     </label>
                     <input
-                      min={new Date().toISOString().slice(0, -8)}
+                    defaultValue={new Date().toISOString().slice(0, -8)}
+                    
                       onChange={(e) => {
                         dispatch({
                           type: FormActionKind.INPUT_ESTART,
@@ -206,11 +216,8 @@ const AddNewEvent = () => {
                   <div className="p-4 flex justify-between ">
                     <label className="p-1 min-w-[10ch] mr-2">Event Ends</label>
                     <input
-                      min={
-                        state.startDate
-                          ? new Date(state.startDate).toISOString().slice(0, -8)
-                          : new Date().toISOString().slice(0, -8)
-                      }
+                      defaultValue={new Date().toISOString().slice(0, -8)}
+                     
                       onChange={(e) =>
                         dispatch({
                           type: FormActionKind.INPUT_EEND,
@@ -247,7 +254,8 @@ const AddNewEvent = () => {
                       }
                       className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
                       type="number"
-                      min={0}
+                      defaultValue={1}
+                      min={1}
                     />
                   </div>
                   <Notification

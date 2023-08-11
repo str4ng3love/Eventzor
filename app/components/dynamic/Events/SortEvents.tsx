@@ -1,15 +1,18 @@
 "use client";
-import { Menu, Transition } from "@headlessui/react";
 
-import { useState, Fragment, useRef, useEffect } from "react";
+import { Menu, Transition } from "@headlessui/react";
+import { Event } from "@prisma/client";
+import React, { useState, Fragment } from "react";
 
 interface Props {
-  events?: any;
+  events?: Event[];
+  fn: (e: React.MouseEvent) => void;
 }
 
-const SortEvents = ({ events }: Props) => {
+const SortEvents = ({ events, fn }: Props) => {
   return (
     <div>
+      {/* Prop `id` did not match. Server: "headlessui-menu-button-:R6crb9mcq:" Client: "headlessui-menu-button-:Rpjdd6pj9:"  || Next.js Error as of 10.08.23, should be fixed in upcoming release.||Resolved */}
       <Menu>
         <Menu.Button
           className={`first-letter:capitalize min-w-[10ch] hover:-translate-y-1 hover:scale-105 font-bold p-2 bg-link text-interactive_text dark:text-text rounded-xl hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all 300ms`}
@@ -31,6 +34,9 @@ const SortEvents = ({ events }: Props) => {
             <Menu.Item>
               {({ active }) => (
                 <span
+                  onClick={(e) => {
+                    fn(e);
+                  }}
                   className={`${
                     active
                       ? "bg-text text-interactive_text p-2"
@@ -44,6 +50,9 @@ const SortEvents = ({ events }: Props) => {
             <Menu.Item>
               {({ active }) => (
                 <span
+                  onClick={(e) => {
+                    fn(e);
+                  }}
                   className={`${
                     active
                       ? "bg-text text-interactive_text p-2"
@@ -57,6 +66,9 @@ const SortEvents = ({ events }: Props) => {
             <Menu.Item>
               {({ active }) => (
                 <span
+                  onClick={(e) => {
+                    fn(e);
+                  }}
                   className={`${
                     active
                       ? "bg-text text-interactive_text p-2"
@@ -70,6 +82,9 @@ const SortEvents = ({ events }: Props) => {
             <Menu.Item>
               {({ active }) => (
                 <span
+                  onClick={(e) => {
+                    fn(e);
+                  }}
                   className={`${
                     active
                       ? "bg-text text-interactive_text p-2"
@@ -83,6 +98,9 @@ const SortEvents = ({ events }: Props) => {
             <Menu.Item>
               {({ active }) => (
                 <span
+                  onClick={(e) => {
+                    fn(e);
+                  }}
                   className={`${
                     active
                       ? "bg-text text-interactive_text p-2"

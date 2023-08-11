@@ -1,18 +1,29 @@
 "use client";
 import { BsCalendar3EventFill } from "react-icons/bs";
 import { Dialog, Transition } from "@headlessui/react";
-
-import { useState, Fragment } from "react";
+import Notification from "../../static/Notification";
+import React, { useState, Fragment } from "react";
 import ButtonWithIcon from "../ButtonWithIcon";
 import Button from "../Button";
 
-const FilterEventsByDate = () => {
+interface Props {
+  fn:(e:React.MouseEvent, dates:{ startDate: string, endDate: string}) => void;
+  title:string;
+}
+
+const FilterEventsByDate = ({fn, title}:Props) => {
   const [show, setShow] = useState(false);
-  const [dates, setDates] = useState({ startDate: "", endDate: "" });
+  const [dates, setDates] = useState({ startDate: new Date().toISOString().slice(0, -8), endDate: new Date().toISOString().slice(0, -8) });
+  const [notify, setNotify] = useState({
+    show: false,
+    message: "",
+    error: false,
+  });
 
   return (
-    <div>
-      <span onClick={()=>setShow(true)}><ButtonWithIcon Icon={BsCalendar3EventFill} size="1.5em" /></span>
+    <div  className="relative" >
+      <span title={title} onClick={()=>setShow(true)}><ButtonWithIcon Icon={BsCalendar3EventFill} size="1.5em"/></span>
+  
       <Transition appear show={show} as={Fragment}>
         <Dialog as="div" onClose={() => setShow(false)}>
           <Transition.Child
@@ -40,14 +51,17 @@ const FilterEventsByDate = () => {
                         From
                       </label>
                       <input
-                        min={new Date().toISOString().slice(0, -8)}
-                        onChange={(e) =>
+                  
+                        value={dates.startDate}
+                        onChange={(e) =>{
+                          let target = e.currentTarget.value
+                          if(!target) return null
                           setDates((prev) => {
                             return {
                               ...prev,
-                              startDate: e.currentTarget.value,
-                            };
-                          })
+                              startDate: target,
+                            };})
+                        }
                         }
                         className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
                         type="datetime-local"
@@ -58,6 +72,7 @@ const FilterEventsByDate = () => {
                         To
                       </label>
                       <input
+                      value={dates.endDate}
                         min={
                           dates.startDate
                             ? new Date(dates.startDate)
@@ -65,23 +80,36 @@ const FilterEventsByDate = () => {
                                 .slice(0, -8)
                             : new Date().toISOString().slice(0, -8)
                         }
-                        onChange={(e) =>
+                        onChange={(e) =>{
+                          let target = e.currentTarget.value
+                          if(!target) return null
                           setDates((prev) => {
                             return {
                               ...prev,
-                              endDate: e.currentTarget.value,
-                            };
-                          })
-                        }
+                              endDate: target,
+                            };})
+                        }}
                         className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
                         type="datetime-local"
                       />
                     </div>
+                    <Notification
+                    message={notify.message}
+                    show={notify.show}
+                    error={notify.error}
+                    onAnimEnd={() =>
+                      setNotify({ error: false, message: "", show: false })
+                    }
+                  />
                     <div className="p-4 mt-4 flex justify-evenly w-full ">
                     <Button
                       text="filter"
-                      fn={() => {
-                        // handleCreate(state);
+                      fn={(e) => {
+                        if(dates.endDate < dates.startDate){
+                          setNotify({error:true, show:true, message:"Invalid Parametes, Second Field Should Container Later Date"})
+                        } else {
+                          fn(e, dates)
+                        }
                       }}
                     />
                     <Button text="Cancel" fn={() => setShow(false)} />
