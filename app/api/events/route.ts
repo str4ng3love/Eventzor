@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
 import { prisma } from "../../../lib/ConnectPrisma";
 import { getServerSession } from "next-auth";
 import { options } from "../auth/[...nextauth]/options";
 
 async function handler(req: Request) {
+  const session = await getServerSession(options);
   if (req.method == "POST") {
-    const session = await getServerSession(options);
     if (session?.user?.name) {
       const body = await req.json();
 
@@ -18,43 +19,77 @@ async function handler(req: Request) {
         body.location.length < 3 ||
         typeof body.tickets != "string" ||
         body.tickets.length < 0 ||
-        typeof body.startDate != "string" ||
-        body.startDate.length < 0 ||
-        typeof body.endDate != "string" ||
-        body.endDate.length < 0
+        !body.eventDate ||
+        !body.closingDate
       ) {
         return NextResponse.json(
           { error: "Please provide correct/missing values" },
           { status: 200 }
         );
       }
-      const event = await prisma.event.create({
-        data: {
-          title: body.title,
-          description: body.description,
-          location: body.location,
-          tickets: parseInt(body.tickets),
-          startDate:new Date(body.startDate),
-          endDate:new Date(body.endDate),
-          organizerName: session.user.name,
-        },
-      });
-
-      if (event) {
+      try {
+        const event = await prisma.event.create({
+          data: {
+            title: body.title,
+            description: body.description,
+            location: body.location,
+            tickets: parseInt(body.tickets),
+            eventDate: new Date(body.eventDate),
+            closingDate: new Date(body.closingDate),
+            organizerName: session.user.name,
+          },
+        });
+        if (event) {
+          return NextResponse.json(
+            { message: "Event created successfully" },
+            { status: 200 }
+          );
+        } else {
+          return NextResponse.json(
+            { error: "Could not create the event" },
+            { status: 200 }
+          );
+        }
+      } catch (error) {
         return NextResponse.json(
-          { message: "Event created successfully" },
-          { status: 200 }
-        );
-      } else {
-        return NextResponse.json(
-          { error: "Could not create the event" },
-          { status: 200 }
+          { error: "Server Internal Error" },
+          { status: 500 }
         );
       }
+    } else {
+      return NextResponse.json({ error: "Not Authorized" }, { status: 401 });
+    }
+  } else if (req.method == "DELETE") {
+    if (!session?.user?.name) {
+      return NextResponse.json({ error: "Not Authorized" }, { status: 401 });
+    }
+
+    try {
+      const body = await req.json();
+      const deletedEvent = await prisma.event.delete({
+        where: {
+          id: body.id,
+        },
+      });
+      if (!deletedEvent) {
+        return NextResponse.json(
+          { error: "Internal server error" },
+          { status: 500 }
+        );
+      }
+      return NextResponse.json({ message: "Event deleted successfully" });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        console.log(error)
+        return NextResponse.json({ error: error.message }, { status: 400 });
+      }
+      return NextResponse.json(
+        { error: "Internal server error" },
+        { status: 500 }
+      );
     }
   } else {
-    const events = await prisma.event.findMany()
-    
+    const events = await prisma.event.findMany();
 
     if (events) {
       return NextResponse.json(events);
@@ -62,4 +97,4 @@ async function handler(req: Request) {
   }
 }
 
-export { handler as GET, handler as POST };
+export { handler as GET, handler as POST, handler as DELETE };

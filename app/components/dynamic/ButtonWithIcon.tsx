@@ -6,15 +6,16 @@ interface Props {
   fn?: (e: React.MouseEvent) => void;
   link?: string;
   size?:string;
+  bgColor?: string;
 
 
 }
-const ButtonWithIcon = ({Icon, fn, link, size='2em'}: Props) => {
+const ButtonWithIcon = ({Icon, fn, link, size='2em', bgColor='bg-link'}: Props) => {
   return (
     <>
       {fn ? (
         <button
-          className="first-letter:capitalize hover:-translate-y-1 hover:scale-105 font-bold p-2 bg-link text-interactive_text dark:text-text rounded-xl hover:bg-link_active hover:shadow-link hover:text-interactive_text  dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all 300ms"
+          className={`first-letter:capitalize hover:-translate-y-1  hover:scale-105 font-bold p-2 text-interactive_text dark:text-text rounded-xl hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all 300ms ${bgColor}`}
           onClick={(e) => fn(e)}
         >
             
@@ -23,13 +24,13 @@ const ButtonWithIcon = ({Icon, fn, link, size='2em'}: Props) => {
       ) : link ? (
         <Link
           href={link}
-          className="text-center first-letter:capitalize  hover:-translate-y-1 hover:scale-105 font-bold p-2 bg-link text-interactive_text dark:text-text rounded-xl hover:bg-link_active hover:shadow-link hover:text-interactive_text  dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all 300ms"
+          className={`first-letter:capitalize hover:-translate-y-1 hover:scale-105 font-bold p-2 text-interactive_text dark:text-text rounded-xl hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all 300ms ${bgColor}`}
         >
          <Icon size={size}/>
         </Link>
       ) : (
         <><button
-        className="flex justify-end first-letter:capitalize  hover:-translate-y-1 hover:scale-105 font-bold p-2 bg-link text-interactive_text dark:text-text rounded-xl hover:bg-link_active hover:shadow-link hover:text-interactive_text  dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all 300ms"
+        className={`first-letter:capitalize hover:-translate-y-1 hover:scale-105 font-bold p-2 text-interactive_text dark:text-text rounded-xl hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all 300ms ${bgColor}`}
         
       >
        

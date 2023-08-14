@@ -1,12 +1,15 @@
 "use client";
-
 import AddNewEvent from "./AddNewEvent";
 import { Event } from "@prisma/client";
 import FilterEventsByDate from "./FilterEventsByDate";
-import SortEvents from "./SortEvents";
-import { useState, useEffect } from "react";
+import DropDown from "../DropDown";
+import React, { useState } from "react";
 import { sortEvents } from "@/helpers/sort";
 import ResetFilter from "./ResetFilter";
+import Notification from "../../static/Notification";
+import { NotificationObj } from "../../static/Notification";
+import EventComponent from "./EventComponent";
+
 interface Props {
   events: Event[];
 }
@@ -15,10 +18,58 @@ const EventBrowser = ({ events }: Props) => {
   const [eventsArr, setEventsArr] = useState(events);
   const [sorter, setSorter] = useState("event");
   const [filtered, setFiltered] = useState<Event[] | null>();
+  const [notify, setNotify] = useState<NotificationObj>();
+
+  const SortEvents = (e: React.MouseEvent) => {
+    let target = e.currentTarget.innerHTML.toLowerCase();
+    if (!target) {
+      return null;
+    }
+    if (sorter !== target) {
+      setSorter(target);
+      setEventsArr((prev) => {
+        return [...sortEvents(prev, target)];
+      });
+    } else {
+      setEventsArr((prev) => {
+        return [...prev.reverse()];
+      });
+    }
+  };
+
+  const deleteEvent = async (id: string) => {
+
+    try {
+      const cachedEntry = eventsArr.filter(e=> e.id == id)
+      setEventsArr((prev) => [...prev.filter((e) => e.id != id)]);
+
+      const resp = await fetch("/api/events", {
+        method: "DELETE",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ id }),
+      });
+      const message = await resp.json();
+      if (resp.ok) {
+        setNotify({ error: false, show: true, message: message.message });
+
+      } else if(message.error) {
+        setEventsArr(prev => [...prev, ...cachedEntry] )
+        setNotify({ error: true, show: true, message: message.error });
+      }
+    } catch (error) {
+
+      setNotify({ error: true, show: true, message: "Something went wrong" });
+    }
+  };
+  const editEvent = ()=>{
+// todo: edit fn
+  }
   return (
     <>
       <div className="my-4 px-8 flex flex-col">
-        <div className="flex justify-end gap-4">
+        <div className="flex justify-end gap-4 text-sm items-center">
           {/* todo filter component and sort */}
           {filtered ? (
             <div className="flex bg-link rounded-xl gap-2">
@@ -33,39 +84,19 @@ const EventBrowser = ({ events }: Props) => {
                   setFiltered([
                     ...eventsArr.filter((event) => {
                       return (
-                        event.startDate >= new Date(dates.startDate) &&
-                        event.startDate <= new Date(dates.endDate)
+                        event.eventDate >= new Date(dates.startDate) &&
+                        event.eventDate <= new Date(dates.endDate)
                       );
                     }),
                   ]);
                 }}
               />
-              <SortEvents
+              <DropDown
+                title="Sort by"
                 fn={(e) => {
-                  let target = e.currentTarget.innerHTML.toLowerCase();
-                  
-                  if (!target) {
-                    return null;
-                  }
-                  console.log(sorter === target);
-                  if (sorter === target) {
-                    setFiltered((prev) => {
-                      if (prev) {
-                        return [...prev.reverse()];
-                      }
-                    });
-                  } else {
-                    console.log(target)
-                    setSorter(target);
-
-                    setFiltered((prev) => {
-                      if (prev) {
-                        return [...sortEvents(prev, target)];
-                      }
-                    });
-                  }
-                  console.log(filtered);
+                  SortEvents(e);
                 }}
+                items={["date", "location", "organizer", "event", "tickets"]}
               />
             </div>
           ) : (
@@ -76,42 +107,30 @@ const EventBrowser = ({ events }: Props) => {
                   setFiltered([
                     ...eventsArr.filter((event) => {
                       return (
-                        event.startDate >= new Date(dates.startDate) &&
-                        event.startDate <= new Date(dates.endDate)
+                        event.eventDate >= new Date(dates.startDate) &&
+                        event.eventDate <= new Date(dates.endDate)
                       );
                     }),
                   ]);
                 }}
               />
-              <SortEvents
+              <DropDown
+                title="Sort by"
                 fn={(e) => {
-                  let target = e.currentTarget.innerHTML.toLowerCase();
-                  if (!target) {
-                    return null;
-                  }
-                  if (sorter !== target) {
-                    setSorter(target);
-                    setEventsArr((prev) => {
-                      return [...sortEvents(prev, target)];
-                    });
-                  } else {
-                    setEventsArr((prev) => {
-                      return [...prev.reverse()];
-                    });
-                  }
+                  SortEvents(e);
                 }}
+                items={["date", "location", "organizer", "event", "tickets"]}
               />
             </>
           )}
 
           <AddNewEvent />
         </div>
-        <table className="my-8  w-full">
-          <tbody>
-            <tr className="border-b-2 border-black/25 bg-black/40">
-              <th className="p-2 text-start">Event</th>
+        <table className="my-8  w-full text-sm table">
+          <tbody className="">
+            <tr className="border-b-2 border-black/25 bg-black/40 table-row">
               <th className="p-2 text-start">Date</th>
-              <th className="p-2 text-start">Location</th>
+              <th className="p-2 text-start">Event</th>
               <th className="p-2 text-start">Tickets Remaining</th>
               <th className="p-2 text-start">Closing Date</th>
               <th className="p-2 text-start">Organizer</th>
@@ -120,49 +139,29 @@ const EventBrowser = ({ events }: Props) => {
             {eventsArr.length > 0 ? (
               <>
                 {filtered
-                  ? filtered.map((el, index) => (
-                      <tr className="border-b-2 border-black/25" key={index}>
-                        <td className="p-2">
-                          {el.title} <br /> {el.location}
-                        </td>
-                        <td className="p-2">
-                          {el.startDate.toDateString()} <br />
-                          {el.startDate.toTimeString().slice(0, 5)}
-                        </td>
-                        <td className="p-2">{el.location}</td>
-                        <td className="p-2">
-                          {el.tickets - el.ticketsSold} / {el.tickets}
-                        </td>
-                        <td className="p-2">
-                          {el.endDate.toDateString()}
-                          <br />
-                          {el.endDate.toTimeString().slice(0, 5)}
-                        </td>
-                        <td className="p-2">{el.organizerName}</td>
-                        <td>menu</td>
-                      </tr>
+                  ? filtered.map((event) => (
+                      <EventComponent
+                        key={event.id}
+                        {...event}
+                        delFn={() => {
+                          deleteEvent(event.id);
+                        }}
+                        editFn={() => {
+                          editEvent();
+                        }}
+                      />
                     ))
-                  : eventsArr.map((event, index) => (
-                      <tr className="border-b-2 border-black/25" key={index}>
-                        <td className="p-2">
-                          {event.title} <br /> {event.location}
-                        </td>
-                        <td className="p-2">
-                          {event.startDate.toDateString()} <br />
-                          {event.startDate.toTimeString().slice(0, 5)}
-                        </td>
-                        <td className="p-2">{event.location}</td>
-                        <td className="p-2">
-                          {event.tickets - event.ticketsSold} / {event.tickets}
-                        </td>
-                        <td className="p-2">
-                          {event.endDate.toDateString()}
-                          <br />
-                          {event.endDate.toTimeString().slice(0, 5)}
-                        </td>
-                        <td className="p-2">{event.organizerName}</td>
-                        <td>menu</td>
-                      </tr>
+                  : eventsArr.map((event) => (
+                      <EventComponent
+                        key={event.id}
+                        {...event}
+                        delFn={() => {
+                          deleteEvent(event.id);
+                        }}
+                        editFn={() => {
+                          editEvent();
+                        }}
+                      />
                     ))}
               </>
             ) : (
@@ -172,6 +171,18 @@ const EventBrowser = ({ events }: Props) => {
             )}
           </tbody>
         </table>
+        {notify ? (
+          <Notification
+            error={notify.error}
+            message={notify.message}
+            show={notify.show}
+            onAnimEnd={() => {
+              setNotify({ error: false, message: "", show: false });
+            }}
+          />
+        ) : (
+          <></>
+        )}
       </div>
     </>
   );

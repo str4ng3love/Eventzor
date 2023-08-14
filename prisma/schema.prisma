@@ -66,8 +66,8 @@ model Event {
   description String
   tickets Int
   ticketsSold Int @default(0)
-  startDate DateTime
-  endDate DateTime
+  eventDate DateTime
+  closingDate DateTime
   location String
   status Status @default(active)
   organizer User @relation(fields: [organizerName], references: [name] )

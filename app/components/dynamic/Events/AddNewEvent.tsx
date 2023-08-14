@@ -17,9 +17,9 @@ enum FormActionKind {
   INPUT_DESC = "Input event description",
   INPUT_TICKETS = "Input amount of available tickets",
   INPUT_LOCATION = "Location at which the event will take place",
+  INPUT_ECLOSING = "Events closing date",
+  INPUT_ESTART = "Events starting date",
   INPUT_STATUS = "Status of the event",
-  INPUT_ESTART = "Events starting time",
-  INPUT_EEND = "Events ending time",
 }
 interface InputAction {
   type: FormActionKind;
@@ -29,8 +29,8 @@ interface InputState {
   title: string;
   description: string;
   tickets: number;
-  startDate: number;
-  endDate: number;
+  eventDate: Date;
+  closingDate: Date;
   location: string;
   status: Status;
 }
@@ -54,13 +54,13 @@ const reducer = (state: InputState, action: InputAction) => {
     case FormActionKind.INPUT_ESTART: {
       return {
         ...state,
-        startDate: payload as number,
+        eventDate: payload as Date,
       };
     }
-    case FormActionKind.INPUT_EEND: {
+    case FormActionKind.INPUT_ECLOSING: {
       return {
         ...state,
-        endDate: payload as number,
+        closingDate: payload as Date,
       };
     }
     case FormActionKind.INPUT_LOCATION: {
@@ -87,18 +87,21 @@ const AddNewEvent = () => {
     message: "",
     error: false,
   });
+  const closingDate = new Date()
+  const eventDate = new Date()
+  closingDate.setUTCMonth(closingDate.getUTCMonth() + 1)
+  eventDate.setUTCMonth(eventDate.getUTCMonth() + 3)
   const [state, dispatch] = useReducer(reducer, {
     title: "",
     description: "",
     status: Status.active,
     tickets: 0,
     location: "",
-    startDate: 0,
-    endDate: 0,
+    closingDate: closingDate,
+    eventDate: eventDate,
   });
 
   const handleCreate = async (state: InputState) => {
-    const date = new Date()
     if (state.tickets < 0) {
       return setNotify({
         error: true,
@@ -106,19 +109,11 @@ const AddNewEvent = () => {
         message: "Amount of tickets cannot be negative.",
       });
     }
-
-    if(state.startDate < date.getHours() - 1 ){
-      return setNotify({
-        error:true,
-        show:true,
-        message:'Event cannot start in the past.'
-      })
-    }
-    if(state.endDate < state.startDate){
+    if(state.eventDate < state.closingDate){
       return setNotify({
         error: true,
         show: true,
-        message: "Event cannot end before it has started.",
+        message: "Cannot start the event before it's closed.",
       });
     }
     try {
@@ -140,6 +135,7 @@ const AddNewEvent = () => {
       console.log(error);
     }
   };
+
   return (
     <div>
       <Button text="Edd Event" fn={() => setShow(true)} />
@@ -170,6 +166,7 @@ const AddNewEvent = () => {
                   <div className="p-4 flex justify-between z-20 ">
                     <label className="p-1 min-w-[10ch] mr-2">Title</label>
                     <input
+                    min={new Date().toDateString().slice(0, -8)}
                       onChange={(e) =>
                         dispatch({
                           type: FormActionKind.INPUT_TITLE,
@@ -194,36 +191,35 @@ const AddNewEvent = () => {
                       className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-24 resize-none "
                     />
                   </div>
+                  <div className="p-4 flex justify-between ">
+                    <label className="p-1 min-w-[10ch] mr-2">Closing Date</label>
+                    <input
+                      min={new Date().toISOString().slice(0,-8)}
+                      defaultValue={closingDate.toISOString().slice(0, -8)}
+                      onChange={(e) =>
+                        dispatch({
+                          type: FormActionKind.INPUT_ECLOSING,
+                          payload: e.currentTarget.value,
+                        })
+                      }
+                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
+                      type="datetime-local"
+                    />
+                  </div>
 
                   <div className="p-4 flex justify-between ">
                     <label className="p-1 min-w-[10ch] mr-2">
-                      Event Starts
+                      Event Date
                     </label>
                     <input
-                    defaultValue={new Date().toISOString().slice(0, -8)}
-                    
+                    min={new Date().toISOString().slice(0,-8)}
+                    defaultValue={new Date(eventDate).toISOString().slice(0, -8)}
                       onChange={(e) => {
                         dispatch({
                           type: FormActionKind.INPUT_ESTART,
                           payload: e.currentTarget.value,
                         });
-                        console.log(e.currentTarget.value);
                       }}
-                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
-                      type="datetime-local"
-                    />
-                  </div>
-                  <div className="p-4 flex justify-between ">
-                    <label className="p-1 min-w-[10ch] mr-2">Event Ends</label>
-                    <input
-                      defaultValue={new Date().toISOString().slice(0, -8)}
-                     
-                      onChange={(e) =>
-                        dispatch({
-                          type: FormActionKind.INPUT_EEND,
-                          payload: e.currentTarget.value,
-                        })
-                      }
                       className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
                       type="datetime-local"
                     />

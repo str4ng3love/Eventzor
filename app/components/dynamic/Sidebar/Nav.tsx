@@ -12,7 +12,7 @@ const Nav = () => {
   const currentPath = usePathname()
   useEffect(()=>{
     setSelected(currentPath)
-  }, [])
+  }, [currentPath])
   return (
     <nav className="flex flex-col items-center justify-start w-full py-8">
       <NavItem
