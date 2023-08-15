@@ -1,6 +1,6 @@
 "use client";
 import AddNewEvent from "./AddNewEvent";
-import { Event } from "@prisma/client";
+import { Event, Status } from "@prisma/client";
 import FilterEventsByDate from "./FilterEventsByDate";
 import DropDown from "../DropDown";
 import React, { useState } from "react";
@@ -9,16 +9,17 @@ import ResetFilter from "./ResetFilter";
 import Notification from "../../static/Notification";
 import { NotificationObj } from "../../static/Notification";
 import EventComponent from "./EventComponent";
-
+import EditEvent from "./EditEvent";
+import { InputState } from "./EditEvent";
 interface Props {
   events: Event[];
 }
-
 const EventBrowser = ({ events }: Props) => {
   const [eventsArr, setEventsArr] = useState(events);
   const [sorter, setSorter] = useState("event");
   const [filtered, setFiltered] = useState<Event[] | null>();
   const [notify, setNotify] = useState<NotificationObj>();
+  const [edit, setEdit] = useState<{show:boolean, event:Event|null}>({show:false, event:null})
 
   const SortEvents = (e: React.MouseEvent) => {
     let target = e.currentTarget.innerHTML.toLowerCase();
@@ -63,9 +64,6 @@ const EventBrowser = ({ events }: Props) => {
       setNotify({ error: true, show: true, message: "Something went wrong" });
     }
   };
-  const editEvent = ()=>{
-// todo: edit fn
-  }
   return (
     <>
       <div className="my-4 px-8 flex flex-col">
@@ -147,7 +145,7 @@ const EventBrowser = ({ events }: Props) => {
                           deleteEvent(event.id);
                         }}
                         editFn={() => {
-                          editEvent();
+                          setEdit({show:true , event: event})
                         }}
                       />
                     ))
@@ -159,7 +157,7 @@ const EventBrowser = ({ events }: Props) => {
                           deleteEvent(event.id);
                         }}
                         editFn={() => {
-                          editEvent();
+                          setEdit({show:true , event: event})
                         }}
                       />
                     ))}
@@ -183,6 +181,7 @@ const EventBrowser = ({ events }: Props) => {
         ) : (
           <></>
         )}
+        { edit.show && edit.event? <EditEvent {...edit.event} show={edit.show} stopDisplayingFn={()=>{setEdit({show:false, event:null})}} />:<></>}
       </div>
     </>
   );

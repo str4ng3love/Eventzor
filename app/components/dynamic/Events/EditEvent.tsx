@@ -1,15 +1,15 @@
 "use client";
 import Notification from "../../static/Notification";
-import { useState, Fragment, useReducer } from "react";
+import React, { useState, Fragment, useReducer } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import Button from "../Button";
 
 // Can't import enum type from schema.prisma file for some reason
  enum Status {
-  active,
-  inactive,
-  paused,
-  canceled,
+  active="active",
+  inactive ="inactive",
+  paused="paused",
+  canceled="canceled",
 }
 
  enum FormActionKind {
@@ -25,14 +25,14 @@ import Button from "../Button";
   type: FormActionKind;
   payload: string | number | Status | Date;
 }
- interface InputState {
+ export interface InputState {
   title: string;
   description: string;
   tickets: number;
   eventDate: Date;
   closingDate: Date;
   location: string;
-  status: Status;
+  status: Status | any;
 }
 
  const reducer = (state: InputState, action: InputAction) => {
@@ -79,9 +79,11 @@ import Button from "../Button";
       return state;
   }
 };
-
-const AddNewEvent = () => {
-  const [show, setShow] = useState(false);
+interface Props extends InputState{
+    show: boolean,
+    stopDisplayingFn: () => void;
+}
+const EditEvent = ({...props}:Props) => {
   const [notify, setNotify] = useState({
     show: false,
     message: "",
@@ -92,16 +94,16 @@ const AddNewEvent = () => {
   closingDate.setUTCMonth(closingDate.getUTCMonth() + 1)
   eventDate.setUTCMonth(eventDate.getUTCMonth() + 3)
   const [state, dispatch] = useReducer(reducer, {
-    title: "",
-    description: "",
-    status: Status.active,
-    tickets: 0,
-    location: "",
-    closingDate: closingDate,
-    eventDate: eventDate,
+    title: props.title,
+    description: props.description,
+    status: props.status,
+    tickets: props.tickets,
+    location: props.location,
+    closingDate: props.closingDate,
+    eventDate: props.eventDate,
   });
 
-  const handleCreate = async (state: InputState) => {
+  const handleEdit = async (state: InputState) => {
     if (state.tickets < 0) {
       return setNotify({
         error: true,
@@ -118,7 +120,7 @@ const AddNewEvent = () => {
     }
     try {
       const resp = await fetch("/api/events", {
-        method: "POST",
+        method: "PATCH",
         headers: {
           "Content-Type": "Applicatin/json",
         },
@@ -138,9 +140,9 @@ const AddNewEvent = () => {
 
   return (
     <div>
-      <Button text="Edd Event" fn={() => setShow(true)} />
-      <Transition appear show={show} as={Fragment}>
-        <Dialog as="div" onClose={() => setShow(false)}>
+
+      <Transition appear show={props.show} as={Fragment}>
+        <Dialog as="div" onClose={() => props.stopDisplayingFn()}>
           <Transition.Child
             enter="ease-out duration-300"
             enterFrom="opacity-0"
@@ -157,16 +159,13 @@ const AddNewEvent = () => {
                 }
               >
                 <Dialog.Title className={"p-2 font-bold text-xl text-center"}>
-                  Add new Event
+                  Edit Event
                 </Dialog.Title>
-                <Dialog.Description className={"p-8 text-lg font-semibold"}>
-                  Create new Event
-                </Dialog.Description>
                 <form onSubmit={(e) => e.preventDefault()}>
                   <div className="p-4 flex justify-between z-20 ">
                     <label className="p-1 min-w-[10ch] mr-2">Title</label>
                     <input
-                    min={new Date().toDateString().slice(0, -8)}
+                    value={state.title}
                       onChange={(e) =>
                         dispatch({
                           type: FormActionKind.INPUT_TITLE,
@@ -182,6 +181,7 @@ const AddNewEvent = () => {
                       Description
                     </label>
                     <textarea
+                    value={state.description}
                       onChange={(e) =>
                         dispatch({
                           type: FormActionKind.INPUT_DESC,
@@ -194,8 +194,8 @@ const AddNewEvent = () => {
                   <div className="p-4 flex justify-between ">
                     <label className="p-1 min-w-[10ch] mr-2">Closing Date</label>
                     <input
+                      value={new Date(state.closingDate).toISOString().slice(0,-8)}
                       min={new Date().toISOString().slice(0,-8)}
-                      defaultValue={closingDate.toISOString().slice(0, -8)}
                       onChange={(e) =>
                         dispatch({
                           type: FormActionKind.INPUT_ECLOSING,
@@ -212,8 +212,8 @@ const AddNewEvent = () => {
                       Event Date
                     </label>
                     <input
+                    value={new Date(state.eventDate).toISOString().slice(0,-8)}
                     min={new Date().toISOString().slice(0,-8)}
-                    defaultValue={new Date(eventDate).toISOString().slice(0, -8)}
                       onChange={(e) => {
                         dispatch({
                           type: FormActionKind.INPUT_ESTART,
@@ -227,6 +227,7 @@ const AddNewEvent = () => {
                   <div className="p-4 flex justify-between ">
                     <label className="p-1 min-w-[10ch] mr-2">Location</label>
                     <input
+                    value={state.location}
                       onChange={(e) =>
                         dispatch({
                           type: FormActionKind.INPUT_LOCATION,
@@ -242,6 +243,7 @@ const AddNewEvent = () => {
                       Available tickets
                     </label>
                     <input
+                    value={state.tickets}
                       onChange={(e) =>
                         dispatch({
                           type: FormActionKind.INPUT_TICKETS,
@@ -250,7 +252,6 @@ const AddNewEvent = () => {
                       }
                       className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
                       type="number"
-                      defaultValue={1}
                       min={1}
                     />
                   </div>
@@ -264,12 +265,12 @@ const AddNewEvent = () => {
                   />
                   <div className="p-4 mt-4 flex justify-evenly ">
                     <Button
-                      text="Create"
+                      text="Edit"
                       fn={() => {
-                        handleCreate(state);
+                        handleEdit(state);
                       }}
                     />
-                    <Button text="Cancel" fn={() => setShow(false)} />
+                    <Button text="Cancel" fn={() => props.stopDisplayingFn()} />
                   </div>
                 </form>
               </Dialog.Panel>
@@ -281,4 +282,4 @@ const AddNewEvent = () => {
   );
 };
 
-export default AddNewEvent;
+export default EditEvent;
