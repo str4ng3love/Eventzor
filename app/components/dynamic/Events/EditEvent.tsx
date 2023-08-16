@@ -81,9 +81,12 @@ import Button from "../Button";
 };
 interface Props extends InputState{
     show: boolean,
+    id: string;
     stopDisplayingFn: () => void;
+    triggerFetchFn: ()=>void;
 }
 const EditEvent = ({...props}:Props) => {
+  const [canEdit, setCanEdit] = useState(true)
   const [notify, setNotify] = useState({
     show: false,
     message: "",
@@ -124,10 +127,11 @@ const EditEvent = ({...props}:Props) => {
         headers: {
           "Content-Type": "Applicatin/json",
         },
-        body: JSON.stringify(state),
+        body: JSON.stringify({state, id: props.id})
       });
       const dat = await resp.json();
-
+      setCanEdit(true)
+      props.triggerFetchFn()
       if (dat.error) {
         setNotify({ error: true, show: true, message: dat.error });
       } else {
@@ -252,7 +256,7 @@ const EditEvent = ({...props}:Props) => {
                       }
                       className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
                       type="number"
-                      min={1}
+                      min={0}
                     />
                   </div>
                   <Notification
@@ -264,12 +268,21 @@ const EditEvent = ({...props}:Props) => {
                     }
                   />
                   <div className="p-4 mt-4 flex justify-evenly ">
-                    <Button
+                    {canEdit ?  <Button
                       text="Edit"
                       fn={() => {
+                        setCanEdit(false)
                         handleEdit(state);
                       }}
-                    />
+                    />:  <Button
+                    text="Editing..."
+                    interactive={false}
+                    bgColor={"bg-bg"}
+                    fn={() => {
+                   
+                    }}
+                  />}
+                   
                     <Button text="Cancel" fn={() => props.stopDisplayingFn()} />
                   </div>
                 </form>

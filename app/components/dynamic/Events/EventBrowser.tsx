@@ -1,16 +1,17 @@
 "use client";
 import AddNewEvent from "./AddNewEvent";
-import { Event, Status } from "@prisma/client";
+import { Event } from "@prisma/client";
 import FilterEventsByDate from "./FilterEventsByDate";
 import DropDown from "../DropDown";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { sortEvents } from "@/helpers/sort";
 import ResetFilter from "./ResetFilter";
 import Notification from "../../static/Notification";
 import { NotificationObj } from "../../static/Notification";
 import EventComponent from "./EventComponent";
 import EditEvent from "./EditEvent";
-import { InputState } from "./EditEvent";
+import EventSkeleton from "./EventSkeleton";
+
 interface Props {
   events: Event[];
 }
@@ -19,7 +20,60 @@ const EventBrowser = ({ events }: Props) => {
   const [sorter, setSorter] = useState("event");
   const [filtered, setFiltered] = useState<Event[] | null>();
   const [notify, setNotify] = useState<NotificationObj>();
-  const [edit, setEdit] = useState<{show:boolean, event:Event|null}>({show:false, event:null})
+  const [edit, setEdit] = useState<{ show: boolean; event: Event | null }>({
+    show: false,
+    event: null,
+  });
+  const [optimisticComp, setOptimisticComp] = useState(false);
+
+  const getEvent = async (id?: string) => {
+    try {
+      let resp;
+      id
+        ? (resp = await fetch(`/api/events/${id}`))
+        : (resp = await fetch("/api/events/latest"));
+
+      const data = await resp.json();
+
+      if (data) {
+
+        id? setEventsArr((prev) => prev.map((e) =>  e.id === id
+                  ? {
+                      id,
+                      closingDate: data.closingDate,
+                      description: data.description,
+                      eventDate: data.eventDate,
+                      location: data.location,
+                      organizerName: data.organizerName,
+                      status: data.status,
+                      tickets: data.tickets,
+                      ticketsSold: data.ticketsSold,
+                      title: data.title,
+                    }
+                  : e
+              )
+            )
+          : setEventsArr((prev) => [...prev, data]);
+
+
+        setOptimisticComp(false);
+      } else {
+        setNotify({
+          show: true,
+          error: true,
+          message: "Could not fetch the events. Please try again.",
+        });
+      }
+    } catch (error) {
+      if (error) {
+        setNotify({
+          show: true,
+          error: true,
+          message: "Could not fetch the events. Please try again.",
+        });
+      }
+    }
+  };
 
   const SortEvents = (e: React.MouseEvent) => {
     let target = e.currentTarget.innerHTML.toLowerCase();
@@ -39,9 +93,8 @@ const EventBrowser = ({ events }: Props) => {
   };
 
   const deleteEvent = async (id: string) => {
-
     try {
-      const cachedEntry = eventsArr.filter(e=> e.id == id)
+      const cachedEntry = eventsArr.filter((e) => e.id == id);
       setEventsArr((prev) => [...prev.filter((e) => e.id != id)]);
 
       const resp = await fetch("/api/events", {
@@ -54,13 +107,11 @@ const EventBrowser = ({ events }: Props) => {
       const message = await resp.json();
       if (resp.ok) {
         setNotify({ error: false, show: true, message: message.message });
-
-      } else if(message.error) {
-        setEventsArr(prev => [...prev, ...cachedEntry] )
+      } else if (message.error) {
+        setEventsArr((prev) => [...prev, ...cachedEntry]);
         setNotify({ error: true, show: true, message: message.error });
       }
     } catch (error) {
-
       setNotify({ error: true, show: true, message: "Something went wrong" });
     }
   };
@@ -121,8 +172,14 @@ const EventBrowser = ({ events }: Props) => {
               />
             </>
           )}
+          <span onClick={(e) => console.log(eventsArr)}>check</span>
 
-          <AddNewEvent />
+          <AddNewEvent
+            fn={(e) => {
+              setOptimisticComp(true);
+            }}
+            refetchTrigger={() => getEvent()}
+          />
         </div>
         <table className="my-8  w-full text-sm table">
           <tbody className="">
@@ -145,7 +202,7 @@ const EventBrowser = ({ events }: Props) => {
                           deleteEvent(event.id);
                         }}
                         editFn={() => {
-                          setEdit({show:true , event: event})
+                          setEdit({ show: true, event: event });
                         }}
                       />
                     ))
@@ -157,10 +214,11 @@ const EventBrowser = ({ events }: Props) => {
                           deleteEvent(event.id);
                         }}
                         editFn={() => {
-                          setEdit({show:true , event: event})
+                          setEdit({ show: true, event: event });
                         }}
                       />
                     ))}
+                {optimisticComp ? <EventSkeleton /> : <></>}
               </>
             ) : (
               <tr className="w-full flex justify-center p-8">
@@ -181,7 +239,19 @@ const EventBrowser = ({ events }: Props) => {
         ) : (
           <></>
         )}
-        { edit.show && edit.event? <EditEvent {...edit.event} show={edit.show} stopDisplayingFn={()=>{setEdit({show:false, event:null})}} />:<></>}
+        {edit.show && edit.event ? (
+          <EditEvent
+            {...edit.event}
+            show={edit.show}
+            stopDisplayingFn={() => {
+              setEdit({ show: false, event: null });
+            }}
+            triggerFetchFn={() => getEvent(edit.event?.id)}
+          />
+          
+        ) : (
+          <></>
+        )}
       </div>
     </>
   );

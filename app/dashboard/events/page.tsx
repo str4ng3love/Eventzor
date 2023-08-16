@@ -1,11 +1,18 @@
 import EventBrowser from "@/app/components/dynamic/Events/EventBrowser";
 import { Heading2, Heading4 } from "@/app/components/static/Heading";
 import { prisma } from "../../../lib/ConnectPrisma";
+import { getServerSession } from "next-auth";
+import { options } from "@/app/api/auth/[...nextauth]/options";
+
+
 const getEvents = async () => {
-  const events = await prisma.event.findMany({ orderBy: [{ title: "asc" }] });
+  const session = await getServerSession(options);
+
+  const events = await prisma.event.findMany({ where:{
+    organizerName: session?.user?.name as string
+  },orderBy: [{ title: "asc" }] });
   return {
     events,
-    revalidate: 60,
   };
 };
 const page = async () => {
@@ -17,6 +24,7 @@ const page = async () => {
         <Heading4 text="Browse and manage events" />
       </div>
       <EventBrowser events={events} />
+   
     </>
   );
 };

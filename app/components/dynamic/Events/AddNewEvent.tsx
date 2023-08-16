@@ -4,6 +4,7 @@ import { useState, Fragment, useReducer } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import Button from "../Button";
 
+
 // Can't import enum type from schema.prisma file for some reason
  enum Status {
   active,
@@ -79,9 +80,14 @@ import Button from "../Button";
       return state;
   }
 };
-
-const AddNewEvent = () => {
+interface Props {
+  fn:(e:React.MouseEvent)=> void;
+  refetchTrigger: ()=>void;
+  
+}
+const AddNewEvent = ({fn, refetchTrigger}:Props) => {
   const [show, setShow] = useState(false);
+  const [canPost, setCanPost] = useState(true)
   const [notify, setNotify] = useState({
     show: false,
     message: "",
@@ -116,7 +122,9 @@ const AddNewEvent = () => {
         message: "Cannot start the event before it's closed.",
       });
     }
+
     try {
+      setCanPost(false);
       const resp = await fetch("/api/events", {
         method: "POST",
         headers: {
@@ -125,7 +133,8 @@ const AddNewEvent = () => {
         body: JSON.stringify(state),
       });
       const dat = await resp.json();
-
+      refetchTrigger()
+      setCanPost(true);
       if (dat.error) {
         setNotify({ error: true, show: true, message: dat.error });
       } else {
@@ -138,7 +147,7 @@ const AddNewEvent = () => {
 
   return (
     <div>
-      <Button text="Edd Event" fn={() => setShow(true)} />
+      <Button text="Add Event" fn={() => setShow(true)} />
       <Transition appear show={show} as={Fragment}>
         <Dialog as="div" onClose={() => setShow(false)}>
           <Transition.Child
@@ -250,8 +259,8 @@ const AddNewEvent = () => {
                       }
                       className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
                       type="number"
-                      defaultValue={1}
-                      min={1}
+                      defaultValue={0}
+                      min={0}
                     />
                   </div>
                   <Notification
@@ -263,12 +272,21 @@ const AddNewEvent = () => {
                     }
                   />
                   <div className="p-4 mt-4 flex justify-evenly ">
+                    {canPost ? 
                     <Button
                       text="Create"
-                      fn={() => {
+                      fn={(e) => {
+                        fn(e);
                         handleCreate(state);
                       }}
-                    />
+                    />:  <Button
+                    text="Fetching..."
+                    interactive={false}
+                    bgColor="bg-bg"
+                    fn={(e) => {
+                  
+                    }}
+                  />}
                     <Button text="Cancel" fn={() => setShow(false)} />
                   </div>
                 </form>

@@ -17,7 +17,6 @@ async function handler(req: Request) {
         body.description.length < 3 ||
         typeof body.location != "string" ||
         body.location.length < 3 ||
-        typeof body.tickets != "string" ||
         body.tickets.length < 0 ||
         !body.eventDate ||
         !body.closingDate
@@ -69,6 +68,7 @@ async function handler(req: Request) {
       const deletedEvent = await prisma.event.delete({
         where: {
           id: body.id,
+          organizerName: session.user.name
         },
       });
       if (!deletedEvent) {
@@ -88,13 +88,40 @@ async function handler(req: Request) {
         { status: 500 }
       );
     }
+  } else if (req.method == "PATCH"){
+    if (!session?.user?.name) {
+      return NextResponse.json({ error: "Not Authorized" }, { status: 401 });
+    }
+
+    try {
+      const body = await req.json();
+      console.log(body.id)
+      const updatedEvent = await prisma.event.update({where:{id: body.id, organizerName:session.user.name}, data:{title: body.state.title, description: body.state.description, location: body.state.location, eventDate: body.state.eventDate, closingDate:body.state.closingDate, status:body.state.status, tickets: parseInt(body.state.tickets) }});
+      if (!updatedEvent) {
+        return NextResponse.json(
+          { error: "Internal server error" },
+          { status: 500 }
+        );
+      }
+      return NextResponse.json({ message: "Event edited successfully" });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        return NextResponse.json({ error: error.message }, { status: 400 });
+      }
+      console.log(error)
+      return NextResponse.json(
+        { error: "Internal server error, here?" },
+        { status: 500 }
+      );
+    }
   } else {
     const events = await prisma.event.findMany();
-
     if (events) {
       return NextResponse.json(events);
+    } else {
+      return NextResponse.json({error: 'Something went wrong.'})
     }
   }
 }
 
-export { handler as GET, handler as POST, handler as DELETE };
+export { handler as GET, handler as POST, handler as DELETE, handler as PATCH };
