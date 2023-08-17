@@ -48,6 +48,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   events        Event[]
+  orders        Order[]
   @@unique([username])
 }
 
@@ -73,7 +74,19 @@ model Event {
   organizer User @relation(fields: [organizerName], references: [name] )
   organizerName String
 }
-
+model Order {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  item String
+  description String
+  price Int
+  amount Int
+  amountSold Int @default(0)
+  preorder Boolean @default(false)
+  releaseDate DateTime?
+  isBuyOrder Boolean @default(false)
+  merchant User @relation(fields: [merchantName], references: [name])
+  merchantName String
+}
 enum Status {
   active
   inactive

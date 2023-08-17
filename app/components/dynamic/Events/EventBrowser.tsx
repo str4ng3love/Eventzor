@@ -3,14 +3,14 @@ import AddNewEvent from "./AddNewEvent";
 import { Event } from "@prisma/client";
 import FilterEventsByDate from "./FilterEventsByDate";
 import DropDown from "../DropDown";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { sortEvents } from "@/helpers/sort";
 import ResetFilter from "./ResetFilter";
 import Notification from "../../static/Notification";
 import { NotificationObj } from "../../static/Notification";
 import EventComponent from "./EventComponent";
 import EditEvent from "./EditEvent";
-import EventSkeleton from "./EventSkeleton";
+import EventSkeleton from "../../static/EventSkeleton";
 
 interface Props {
   events: Event[];
@@ -172,7 +172,6 @@ const EventBrowser = ({ events }: Props) => {
               />
             </>
           )}
-          <span onClick={(e) => console.log(eventsArr)}>check</span>
 
           <AddNewEvent
             fn={(e) => {

@@ -1,49 +1,40 @@
 "use client";
-import Notification from "../../static/Notification";
-import { useState, Fragment, useReducer } from "react";
-import { Dialog, Transition } from "@headlessui/react";
 import Button from "../Button";
+import { Fragment, useState, useReducer } from "react";
+import { Transition, Dialog } from "@headlessui/react";
+import Notification from "../../static/Notification";
 
-
-// Can't import enum type from schema.prisma file for some reason
- enum Status {
-  active,
-  inactive,
-  paused,
-  canceled,
+enum FormActionKind {
+  INPUT_ITEM,
+  INPUT_DESC,
+  INPUT_AMOUNT,
+  INPUT_IS_PREORDER,
+  INPUT_IS_BUY_ORDER,
+  INPUT_RELEASE,
+  INPUT_PRICE
 }
-
- enum FormActionKind {
-  INPUT_TITLE = "Input event title",
-  INPUT_DESC = "Input event description",
-  INPUT_TICKETS = "Input amount of available tickets",
-  INPUT_LOCATION = "Location at which the event will take place",
-  INPUT_ECLOSING = "Events closing date",
-  INPUT_ESTART = "Events starting date",
-  INPUT_STATUS = "Status of the event",
-}
- interface InputAction {
+interface InputAction {
   type: FormActionKind;
-  payload: string | number | Status | Date;
+  payload: string | number | boolean | Date;
 }
- interface InputState {
-  title: string;
+interface InputState {
+  item: string;
   description: string;
-  tickets: number;
-  eventDate: Date;
-  closingDate: Date;
-  location: string;
-  status: Status;
+  amount: number;
+  isPreorder: boolean;
+  isBuyOrder: boolean;
+  releaseDate?: Date;
+  price: number
 }
 
- const reducer = (state: InputState, action: InputAction) => {
+const reducer = (state: InputState, action: InputAction) => {
   const { type, payload } = action;
 
   switch (type) {
-    case FormActionKind.INPUT_TITLE: {
+    case FormActionKind.INPUT_ITEM: {
       return {
         ...state,
-        title: payload as string,
+        item: payload as string,
       };
     }
     case FormActionKind.INPUT_DESC: {
@@ -52,80 +43,87 @@ import Button from "../Button";
         description: payload as string,
       };
     }
-    case FormActionKind.INPUT_ESTART: {
+    case FormActionKind.INPUT_AMOUNT: {
       return {
         ...state,
-        eventDate: payload as Date,
+        amount: payload as number,
       };
     }
-    case FormActionKind.INPUT_ECLOSING: {
+    case FormActionKind.INPUT_IS_BUY_ORDER: {
       return {
         ...state,
-        closingDate: payload as Date,
+        isBuyOrder: payload as boolean,
       };
     }
-    case FormActionKind.INPUT_LOCATION: {
+    case FormActionKind.INPUT_IS_PREORDER: {
       return {
         ...state,
-        location: payload as string,
+        isPreorder: payload as boolean,
       };
     }
-    case FormActionKind.INPUT_TICKETS: {
+    case FormActionKind.INPUT_RELEASE: {
       return {
         ...state,
-        tickets: payload as number,
+        releaseDate: payload as Date,
       };
     }
+    case FormActionKind.INPUT_PRICE:{
+      return {
+        ...state,
+        price: payload as number
+      }
+    }
+
     default:
       return state;
   }
 };
 interface Props {
-  fn:(e:React.MouseEvent)=> void;
-  refetchTrigger: ()=>void;
-  
+  fn?: (e: React.MouseEvent) => void;
+  refetchTrigger?: () => void;
 }
-const AddNewEvent = ({fn, refetchTrigger}:Props) => {
+const date = new Date();
+const AddOrder = ({ fn, refetchTrigger }: Props) => {
   const [show, setShow] = useState(false);
-  const [canPost, setCanPost] = useState(true)
+  const [canPost, setCanPost] = useState(true);
   const [notify, setNotify] = useState({
     show: false,
-    message: "",
     error: false,
+    message: "",
   });
-  const closingDate = new Date()
-  const eventDate = new Date()
-  closingDate.setUTCMonth(closingDate.getUTCMonth() + 1)
-  eventDate.setUTCMonth(eventDate.getUTCMonth() + 3)
   const [state, dispatch] = useReducer(reducer, {
-    title: "",
+    item: "",
     description: "",
-    status: Status.active,
-    tickets: 0,
-    location: "",
-    closingDate: closingDate,
-    eventDate: eventDate,
+    amount: 0,
+    isBuyOrder: false,
+    isPreorder: false,
+    releaseDate: new Date(date.setDate(date.getDay() + 1)),
+    price: 0
   });
-
   const handleCreate = async (state: InputState) => {
-    if (state.tickets < 0) {
+    if (state.amount < 0) {
       return setNotify({
         error: true,
         show: true,
-        message: "Amount of tickets cannot be negative.",
+        message: "Amount of items cannot be negative.",
       });
     }
-    if(state.eventDate < state.closingDate){
+    if (
+      // todo need to work out how to handle date logic
+
+      state.releaseDate &&
+      state.releaseDate < new Date(date.setDate(date.getDay() + 1))
+    ) {
       return setNotify({
         error: true,
         show: true,
-        message: "Cannot start the event before it's closed.",
+        message: "Release date must be in future.",
       });
     }
 
     try {
       setCanPost(false);
-      const resp = await fetch("/api/events", {
+      const resp = await fetch("/api/orders", {
         method: "POST",
         headers: {
           "Content-Type": "Applicatin/json",
@@ -133,7 +131,7 @@ const AddNewEvent = ({fn, refetchTrigger}:Props) => {
         body: JSON.stringify(state),
       });
       const dat = await resp.json();
-      refetchTrigger()
+      //   refetchTrigger()
       setCanPost(true);
       if (dat.error) {
         setNotify({ error: true, show: true, message: dat.error });
@@ -144,10 +142,9 @@ const AddNewEvent = ({fn, refetchTrigger}:Props) => {
       console.log(error);
     }
   };
-
   return (
     <div>
-      <Button text="Add Event" fn={() => setShow(true)} />
+      <Button text="Create Order" fn={() => setShow(true)} />
       <Transition appear show={show} as={Fragment}>
         <Dialog as="div" onClose={() => setShow(false)}>
           <Transition.Child
@@ -166,19 +163,18 @@ const AddNewEvent = ({fn, refetchTrigger}:Props) => {
                 }
               >
                 <Dialog.Title className={"p-2 font-bold text-xl text-center"}>
-                  Add new Event
+                  Add new Order
                 </Dialog.Title>
                 <Dialog.Description className={"p-8 text-lg font-semibold"}>
-                  Create new Event
+                  Create new Order
                 </Dialog.Description>
                 <form onSubmit={(e) => e.preventDefault()}>
                   <div className="p-4 flex justify-between z-20 ">
-                    <label className="p-1 min-w-[10ch] mr-2">Title</label>
+                    <label className="p-1 min-w-[10ch] mr-2">Item</label>
                     <input
-                    min={new Date().toDateString().slice(0, -8)}
                       onChange={(e) =>
                         dispatch({
-                          type: FormActionKind.INPUT_TITLE,
+                          type: FormActionKind.INPUT_ITEM,
                           payload: e.currentTarget.value,
                         })
                       }
@@ -201,68 +197,79 @@ const AddNewEvent = ({fn, refetchTrigger}:Props) => {
                     />
                   </div>
                   <div className="p-4 flex justify-between ">
-                    <label className="p-1 min-w-[10ch] mr-2">Closing Date</label>
+                    <label className="p-1 min-w-[10ch] mr-2">Price</label>
                     <input
-                      min={new Date().toISOString().slice(0,-8)}
-                      defaultValue={closingDate.toISOString().slice(0, -8)}
+                      min={0}
                       onChange={(e) =>
                         dispatch({
-                          type: FormActionKind.INPUT_ECLOSING,
-                          payload: e.currentTarget.value,
-                        })
-                      }
-                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
-                      type="datetime-local"
-                    />
-                  </div>
-
-                  <div className="p-4 flex justify-between ">
-                    <label className="p-1 min-w-[10ch] mr-2">
-                      Event Date
-                    </label>
-                    <input
-                    min={new Date().toISOString().slice(0,-8)}
-                    defaultValue={new Date(eventDate).toISOString().slice(0, -8)}
-                      onChange={(e) => {
-                        dispatch({
-                          type: FormActionKind.INPUT_ESTART,
-                          payload: e.currentTarget.value,
-                        });
-                      }}
-                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
-                      type="datetime-local"
-                    />
-                  </div>
-                  <div className="p-4 flex justify-between ">
-                    <label className="p-1 min-w-[10ch] mr-2">Location</label>
-                    <input
-                      onChange={(e) =>
-                        dispatch({
-                          type: FormActionKind.INPUT_LOCATION,
-                          payload: e.currentTarget.value,
-                        })
-                      }
-                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
-                      type="text"
-                    />
-                  </div>
-                  <div className="p-4 flex justify-between ">
-                    <label className="p-1 min-w-[10ch] mr-2">
-                      Available tickets
-                    </label>
-                    <input
-                      onChange={(e) =>
-                        dispatch({
-                          type: FormActionKind.INPUT_TICKETS,
+                          type: FormActionKind.INPUT_PRICE,
                           payload: e.currentTarget.value,
                         })
                       }
                       className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
                       type="number"
-                      defaultValue={0}
-                      min={0}
                     />
                   </div>
+                  <div className="p-4 flex justify-between ">
+                    <label className="p-1 min-w-[10ch] mr-2">Amount</label>
+                    <input
+                      min={1}
+                      onChange={(e) =>
+                        dispatch({
+                          type: FormActionKind.INPUT_AMOUNT,
+                          payload: e.currentTarget.value,
+                        })
+                      }
+                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
+                      type="number"
+                    />
+                  </div>
+
+                  <div className="p-4 flex justify-between ">
+                    <label className="p-1 min-w-[10ch] mr-2">Buy Order ?</label>
+                    <input
+                      onChange={(e) => {
+                        dispatch({
+                          type: FormActionKind.INPUT_IS_BUY_ORDER,
+                          payload: !state.isBuyOrder,
+                        });
+                      }}
+                      className="p-1  ring-1 ring-text active:ring-link dark:text-interactive_text w-full "
+                      type="checkbox"
+                    />
+                  </div>
+                  <div className="p-4 flex justify-between ">
+                    <label className="p-1 min-w-[10ch] mr-2">Preorder ?</label>
+                    <input
+                      onChange={(e) =>
+                        dispatch({
+                          type: FormActionKind.INPUT_IS_PREORDER,
+                          payload: !state.isPreorder,
+                        })
+                      }
+                      className="p-1  ring-1 ring-text active:ring-link dark:text-interactive_text w-full  "
+                      type="checkbox"
+                    />
+                  </div>
+                  {state.isPreorder ? (
+                    <div className="p-4 flex justify-between ">
+                      <label className="p-1 min-w-[10ch] mr-2">
+                        Realease date
+                      </label>
+                      <input
+                        onChange={(e) =>
+                          dispatch({
+                            type: FormActionKind.INPUT_RELEASE,
+                            payload: e.currentTarget.value,
+                          })
+                        }
+                        className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
+                        type="datetime-local"
+                      />
+                    </div>
+                  ) : (
+                    <></>
+                  )}
                   <Notification
                     message={notify.message}
                     show={notify.show}
@@ -272,21 +279,21 @@ const AddNewEvent = ({fn, refetchTrigger}:Props) => {
                     }
                   />
                   <div className="p-4 mt-4 flex justify-evenly ">
-                    {canPost ? 
-                    <Button
-                      text="Create"
-                      fn={(e) => {
-                        fn(e);
-                        handleCreate(state);
-                      }}
-                    />:  <Button
-                    text="Adding..."
-                    interactive={false}
-                    bgColor="bg-bg"
-                    fn={(e) => {
-                  
-                    }}
-                  />}
+                    {canPost ? (
+                      <Button
+                        text="Create"
+                        fn={(e) => {
+                          handleCreate(state);
+                        }}
+                      />
+                    ) : (
+                      <Button
+                        text="Adding..."
+                        interactive={false}
+                        bgColor="bg-bg"
+                        fn={(e) => {}}
+                      />
+                    )}
                     <Button text="Cancel" fn={() => setShow(false)} />
                   </div>
                 </form>
@@ -299,4 +306,4 @@ const AddNewEvent = ({fn, refetchTrigger}:Props) => {
   );
 };
 
-export default AddNewEvent;
+export default AddOrder;
