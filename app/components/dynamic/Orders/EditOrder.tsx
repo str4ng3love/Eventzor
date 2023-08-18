@@ -1,9 +1,10 @@
 "use client";
-import Button from "../Button";
-import { Fragment, useState, useReducer } from "react";
-import { Transition, Dialog } from "@headlessui/react";
 import Notification from "../../static/Notification";
+import React, { useState, Fragment, useReducer } from "react";
+import { Dialog, Transition } from "@headlessui/react";
+import Button from "../Button";
 
+// Can't import enum type from schema.prisma file for some reason
 enum FormActionKind {
   INPUT_ITEM,
   INPUT_DESC,
@@ -21,9 +22,9 @@ interface InputState {
   item: string;
   description: string;
   amount: number;
-  isPreorder: boolean;
+  preorder: boolean;
   isBuyOrder: boolean;
-  releaseDate?: Date;
+  releaseDate?: Date | null;
   price: number
 }
 
@@ -78,63 +79,42 @@ const reducer = (state: InputState, action: InputAction) => {
       return state;
   }
 };
-interface Props {
-  fn?: (e: React.MouseEvent) => void;
-  refetchTrigger?: () => void;
+interface Props extends InputState{
+    show: boolean,
+    id: string;
+    stopDisplayingFn: () => void;
+    triggerFetchFn: ()=>void;
 }
-const date = new Date();
-const AddOrder = ({ fn, refetchTrigger }: Props) => {
-  const [show, setShow] = useState(false);
-  const [canPost, setCanPost] = useState(true);
+const EditOrder = ({...props}:Props) => {
+    let date = new Date()
+  const [canEdit, setCanEdit] = useState(true)
   const [notify, setNotify] = useState({
     show: false,
-    error: false,
     message: "",
+    error: false,
   });
   const [state, dispatch] = useReducer(reducer, {
-    item: "",
-    description: "",
-    amount: 0,
-    isBuyOrder: false,
-    isPreorder: false,
-    releaseDate: new Date(date.setDate(date.getDay() + 1)),
-    price: 0
+    item: props.item,
+    description: props.description,
+    amount: props.amount,
+    isBuyOrder: props.isBuyOrder,
+    preorder: props.preorder,
+    releaseDate: props.releaseDate,
+    price: props.price
   });
-  const handleCreate = async (state: InputState) => {
-    if (state.amount < 0) {
-      return setNotify({
-        error: true,
-        show: true,
-        message: "Amount of items cannot be negative.",
-      });
-    }
-    if (
-      // todo need to work out how to handle date logic
 
-      state.releaseDate &&
-      state.releaseDate < new Date(date.setDate(date.getDay() + 1))
-    ) {
-      return setNotify({
-        error: true,
-        show: true,
-        message: "Release date must be in future.",
-      });
-    }
-
+  const handleEdit = async (state: InputState) => {
     try {
-      setCanPost(false);
       const resp = await fetch("/api/orders", {
-        method: "POST",
+        method: "PATCH",
         headers: {
           "Content-Type": "Application/json",
         },
-        body: JSON.stringify(state),
+        body: JSON.stringify({state, id: props.id})
       });
-      console.log(resp)
       const dat = await resp.json();
-      
-      //   refetchTrigger()
-      setCanPost(true);
+      setCanEdit(true)
+      props.triggerFetchFn()
       if (dat.error) {
         setNotify({ error: true, show: true, message: dat.error });
       } else {
@@ -144,11 +124,12 @@ const AddOrder = ({ fn, refetchTrigger }: Props) => {
       console.log(error);
     }
   };
+
   return (
     <div>
-      <Button text="Create Order" fn={() => setShow(true)} />
-      <Transition appear show={show} as={Fragment}>
-        <Dialog as="div" onClose={() => setShow(false)}>
+
+      <Transition appear show={props.show} as={Fragment}>
+        <Dialog as="div" onClose={() => props.stopDisplayingFn()}>
           <Transition.Child
             enter="ease-out duration-300"
             enterFrom="opacity-0"
@@ -165,15 +146,13 @@ const AddOrder = ({ fn, refetchTrigger }: Props) => {
                 }
               >
                 <Dialog.Title className={"p-2 font-bold text-xl text-center"}>
-                  Add new Order
+                  Edit Order
                 </Dialog.Title>
-                <Dialog.Description className={"p-8 text-lg font-semibold"}>
-                  Create new Order
-                </Dialog.Description>
                 <form onSubmit={(e) => e.preventDefault()}>
                   <div className="p-4 flex justify-between z-20 ">
-                    <label className="p-1 min-w-[10ch] mr-2">Item</label>
+                    <label className="p-1 min-w-[10ch] mr-2">Title</label>
                     <input
+                    value={state.item}
                       onChange={(e) =>
                         dispatch({
                           type: FormActionKind.INPUT_ITEM,
@@ -189,6 +168,7 @@ const AddOrder = ({ fn, refetchTrigger }: Props) => {
                       Description
                     </label>
                     <textarea
+                    value={state.description}
                       onChange={(e) =>
                         dispatch({
                           type: FormActionKind.INPUT_DESC,
@@ -199,23 +179,11 @@ const AddOrder = ({ fn, refetchTrigger }: Props) => {
                     />
                   </div>
                   <div className="p-4 flex justify-between ">
-                    <label className="p-1 min-w-[10ch] mr-2">Price</label>
+                    <label className="p-1 min-w-[10ch] mr-2">
+                      Available items
+                    </label>
                     <input
-                      min={0}
-                      onChange={(e) =>
-                        dispatch({
-                          type: FormActionKind.INPUT_PRICE,
-                          payload: e.currentTarget.value,
-                        })
-                      }
-                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
-                      type="number"
-                    />
-                  </div>
-                  <div className="p-4 flex justify-between ">
-                    <label className="p-1 min-w-[10ch] mr-2">Amount</label>
-                    <input
-                      min={1}
+                    value={state.amount}
                       onChange={(e) =>
                         dispatch({
                           type: FormActionKind.INPUT_AMOUNT,
@@ -224,54 +192,26 @@ const AddOrder = ({ fn, refetchTrigger }: Props) => {
                       }
                       className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
                       type="number"
-                    />
-                  </div>
-
-                  <div className="p-4 flex justify-between ">
-                    <label className="p-1 min-w-[10ch] mr-2">Buy Order ?</label>
-                    <input
-                      onChange={(e) => {
-                        dispatch({
-                          type: FormActionKind.INPUT_IS_BUY_ORDER,
-                          payload: !state.isBuyOrder,
-                        });
-                      }}
-                      className="p-1  ring-1 ring-text active:ring-link dark:text-interactive_text w-full "
-                      type="checkbox"
+                  
                     />
                   </div>
                   <div className="p-4 flex justify-between ">
-                    <label className="p-1 min-w-[10ch] mr-2">Preorder ?</label>
+                    <label className="p-1 min-w-[10ch] mr-2">
+                      Price
+                    </label>
                     <input
+                    value={state.price  }
                       onChange={(e) =>
                         dispatch({
-                          type: FormActionKind.INPUT_IS_PREORDER,
-                          payload: !state.isPreorder,
+                          type: FormActionKind.INPUT_PRICE,
+                          payload: e.currentTarget.value,
                         })
                       }
-                      className="p-1  ring-1 ring-text active:ring-link dark:text-interactive_text w-full  "
-                      type="checkbox"
+                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
+                      type="number"
+                  
                     />
                   </div>
-                  {state.isPreorder ? (
-                    <div className="p-4 flex justify-between ">
-                      <label className="p-1 min-w-[10ch] mr-2">
-                        Realease date
-                      </label>
-                      <input
-                        onChange={(e) =>
-                          dispatch({
-                            type: FormActionKind.INPUT_RELEASE,
-                            payload: e.currentTarget.value,
-                          })
-                        }
-                        className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
-                        type="datetime-local"
-                      />
-                    </div>
-                  ) : (
-                    <></>
-                  )}
                   <Notification
                     message={notify.message}
                     show={notify.show}
@@ -281,22 +221,22 @@ const AddOrder = ({ fn, refetchTrigger }: Props) => {
                     }
                   />
                   <div className="p-4 mt-4 flex justify-evenly ">
-                    {canPost ? (
-                      <Button
-                        text="Create"
-                        fn={(e) => {
-                          handleCreate(state);
-                        }}
-                      />
-                    ) : (
-                      <Button
-                        text="Adding..."
-                        interactive={false}
-                        bgColor="bg-bg"
-                        fn={(e) => {}}
-                      />
-                    )}
-                    <Button text="Cancel" fn={() => setShow(false)} />
+                    {canEdit ?  <Button
+                      text="Edit"
+                      fn={() => {
+                        setCanEdit(false)
+                        handleEdit(state);
+                      }}
+                    />:  <Button
+                    text="Editing..."
+                    interactive={false}
+                    bgColor={"bg-bg"}
+                    fn={() => {
+                   
+                    }}
+                  />}
+                   
+                    <Button text="Cancel" fn={() => props.stopDisplayingFn()} />
                   </div>
                 </form>
               </Dialog.Panel>
@@ -308,4 +248,4 @@ const AddOrder = ({ fn, refetchTrigger }: Props) => {
   );
 };
 
-export default AddOrder;
+export default EditOrder;

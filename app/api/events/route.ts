@@ -19,7 +19,8 @@ async function handler(req: Request) {
         body.location.length < 3 ||
         body.tickets.length < 0 ||
         !body.eventDate ||
-        !body.closingDate
+        !body.closingDate||
+        parseInt(body.tickets)  <= 0
       ) {
         return NextResponse.json(
           { error: "Please provide correct/missing values" },
@@ -92,10 +93,12 @@ async function handler(req: Request) {
     if (!session?.user?.name) {
       return NextResponse.json({ error: "Not Authorized" }, { status: 401 });
     }
-
+    const body = await req.json();
+  if(parseInt(body.state.tickets) <= 0){
+    return NextResponse.json({error: "Amount of tickets must be higher than 0"})
+  }
     try {
-      const body = await req.json();
-      console.log(body.id)
+
       const updatedEvent = await prisma.event.update({where:{id: body.id, organizerName:session.user.name}, data:{title: body.state.title, description: body.state.description, location: body.state.location, eventDate: body.state.eventDate, closingDate:body.state.closingDate, status:body.state.status, tickets: parseInt(body.state.tickets) }});
       if (!updatedEvent) {
         return NextResponse.json(

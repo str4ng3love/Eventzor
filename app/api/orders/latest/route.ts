@@ -10,9 +10,9 @@ export default async function handler(req:Request){
     try {
     const session = await getServerSession(options)
     if(session?.user?.name){
-        const latestEvent = await prisma.event.findFirst({where: {organizerName: session.user.name}, orderBy:{id:'desc'}})
-        if(latestEvent){
-            return NextResponse.json(latestEvent)
+        const latestOrder = await prisma.order.findFirst({where: {merchantName: session.user.name}, orderBy:{id:'desc'}})
+        if(latestOrder){
+            return NextResponse.json(latestOrder)
         } else {
             return NextResponse.json({error: 'Something went wrong.'})
         }

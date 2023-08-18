@@ -125,7 +125,7 @@ const EditEvent = ({...props}:Props) => {
       const resp = await fetch("/api/events", {
         method: "PATCH",
         headers: {
-          "Content-Type": "Applicatin/json",
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({state, id: props.id})
       });
