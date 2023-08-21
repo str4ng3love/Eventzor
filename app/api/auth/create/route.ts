@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { Prisma } from "@prisma/client";
-import {prisma} from "../../../../lib/ConnectPrisma"
+import { prisma } from "../../../../lib/ConnectPrisma";
+import { hashPass } from "@/lib/bcrypt";
 
 const handler = async (req: Request) => {
   if (req.method !== "POST" && !req.body) {
@@ -57,21 +58,22 @@ const handler = async (req: Request) => {
       { status: 400 }
     );
   }
-  if(body.password!==body.confirm){
+  if (body.password !== body.confirm) {
     return NextResponse.json(
-        {
-          error: "Please confirm password",
-          field: "confirm",
-        },
-        { status: 400 }
-      );
+      {
+        error: "Please confirm password",
+        field: "confirm",
+      },
+      { status: 400 }
+    );
   }
   try {
+    const hassedPass = await hashPass(body.password);
     const user = await prisma.user.create({
       data: {
         name: body.username,
         username: body.username,
-        password: body.password,
+        password: hassedPass,
         email: body.email,
       },
     });
@@ -95,7 +97,7 @@ const handler = async (req: Request) => {
           id: user.id,
           name: user.name,
           email: user.email,
-          message: "Account Created"
+          message: "Account Created",
         },
         { status: 200 }
       );

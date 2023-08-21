@@ -128,7 +128,7 @@ const AddNewEvent = ({fn, refetchTrigger}:Props) => {
       const resp = await fetch("/api/events", {
         method: "POST",
         headers: {
-          "Content-Type": "Applicatin/json",
+          "Content-Type": "Application/json",
         },
         body: JSON.stringify(state),
       });

@@ -8,23 +8,27 @@ async function handler(req: Request) {
   if (req.method === "POST") {
     if (session?.user?.name) {
       const body = await req.json();
-
+console.log(    parseFloat(body.price) < 0 )
       if (
         body.amount <= 0 ||
         body.description.length < 3 ||
-        typeof body.description !== "string" ||
-        body.item < 3 ||
-        typeof body.item !== "string" ||
-        typeof body.isBuyOrder !== "boolean" ||
-        typeof body.isPreorder !== "boolean" ||
+        typeof(body.description)!== "string" ||
+        body.item.length <= 3 ||
+        typeof(body.item) !== "string" ||
+        typeof(body.isBuyOrder) !== "boolean" ||
+        typeof(body.isPreorder) !== "boolean" ||
         body.price.length === 0 ||
-        parseInt(body.price) < 0
+        parseFloat(body.price) < 0
       ) {
         return NextResponse.json(
           { error: "Please provide correct/missing values" },
           { status: 200 }
         );
       }
+    let date = new Date()
+    let orderDate = body.releaseDate
+    console.log(orderDate)
+
       try {
         const newOrder = await prisma.order.create({
           data: {
@@ -34,8 +38,8 @@ async function handler(req: Request) {
             isBuyOrder: body.isBuyOrder,
             merchantName: session?.user?.name,
             preorder: body.isPreorder,
-            releaseDate: body.releaseDate,
-            price: parseInt(body.price),
+            releaseDate: new Date(body.releaseDate) || null,
+            price: parseFloat(body.price),
           },
         });
 
@@ -68,7 +72,7 @@ async function handler(req: Request) {
       }
       try {
         const deletedOrder = await prisma.order.delete({
-          where: { id: body.id },
+          where: { id: body.id, merchantName: session.user.name },
         });
         if (!deletedOrder) {
           return NextResponse.json(
@@ -103,7 +107,6 @@ async function handler(req: Request) {
     if(parseInt(body.state.amount) > 10000){
       return NextResponse.json({error: "Amount of items cannot exceed 10 000 units"})
     }
-    console.log(body)
       try {
         const updatedOrder = await prisma.order.update({
           where: {

@@ -1,9 +1,10 @@
 "use client";
-import { useState, Fragment, useEffect } from "react";
+import { useState, Fragment } from "react";
 import Button from "./Button";
 import { Dialog, Transition } from "@headlessui/react";
 import Notification from "../static/Notification";
 import { NotificationObj } from "../static/Notification";
+
 const RegisterForm = () => {
   const [isOpen, setOpen] = useState(false);
   const [username, setUsername] = useState("");

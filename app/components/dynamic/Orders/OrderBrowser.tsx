@@ -85,6 +85,29 @@ export const OrderBrowser = ({ orders }: Props) => {
       });
     }
   };
+  const deleteOrder = async (id: string) => {
+    try {
+      const cachedEntry = ordersArr.filter((e) => e.id == id);
+      setOrdersArr((prev) => [...prev.filter((e) => e.id != id)]);
+
+      const resp = await fetch("/api/orders", {
+        method: "DELETE",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ id }),
+      });
+      const message = await resp.json();
+      if (resp.ok) {
+        setNotify({ error: false, show: true, message: message.message });
+      } else if (message.error) {
+        setOrdersArr((prev) => [...prev, ...cachedEntry]);
+        setNotify({ error: true, show: true, message: message.error });
+      }
+    } catch (error) {
+      setNotify({ error: true, show: true, message: "Something went wrong" });
+    }
+  };
   return (
     <>
       <div className="my-4 px-8 flex flex-col">
@@ -99,8 +122,8 @@ export const OrderBrowser = ({ orders }: Props) => {
           <AddOrder
             fn={(e) => {
               setOptimisticComp(true);
-              // fetch
             }}
+            refetchTrigger={()=> getOrder()}
           />
         </div>
         <table className="my-8  w-full text-sm table">
@@ -113,7 +136,7 @@ export const OrderBrowser = ({ orders }: Props) => {
             </tr>
             {ordersArr.length > 0 ? (
               ordersArr.map((order) => (
-                <OrderComponent {...order} delFn={() => {}} editFn={() => setEdit({show:true, order})} key={order.id}/>
+                <OrderComponent {...order} delFn={() => {deleteOrder(order.id)}} editFn={() => setEdit({show:true, order})} key={order.id}/>
               ))
             ) : (
               <tr className="w-full flex justify-center p-8">

@@ -3,8 +3,9 @@ import { NextResponse } from "next/server";
 
 async function handler(req: Request) {
   if (req.method === "GET") {
-    const deleted = await prisma.event.deleteMany({});
-    return NextResponse.json({ deleted: deleted });
+    const deletedEvents = await prisma.event.deleteMany({});
+    const deletedOrders = await prisma.order.deleteMany({});
+    return NextResponse.json({ deleted: deletedEvents, deletedOrders });
   }
 }
 

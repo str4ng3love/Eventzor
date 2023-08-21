@@ -27,7 +27,8 @@ module.exports = {
         bg_sidebar: "var(--bg-sidebar)",
         text: "var(--text)",
         interactive_text: "var(--interactive-text)",
-        text_inactive: "var(--inactive-text)"
+        text_inactive: "var(--inactive-text)",
+        text_button: "var(--button-text)"
       },
       boxShadow: {
         link: "var(--shadow-link)",

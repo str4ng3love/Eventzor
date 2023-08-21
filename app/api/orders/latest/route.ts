@@ -3,7 +3,7 @@ import { options } from "../../auth/[...nextauth]/options"
 import { NextResponse } from "next/server"
 import {prisma} from '../../../../lib/ConnectPrisma'
 
-export default async function handler(req:Request){
+export async function handler(req:Request){
     if(req.method !== "GET"){
         return NextResponse.json({error: 'Bad request'}, {status:400})
     }

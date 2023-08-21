@@ -11,7 +11,7 @@ enum FormActionKind {
   INPUT_IS_PREORDER,
   INPUT_IS_BUY_ORDER,
   INPUT_RELEASE,
-  INPUT_PRICE
+  INPUT_PRICE,
 }
 interface InputAction {
   type: FormActionKind;
@@ -23,8 +23,8 @@ interface InputState {
   amount: number;
   isPreorder: boolean;
   isBuyOrder: boolean;
-  releaseDate?: Date;
-  price: number
+  releaseDate?: Date | null;
+  price: number;
 }
 
 const reducer = (state: InputState, action: InputAction) => {
@@ -67,11 +67,12 @@ const reducer = (state: InputState, action: InputAction) => {
         releaseDate: payload as Date,
       };
     }
-    case FormActionKind.INPUT_PRICE:{
+    case FormActionKind.INPUT_PRICE: {
       return {
         ...state,
-        price: payload as number
-      }
+
+        price: payload as number,
+      };
     }
 
     default:
@@ -79,8 +80,8 @@ const reducer = (state: InputState, action: InputAction) => {
   }
 };
 interface Props {
-  fn?: (e: React.MouseEvent) => void;
-  refetchTrigger?: () => void;
+  fn: (e: React.MouseEvent) => void;
+  refetchTrigger: () => void;
 }
 const date = new Date();
 const AddOrder = ({ fn, refetchTrigger }: Props) => {
@@ -94,11 +95,11 @@ const AddOrder = ({ fn, refetchTrigger }: Props) => {
   const [state, dispatch] = useReducer(reducer, {
     item: "",
     description: "",
-    amount: 0,
+    amount: 1,
     isBuyOrder: false,
     isPreorder: false,
-    releaseDate: new Date(date.setDate(date.getDay() + 1)),
-    price: 0
+    releaseDate: null,
+    price: 0,
   });
   const handleCreate = async (state: InputState) => {
     if (state.amount < 0) {
@@ -108,9 +109,15 @@ const AddOrder = ({ fn, refetchTrigger }: Props) => {
         message: "Amount of items cannot be negative.",
       });
     }
-    if (
-      // todo need to work out how to handle date logic
 
+    if (state.price.toString().includes(",")) {
+      let priceWithDot = state.price.toString().replace(",", ".");
+      dispatch({
+        type: FormActionKind.INPUT_PRICE,
+        payload: parseFloat(priceWithDot),
+      });
+    }
+    if (
       state.releaseDate &&
       state.releaseDate < new Date(date.setDate(date.getDay() + 1))
     ) {
@@ -130,10 +137,8 @@ const AddOrder = ({ fn, refetchTrigger }: Props) => {
         },
         body: JSON.stringify(state),
       });
-      console.log(resp)
       const dat = await resp.json();
-      
-      //   refetchTrigger()
+      refetchTrigger()
       setCanPost(true);
       if (dat.error) {
         setNotify({ error: true, show: true, message: dat.error });
@@ -168,7 +173,7 @@ const AddOrder = ({ fn, refetchTrigger }: Props) => {
                   Add new Order
                 </Dialog.Title>
                 <Dialog.Description className={"p-8 text-lg font-semibold"}>
-                  Create new Order
+                  Create new&nbsp;{state.isBuyOrder ? "Buy " : ""}Order
                 </Dialog.Description>
                 <form onSubmit={(e) => e.preventDefault()}>
                   <div className="p-4 flex justify-between z-20 ">
@@ -199,8 +204,18 @@ const AddOrder = ({ fn, refetchTrigger }: Props) => {
                     />
                   </div>
                   <div className="p-4 flex justify-between ">
-                    <label className="p-1 min-w-[10ch] mr-2">Price</label>
+                    <label className="p-1 min-w-[10ch] mr-2">
+                      {state.isBuyOrder ? "Offer" : "Price"}
+                    </label>
                     <input
+                      onInvalid={() =>
+                        setNotify({
+                          error: true,
+                          show: true,
+                          message: `Please provide a number, use a dot(.) when dealing with fractions `,
+                        })
+                      }
+                      value={state.price}
                       min={0}
                       onChange={(e) =>
                         dispatch({
@@ -210,11 +225,13 @@ const AddOrder = ({ fn, refetchTrigger }: Props) => {
                       }
                       className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
                       type="number"
+                      step="0.01"
                     />
                   </div>
                   <div className="p-4 flex justify-between ">
                     <label className="p-1 min-w-[10ch] mr-2">Amount</label>
                     <input
+                      value={state.amount}
                       min={1}
                       onChange={(e) =>
                         dispatch({
@@ -227,38 +244,56 @@ const AddOrder = ({ fn, refetchTrigger }: Props) => {
                     />
                   </div>
 
-                  <div className="p-4 flex justify-between ">
-                    <label className="p-1 min-w-[10ch] mr-2">Buy Order ?</label>
-                    <input
-                      onChange={(e) => {
-                        dispatch({
-                          type: FormActionKind.INPUT_IS_BUY_ORDER,
-                          payload: !state.isBuyOrder,
-                        });
-                      }}
-                      className="p-1  ring-1 ring-text active:ring-link dark:text-interactive_text w-full "
-                      type="checkbox"
-                    />
-                  </div>
-                  <div className="p-4 flex justify-between ">
-                    <label className="p-1 min-w-[10ch] mr-2">Preorder ?</label>
-                    <input
-                      onChange={(e) =>
-                        dispatch({
-                          type: FormActionKind.INPUT_IS_PREORDER,
-                          payload: !state.isPreorder,
-                        })
-                      }
-                      className="p-1  ring-1 ring-text active:ring-link dark:text-interactive_text w-full  "
-                      type="checkbox"
-                    />
-                  </div>
                   {state.isPreorder ? (
+                    <></>
+                  ) : (
                     <div className="p-4 flex justify-between ">
                       <label className="p-1 min-w-[10ch] mr-2">
-                        Realease date
+                        Buy Order ?
                       </label>
                       <input
+                        onChange={(e) => {
+                          dispatch({
+                            type: FormActionKind.INPUT_IS_BUY_ORDER,
+                            payload: !state.isBuyOrder,
+                          });
+                        }}
+                        className="p-1  ring-1 ring-text active:ring-link dark:text-interactive_text w-full "
+                        type="checkbox"
+                      />
+                    </div>
+                  )}
+                  {state.isBuyOrder ? (
+                    <></>
+                  ) : (
+                    <div className="p-4 flex justify-between ">
+                      <label className="p-1 min-w-[10ch] mr-2">
+                        Preorder ?
+                      </label>
+                      <input
+                        onChange={(e) =>
+                          dispatch({
+                            type: FormActionKind.INPUT_IS_PREORDER,
+                            payload: !state.isPreorder,
+                          })
+                        }
+                        className="p-1  ring-1 ring-text active:ring-link dark:text-interactive_text w-full  "
+                        type="checkbox"
+                      />
+                    </div>
+                  )}
+                  {state.isPreorder && !state.isBuyOrder ? (
+                    <div className="p-4 flex justify-between ">
+                      <label className="p-1 min-w-[10ch] mr-2">
+                        Release date
+                      </label>
+                      <input
+                        min={new Date(date.setDate(date.getDate() + 1))
+                          .toISOString()
+                          .slice(0, -8)}
+                        onInvalid={()=>{
+                          setNotify({error: true, show:true, message:"Please provide a valid date"})
+                        }}
                         onChange={(e) =>
                           dispatch({
                             type: FormActionKind.INPUT_RELEASE,
@@ -285,6 +320,7 @@ const AddOrder = ({ fn, refetchTrigger }: Props) => {
                       <Button
                         text="Create"
                         fn={(e) => {
+                          fn(e);
                           handleCreate(state);
                         }}
                       />

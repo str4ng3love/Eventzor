@@ -2,7 +2,7 @@ import { NextAuthOptions } from "next-auth";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaClient } from "@prisma/client";
-
+import { compare } from "@/lib/bcrypt";
 
 const prisma = new PrismaClient();
 
@@ -22,14 +22,16 @@ export const options: NextAuthOptions = {
         },
       },
       async authorize(credentials, req) {
-
         let user = await prisma.user.findFirst({
-          where: { username: credentials?.username, AND: {password: credentials?.password} },
+          where: { username: credentials?.username },
         });
 
-        if (user?.username) {
- 
-          return user
+        if (user && credentials?.password) {
+          const isMatch = await compare(credentials?.password, user.password)
+
+          if (isMatch) {
+            return user;
+          }
         }
         return null;
       },
@@ -37,10 +39,8 @@ export const options: NextAuthOptions = {
   ],
   adapter: PrismaAdapter(prisma),
   secret: process.env.NEXTAUTH_SECRET,
-  callbacks: {
-    
-  },
+  callbacks: {},
   session: {
-    strategy:"jwt"
-  }
+    strategy: "jwt",
+  },
 };
