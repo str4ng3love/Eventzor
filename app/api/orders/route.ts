@@ -114,7 +114,7 @@ console.log(    parseFloat(body.price) < 0 )
           },
           data: {
            amount: parseInt(body.state.amount),
-           price: parseInt(body.state.price),
+           price: parseFloat(body.state.price),
            description: body.state.description,
            item: body.state.item
             

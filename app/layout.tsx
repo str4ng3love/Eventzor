@@ -1,6 +1,7 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import { Public_Sans } from 'next/font/google'
+import Header from './components/static/Header/Header'
 
 const publicSans = Public_Sans({ subsets: ['latin'] })
 
@@ -16,7 +17,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={publicSans.className}>{children}</body>
+      <body className={publicSans.className}>
+        <Header />
+        {children}
+        </body>
     </html>
   )
 }

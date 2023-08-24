@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 async function handler(req: Request, { params }: { params: { slug: string } }) {
   const slug = params.slug;
-console.log('hit')
+
   try {
     const order = await prisma.order.findUnique({ where: { id: slug } });
     if (!order) {
@@ -13,7 +13,7 @@ console.log('hit')
         { status: 404 }
       );
     }
-console.log(order)
+
     return NextResponse.json(order);
   } catch (error) {
     console.log(error);

@@ -21,6 +21,7 @@ import Button from "../Button";
   INPUT_ECLOSING = "Events closing date",
   INPUT_ESTART = "Events starting date",
   INPUT_STATUS = "Status of the event",
+  INPUT_PRICE = "Ticket price"
 }
  interface InputAction {
   type: FormActionKind;
@@ -33,6 +34,7 @@ import Button from "../Button";
   eventDate: Date;
   closingDate: Date;
   location: string;
+  price: number;
   status: Status;
 }
 
@@ -62,6 +64,12 @@ import Button from "../Button";
       return {
         ...state,
         closingDate: payload as Date,
+      };
+    }
+    case FormActionKind.INPUT_PRICE: {
+      return {
+        ...state,
+        price: payload as number,
       };
     }
     case FormActionKind.INPUT_LOCATION: {
@@ -105,6 +113,7 @@ const AddNewEvent = ({fn, refetchTrigger}:Props) => {
     location: "",
     closingDate: closingDate,
     eventDate: eventDate,
+    price: 0
   });
 
   const handleCreate = async (state: InputState) => {
@@ -259,6 +268,24 @@ const AddNewEvent = ({fn, refetchTrigger}:Props) => {
                       }
                       className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
                       type="number"
+                      defaultValue={0}
+                      min={0}
+                    />
+                  </div>
+                  <div className="p-4 flex justify-between ">
+                    <label className="p-1 min-w-[10ch] mr-2">
+                      Ticket Price
+                    </label>
+                    <input
+                      onChange={(e) =>
+                        dispatch({
+                          type: FormActionKind.INPUT_PRICE,
+                          payload: e.currentTarget.value,
+                        })
+                      }
+                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
+                      type="number"
+                      step="0.01"
                       defaultValue={0}
                       min={0}
                     />

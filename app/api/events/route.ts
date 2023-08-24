@@ -9,7 +9,7 @@ async function handler(req: Request) {
   if (req.method == "POST") {
     if (session?.user?.name) {
       const body = await req.json();
-
+console.log(body)
       if (
         typeof body.title != "string" ||
         body.title.length < 3 ||
@@ -20,6 +20,7 @@ async function handler(req: Request) {
         body.tickets.length < 0 ||
         !body.eventDate ||
         !body.closingDate||
+        parseFloat(body.price) <= 0 ||
         parseInt(body.tickets)  <= 0
       ) {
         return NextResponse.json(
@@ -37,6 +38,7 @@ async function handler(req: Request) {
             eventDate: new Date(body.eventDate),
             closingDate: new Date(body.closingDate),
             organizerName: session.user.name,
+            price: parseFloat(body.price)
           },
         });
         if (event) {

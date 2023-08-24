@@ -10,7 +10,7 @@ export default async function Home() {
 
   if (session?.user) {
     return (
-      <main className="flex min-h-screen flex-col items-center justify-center p-24">
+      <main className="flex h-[calc(100dvh_-_4rem)] flex-col items-center justify-center p-24">
         <h2 className="text-3xl font-bold mb-8 ">Dashboard Demo</h2>
         <div className="flex justify-around p-4 gap-4">
           <Button text="Enter" link="/dashboard" />
@@ -20,7 +20,7 @@ export default async function Home() {
     );
   } else {
     return (
-      <main className="flex min-h-screen flex-col items-center justify-center p-24">
+      <main className="flex h-[calc(100dvh_-_4rem)] flex-col items-center justify-center p-24">
         <h2 className="text-3xl font-bold mb-8">Dashboard Demo</h2>
         <Authenticate />
       </main>

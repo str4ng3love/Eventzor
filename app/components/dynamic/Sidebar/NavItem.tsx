@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { IconType } from "react-icons";
 interface Props {
-  Icon: IconType;
+  Icon?: IconType;
   text: string;
   href: string;
   fn: (e: React.MouseEvent, href: string) => void;
@@ -29,7 +29,7 @@ const NavItem = ({
 after:-translate-x-8`}
     >
       <span className={"text-xl p-2"}>
-        <Icon />
+        {Icon? <Icon />: <></>}
       </span>
 
       <span className="first-letter:uppercase p-2">{text}</span>

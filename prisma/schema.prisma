@@ -11,18 +11,18 @@ datasource db {
 }
 
 model Account {
-  id                 String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId             String @db.ObjectId
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  
-  access_token       String?  
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  
-  session_state      String?
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -32,15 +32,15 @@ model Account {
 model Session {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   sessionToken String   @unique
-  userId       String @db.ObjectId
+  userId       String   @db.ObjectId
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  name          String @unique
-  email         String?   
+  name          String    @unique
+  email         String?
   emailVerified DateTime?
   image         String?
   username      String
@@ -49,11 +49,15 @@ model User {
   sessions      Session[]
   events        Event[]
   orders        Order[]
+  comments      Comment[]
+  dislikes      Dislike[]
+  likes         Like[]
+
   @@unique([username])
 }
 
 model VerificationToken {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
   identifier String
   token      String   @unique
   expires    DateTime
@@ -62,31 +66,40 @@ model VerificationToken {
 }
 
 model Event {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  title String
-  description String
-  tickets Int
-  ticketsSold Int @default(0)
-  eventDate DateTime
-  closingDate DateTime
-  location String
-  status Status @default(active)
-  organizer User @relation(fields: [organizerName], references: [name] )
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  title         String
+  description   String
+  tickets       Int
+  ticketsSold   Int       @default(0)
+  eventDate     DateTime
+  closingDate   DateTime
+  location      String
+  price         Float
+  status        Status    @default(active)
+  organizer     User      @relation(fields: [organizerName], references: [name])
   organizerName String
+  dislikes      Dislike[]
+  likes         Like[]
 }
+
 model Order {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  item String
-  description String
-  price Int
-  amount Int
-  amountSold Int @default(0)
-  preorder Boolean @default(false)
-  releaseDate DateTime?
-  isBuyOrder Boolean @default(false)
-  merchant User @relation(fields: [merchantName], references: [name])
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  item         String
+  description  String
+  price        Float
+  amount       Int
+  amountSold   Int       @default(0)
+  preorder     Boolean   @default(false)
+  releaseDate  DateTime?
+  isBuyOrder   Boolean   @default(false)
+  imageUrl     String[]
+  merchant     User      @relation(fields: [merchantName], references: [name])
   merchantName String
+  comments     Comment[]
+  dislikes     Dislike[]
+  likes        Like[]
 }
+
 enum Status {
   active
   inactive
@@ -94,3 +107,42 @@ enum Status {
   canceled
 }
 
+model Comment {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt  String
+  message    String
+  parentId   String?   @db.ObjectId
+  updatedAt  String?
+  authorName User      @relation(fields: [author], references: [name])
+  author     String
+  order      Order?    @relation(fields: [orderId], references: [id])
+  orderId    String?   @db.ObjectId
+  parent     Comment?  @relation("parent-child", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  children   Comment[] @relation("parent-child")
+  dislikes   Dislike[]
+  likes      Like[]
+}
+
+model Dislike {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  orderId   String?  @db.ObjectId
+  commentId String?  @db.ObjectId
+  eventId   String?  @db.ObjectId
+  event     Event?   @relation(fields: [eventId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  order     Order?   @relation(fields: [orderId], references: [id])
+  comment   Comment? @relation(fields: [commentId], references: [id])
+}
+
+model Like {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  orderId   String?  @db.ObjectId
+  commentId String?  @db.ObjectId
+  eventId   String?  @db.ObjectId
+  event     Event?   @relation(fields: [eventId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  order     Order?   @relation(fields: [orderId], references: [id])
+  comment   Comment? @relation(fields: [commentId], references: [id])
+}
