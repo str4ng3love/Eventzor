@@ -3,6 +3,7 @@ import Notification from "../../static/Notification";
 import React, { useState, Fragment, useReducer } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import Button from "../Button";
+import EditImages from "./EditImages";
 
 // Can't import enum type from schema.prisma file for some reason
  enum Status {
@@ -20,6 +21,7 @@ import Button from "../Button";
   INPUT_ECLOSING = "Events closing date",
   INPUT_ESTART = "Events starting date",
   INPUT_STATUS = "Status of the event",
+  INPUT_PRICE = "Ticket price",
 }
  interface InputAction {
   type: FormActionKind;
@@ -31,6 +33,7 @@ import Button from "../Button";
   tickets: number;
   eventDate: Date;
   closingDate: Date;
+  price: number;
   location: string;
   status: Status | any;
 }
@@ -63,6 +66,12 @@ import Button from "../Button";
         closingDate: payload as Date,
       };
     }
+    case FormActionKind.INPUT_PRICE: {
+      return {
+        ...state,
+        price: payload as number,
+      };
+    }
     case FormActionKind.INPUT_LOCATION: {
       return {
         ...state,
@@ -82,10 +91,12 @@ import Button from "../Button";
 interface Props extends InputState{
     show: boolean,
     id: string;
+    images:string[];
     stopDisplayingFn: () => void;
     triggerFetchFn: ()=>void;
 }
 const EditEvent = ({...props}:Props) => {
+
   const [canEdit, setCanEdit] = useState(true)
   const [notify, setNotify] = useState({
     show: false,
@@ -104,6 +115,7 @@ const EditEvent = ({...props}:Props) => {
     location: props.location,
     closingDate: props.closingDate,
     eventDate: props.eventDate,
+    price: props.price
   });
 
   const handleEdit = async (state: InputState) => {
@@ -258,6 +270,26 @@ const EditEvent = ({...props}:Props) => {
                       type="number"
                       min={0}
                     />
+                  </div>
+                  <div className="p-4 flex justify-between ">
+                    <label className="p-1 min-w-[10ch] mr-2">
+                      Ticket Price
+                    </label>
+                    <input
+                      onChange={(e) =>
+                        dispatch({
+                          type: FormActionKind.INPUT_PRICE,
+                          payload: e.currentTarget.value,
+                        })
+                      }
+                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
+                      type="number"
+                      step="0.01"
+                      value={state.price}
+                    />
+                  </div>
+                  <div className="p-4 flex justify-center ">
+                        <EditImages images={props.images} id={props.id}/>
                   </div>
                   <Notification
                     message={notify.message}

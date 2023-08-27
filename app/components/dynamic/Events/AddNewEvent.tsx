@@ -21,7 +21,8 @@ import Button from "../Button";
   INPUT_ECLOSING = "Events closing date",
   INPUT_ESTART = "Events starting date",
   INPUT_STATUS = "Status of the event",
-  INPUT_PRICE = "Ticket price"
+  INPUT_PRICE = "Ticket price",
+  INPUT_IMAGE = "Image for promotion"
 }
  interface InputAction {
   type: FormActionKind;
@@ -36,6 +37,7 @@ import Button from "../Button";
   location: string;
   price: number;
   status: Status;
+  image: string;
 }
 
  const reducer = (state: InputState, action: InputAction) => {
@@ -84,6 +86,12 @@ import Button from "../Button";
         tickets: payload as number,
       };
     }
+    case FormActionKind.INPUT_IMAGE: {
+      return {
+        ...state,
+        image: payload as string
+      };
+    }
     default:
       return state;
   }
@@ -113,7 +121,8 @@ const AddNewEvent = ({fn, refetchTrigger}:Props) => {
     location: "",
     closingDate: closingDate,
     eventDate: eventDate,
-    price: 0
+    price: 0,
+    image:""
   });
 
   const handleCreate = async (state: InputState) => {
@@ -288,6 +297,27 @@ const AddNewEvent = ({fn, refetchTrigger}:Props) => {
                       step="0.01"
                       defaultValue={0}
                       min={0}
+                    />
+                  </div>
+                  <div className="p-4 flex justify-between ">
+                    <label className="p-1 min-w-[10ch] mr-2">
+                      Image Link
+                    </label>
+                    <input
+                    onPaste={(e) =>
+                      dispatch({
+                        type: FormActionKind.INPUT_IMAGE,
+                        payload: e.currentTarget.value,
+                      })}
+                      onChange={(e) =>
+                        dispatch({
+                          type: FormActionKind.INPUT_IMAGE,
+                          payload: e.currentTarget.value,
+                        })
+                      }
+                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
+                      type="text"
+                     
                     />
                   </div>
                   <Notification

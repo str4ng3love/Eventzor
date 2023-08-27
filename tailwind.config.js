@@ -32,6 +32,7 @@ module.exports = {
       },
       boxShadow: {
         link: "var(--shadow-link)",
+        omni: "var(--shadow-omni)",
       },
       keyframes: {
         rotateRight: {
@@ -88,6 +89,8 @@ module.exports = {
         rotateRight: "rotateRight linear 10s infinite",
         fadeIn: "fadeIn ease-in-out 500ms forwards",
         fadeOut: "fadeOut ease-in-out 500ms forwards",
+        fadeIn300: "fadeIn ease-in-out 300ms forwards",
+        fadeOut300: "fadeOut ease-in-out 300ms forwards",
         growAndShrink: "growAndShrink ease-in-out 5s forwards",
         pingSlower: "ping 6s cubic-bezier(0, 0, 0.2, 1) infinite",
         pingSlower2: "ping 6s 3s cubic-bezier(0, 0, 0.2, 1) infinite",

@@ -41,6 +41,8 @@ const EventBrowser = ({ events }: Props) => {
                   ? {
                       id,
                       closingDate: data.closingDate,
+                      price: data.price,
+                      images:data.images,
                       description: data.description,
                       eventDate: data.eventDate,
                       location: data.location,
@@ -240,12 +242,13 @@ const EventBrowser = ({ events }: Props) => {
         )}
         {edit.show && edit.event ? (
           <EditEvent
-            {...edit.event}
-            show={edit.show}
-            stopDisplayingFn={() => {
-              setEdit({ show: false, event: null });
-            }}
-            triggerFetchFn={() => getEvent(edit.event?.id)}
+
+          {...edit.event}
+          show={edit.show}
+          stopDisplayingFn={() => {
+            setEdit({ show: false, event: null });
+          }}
+          triggerFetchFn={() => getEvent(edit.event?.id)}
           />
           
         ) : (

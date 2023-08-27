@@ -9,7 +9,6 @@ async function handler(req: Request) {
   if (req.method == "POST") {
     if (session?.user?.name) {
       const body = await req.json();
-console.log(body)
       if (
         typeof body.title != "string" ||
         body.title.length < 3 ||
@@ -21,7 +20,8 @@ console.log(body)
         !body.eventDate ||
         !body.closingDate||
         parseFloat(body.price) <= 0 ||
-        parseInt(body.tickets)  <= 0
+        parseInt(body.tickets)  <= 0||
+        body.image.length <= 0
       ) {
         return NextResponse.json(
           { error: "Please provide correct/missing values" },
@@ -38,7 +38,9 @@ console.log(body)
             eventDate: new Date(body.eventDate),
             closingDate: new Date(body.closingDate),
             organizerName: session.user.name,
-            price: parseFloat(body.price)
+            price: parseFloat(body.price),
+            images: [body.image]
+
           },
         });
         if (event) {
@@ -53,6 +55,7 @@ console.log(body)
           );
         }
       } catch (error) {
+        console.log(error)
         return NextResponse.json(
           { error: "Server Internal Error" },
           { status: 500 }
@@ -101,7 +104,7 @@ console.log(body)
   }
     try {
 
-      const updatedEvent = await prisma.event.update({where:{id: body.id, organizerName:session.user.name}, data:{title: body.state.title, description: body.state.description, location: body.state.location, eventDate: body.state.eventDate, closingDate:body.state.closingDate, status:body.state.status, tickets: parseInt(body.state.tickets) }});
+      const updatedEvent = await prisma.event.update({where:{id: body.id, organizerName:session.user.name}, data:{title: body.state.title, description: body.state.description, location: body.state.location, eventDate: body.state.eventDate, closingDate:body.state.closingDate, status:body.state.status, tickets: parseInt(body.state.tickets)}});
       if (!updatedEvent) {
         return NextResponse.json(
           { error: "Internal server error" },

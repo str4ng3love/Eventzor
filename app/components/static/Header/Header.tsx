@@ -6,8 +6,8 @@ const Header = () => {
 
         <div className="ml-32">
           <HeaderNav dest="/" text="home" />
-          <HeaderNav dest="events" text="events" />
-          <HeaderNav dest="orders" text="orders" />
+          <HeaderNav dest="/events" text="events" />
+          <HeaderNav dest="/orders" text="orders" />
         </div>
         <div className="mr-32">
           <HeaderNav dest="/dashboard" text="dashboard" />

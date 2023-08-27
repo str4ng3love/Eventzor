@@ -17,6 +17,7 @@
   --secondary: #E94D41;
   --shadowColor: var(--link);
   --shadow-link: 0rem 0rem 1rem var(--shadowColor);
+  --shadow-omni: 0rem 0rem 1rem black;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -27,7 +28,7 @@
     --text: rgb(235, 235, 235);
     --interactive-text: rgb(20, 20, 20);
     --shadowColor:var(--text);
-    --inactive-text: rgb(177, 177, 177);
+    --inactive-text: rgb(165, 165, 165);
   }
 }
 

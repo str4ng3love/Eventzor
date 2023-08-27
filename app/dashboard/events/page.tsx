@@ -17,6 +17,7 @@ const getEvents = async () => {
 };
 const page = async () => {
   const { events } = await getEvents();
+
   return (
     <>
       <div className="flex flex-col pl-10">

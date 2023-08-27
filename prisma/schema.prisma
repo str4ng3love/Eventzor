@@ -78,6 +78,7 @@ model Event {
   status        Status    @default(active)
   organizer     User      @relation(fields: [organizerName], references: [name])
   organizerName String
+  images        String[]
   dislikes      Dislike[]
   likes         Like[]
 }
@@ -95,6 +96,7 @@ model Order {
   imageUrl     String[]
   merchant     User      @relation(fields: [merchantName], references: [name])
   merchantName String
+  images       String[]
   comments     Comment[]
   dislikes     Dislike[]
   likes        Like[]
