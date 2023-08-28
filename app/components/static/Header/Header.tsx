@@ -2,7 +2,7 @@ import HeaderNav from "../../dynamic/Header/HeaderNav";
 
 const Header = () => {
   return (
-    <nav className="h-[4rem] bg-bg_sidebar dark:bg-black z-50 flex justify-between items-center static">
+    <nav className="h-[4rem] bg-bg_sidebar text-interactive_text dark:text-text dark:bg-black z-50 flex justify-between items-center static">
 
         <div className="ml-32">
           <HeaderNav dest="/" text="home" />

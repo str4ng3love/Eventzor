@@ -26,7 +26,7 @@ const page = async () => {
     const {newEvents} = await getNewEvents();
   return (
     <main className="flex flex-col items-center min-h-[calc(100dvh_-_4rem)]">
-      {/* TODO: [slugified] dynamic page fora single event */}
+      {/* TODO: [slugified] dynamic page for a single event */}
       <Carousel
         heading="Upcoming events"
         items={newEvents}

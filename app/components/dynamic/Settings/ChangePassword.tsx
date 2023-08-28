@@ -58,7 +58,7 @@ const ChangePassword = () => {
             <>
               <label className="p-1 w-[16ch]">Password</label>
               <input
-                className="p-1 text-interactive_text"
+                className="p-1 dark:text-interactive_text text-text"
                 type="text"
                 onInput={(e) => setPassword(e.currentTarget.value)}
               />
@@ -68,7 +68,7 @@ const ChangePassword = () => {
             <>
               <label className="p-1 w-[16ch]">Password</label>
               <input
-                className="p-1 text-interactive_text"
+                className="p-1 dark:text-interactive_text text-text"
                 type="password"
                 onInput={(e) => setPassword(e.currentTarget.value)}
               />
@@ -81,7 +81,7 @@ const ChangePassword = () => {
             <>
               <label className="p-1 w-[16ch]">New Password</label>
               <input
-                className="p-1 text-interactive_text"
+                className="p-1 dark:text-interactive_text text-text"
                 type="text"
                 onInput={(e) => setNewPassword(e.currentTarget.value)}
               />
@@ -91,7 +91,7 @@ const ChangePassword = () => {
             <>
               <label className="p-1 w-[16ch]">New Password</label>
               <input
-                className="p-1 text-interactive_text"
+                className="p-1 dark:text-interactive_text text-text"
                 type="password"
                 onInput={(e) => setNewPassword(e.currentTarget.value)}
               />
@@ -104,7 +104,7 @@ const ChangePassword = () => {
             <>
               <label className="p-1 w-[16ch]">Confirm Password</label>
               <input
-                className="p-1 text-interactive_text"
+                className="p-1 dark:text-interactive_text text-text"
                 type="text"
                 onInput={(e) => setConfirmPassword(e.currentTarget.value)}
               />
@@ -114,7 +114,7 @@ const ChangePassword = () => {
             <>
               <label className="p-1 w-[16ch]">Confirm Password</label>
               <input
-                className="p-1 text-interactive_text"
+                className="p-1 dark:text-interactive_text text-text"
                 type="password"
                 onInput={(e) => setConfirmPassword(e.currentTarget.value)}
               />

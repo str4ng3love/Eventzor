@@ -45,7 +45,7 @@ const ChangeEmail = ({ userEmail }: Props) => {
           {showEdit ? (
             <>
               <input
-                className="p-1 text-interactive_text"
+                className="p-1 dark:text-interactive_text"
                 type="email"
                 onInput={(e) => setEmail(e.currentTarget.value)}
               />
