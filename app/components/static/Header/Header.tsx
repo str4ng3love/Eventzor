@@ -1,4 +1,5 @@
 import HeaderNav from "../../dynamic/Header/HeaderNav";
+import ShoppingCart from "../../dynamic/ShoppingCart";
 
 const Header = () => {
   return (
@@ -9,7 +10,8 @@ const Header = () => {
           <HeaderNav dest="/events" text="events" />
           <HeaderNav dest="/orders" text="orders" />
         </div>
-        <div className="mr-32">
+        <div className="mr-32 flex items-center gap-4">
+          <ShoppingCart />
           <HeaderNav dest="/dashboard" text="dashboard" />
         </div>
 

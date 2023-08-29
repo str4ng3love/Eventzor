@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import Portal from "../Portal";
+
 
 interface Props {
   images: string[];
@@ -11,7 +11,6 @@ const ImageBrowser = ({ images }: Props) => {
   const [selected, setSelected] = useState(0);
   const [playFadeOut, setPlayFadeOut] = useState(false);
 
-  const enlarge = () => {};
   const handleChange = async (i: number) => {
     setPlayFadeOut(true);
     setTimeout(() => {
@@ -20,14 +19,14 @@ const ImageBrowser = ({ images }: Props) => {
     }, 150);
   };
   return (
-    <div className="w-full h-[300px] relative">
+    <div className="w-full h-[400px] relative shadow-omni dark:shadow-none ring-2 ring-primary">
       <Image
         onClick={() => {}}
         fill
         placeholder="blur"
         blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
         style={{ objectFit: "cover" }}
-        sizes="(max-width: 750px"
+        sizes="(max-width: 750px, mix-height: 300px"
         alt="events image"
         src={images[selected]}
         className={`${
@@ -38,6 +37,7 @@ const ImageBrowser = ({ images }: Props) => {
         {/* TODO: custom scroll*/}
         {images.map((i, index) => (
           <Image
+          key={index}
             onClick={() => handleChange(index)}
             placeholder="blur"
             blurDataURL="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkOAMAANIAzr59FiYAAAAASUVORK5CYII="

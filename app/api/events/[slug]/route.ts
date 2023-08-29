@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 async function handler(req: Request, { params }: { params: { slug: string } }) {
   const slug = params.slug;
-
+console.log('hoyt')
   try {
     const event = await prisma.event.findUnique({ where: { id: slug } });
     if (!event) {
