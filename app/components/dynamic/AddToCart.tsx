@@ -39,15 +39,18 @@ const AddToCart = ({ item }: Props) => {
             if(prevString[prevString.length-1].id === item){
               prevString[prevString.length-1].amount = amount
               localStorage.setItem("cart", JSON.stringify(prevString));
+              window.dispatchEvent(new Event('storage'))
             } else {
               prevString.push({ id: item, amount: amount });
               localStorage.setItem("cart", JSON.stringify(prevString));
+              window.dispatchEvent(new Event('storage'))
             }
           } else {
             localStorage.setItem(
               "cart",
               JSON.stringify([{ id: item, amount: amount }])
             );
+            window.dispatchEvent(new Event('storage'))
           }
         }}
       />

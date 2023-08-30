@@ -1,5 +1,5 @@
 import HeaderNav from "../../dynamic/Header/HeaderNav";
-import ShoppingCart from "../../dynamic/ShoppingCart";
+import ShoppingCart from "../../dynamic/ShoppingCart/ShoppingCart";
 
 const Header = () => {
   return (
