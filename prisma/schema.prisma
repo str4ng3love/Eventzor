@@ -148,3 +148,9 @@ model Like {
   order     Order?   @relation(fields: [orderId], references: [id])
   comment   Comment? @relation(fields: [commentId], references: [id])
 }
+
+model Currency {
+  id String @id @map("_id") @default(auto()) @db.ObjectId
+  name String
+  exchangeRateToUSD Float
+}

@@ -1,4 +1,8 @@
+import Test from "./components/dynamic/Test";
+
+
 export default async function Home() {
+
   return (
     <div className="flex items-center justify-center min-h-[calc(100dvh_-_4rem)]">
       <span className="skew-y-2 p-1 bg-gradient-to-t from-primary to-secondary rounded-2xl animate-bounce">
@@ -6,6 +10,8 @@ export default async function Home() {
           under construction
         </h2>
       </span>
+
+   {/* <Test /> */}
     </div>
   );
 }

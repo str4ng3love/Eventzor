@@ -15,7 +15,7 @@ import EventSkeleton from "../../static/EventSkeleton";
 interface Props {
   events: Event[];
 }
-const EventBrowser = ({ events }: Props) => {
+const MyEventBrowser = ({ events }: Props) => {
   const [eventsArr, setEventsArr] = useState(events);
   const [sorter, setSorter] = useState("event");
   const [filtered, setFiltered] = useState<Event[] | null>();
@@ -259,4 +259,4 @@ const EventBrowser = ({ events }: Props) => {
   );
 };
 
-export default EventBrowser;
+export default MyEventBrowser;

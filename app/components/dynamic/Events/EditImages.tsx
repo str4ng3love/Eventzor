@@ -74,7 +74,7 @@ const EditImages = ({ images, id }: Props) => {
                       imgArr.map((im, index) => (
                         <>
                           {selected === index && confirm ? (
-                            <div className="flex flex-col items-center justify-evenly gap-2 p-4" >
+                            <div key={index} className="flex flex-col items-center justify-evenly gap-2 p-4" >
                               <Button
                                 text="Confirm"
                                 bgColor="bg-red-600"

@@ -5,9 +5,11 @@ import getEvent from "@/helpers/getEvent";
 import ImageBrowser from "@/app/components/dynamic/ImageBrowser";
 import Link from "next/link";
 import AddToCart from "@/app/components/dynamic/AddToCart";
+import PriceDisplay from "@/app/components/static/PriceDisplay";
 
 const page = async ({ params }: { params: { slug: string } }) => {
   const slug = params.slug;
+  console.log(slug)
   const { event } = await getEvent(decodeURI(slug));
 
   if (event !== null) {
@@ -30,6 +32,10 @@ const page = async ({ params }: { params: { slug: string } }) => {
               <div className="flex justify-between p-1 text-interactive_text dark:text-text">
                 <span>Tickets Left:&nbsp;</span>
                 <span>{event.tickets - event.ticketsSold}</span>
+              </div>
+              <div className="flex justify-between p-1 text-interactive_text dark:text-text">
+                <span>Price:&nbsp;</span>
+                <PriceDisplay price={event.price}/>
               </div>
               <AddToCart item={event.id} />
             </div>

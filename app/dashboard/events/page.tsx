@@ -1,6 +1,6 @@
-import EventBrowser from "@/app/components/dynamic/Events/EventBrowser";
+import MyEventBrowser from "@/app/components/dynamic/Events/MyEventBrowser";
 import { Heading2, Heading4 } from "@/app/components/static/Heading";
-import { prisma } from "../../../lib/ConnectPrisma";
+import { prisma } from "@/lib/ConnectPrisma";
 import { getServerSession } from "next-auth";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 
@@ -24,7 +24,7 @@ const page = async () => {
         <Heading2 text="events" />
         <Heading4 text="Browse and manage events" />
       </div>
-      <EventBrowser events={events} />
+      <MyEventBrowser events={events} />
    
     </>
   );

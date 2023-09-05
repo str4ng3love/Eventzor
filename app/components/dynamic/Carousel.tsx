@@ -4,6 +4,7 @@ import { Heading3, Heading4 } from "../static/Heading";
 import Image from "next/image";
 import { BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi";
 import Link from "next/link";
+import SpinnerMini from "../static/SpinnerMini";
 interface Props {
   items: {
     title: string;
@@ -21,6 +22,7 @@ const Carousel = ({ items, heading }: Props) => {
   const [selectedImage, setSelectedImage] = useState(items[0].images[0]);
   const [playFadeOut, setPlayFadeOut] = useState(false);
   const [active, setActive] = useState(0);
+  const [currency, setCurrency] = useState({ name: "initial", rate: 1 });
 
   const handleChange = async (image: string) => {
     setPlayFadeOut(true);
@@ -30,13 +32,43 @@ const Carousel = ({ items, heading }: Props) => {
     }, 150);
   };
   useEffect(() => {
+    window.addEventListener("currency", () => {
+      const currency = localStorage.getItem("currency");
+      if (currency) {
+        let selectedCurrency = JSON.parse(currency);
+        setCurrency({
+          name: selectedCurrency.name,
+          rate: selectedCurrency.rate,
+        });
+      } else {
+        setCurrency({
+          name: "usd",
+          rate: 1,
+        });
+      }
+    });
+    return () => {
+      window.removeEventListener("currency", () => {});
+    };
+  }, []);
+  useEffect(() => {
+    let prefCurrency = localStorage.getItem("currency");
+    if (prefCurrency) {
+      let selectedCurrency = JSON.parse(prefCurrency);
+      setCurrency({
+        name: selectedCurrency.name,
+        rate: selectedCurrency.rate,
+      });
+    }
+  }, []);
+  useEffect(() => {
     setSelectedImage(items[active].images[0]);
   }, [active]);
   if (items.length > 0) {
     return (
       <div className="flex flex-col lg:w-[50rem] w-[30rem]">
         <div className="p-4">
-          <Heading4 text="Newest Events" />
+          <Heading4 text={heading} />
         </div>
         <div className="flex items-center justify-between h-[20rem] ">
           <span
@@ -55,7 +87,7 @@ const Carousel = ({ items, heading }: Props) => {
             >
               <Image
                 fill
-                placeholder='blur'
+                placeholder="blur"
                 blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
                 style={{ objectFit: "cover" }}
                 sizes="(max-width: 750px"
@@ -83,8 +115,8 @@ const Carousel = ({ items, heading }: Props) => {
                       handleChange(i);
                     }}
                     alt="events image"
-                    placeholder='blur'
-                    blurDataURL='data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkOAMAANIAzr59FiYAAAAASUVORK5CYII='
+                    placeholder="blur"
+                    blurDataURL="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkOAMAANIAzr59FiYAAAAASUVORK5CYII="
                     key={index}
                     src={i}
                     width={75}
@@ -101,7 +133,17 @@ const Carousel = ({ items, heading }: Props) => {
                     {items[active].tickets - items[active].ticketsSold} tickets
                     left
                   </span>
-                  <span className="p-1">{items[active].price} $</span>
+                  <span className="p-1 flex items-center justify-center">
+                    {currency.name === "initial" ? (
+                      <SpinnerMini h="h-4" w="w-4" borderSize="border-[3px]"/>
+                    ) : (
+                      (items[active].price * currency.rate).toFixed(2)
+                    )}
+                    &nbsp;
+                    {currency.name === "initial"
+                      ? ""
+                      : currency.name.toLocaleUpperCase()}
+                  </span>
                 </div>
               </div>
             </div>

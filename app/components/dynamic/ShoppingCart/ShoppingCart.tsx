@@ -6,6 +6,7 @@ import { BiCart } from "react-icons/bi";
 import CartEventItem from "./CartEventItem";
 import CartButton from "./CartButton";
 import Button from "../Button";
+import Currency from "../Currency";
 
 interface EventItem {
   id: string;
@@ -19,8 +20,8 @@ const ShoppingCart = () => {
   const [isLoadingEvents, setIsLoadingEvents] = useState(true);
   const [eventItems, setEventItems] = useState<EventItem[]>([]);
   const [newEntries, setNewEntries] = useState(0);
-  const [currency, setCurrency] = useState('UD')
-
+  const [currency, setCurrency] = useState({ name: "usd", rate: 1 });
+  // todo: read currency from localstorage
   const fetchTitle = async (id: string) => {
     try {
       const resp = await fetch(`/api/events/price/${id}`);
@@ -32,6 +33,7 @@ const ShoppingCart = () => {
     }
   };
   // TODO: trace and react to changes in local storage API
+
   useEffect(() => {
     const cart = localStorage.getItem("cart");
     if (cart) {
@@ -45,9 +47,20 @@ const ShoppingCart = () => {
         setNewEntries(cartItems.length);
       }
     });
+    window.addEventListener("currency", () => {
+      const currency = localStorage.getItem("currency");
+      if (currency) {
+        let selectedCurrency = JSON.parse(currency);
+        setCurrency({
+          name: selectedCurrency.name,
+          rate: selectedCurrency.rate,
+        });
+      }
+    });
 
     return () => {
       window.removeEventListener("storage", () => {});
+      window.removeEventListener("currency", () => {});
     };
   }, []);
   useEffect(() => {
@@ -74,6 +87,16 @@ const ShoppingCart = () => {
       })();
     }
   }, [storage]);
+  useEffect(() => {
+    let prefCurrency = localStorage.getItem("currency");
+    if (prefCurrency) {
+      let selectedCurrency = JSON.parse(prefCurrency);
+      setCurrency({
+        name: selectedCurrency.name,
+        rate: selectedCurrency.rate,
+      });
+    }
+  }, [isOpen]);
   return (
     <>
       <CartButton
@@ -113,6 +136,14 @@ const ShoppingCart = () => {
                 <Dialog.Description className={"text-sm font-semibold"}>
                   Manage your Items
                 </Dialog.Description>
+                <div className="flex justify-end">
+                  <Currency
+                    currentCurrency={{
+                      name: currency.name,
+                      exchangeRateToUSD: currency.rate,
+                    }}
+                  />
+                </div>
                 <div className="flex flex-col p-4 mt-8">
                   {isLoadingEvents ? (
                     <h3>Loading ...</h3>
@@ -141,17 +172,18 @@ const ShoppingCart = () => {
                     </>
                   )}
                 </div>
+
                 {!isLoadingEvents && eventItems.length > 0 ? (
                   <div className="flex justify-end">
                     <div className=" ring-4 ring-primary p-2 text-xl font-bold">
                       <span className="mr-1">Total :</span>
                       <span className="mr-1">
                         {eventItems.reduce((acc, val, index) => {
-                          acc = acc + val.price * storage[index].amount;
-                          return acc;
+                          acc = acc + (val.price * currency.rate)* storage[index].amount;
+                          return parseFloat(acc.toFixed(2));
                         }, 0)}
                       </span>
-                      <span>{currency}</span>
+                      <span>{currency.name.toLocaleUpperCase()}</span>
                     </div>
                   </div>
                 ) : (
