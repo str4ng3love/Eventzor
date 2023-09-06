@@ -79,12 +79,13 @@ const Carousel = ({ items, heading }: Props) => {
           >
             <BiSolidLeftArrow />
           </span>
-          <div className="w-full h-full flex justify-between ring-2 ring-primary shadow-omni">
+          <div className=" w-full h-full flex justify-between ring-2 ring-primary shadow-omni">
             <Link
               href={`/events/${items[active].title}`}
               title={items[active].title}
-              className="lg:w-[67%] w-full overflow-hidden relative bg-black"
+              className={`relative group lg:w-[67%] w-full overflow-hidden  bg-black`}
             >
+              <span className="opacity-0 absolute z-50 h-full w-full bg-black/40 flex lg:hidden group-hover:opacity-100 justify-center items-center text-xl font-bold transition-all 300ms">{items[active].title}</span>
               <Image
                 fill
                 placeholder="blur"

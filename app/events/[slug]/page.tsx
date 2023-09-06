@@ -6,17 +6,18 @@ import ImageBrowser from "@/app/components/dynamic/ImageBrowser";
 import Link from "next/link";
 import AddToCart from "@/app/components/dynamic/AddToCart";
 import PriceDisplay from "@/app/components/static/PriceDisplay";
+import Comments from "@/app/components/dynamic/Events/Comments";
 
 const page = async ({ params }: { params: { slug: string } }) => {
   const slug = params.slug;
-  console.log(slug)
+
   const { event } = await getEvent(decodeURI(slug));
 
   if (event !== null) {
     return (
       <main className="flex flex-col items-center min-h-[calc(100dvh_-_4rem)]">
-        <div className="grid lg:grid-cols-3 grid-cols-2 justify-between lg:w-[80%] lg:gap-4 gap-2 w-full p-4 transition-all 300ms">
-          <div className="p-4 flex flex-col rounded-md bg-bg_interactive dark:bg-black/20 col-span-2 lg:col-start-1 lg:col-span-2 lg:row-span-3 lg:row-start-1 row-span-1 ">
+        <div className="grid grid-cols-3 justify-between lg:w-[80%] lg:gap-4 gap-2 w-full p-4 transition-all 300ms ">
+          <div className="p-4 flex flex-col rounded-md bg-bg_interactive dark:bg-black/20 col-span-2 row-span-2 ">
             <h2 className="p-4 font-bold text-2xl">{event.title}</h2>
             <div className="flex flex-col p-2 my-8">
               <span>{event.eventDate.toUTCString().slice(0, -7)}&nbsp;GMT</span>
@@ -24,10 +25,11 @@ const page = async ({ params }: { params: { slug: string } }) => {
             </div>
             <ImageBrowser images={event.images} />
           </div>
-          <div className="p-4 flex flex-col justify-start rounded-md bg-bg_interactive dark:bg-black/20 lg:row-start-2 lg:col-start-3">
+          <div className="bg-black/20">Implement likes and other shanenigans</div>
+          <div className="p-4 flex flex-col justify-start rounded-md bg-bg_interactive dark:bg-black/20 row-start-3 col-span-3">
             <p className="indent-4">{event.description}</p>
           </div>
-          <div className="p-4 flex flex-col justify-start rounded-md bg-bg_interactive dark:bg-black/20 h-fit lg:row-start-1 lg:col-start-3 lg:self-end">
+          <div className="p-4 flex flex-col justify-start rounded-md bg-bg_interactive dark:bg-black/20 h-fit row-start-1 col-start-3 self-start">
             <div className=" bg-primary ring-2 ring-primary rounded-t-md p-2">
               <div className="flex justify-between p-1 text-interactive_text dark:text-text">
                 <span>Tickets Left:&nbsp;</span>
@@ -61,7 +63,7 @@ const page = async ({ params }: { params: { slug: string } }) => {
             </div>
           </div>
         </div>
-        <span>COMMENTS GO HERE</span>
+        <Comments eventId={event.id}/>
       </main>
     );
   } else {

@@ -11,7 +11,7 @@ async function handler(req: Request) {
     try {
       const events = await prisma.event.findMany({
         
-        orderBy: { eventDate: 'asc' },
+        orderBy: { closingDate: 'asc' },
         skip: skip ? parseInt(skip) : 0,
         take: take ? parseInt(take) : 20,
       });
