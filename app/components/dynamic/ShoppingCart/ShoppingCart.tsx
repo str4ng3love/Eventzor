@@ -191,11 +191,11 @@ const ShoppingCart = () => {
                 )}
                 {eventItems.length > 0 ? (
                   <div className="flex items-center justify-center h-full pt-10">
-                    <Button text="Continue" fn={(e) => setIsOpen(false)} />
+                    <Button title="Continue" text="Continue" fn={(e) => setIsOpen(false)} />
                   </div>
                 ) : (
                   <div className="flex items-center justify-center h-full pt-10">
-                    <Button text="Close" fn={(e) => setIsOpen(false)} />
+                    <Button title="Close" text="Close" fn={(e) => setIsOpen(false)} />
                   </div>
                 )}
               </Dialog.Panel>

@@ -63,7 +63,8 @@ try {
         <span className="bg-slate-400 m-2 p-2">{currName}</span>
         <span className="bg-slate-400 m-2 p-2">{currRate}</span>
       </div>
-      <Button text="submit" fn={(e)=> handleCreateCurr()}/>
+      <Button
+      title="test" text="submit" fn={(e)=> handleCreateCurr()}/>
     </div>
   );
 };

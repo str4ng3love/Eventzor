@@ -71,7 +71,7 @@ const page = async ({ params }: { params: { slug: string } }) => {
       <main className="flex flex-col justify-center gap-2 items-center min-h-[calc(100dvh_-_4rem)]">
         <Heading2 text={`${decodeURI(slug)}`} />
         <Heading3 text="event not found" />
-        <Button text="go back" link="/events" />
+        <Button title="Go back" text="go back" link="/events" />
       </main>
     );
   }

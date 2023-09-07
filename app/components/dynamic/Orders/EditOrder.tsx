@@ -222,12 +222,14 @@ const EditOrder = ({...props}:Props) => {
                   />
                   <div className="p-4 mt-4 flex justify-evenly ">
                     {canEdit ?  <Button
+                    title="Edit"
                       text="Edit"
                       fn={() => {
                         setCanEdit(false)
                         handleEdit(state);
                       }}
                     />:  <Button
+                    title="Working ..."
                     text="Editing..."
                     interactive={false}
                     bgColor={"bg-bg"}
@@ -236,7 +238,7 @@ const EditOrder = ({...props}:Props) => {
                     }}
                   />}
                    
-                    <Button text="Cancel" fn={() => props.stopDisplayingFn()} />
+                    <Button title="cancel" text="Cancel" fn={() => props.stopDisplayingFn()} />
                   </div>
                 </form>
               </Dialog.Panel>

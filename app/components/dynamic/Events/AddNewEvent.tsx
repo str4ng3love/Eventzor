@@ -330,13 +330,14 @@ const AddNewEvent = ({fn, refetchTrigger}:Props) => {
                   />
                   <div className="p-4 mt-4 flex justify-evenly ">
                     {canPost ? 
-                    <Button
+                    <Button title="Create"
                       text="Create"
                       fn={(e) => {
                         fn(e);
                         handleCreate(state);
                       }}
                     />:  <Button
+                    title="Working..."
                     text="Adding..."
                     interactive={false}
                     bgColor="bg-bg"
@@ -344,7 +345,9 @@ const AddNewEvent = ({fn, refetchTrigger}:Props) => {
                   
                     }}
                   />}
-                    <Button text="Cancel" fn={() => setShow(false)} />
+                    <Button 
+                    title="Cancel"
+                    text="Cancel" fn={() => setShow(false)} />
                   </div>
                 </form>
               </Dialog.Panel>

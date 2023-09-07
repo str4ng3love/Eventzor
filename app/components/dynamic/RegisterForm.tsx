@@ -37,7 +37,7 @@ const RegisterForm = () => {
 
   return (
     <>
-      <Button text="register" fn={() => setOpen(true)} />
+      <Button title="Register an account" text="register" fn={() => setOpen(true)} />
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog
           as="div"
@@ -112,12 +112,13 @@ const RegisterForm = () => {
 
                 <div className="flex justify-around pt-8">
                   <Button
+                  title="Register"
                     text="register"
                     fn={() => {
                       handleRegister(username, password, confirm, email);
                     }}
                   />
-                  <Button text="Cancel" fn={() => setOpen(false)}></Button>
+                  <Button title="Cancel registration" text="Cancel" fn={() => setOpen(false)}></Button>
                 </div>
               </Dialog.Panel>
             </div>

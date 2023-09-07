@@ -103,6 +103,7 @@ const FilterEventsByDate = ({fn, title}:Props) => {
                   />
                     <div className="p-4 mt-4 flex justify-evenly w-full ">
                     <Button
+                    title="Filter"
                       text="filter"
                       fn={(e) => {
                         if(dates.endDate < dates.startDate){
@@ -112,7 +113,8 @@ const FilterEventsByDate = ({fn, title}:Props) => {
                         }
                       }}
                     />
-                    <Button text="Cancel" fn={() => setShow(false)} />
+                    <Button 
+                    title="cancel" text="Cancel" fn={() => setShow(false)} />
                     </div>
                   </div>
                 </form>

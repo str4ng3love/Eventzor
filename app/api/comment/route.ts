@@ -8,7 +8,7 @@ async function handler(req: Request) {
     return NextResponse.json({ error: "Method not allowed" }, { status: 405 });
   } else if (req.method === "POST") {
     const session = await getServerSession(options);
-    if (!session?.user) {
+    if (!session?.user?.name) {
       return NextResponse.json(
         { error: "You need to be logged in" },
         { status: 401 }
@@ -22,33 +22,48 @@ async function handler(req: Request) {
       );
     }
 
-    if (
-      typeof body.author !== "string" ||
-      body.author.length <= 0 ||
-      typeof body.comment !== "string" ||
-      body.comment.length <= 0 ||
-      session.user.name !== body.author ||
-      typeof body.event !== "string" ||
-      body.event.length <= 0
-    ) {
-      return NextResponse.json(
-        { error: "Invalid comment data" },
-        { status: 400 }
-      );
-    }
     try {
-      let text
-      if(body.comment.includes("<div>")){
-        text = body.comment
-        .replaceAll("</div>", `\n`)
-        .replaceAll("<div>", "")
-        .replaceAll("<br>", " ")
-        .replaceAll("&nbsp;", " ");
-        
+      let text = body.comment;
+
+      if (body.parentId) {
+        if (
+          typeof body.comment !== "string" ||
+          body.comment.length <= 0 ||
+          typeof body.parentId !== "string" ||
+          body.parentId.length <= 0
+        ) {
+          return NextResponse.json(
+            { error: "Invalid comment data" },
+            { status: 400 }
+          );
+        }
+        const comment = await prisma.comment.create({
+          data: {
+            createdAt: new Date(Date.now()),
+            message: text,
+            authorName: session.user.name,
+            parentId: body.parentId,
+          },
+        });
+        return NextResponse.json(
+          { message: "Comment created successfully", comment },
+          { status: 200 }
+        );
       } else {
-        text = body.comment
-      }
-      
+        if (
+          typeof body.author !== "string" ||
+          body.author.length <= 0 ||
+          typeof body.comment !== "string" ||
+          body.comment.length <= 0 ||
+          session.user.name !== body.author ||
+          typeof body.event !== "string" ||
+          body.event.length <= 0
+        ) {
+          return NextResponse.json(
+            { error: "Invalid comment data" },
+            { status: 400 }
+          );
+        }
         const comment = await prisma.comment.create({
           data: {
             createdAt: new Date(Date.now()),
@@ -57,10 +72,11 @@ async function handler(req: Request) {
             eventId: body.event,
           },
         });
-      return NextResponse.json(
-        { message:"Comment created successfully", comment },
-        { status: 200 }
-      );
+        return NextResponse.json(
+          { message: "Comment created successfully", comment },
+          { status: 200 }
+        );
+      }
     } catch (error) {
       console.log(error);
       return NextResponse.json(

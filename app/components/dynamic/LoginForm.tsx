@@ -46,7 +46,7 @@ const LoginForm = () => {
 
   return (
     <>
-      <Button text="login" fn={() => setOpen(true)} />
+      <Button title="Log in" text="log in" fn={() => setOpen(true)} />
 
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog
@@ -104,10 +104,12 @@ const LoginForm = () => {
 
                 <div className="flex justify-around pt-8">
                   <Button
+
+                  title="Log in"
                     text="log in"
                     fn={() => handleLogin(username, password)}
                   />
-                  <Button text="Cancel" fn={() => setOpen(false)}></Button>
+                  <Button title="Cancel" text="Cancel" fn={() => setOpen(false)}></Button>
                 </div>
               </Dialog.Panel>
             </div>

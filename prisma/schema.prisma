@@ -114,7 +114,6 @@ model Comment {
   id         String    @id @default(auto()) @map("_id") @db.ObjectId
   createdAt  DateTime
   message    String
-  parentId   String?   @db.ObjectId
   updatedAt  DateTime?
   author     User      @relation(fields: [authorName], references: [name])
   authorName String
@@ -123,6 +122,7 @@ model Comment {
   order      Order?    @relation(fields: [orderId], references: [id])
   orderId    String?   @db.ObjectId
   parent     Comment?  @relation("parent-child", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  parentId   String?   @db.ObjectId
   children   Comment[] @relation("parent-child")
   dislikes   Dislike[]
   likes      Like[]

@@ -40,7 +40,7 @@ const EditImages = ({ images, id }: Props) => {
   };
   return (
     <>
-      <Button
+      <Button title="Show Images"
         text="Images"
         fn={() => {
           setShow(true);
@@ -76,6 +76,7 @@ const EditImages = ({ images, id }: Props) => {
                           {selected === index && confirm ? (
                             <div key={index} className="flex flex-col items-center justify-evenly gap-2 p-4" >
                               <Button
+                              title="Confirm changes"
                                 text="Confirm"
                                 bgColor="bg-red-600"
                                 fn={() => {
@@ -88,6 +89,7 @@ const EditImages = ({ images, id }: Props) => {
                                 }}
                               />
                               <Button
+                              title="Cancel"
                                 text="cancel"
                                 fn={() => {
                                   {
@@ -124,6 +126,7 @@ const EditImages = ({ images, id }: Props) => {
                   <div className="flex flex-col">
                     <div className="flex justify-between gap-2 p-2">
                       <Button
+                      title="Add new image"
                         text="add new"
                         fn={(e) => {
                           setImgArr((prev) => [...prev, url]);
@@ -140,6 +143,7 @@ const EditImages = ({ images, id }: Props) => {
                     <div className="flex justify-center p-2">
                       {canEdit ? (
                         <Button
+                        title="Save changes"
                           text="save changes"
                           fn={(e) => {
                             setCanEdit(false);
@@ -148,6 +152,7 @@ const EditImages = ({ images, id }: Props) => {
                         />
                       ) : (
                         <Button
+                        title="Working..."
                           text="Saving..."
                           bgColor="bg-bg"
                           fn={(e) => {}}

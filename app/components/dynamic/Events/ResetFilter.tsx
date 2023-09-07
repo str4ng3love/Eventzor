@@ -9,6 +9,7 @@ const ResetFilter = ({ fn }: Props) => {
     <div>
       <span className="">
         <Button
+        title="reset filter"
         bgColor="bg-red-500"
           text="Disable"
           fn={(e) => {

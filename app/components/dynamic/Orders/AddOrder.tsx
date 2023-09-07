@@ -151,7 +151,7 @@ const AddOrder = ({ fn, refetchTrigger }: Props) => {
   };
   return (
     <div>
-      <Button text="Create Order" fn={() => setShow(true)} />
+      <Button title="Create Order" text="Create Order" fn={() => setShow(true)} />
       <Transition appear show={show} as={Fragment}>
         <Dialog as="div" onClose={() => setShow(false)}>
           <Transition.Child
@@ -318,6 +318,7 @@ const AddOrder = ({ fn, refetchTrigger }: Props) => {
                   <div className="p-4 mt-4 flex justify-evenly ">
                     {canPost ? (
                       <Button
+                      title="Create"
                         text="Create"
                         fn={(e) => {
                           fn(e);
@@ -326,13 +327,14 @@ const AddOrder = ({ fn, refetchTrigger }: Props) => {
                       />
                     ) : (
                       <Button
+                      title="Working..."
                         text="Adding..."
                         interactive={false}
                         bgColor="bg-bg"
                         fn={(e) => {}}
                       />
                     )}
-                    <Button text="Cancel" fn={() => setShow(false)} />
+                    <Button title="Cancel" text="Cancel" fn={() => setShow(false)} />
                   </div>
                 </form>
               </Dialog.Panel>

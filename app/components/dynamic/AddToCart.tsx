@@ -30,6 +30,7 @@ const AddToCart = ({ item }: Props) => {
       </div>
       {/* TODO: proper localstorage fn */}
       <Button
+      title="Add to cart"
         text="Add to cart"
         fn={() => {
           let prev = localStorage.getItem("cart");
