@@ -31,7 +31,7 @@ const EventsBrowser = ({ events }: Props) => {
     try {
       const resp = await fetch(encodeURI(`/api/events/${route}` + search));
       const events = await resp.json();
-      console.log(events);
+
       setEventsArr(events);
       setIsLoading(false);
     } catch (error) {
@@ -68,12 +68,18 @@ const EventsBrowser = ({ events }: Props) => {
         rate: selectedCurrency.rate,
       });
     }
+    if (!prefCurrency) {
+      setCurrency({
+        name: "usd",
+        rate: 1,
+      });
+    }
   }, []);
   return (
     <div className="lg:w-[75%] w-full bg-gradient-to-bl from-primary to-slate-900 ring-2 ring-primary flex lg:flex-col my-2 flex-row justify-between">
       <div className="bg-black/50 p-4 flex xl:justify-start gap-2 lg:justify-center flex-col lg:flex-row justify-start">
         <Button
-        title="Newest"
+          title="Newest"
           text="Newest"
           fn={(e) => {
             if (e.currentTarget.innerHTML === selected) {
@@ -86,7 +92,7 @@ const EventsBrowser = ({ events }: Props) => {
           bgColor={selected === "Newest" ? "bg-link underline" : "bg-link"}
         />
         <Button
-        title="All items"
+          title="All items"
           text="All Items"
           fn={(e) => {
             if (e.currentTarget.innerHTML === selected) {
@@ -99,7 +105,7 @@ const EventsBrowser = ({ events }: Props) => {
           bgColor={selected === "All Items" ? "bg-link underline" : "bg-link"}
         />
         <Button
-        title="Popular"
+          title="Popular"
           text="Popular"
           fn={(e) => {
             if (e.currentTarget.innerHTML === selected) {
@@ -112,7 +118,7 @@ const EventsBrowser = ({ events }: Props) => {
           bgColor={selected === "Popular" ? "bg-link underline" : "bg-link"}
         />
         <Button
-        title="Most liked"
+          title="Most liked"
           text="Most Liked"
           fn={(e) => {
             if (e.currentTarget.innerHTML === selected) {
@@ -125,7 +131,7 @@ const EventsBrowser = ({ events }: Props) => {
           bgColor={selected === "Most Liked" ? "bg-link underline" : "bg-link"}
         />
         <Button
-        title="Upcoming"
+          title="Upcoming"
           text="Upcoming"
           fn={(e) => {
             if (e.currentTarget.innerHTML === selected) {
@@ -138,7 +144,7 @@ const EventsBrowser = ({ events }: Props) => {
           bgColor={selected === "Upcoming" ? "bg-link underline" : "bg-link"}
         />
         <Button
-        title="Sales ending"
+          title="Sales ending"
           text="Sales Ending"
           fn={(e) => {
             if (e.currentTarget.innerHTML === selected) {
@@ -191,24 +197,25 @@ const EventsBrowser = ({ events }: Props) => {
                     </span>
                   </div>
                   <div className="text-sm flex">
-                      <span className="p-2 whitespace-nowrap xl:block hidden">Available to:&nbsp;</span>
-                      <span className="self-end w-40 p-2 xl:block hidden">
-                        {new Date(e.closingDate).toUTCString().slice(0, -7)}
-                        &nbsp;GMT
-                      </span>
-                      <span className="flex justify-end self-center font-semibold w-[14ch] px-2 lg:text-lg overflow-hidden text-ellipsis">
-                    {currency.name === "initial" ? (
-                      <SpinnerMini />
-                    ) : (
-                      (e.price * currency.rate).toFixed(2)
-                    )}
-                    &nbsp;
-                    {currency.name !== "initial"
-                      ? currency.name.toLocaleUpperCase()
-                      : ""}
-                  </span>
-                    </div>
-            
+                    <span className="p-2 whitespace-nowrap xl:block hidden">
+                      Available to:&nbsp;
+                    </span>
+                    <span className="self-end w-40 p-2 xl:block hidden">
+                      {new Date(e.closingDate).toUTCString().slice(0, -7)}
+                      &nbsp;GMT
+                    </span>
+                    <span className="flex justify-end self-center font-semibold w-[14ch] px-2 lg:text-lg overflow-hidden text-ellipsis">
+                      {currency.name === "initial" ? (
+                        <SpinnerMini />
+                      ) : (
+                        (e.price * currency.rate).toFixed(2)
+                      )}
+                      &nbsp;
+                      {currency.name !== "initial"
+                        ? currency.name.toLocaleUpperCase()
+                        : ""}
+                    </span>
+                  </div>
                 </Link>
               ))
             ) : (

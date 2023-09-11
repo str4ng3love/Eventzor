@@ -3,6 +3,7 @@ import AddComment from "../Comment/AddComment";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import { prisma } from "@/lib/ConnectPrisma";
 import CommentComponent from "../Comment/CommentComponent";
+import LoginForm from "../LoginForm";
 
 interface Props {
   eventId: string;
@@ -21,24 +22,15 @@ const getComments = async (id: string) => {
 };
 const Comments = async ({ eventId }: Props) => {
   const comments = await getComments(eventId);
-  const session = await getServerSession(options);
   return (
     <div className="flex my-8 w-[85%] justify-between">
       <div className="p-2  bg-black/20 w-full">
-        {session?.user?.name ? (
-          <AddComment
-            title="Add a comment"
-            eventId={eventId}
-            author={session.user.name}
-          />
-        ) : (
-          <>
-            <span>login to comment</span>
-          </>
-        )}
+        <AddComment title="Add a comment" eventId={eventId} />
+
         {comments ? (
           (await comments.comments).map((c) => (
             <CommentComponent
+              key={c.id}
               id={c.id}
               author={c.authorName}
               text={c.message}

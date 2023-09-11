@@ -3,6 +3,8 @@ import ButtonWithIcon from "../ButtonWithIcon";
 import { BiLike, BiDislike } from "react-icons/bi";
 import { useEffect, useRef, useState } from "react";
 import Button from "../Button";
+import { useSession } from "next-auth/react";
+import LoginForm from "../LoginForm";
 
 interface Props {
   title: string;
@@ -18,9 +20,10 @@ const AddComment = ({
   parentId,
   title,
 }: Props) => {
+  const [showLogin, setShowLogin] = useState(false);
   const [show, setShow] = useState(false);
   const [comment, setComment] = useState("");
-
+  const { data: session } = useSession();
   const handleCreate = async () => {
     try {
       const resp = await fetch("/api/comment", {
@@ -32,19 +35,17 @@ const AddComment = ({
         }),
       });
       const data = await resp.json();
-
     } catch (error) {
       console.log(error);
     }
   };
   const handleCreateReply = async () => {
     try {
-      console.log(comment)
       const resp = await fetch("/api/comment", {
         method: "POST",
         body: JSON.stringify({
           comment: comment,
-          parentId: parentId
+          parentId: parentId,
         }),
       });
       const data = await resp.json();
@@ -62,7 +63,11 @@ const AddComment = ({
   return (
     <>
       {show ? (
-        <div className={`w-full px-4 ${reply? "border-t-2 border-primary pt-4 border-dashed mt-4": ""}`}>
+        <div
+          className={`w-full px-4 ${
+            reply ? "border-t-2 border-primary pt-4 border-dashed mt-4" : ""
+          }`}
+        >
           {reply ? (
             <h4 className="p-1 text-sm">Leave a Reply</h4>
           ) : (
@@ -138,44 +143,90 @@ const AddComment = ({
         <>
           {reply ? (
             <>
-              <ButtonWithIcon
-                size="1em"
-                Icon={BiLike}
-                bgColor="bg-transparent"
-                title="Like"
-                fn={() => {}}
-              />
-              <ButtonWithIcon
-                size="1em"
-                Icon={BiDislike}
-                bgColor="bg-transparent"
-                title="Dislike"
-                fn={() => {}}
-              />
-              <Button
-                size="text-xs"
-                title={title}
-                text="Reply"
-                bgColor="bg-transparent"
-                fn={(e) => {
-                  setShow(true);
-                  divEl.current?.focus();
-                }}
-              />
+              {session?.user?.name ? (
+                <>
+                  <ButtonWithIcon
+                    size="1em"
+                    Icon={BiLike}
+                    bgColor="bg-transparent"
+                    title="Like"
+                    fn={() => {}}
+                  />
+                  <ButtonWithIcon
+                    size="1em"
+                    Icon={BiDislike}
+                    bgColor="bg-transparent"
+                    title="Dislike"
+                    fn={() => {}}
+                  />
+                  <Button
+                    size="text-xs"
+                    title={title}
+                    text="Reply"
+                    bgColor="bg-transparent"
+                    fn={(e) => {
+                      setShow(true);
+                      divEl.current?.focus();
+                    }}
+                  />
+                </>
+              ) : (
+                <>
+                  <ButtonWithIcon
+                    size="1em"
+                    Icon={BiLike}
+                    bgColor="bg-transparent"
+                    title="Like"
+                    fn={() => { setShowLogin(true);}}
+                  />
+                  <ButtonWithIcon
+                    size="1em"
+                    Icon={BiDislike}
+                    bgColor="bg-transparent"
+                    title="Dislike"
+                    fn={() => { setShowLogin(true);}}
+                  />
+                  <Button
+                    size="text-xs"
+                    title={title}
+                    text="Reply"
+                    bgColor="bg-transparent"
+                    fn={(e) => {
+                      setShowLogin(true);
+                    }}
+                  />
+                </>
+              )}
             </>
           ) : (
             <div className="flex items-center my-4 justify-center">
-              <Button
-                title={title}
-                text="Add a Comment ..."
-                fn={(e) => {
-                  setShow(true);
-                  divEl.current?.focus();
-                }}
-              />
+              {session?.user?.name ? (
+                <Button
+                  title={title}
+                  text="Add a Comment ..."
+                  fn={(e) => {
+                    setShow(true);
+                    divEl.current?.focus();
+                  }}
+                />
+              ) : (
+                <Button
+                  title={title}
+                  text="Add a Comment ..."
+                  fn={(e) => {
+                    setShowLogin(true);
+                  
+                  }}
+                />
+              )}
             </div>
           )}
         </>
+      )}
+      {showLogin ? (
+        <LoginForm cleanUp={() => setShowLogin(false)} show={true} />
+      ) : (
+        <></>
       )}
     </>
   );

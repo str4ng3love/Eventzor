@@ -165,7 +165,7 @@ const AddNewEvent = ({fn, refetchTrigger}:Props) => {
 
   return (
     <div>
-      <Button text="Add Event" fn={() => setShow(true)} />
+      <Button title="add an event" text="Add Event" fn={() => setShow(true)} />
       <Transition appear show={show} as={Fragment}>
         <Dialog as="div" onClose={() => setShow(false)}>
           <Transition.Child

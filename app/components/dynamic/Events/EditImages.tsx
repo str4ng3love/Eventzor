@@ -70,7 +70,7 @@ const EditImages = ({ images, id }: Props) => {
                 <div className="flex flex-col justify-center items-center">
                   <div className="p-4 flex justify-between z-20 gap-2 ">
                     {/*TODO: combat: error (probably) because of headlessUI portal being rendered twice */}
-                    {imgArr ? (
+                    {imgArr ? 
                       imgArr.map((im, index) => (
                         <>
                           {selected === index && confirm ? (
@@ -119,9 +119,9 @@ const EditImages = ({ images, id }: Props) => {
                           )}
                         </>
                       ))
-                    ) : (
-                      <h2>There are no images</h2>
-                    )}
+                     : 
+                      <h2 key={self.crypto.randomUUID()}>There are no images</h2>
+                    }
                   </div>
                   <div className="flex flex-col">
                     <div className="flex justify-between gap-2 p-2">

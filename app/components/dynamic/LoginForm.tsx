@@ -1,17 +1,21 @@
 "use client";
-import { useState, Fragment } from "react";
+import { useState, Fragment, useEffect } from "react";
 import Notification from "../static/Notification";
 import { NotificationObj } from "../static/Notification";
 import Button from "./Button";
 import { Dialog, Transition } from "@headlessui/react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import RegisterForm from "./RegisterForm";
 
 
+interface Props {
+  show?: boolean;
+  cleanUp?: ()=>void
+}
+const LoginForm = ({show=false, cleanUp}:Props) => {
 
-const LoginForm = () => {
-
-  const [isOpen, setOpen] = useState(false);
+  const [isOpen, setOpen] = useState(show);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [notify, setNotify] = useState<NotificationObj>({
@@ -43,10 +47,14 @@ const LoginForm = () => {
       }, 2000);
     }
   };
-
+useEffect(()=>{
+  if(cleanUp && !isOpen){
+    cleanUp()
+  }
+}, [isOpen])
   return (
     <>
-      <Button title="Log in" text="log in" fn={() => setOpen(true)} />
+      {show? <></>: <Button title="Log in" text="log in" fn={() => setOpen(true)} />}
 
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog
@@ -110,6 +118,11 @@ const LoginForm = () => {
                     fn={() => handleLogin(username, password)}
                   />
                   <Button title="Cancel" text="Cancel" fn={() => setOpen(false)}></Button>
+                </div>
+                <div className="flex flex-col justify-around pt-8 ">
+             
+             <span className="p-4">Don't have an account?</span>
+            <RegisterForm />
                 </div>
               </Dialog.Panel>
             </div>

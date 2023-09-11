@@ -85,6 +85,9 @@ async function handler(req: Request) {
       );
     }
   } else if (req.method === "DELETE") {
+    const {searchParams} = new URL(req.url)
+    const id = searchParams.get("id")
+    return NextResponse.json({id});
   } else if (req.method === "PATCH") {
   } else {
     return NextResponse.json({ error: "Method not allowed" }, { status: 405 });

@@ -3,11 +3,13 @@
 import TimeDifference from "@/helpers/TimeDifference";
 import AddComment from "./AddComment";
 import { useState } from "react";
-import { BiDownArrow } from "react-icons/bi";
+import { BiDotsVerticalRounded, BiDownArrow } from "react-icons/bi";
 import { Comment } from "@prisma/client";
 import SpinnerMini from "../../static/SpinnerMini";
 import Reply from "./Reply";
 import { FormatString } from "@/helpers/FormatString";
+import DropDownMini from "../DropDownMini";
+import { signIn, useSession } from "next-auth/react";
 
 interface Props {
   id: string;
@@ -30,7 +32,7 @@ const CommentComponent = ({
 }: Props) => {
   const [replies, setReplies] = useState<ReplyProps[]>([]);
   const [showReplies, setShowReplies] = useState(false);
-
+  const { data: session } = useSession();
   const getReplies = async (parentId: string) => {
     try {
       const resp = await fetch(
@@ -45,14 +47,31 @@ const CommentComponent = ({
   };
   return (
     <div className="flex w-full flex-col my-4 hover:ring-2 ring-primary rounded-md">
-      <div className=" p-2 w-full flex items-center ">
-        <span>{author}</span>
-        <span className="text-sm pl-4">
-          {updatedAt ? "(edited) " : ""}
-          {createdAt
-            ? TimeDifference(Date.now(), Date.parse(createdAt?.toUTCString()))
-            : ""}
-        </span>
+      <div className=" p-2 w-full flex items-center justify-between">
+        <div>
+          <span>{author}</span>
+          <span className="text-sm pl-4">
+            {updatedAt ? "(edited) " : ""}
+            {createdAt
+              ? TimeDifference(Date.now(), Date.parse(createdAt?.toUTCString()))
+              : ""}
+          </span>
+        </div>
+        <div>
+          {session?.user?.name === author ? (
+            <DropDownMini
+              items={[
+                { text: "delete", fn: () => {} },
+                { text: "Edit", fn: () => {} },
+              ]}
+              Icon={BiDotsVerticalRounded}
+              size="1em"
+              bgColor="bg-transparent"
+            />
+          ) : (
+            <></>
+          )}
+        </div>
       </div>
       <div className=" p-2 w-full break-words text-sm">
         {FormatString(text)}

@@ -1,11 +1,14 @@
 "use client";
 import TimeDifference from "@/helpers/TimeDifference";
 import AddComment from "./AddComment";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import SpinnerMini from "../../static/SpinnerMini";
-import { BiDownArrow } from "react-icons/bi";
+import { BiDotsVerticalRounded, BiDownArrow } from "react-icons/bi";
 import { ReplyProps } from "./CommentComponent";
-import { FormatString} from "@/helpers/FormatString";
+import { FormatString } from "@/helpers/FormatString";
+import DropDownMini from "../DropDownMini";
+import { useSession } from "next-auth/react";
+import { data } from "autoprefixer";
 interface Props {
   id: string;
   message: string;
@@ -25,6 +28,7 @@ const Reply = ({
 }: Props) => {
   const [showReplies, setShowReplies] = useState(false);
   const [replies, setReplies] = useState<ReplyProps[]>([]);
+  const { data: session } = useSession();
 
   const getReplies = async (parentId: string) => {
     try {
@@ -37,22 +41,39 @@ const Reply = ({
       console.log(error);
     }
   };
-  useEffect(()=>{
-    console.log(message)
-  }, [])
+
   return (
     <div className="border-l-4 border-primary border-solid flex w-full flex-col my-2 pl-2">
-      <div className="flex items-center">
-        <span>{authorName}</span>
-        <span className="text-sm pl-4">
-          {updatedAt ? "(edited) " : ""}
-          {createdAt
-            ? TimeDifference(Date.now(), Date.parse(createdAt.toUTCString()))
-            : ""}
-        </span>
+      <div className="flex items-center  justify-between">
+        <div className="">
+          <span>{authorName}</span>
+          <span className="text-sm pl-4">
+            {updatedAt ? "(edited) " : ""}
+            {createdAt
+              ? TimeDifference(Date.now(), Date.parse(createdAt.toUTCString()))
+              : ""}
+          </span>
+        </div>
+        {session?.user?.name === authorName ? (
+          <div>
+            <DropDownMini
+              items={[
+                { text: "delete", fn: () => {} },
+                { text: "Edit", fn: () => {} },
+              ]}
+              Icon={BiDotsVerticalRounded}
+              size="1em"
+              bgColor="bg-transparent"
+            />
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
 
-      <div className="p-2 w-full break-words text-sm">{FormatString(message)}</div>
+      <div className="p-2 w-full break-words text-sm">
+        {FormatString(message)}
+      </div>
       <div className="flex p-2 w-full gap-2">
         <AddComment title="Reply" reply parentId={id} />
       </div>

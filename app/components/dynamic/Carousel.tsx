@@ -60,6 +60,12 @@ const Carousel = ({ items, heading }: Props) => {
         rate: selectedCurrency.rate,
       });
     }
+    if (!prefCurrency) {
+      setCurrency({
+        name: "usd",
+        rate: 1,
+      });
+    }
   }, []);
   useEffect(() => {
     setSelectedImage(items[active].images[0]);
@@ -85,7 +91,9 @@ const Carousel = ({ items, heading }: Props) => {
               title={items[active].title}
               className={`relative group lg:w-[67%] w-full overflow-hidden  bg-black`}
             >
-              <span className="opacity-0 absolute z-50 h-full w-full bg-black/40 flex lg:hidden group-hover:opacity-100 justify-center items-center text-xl font-bold transition-all 300ms">{items[active].title}</span>
+              <span className="opacity-0 absolute z-50 h-full w-full bg-black/40 flex lg:hidden group-hover:opacity-100 justify-center items-center text-xl font-bold transition-all 300ms">
+                {items[active].title}
+              </span>
               <Image
                 fill
                 placeholder="blur"
@@ -136,7 +144,7 @@ const Carousel = ({ items, heading }: Props) => {
                   </span>
                   <span className="p-1 flex items-center justify-center">
                     {currency.name === "initial" ? (
-                      <SpinnerMini h="h-4" w="w-4" borderSize="border-[3px]"/>
+                      <SpinnerMini h="h-4" w="w-4" borderSize="border-[3px]" />
                     ) : (
                       (items[active].price * currency.rate).toFixed(2)
                     )}
