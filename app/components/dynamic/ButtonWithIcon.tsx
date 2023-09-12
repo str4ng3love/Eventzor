@@ -22,7 +22,7 @@ const ButtonWithIcon = ({
       {fn ? (
         <button
           title={title}
-          className={`relative first-letter:capitalize hover:-translate-y-1  hover:scale-105 font-bold p-2 text-interactive_text dark:text-text rounded-xl hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all 300ms ${bgColor} `}
+          className={`relative first-letter:capitalize hover:-translate-y-1  hover:scale-105 font-bold p-2 text-interactive_text dark:text-text rounded-xl hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-300 ${bgColor} `}
           onClick={(e) => fn(e)}
         >
           <Icon size={size} />
@@ -30,7 +30,7 @@ const ButtonWithIcon = ({
       ) : link ? (
         <Link
           href={link}
-          className={`relative first-letter:capitalize hover:-translate-y-1 hover:scale-105 font-bold p-2 text-interactive_text dark:text-text rounded-xl hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all 300ms ${bgColor}`}
+          className={`relative first-letter:capitalize hover:-translate-y-1 hover:scale-105 font-bold p-2 text-interactive_text dark:text-text rounded-xl hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-300 ${bgColor}`}
         >
           <Icon size={size} />
         </Link>
@@ -38,7 +38,7 @@ const ButtonWithIcon = ({
         <>
           <button
             title={title}
-            className={`first-letter:capitalize hover:-translate-y-1 hover:scale-105 font-bold p-2 text-interactive_text dark:text-text rounded-xl hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all 300ms ${bgColor}`}
+            className={`first-letter:capitalize hover:-translate-y-1 hover:scale-105 font-bold p-2 text-interactive_text dark:text-text rounded-xl hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-300 ${bgColor}`}
           >
             <Icon size={size} />
           </button>

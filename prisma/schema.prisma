@@ -38,8 +38,8 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  name          String    @unique
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
+  name          String       @unique
   email         String?
   emailVerified DateTime?
   image         String?
@@ -48,7 +48,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   events        Event[]
-  orders        Order[]
+  marketItems   MarketItem[]
   comments      Comment[]
   dislikes      Dislike[]
   likes         Like[]
@@ -84,7 +84,7 @@ model Event {
   likes         Like[]
 }
 
-model Order {
+model MarketItem {
   id           String    @id @default(auto()) @map("_id") @db.ObjectId
   item         String
   description  String
@@ -110,46 +110,54 @@ enum Status {
   canceled
 }
 
+enum CommentStatus {
+  normal
+  flaggedAsDeleted
+  reported
+  brokeToS
+}
+
 model Comment {
-  id         String    @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt  DateTime
-  message    String
-  updatedAt  DateTime?
-  author     User      @relation(fields: [authorName], references: [name])
-  authorName String
-  event      Event?    @relation(fields: [eventId], references: [id])
-  eventId    String?   @db.ObjectId
-  order      Order?    @relation(fields: [orderId], references: [id])
-  orderId    String?   @db.ObjectId
-  parent     Comment?  @relation("parent-child", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  parentId   String?   @db.ObjectId
-  children   Comment[] @relation("parent-child")
-  dislikes   Dislike[]
-  likes      Like[]
+  id           String        @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt    DateTime
+  message      String
+  status       CommentStatus @default(normal)
+  updatedAt    DateTime?
+  author       User          @relation(fields: [authorName], references: [name])
+  authorName   String
+  event        Event?        @relation(fields: [eventId], references: [id])
+  eventId      String?       @db.ObjectId
+  marketItem   MarketItem?   @relation(fields: [marketItemId], references: [id])
+  marketItemId String?       @db.ObjectId
+  parent       Comment?      @relation("parent-child", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  parentId     String?       @db.ObjectId
+  children     Comment[]     @relation("parent-child")
+  dislikes     Dislike[]
+  likes        Like[]
 }
 
 model Dislike {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String   @db.ObjectId
-  orderId   String?  @db.ObjectId
-  commentId String?  @db.ObjectId
-  eventId   String?  @db.ObjectId
-  event     Event?   @relation(fields: [eventId], references: [id])
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  order     Order?   @relation(fields: [orderId], references: [id])
-  comment   Comment? @relation(fields: [commentId], references: [id])
+  id           String      @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String      @db.ObjectId
+  MarketItemId String?     @db.ObjectId
+  commentId    String?     @db.ObjectId
+  eventId      String?     @db.ObjectId
+  event        Event?      @relation(fields: [eventId], references: [id])
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  marketItem   MarketItem? @relation(fields: [MarketItemId], references: [id])
+  comment      Comment?    @relation(fields: [commentId], references: [id])
 }
 
 model Like {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String   @db.ObjectId
-  orderId   String?  @db.ObjectId
-  commentId String?  @db.ObjectId
-  eventId   String?  @db.ObjectId
-  event     Event?   @relation(fields: [eventId], references: [id])
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  order     Order?   @relation(fields: [orderId], references: [id])
-  comment   Comment? @relation(fields: [commentId], references: [id])
+  id           String      @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String      @db.ObjectId
+  MarketItemId String?     @db.ObjectId
+  commentId    String?     @db.ObjectId
+  eventId      String?     @db.ObjectId
+  event        Event?      @relation(fields: [eventId], references: [id])
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  marketItem   MarketItem? @relation(fields: [MarketItemId], references: [id])
+  comment      Comment?    @relation(fields: [commentId], references: [id])
 }
 
 model Currency {

@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import Button from "../Button";
 import { useSession } from "next-auth/react";
 import LoginForm from "../LoginForm";
+import Notification from "../../static/Notification";
 
 interface Props {
   title: string;
@@ -20,6 +21,11 @@ const AddComment = ({
   parentId,
   title,
 }: Props) => {
+  const [notify, setNotify] = useState({
+    error: false,
+    message: "",
+    show: false,
+  });
   const [showLogin, setShowLogin] = useState(false);
   const [show, setShow] = useState(false);
   const [comment, setComment] = useState("");
@@ -35,6 +41,13 @@ const AddComment = ({
         }),
       });
       const data = await resp.json();
+
+      if (data.error) {
+        setNotify({ message: data.error, show: true, error: true });
+      } else {
+        setNotify({ message: data.message, show: true, error: false });
+      
+      }
     } catch (error) {
       console.log(error);
     }
@@ -49,9 +62,14 @@ const AddComment = ({
         }),
       });
       const data = await resp.json();
-      //todo notification or optimistic mount
+      //todo optimistic mount
 
-      console.log(data);
+      if (data.error) {
+        setNotify({ message: data.error, show: true, error: true });
+      } else {
+        setNotify({ message: data.message, show: true, error: false });
+        setShow(false)
+      }
     } catch (error) {
       console.log(error);
     }
@@ -144,7 +162,7 @@ const AddComment = ({
           {reply ? (
             <>
               {session?.user?.name ? (
-                <>
+                <div className="flex items-center gap-2">
                   <ButtonWithIcon
                     size="1em"
                     Icon={BiLike}
@@ -169,22 +187,27 @@ const AddComment = ({
                       divEl.current?.focus();
                     }}
                   />
-                </>
+                </div>
               ) : (
-                <>
+                <div className="flex items-center gap-2">
+                  <div></div>
                   <ButtonWithIcon
                     size="1em"
                     Icon={BiLike}
                     bgColor="bg-transparent"
                     title="Like"
-                    fn={() => { setShowLogin(true);}}
+                    fn={() => {
+                      setShowLogin(true);
+                    }}
                   />
                   <ButtonWithIcon
                     size="1em"
                     Icon={BiDislike}
                     bgColor="bg-transparent"
                     title="Dislike"
-                    fn={() => { setShowLogin(true);}}
+                    fn={() => {
+                      setShowLogin(true);
+                    }}
                   />
                   <Button
                     size="text-xs"
@@ -195,7 +218,7 @@ const AddComment = ({
                       setShowLogin(true);
                     }}
                   />
-                </>
+                </div>
               )}
             </>
           ) : (
@@ -215,7 +238,6 @@ const AddComment = ({
                   text="Add a Comment ..."
                   fn={(e) => {
                     setShowLogin(true);
-                  
                   }}
                 />
               )}
@@ -225,6 +247,17 @@ const AddComment = ({
       )}
       {showLogin ? (
         <LoginForm cleanUp={() => setShowLogin(false)} show={true} />
+      ) : (
+        <></>
+      )}
+   
+      {notify.show ? (
+        <Notification
+          {...notify}
+          onAnimEnd={() =>
+            setNotify({ error: false, message: "", show: false })
+          }
+        />
       ) : (
         <></>
       )}

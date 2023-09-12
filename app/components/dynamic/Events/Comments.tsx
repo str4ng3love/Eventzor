@@ -1,9 +1,7 @@
-import { getServerSession } from "next-auth";
+
 import AddComment from "../Comment/AddComment";
-import { options } from "@/app/api/auth/[...nextauth]/options";
 import { prisma } from "@/lib/ConnectPrisma";
 import CommentComponent from "../Comment/CommentComponent";
-import LoginForm from "../LoginForm";
 
 interface Props {
   eventId: string;
@@ -30,6 +28,7 @@ const Comments = async ({ eventId }: Props) => {
         {comments ? (
           (await comments.comments).map((c) => (
             <CommentComponent
+              status={c.status}
               key={c.id}
               id={c.id}
               author={c.authorName}

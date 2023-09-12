@@ -48,7 +48,7 @@ const ImageBrowser = ({ images }: Props) => {
             alt="events image"
             className={` ${
               index === selected ? "ring-2 ring-link" : ""
-            } hover:ring-2 ring-link self-center transition-all 300ms`}
+            } hover:ring-2 ring-link self-center transition-all duration-300`}
             src={i}
           />
         ))}

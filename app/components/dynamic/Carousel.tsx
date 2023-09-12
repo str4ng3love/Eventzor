@@ -81,7 +81,7 @@ const Carousel = ({ items, heading }: Props) => {
             onClick={(e) =>
               setActive((prev) => (prev === 0 ? items.length - 1 : prev - 1))
             }
-            className="p-2 text-3xl text-text_inactive hover:text-text transition-all 300ms cursor-pointer"
+            className="p-2 text-3xl text-text_inactive hover:text-text transition-all duration-300 cursor-pointer"
           >
             <BiSolidLeftArrow />
           </span>
@@ -91,7 +91,7 @@ const Carousel = ({ items, heading }: Props) => {
               title={items[active].title}
               className={`relative group lg:w-[67%] w-full overflow-hidden  bg-black`}
             >
-              <span className="opacity-0 absolute z-50 h-full w-full bg-black/40 flex lg:hidden group-hover:opacity-100 justify-center items-center text-xl font-bold transition-all 300ms">
+              <span className="opacity-0 absolute z-50 h-full w-full bg-black/40 flex lg:hidden group-hover:opacity-100 justify-center items-center text-xl font-bold transition-all duration-300">
                 {items[active].title}
               </span>
               <Image
@@ -116,7 +116,7 @@ const Carousel = ({ items, heading }: Props) => {
                   <Image
                     className={` ${
                       i === selectedImage ? "ring-2 ring-link" : ""
-                    } hover:ring-2 ring-link self-center transition-all 300ms`}
+                    } hover:ring-2 ring-link self-center transition-all duration-300`}
                     onClick={() => {
                       if (i === selectedImage) {
                         return;
@@ -161,7 +161,7 @@ const Carousel = ({ items, heading }: Props) => {
             onClick={(e) => {
               setActive((prev) => (prev === items.length - 1 ? 0 : prev + 1));
             }}
-            className="p-2 text-3xl text-text_inactive hover:text-text transition-all 300ms cursor-pointer"
+            className="p-2 text-3xl text-text_inactive hover:text-text transition-all duration-300 cursor-pointer"
           >
             <BiSolidRightArrow />
           </span>
@@ -173,7 +173,7 @@ const Carousel = ({ items, heading }: Props) => {
               key={i}
               className={`h-4 w-4 ${
                 active === i ? "bg-text" : "bg-text_inactive"
-              } hover:bg-text hover:shadow-link transition-all 300ms block mx-2 p-2 rounded-sm cursor-pointer`}
+              } hover:bg-text hover:shadow-link transition-all duration-300 block mx-2 p-2 rounded-sm cursor-pointer`}
             ></span>
           ))}
         </div>

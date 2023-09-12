@@ -73,7 +73,7 @@ const Currency = ({
     <>
       <Listbox value={selected} onChange={setSelected}>
         <Listbox.Button
-          className={`p-2 bg-bg_interactive ring-2 ring-primary w-fit relative z-50 hover:bg-link`}
+          className={`p-2 bg-bg_interactive ring-2 ring-primary w-fit relative z-50 hover:bg-link transition-all duration-300`}
         >
           {selected.name ==='initial' ? <SpinnerMini />: selected?.name.toLocaleUpperCase() }
         </Listbox.Button>
@@ -87,7 +87,7 @@ const Currency = ({
                 key={currency.id}
                 className={`${
                   selected.name === currency.name ? "hidden" : ""
-                } hover:bg-link p-2 transition-all 300ms`}
+                } hover:bg-link p-2 transition-all duration-300`}
                 value={currency}
               >
                 {currency.name.toLocaleUpperCase()}

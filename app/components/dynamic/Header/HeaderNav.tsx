@@ -9,7 +9,7 @@ interface Props {
 const HeaderNav = ({dest, text}: Props) => {
   return (
    
-    <Link className="uppercase p-4 mx-1 rounded-md font-bold hover:text-white hover:bg-link transition-all 300ms" href={dest} >{text}</Link>
+    <Link className="uppercase p-4 mx-1 rounded-md font-bold hover:text-white hover:bg-link transition-all duration-300" href={dest} >{text}</Link>
 
   )
 }

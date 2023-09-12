@@ -15,6 +15,7 @@ async function handler(req: Request) {
       );
     }
     const body = await req.json();
+
     if (!body) {
       return NextResponse.json(
         { error: "You need to provide comment data" },
@@ -51,11 +52,8 @@ async function handler(req: Request) {
         );
       } else {
         if (
-          typeof body.author !== "string" ||
-          body.author.length <= 0 ||
           typeof body.comment !== "string" ||
           body.comment.length <= 0 ||
-          session.user.name !== body.author ||
           typeof body.event !== "string" ||
           body.event.length <= 0
         ) {
@@ -68,7 +66,7 @@ async function handler(req: Request) {
           data: {
             createdAt: new Date(Date.now()),
             message: text,
-            authorName: body.author,
+            authorName: session.user.name,
             eventId: body.event,
           },
         });
@@ -85,13 +83,57 @@ async function handler(req: Request) {
       );
     }
   } else if (req.method === "DELETE") {
-    const {searchParams} = new URL(req.url)
-    const id = searchParams.get("id")
-    return NextResponse.json({id});
+    const body = await req.json();
+
+
+    const deletedComment = await prisma.comment.deleteMany({
+      where: { AND: [{ id: body }, { children: { none: {} } }] },
+    });
+
+    if (deletedComment.count === 0) {
+      const deletedCommentUpdate = await prisma.comment.update({
+        where: { id: body },
+        data: {
+          status: "flaggedAsDeleted",
+        },
+        select: { id: true, status: true },
+      });
+      if (!deletedComment) {
+        return NextResponse.json({ error: "Internal server error" });
+      }
+      return NextResponse.json({
+        message: "Comment deleted successfully",
+        deletedCommentUpdate,
+      });
+    }
+
+    return NextResponse.json({
+      message: "Comment deleted successfully",
+      deletedComment,
+    });
   } else if (req.method === "PATCH") {
+    const body = await req.json();
+    console.log(body);
+    if (!body || body.id.length <= 0 || body.text <= 0) {
+      return NextResponse.json({
+        error: "Please provide a valid comment update",
+      });
+    }
+    const updatedComment = await prisma.comment.update({
+      where: { id: body.id },
+      data: { message: body.text, updatedAt: new Date() },
+    });
+    console.log(updatedComment);
+    if (!updatedComment) {
+      return NextResponse.json({ error: "something went wrong" });
+    }
+    return NextResponse.json({
+      message: "Comment updated successfully",
+      updatedComment,
+    });
   } else {
     return NextResponse.json({ error: "Method not allowed" }, { status: 405 });
   }
 }
 
-export { handler as POST };
+export { handler as POST, handler as PATCH, handler as DELETE };

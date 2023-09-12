@@ -159,7 +159,7 @@ const EventsBrowser = ({ events }: Props) => {
           }
         />
       </div>
-      <div className="flex flex-col p-4 justify-start xl:mx-0 mx-2 transition-all 300ms h-[50rem]">
+      <div className="flex flex-col p-4 justify-start xl:mx-0 mx-2 transition-all duration-300 h-[50rem]">
         {isLoadinig ? (
           <div className="flex justify-center items-center mt-10 w-full">
             <SpinnerMini />
@@ -170,7 +170,7 @@ const EventsBrowser = ({ events }: Props) => {
               eventsArr.map((e) => (
                 <Link
                   href={`/events/${e.title}`}
-                  className="ring-2 p-1 my-1 hover:bg-gradient-to-tl from-link via-link_active to-link transition-all 300ms h-20 flex justify-between "
+                  className="ring-2 p-1 my-1 hover:bg-gradient-to-tl from-link via-link_active to-link transition-all duration-300 h-20 flex justify-between "
                   key={e.id}
                 >
                   <div className="flex">
@@ -204,7 +204,7 @@ const EventsBrowser = ({ events }: Props) => {
                       {new Date(e.closingDate).toUTCString().slice(0, -7)}
                       &nbsp;GMT
                     </span>
-                    <span className="flex justify-end self-center font-semibold w-[14ch] px-2 lg:text-lg overflow-hidden text-ellipsis">
+                    <span className="flex justify-end self-center font-semibold w-[20ch] px-2 lg:text-lg overflow-hidden text-ellipsis">
                       {currency.name === "initial" ? (
                         <SpinnerMini />
                       ) : (

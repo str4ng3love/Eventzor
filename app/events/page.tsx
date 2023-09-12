@@ -13,7 +13,7 @@ const getNewEvents = async () => {
 };
 const getEvents = async () => {
   const events = await prisma.event.findMany({
-    orderBy:{id:'asc'},
+    orderBy: { id: "asc" },
     take: 20,
   });
   return {
@@ -25,6 +25,12 @@ const page = async () => {
   const { events } = await getEvents();
   return (
     <main className="flex flex-col items-center min-h-[calc(100dvh_-_4rem)]">
+      <div className="min-h-[400px] bg-primary w-full">
+      <h2>
+          Find tickets for interesting gatherings, concerts and conventions.
+        </h2>
+        <div>hero image - people</div>
+      </div>
       {/* TODO: [slugified] dynamic page for a single event */}
       <Carousel heading="Upcoming events" items={newEvents} />
       {/* TODO: Event browser with sorting, pagination etc */}
