@@ -12,6 +12,8 @@ import DropDownMini from "../DropDownMini";
 import { useSession } from "next-auth/react";
 import Button from "../Button";
 import Notification from "../../static/Notification";
+import Like from "../Like";
+import Dislike from "../Dislike";
 
 interface Props {
   id: string;
@@ -21,6 +23,8 @@ interface Props {
   createdAt: Date;
   updatedAt?: Date | null;
   amountOfReplies?: number;
+  likes: number;
+  dislikes: number;
 }
 export interface ReplyProps extends Comment {
   _count: { children: number };
@@ -33,6 +37,8 @@ const CommentComponent = ({
   id,
   status,
   amountOfReplies,
+  likes,
+  dislikes,
 }: Props) => {
   const [comment, setComment] = useState({
     text,
@@ -41,6 +47,9 @@ const CommentComponent = ({
     updatedAt,
     id,
     amountOfReplies,
+    likes,
+    dislikes,
+
   });
   const [notify, setNotify] = useState({
     show: false,
@@ -117,6 +126,19 @@ const CommentComponent = ({
       console.log(error);
     }
   };
+  useEffect(() => {
+    setComment({
+      amountOfReplies,
+      author,
+      createdAt,
+      id,
+      text,
+      updatedAt,
+      likes,
+      dislikes,
+    });
+ 
+  }, []);
   if (status === "flaggedAsDeleted") {
     return (
       <>
@@ -275,7 +297,10 @@ const CommentComponent = ({
             </div>
           )}
 
-          <div className="flex p-2 w-full gap-2 flex-col ">
+          <div className="flex p-2 w-full gap-2">
+            <Like commentId={id} amount={comment.likes} />
+            <Dislike id={id} />
+
             <AddComment title="Reply" reply parentId={id} />
           </div>
           {amountOfReplies && amountOfReplies > 0 ? (

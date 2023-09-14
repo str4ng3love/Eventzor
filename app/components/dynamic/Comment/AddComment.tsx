@@ -1,11 +1,11 @@
 "use client";
-import ButtonWithIcon from "../ButtonWithIcon";
-import { BiLike, BiDislike } from "react-icons/bi";
-import { useEffect, useRef, useState } from "react";
+
+import { useEffect, useRef, useState, useTransition } from "react";
 import Button from "../Button";
 import { useSession } from "next-auth/react";
 import LoginForm from "../LoginForm";
 import Notification from "../../static/Notification";
+import { useRouter } from "next/navigation";
 
 interface Props {
   title: string;
@@ -30,6 +30,8 @@ const AddComment = ({
   const [show, setShow] = useState(false);
   const [comment, setComment] = useState("");
   const { data: session } = useSession();
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
   const handleCreate = async () => {
     try {
       const resp = await fetch("/api/comment", {
@@ -45,8 +47,11 @@ const AddComment = ({
       if (data.error) {
         setNotify({ message: data.error, show: true, error: true });
       } else {
-        setNotify({ message: data.message, show: true, error: false });
-      
+        startTransition(() => {
+          setNotify({ message: data.message, show: true, error: false });
+          router.refresh();
+          setShow(false);
+        });
       }
     } catch (error) {
       console.log(error);
@@ -67,13 +72,17 @@ const AddComment = ({
       if (data.error) {
         setNotify({ message: data.error, show: true, error: true });
       } else {
-        setNotify({ message: data.message, show: true, error: false });
-        setShow(false)
+        startTransition(() => {
+          setNotify({ message: data.message, show: true, error: false });
+          router.refresh();
+          setShow(false);
+        });
       }
     } catch (error) {
       console.log(error);
     }
   };
+
   const divEl = useRef<HTMLInputElement>(null);
   useEffect(() => {
     divEl.current?.focus();
@@ -105,26 +114,6 @@ const AddComment = ({
               reply ? "justify-between" : "justify-end "
             } gap-2`}
           >
-            {reply ? (
-              <div className="p-2 flex gap-2">
-                <ButtonWithIcon
-                  size="1em"
-                  Icon={BiLike}
-                  bgColor="bg-transparent"
-                  title="Like"
-                  fn={() => {}}
-                />
-                <ButtonWithIcon
-                  size="1em"
-                  Icon={BiDislike}
-                  bgColor="bg-transparent"
-                  title="Dislike"
-                  fn={() => {}}
-                />
-              </div>
-            ) : (
-              <></>
-            )}
             <div className="p-2 flex gap-2">
               <Button
                 size="text-sm"
@@ -163,20 +152,6 @@ const AddComment = ({
             <>
               {session?.user?.name ? (
                 <div className="flex items-center gap-2">
-                  <ButtonWithIcon
-                    size="1em"
-                    Icon={BiLike}
-                    bgColor="bg-transparent"
-                    title="Like"
-                    fn={() => {}}
-                  />
-                  <ButtonWithIcon
-                    size="1em"
-                    Icon={BiDislike}
-                    bgColor="bg-transparent"
-                    title="Dislike"
-                    fn={() => {}}
-                  />
                   <Button
                     size="text-xs"
                     title={title}
@@ -190,25 +165,6 @@ const AddComment = ({
                 </div>
               ) : (
                 <div className="flex items-center gap-2">
-                  <div></div>
-                  <ButtonWithIcon
-                    size="1em"
-                    Icon={BiLike}
-                    bgColor="bg-transparent"
-                    title="Like"
-                    fn={() => {
-                      setShowLogin(true);
-                    }}
-                  />
-                  <ButtonWithIcon
-                    size="1em"
-                    Icon={BiDislike}
-                    bgColor="bg-transparent"
-                    title="Dislike"
-                    fn={() => {
-                      setShowLogin(true);
-                    }}
-                  />
                   <Button
                     size="text-xs"
                     title={title}
@@ -250,7 +206,7 @@ const AddComment = ({
       ) : (
         <></>
       )}
-   
+
       {notify.show ? (
         <Notification
           {...notify}

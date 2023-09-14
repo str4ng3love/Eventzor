@@ -138,26 +138,34 @@ model Comment {
 
 model Dislike {
   id           String      @id @default(auto()) @map("_id") @db.ObjectId
-  userId       String      @db.ObjectId
+  userName     String
   MarketItemId String?     @db.ObjectId
   commentId    String?     @db.ObjectId
   eventId      String?     @db.ObjectId
   event        Event?      @relation(fields: [eventId], references: [id])
-  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User        @relation(fields: [userName], references: [username], onDelete: Cascade)
   marketItem   MarketItem? @relation(fields: [MarketItemId], references: [id])
   comment      Comment?    @relation(fields: [commentId], references: [id])
+
+  @@unique([userName, commentId])
+  @@unique([userName, eventId])
+  @@unique([userName, MarketItemId])
 }
 
 model Like {
   id           String      @id @default(auto()) @map("_id") @db.ObjectId
-  userId       String      @db.ObjectId
+  userName     String
   MarketItemId String?     @db.ObjectId
   commentId    String?     @db.ObjectId
   eventId      String?     @db.ObjectId
   event        Event?      @relation(fields: [eventId], references: [id])
-  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User        @relation(fields: [userName], references: [name], onDelete: Cascade)
   marketItem   MarketItem? @relation(fields: [MarketItemId], references: [id])
   comment      Comment?    @relation(fields: [commentId], references: [id])
+
+  @@unique([userName, commentId])
+  @@unique([userName, eventId])
+  @@unique([userName, MarketItemId])
 }
 
 model Currency {

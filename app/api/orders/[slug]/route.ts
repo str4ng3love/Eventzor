@@ -6,7 +6,7 @@ async function handler(req: Request, { params }: { params: { slug: string } }) {
   const slug = params.slug;
 
   try {
-    const order = await prisma.order.findUnique({ where: { id: slug } });
+    const order = await prisma.marketItem.findUnique({ where: { id: slug } });
     if (!order) {
       return NextResponse.json(
         { error: `No order with id of ${slug}` },
