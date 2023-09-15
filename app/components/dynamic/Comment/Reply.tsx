@@ -10,6 +10,7 @@ import DropDownMini from "../DropDownMini";
 import { useSession } from "next-auth/react";
 import { CommentStatus } from "@prisma/client";
 import Button from "../Button";
+import LikeAndDislike from "../LikeAndDislike";
 
 interface Props {
   id: string;
@@ -19,6 +20,8 @@ interface Props {
   createdAt: Date;
   updatedAt?: Date | null;
   amountOfReplies: number;
+  amountOfLikes:number;
+  amountOfDislikes:number;
 }
 
 const Reply = ({
@@ -29,6 +32,8 @@ const Reply = ({
   updatedAt,
   status,
   amountOfReplies,
+  amountOfLikes,
+  amountOfDislikes
 }: Props) => {
   const [commentTextEdited, setCommentTextEdited] = useState("");
   const [fallbackText, setFallbackText] = useState("");
@@ -57,6 +62,7 @@ const Reply = ({
         "/api/comment/replies?" + new URLSearchParams({ id: parentId })
       );
       const data = await resp.json();
+      console.log(data)
       setReplies(data);
     } catch (error) {
       console.log(error);
@@ -132,6 +138,8 @@ const Reply = ({
                   replies.map((r) => (
                     <Reply
                       amountOfReplies={r._count.children}
+                      amountOfLikes={r._count.likes}
+                      amountOfDislikes={r._count.dislikes}
                       key={r.id}
                       {...r}
                       createdAt={new Date(r.createdAt)}
@@ -237,7 +245,8 @@ const Reply = ({
           </div>
         )}
         <div className="flex p-2 w-full gap-2">
-          <AddComment  title="Reply" reply parentId={reply.id} />
+          <LikeAndDislike commentId={id} amountOfLikes={amountOfLikes} amountOfDislikes={amountOfDislikes}/>
+          <AddComment  title="Reply" reply parentId={reply.id} callback={()=>setReply((prev)=>({...prev, amountOfReplies: amountOfReplies+1}))}/>
         </div>
         {reply.amountOfReplies && reply.amountOfReplies > 0 ? (
           <div className="flex flex-col p-2 w-full gap-2">
@@ -266,6 +275,8 @@ const Reply = ({
                   replies.map((r) => (
                     <Reply
                       amountOfReplies={r._count.children}
+                      amountOfLikes={r._count.likes}
+                      amountOfDislikes={r._count.dislikes}
                       key={r.id}
                       {...r}
                       createdAt={new Date(r.createdAt)}

@@ -10,7 +10,7 @@ async function handler(req:Request){
             return NextResponse.json({error: "Bad request"}, {status:400})
         } 
    
-        const replies = await prisma.comment.findMany({where: {parentId: id}, include:{_count:{select:{children:true}}}, orderBy:{createdAt:'desc'}})
+        const replies = await prisma.comment.findMany({where: {parentId: id}, include:{_count:{select:{children:true, likes:true, dislikes:true}}}, orderBy:{createdAt:'desc'}})
      
     
         return NextResponse.json(replies)

@@ -146,10 +146,6 @@ model Dislike {
   user         User        @relation(fields: [userName], references: [username], onDelete: Cascade)
   marketItem   MarketItem? @relation(fields: [MarketItemId], references: [id])
   comment      Comment?    @relation(fields: [commentId], references: [id])
-
-  @@unique([userName, commentId])
-  @@unique([userName, eventId])
-  @@unique([userName, MarketItemId])
 }
 
 model Like {
@@ -162,10 +158,6 @@ model Like {
   user         User        @relation(fields: [userName], references: [name], onDelete: Cascade)
   marketItem   MarketItem? @relation(fields: [MarketItemId], references: [id])
   comment      Comment?    @relation(fields: [commentId], references: [id])
-
-  @@unique([userName, commentId])
-  @@unique([userName, eventId])
-  @@unique([userName, MarketItemId])
 }
 
 model Currency {

@@ -2,8 +2,6 @@
 import AddComment from "../Comment/AddComment";
 import { prisma } from "@/lib/ConnectPrisma";
 import CommentComponent from "../Comment/CommentComponent";
-import { options } from "@/app/api/auth/[...nextauth]/options";
-import {getServerSession} from 'next-auth'
 
 
 interface Props {
@@ -23,7 +21,7 @@ const getComments = async (id: string) => {
       console.log(error);
     }
   
-  
+
 };
 const Comments = async ({ eventId }: Props) => {
   const comments = await getComments(eventId);

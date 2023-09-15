@@ -12,8 +12,7 @@ import DropDownMini from "../DropDownMini";
 import { useSession } from "next-auth/react";
 import Button from "../Button";
 import Notification from "../../static/Notification";
-import Like from "../Like";
-import Dislike from "../Dislike";
+import LikeAndDislike from "../LikeAndDislike";
 
 interface Props {
   id: string;
@@ -27,7 +26,7 @@ interface Props {
   dislikes: number;
 }
 export interface ReplyProps extends Comment {
-  _count: { children: number };
+  _count: { children: number; likes: number; dislikes: number };
 }
 const CommentComponent = ({
   text,
@@ -49,7 +48,6 @@ const CommentComponent = ({
     amountOfReplies,
     likes,
     dislikes,
-
   });
   const [notify, setNotify] = useState({
     show: false,
@@ -137,7 +135,6 @@ const CommentComponent = ({
       likes,
       dislikes,
     });
- 
   }, []);
   if (status === "flaggedAsDeleted") {
     return (
@@ -183,6 +180,8 @@ const CommentComponent = ({
                   {replies.length > 0 ? (
                     replies.map((r) => (
                       <Reply
+                        amountOfLikes={r._count.likes}
+                        amountOfDislikes={r._count.dislikes}
                         key={r.id}
                         amountOfReplies={r._count.children}
                         {...r}
@@ -298,8 +297,11 @@ const CommentComponent = ({
           )}
 
           <div className="flex p-2 w-full gap-2">
-            <Like commentId={id} amount={comment.likes} />
-            <Dislike id={id} />
+            <LikeAndDislike
+              commentId={id}
+              amountOfLikes={comment.likes}
+              amountOfDislikes={comment.dislikes}
+            />
 
             <AddComment title="Reply" reply parentId={id} />
           </div>
@@ -329,6 +331,8 @@ const CommentComponent = ({
                   {replies.length > 0 ? (
                     replies.map((r) => (
                       <Reply
+                        amountOfLikes={r._count.likes}
+                        amountOfDislikes={r._count.dislikes}
                         key={r.id}
                         amountOfReplies={r._count.children}
                         {...r}

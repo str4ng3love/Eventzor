@@ -13,6 +13,7 @@ interface Props {
   author?: string;
   reply?: boolean;
   parentId?: string;
+  callback?: () => void;
 }
 const AddComment = ({
   eventId,
@@ -20,6 +21,7 @@ const AddComment = ({
   reply = false,
   parentId,
   title,
+  callback,
 }: Props) => {
   const [notify, setNotify] = useState({
     error: false,
@@ -73,6 +75,7 @@ const AddComment = ({
         setNotify({ message: data.error, show: true, error: true });
       } else {
         startTransition(() => {
+          callback ? callback() : null;
           setNotify({ message: data.message, show: true, error: false });
           router.refresh();
           setShow(false);
