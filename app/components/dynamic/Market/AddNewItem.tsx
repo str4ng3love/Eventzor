@@ -5,7 +5,6 @@ import { Transition, Dialog } from "@headlessui/react";
 import Notification from "../../static/Notification";
 import { Listbox } from "@headlessui/react";
 
-
 // import { ItemType } from "@prisma/client";
 
 type ItemType = "tshirt" | "cap" | "poster" | "bracelet" | "sticker";
@@ -18,6 +17,8 @@ enum FormActionKind {
   INPUT_TYPE,
   INPUT_RELEASE,
   INPUT_PRICE,
+  INPUT_IMAGE,
+  DELETE_IMAGE,
 }
 
 interface InputAction {
@@ -32,6 +33,7 @@ interface InputState {
   type: string;
   releaseDate?: Date | null;
   price: number;
+  image: string[];
 }
 
 const reducer = (state: InputState, action: InputAction) => {
@@ -81,6 +83,24 @@ const reducer = (state: InputState, action: InputAction) => {
         price: payload as number,
       };
     }
+    case FormActionKind.INPUT_IMAGE: {
+      return {
+        ...state,
+
+        image: [...state.image, payload as string],
+      };
+    }
+    case FormActionKind.DELETE_IMAGE: {
+      return {
+        ...state,
+
+        image: [
+          ...state.image.filter(
+            (image, index) => index !== (payload as number)
+          ),
+        ],
+      };
+    }
 
     default:
       return state;
@@ -101,6 +121,7 @@ const AddNewItem = ({
   const [show, setShow] = useState(false);
   const [selected, setSelected] = useState(options[0]);
   const [canPost, setCanPost] = useState(true);
+  const [image, setImage] = useState("");
   const [notify, setNotify] = useState({
     show: false,
     error: false,
@@ -114,6 +135,7 @@ const AddNewItem = ({
     isPreorder: false,
     releaseDate: null,
     price: 0,
+    image: [],
   });
   const handleCreate = async (state: InputState) => {
     if (state.amount < 0) {
@@ -150,23 +172,21 @@ const AddNewItem = ({
         headers: {
           "Content-Type": "Application/json",
         },
-        body: JSON.stringify({...state}),
+        body: JSON.stringify({ ...state }),
       });
       const dat = await resp.json();
 
       setCanPost(true);
       if (dat.error) {
-        optimisticFnClnUp()
+        optimisticFnClnUp();
         setNotify({ error: true, show: true, message: dat.error });
       } else {
         refetchTrigger();
         setNotify({ error: false, show: true, message: dat.message });
       }
-
     } catch (error) {
       console.log(error);
     }
-
   };
   return (
     <div>
@@ -332,7 +352,58 @@ const AddNewItem = ({
                   ) : (
                     <></>
                   )}
-             
+                  <div className="flex p-4 flex-col justify-center items-center">
+                    <div className="pb-8 flex justify-between w-full ">
+                      <label className="p-1 min-w-[10ch] mr-2">
+                        Image Link
+                      </label>
+                      <input
+                        className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
+                        type="text"
+                        value={image}
+                        onChange={(e) => setImage(e.currentTarget.value)}
+                        onPaste={(e) => setImage(e.currentTarget.value)}
+                      />
+                    </div>
+                    <Button
+                      title="add picture"
+                      text="add"
+                      fn={() => {
+                        if (image.length === 0) return;
+                        dispatch({
+                          type: FormActionKind.INPUT_IMAGE,
+                          payload: image,
+                        });
+                        setImage("");
+                      }}
+                    />
+                  </div>
+                  <div className="flex gap-1">
+                    {state.image && state.image.length > 0 ? (
+                      state.image.map((i, index) => (
+                        <span
+                          key={index}
+                          className="flex items-center relative after:flex after:items-center after:justify-center hover:after:content-['Delete'] hover:after:absolute after:top-0 after:left-0 after:bg-black/50 w-fit h-fit after:w-full after:h-full"
+                          onClick={() =>
+                            dispatch({
+                              type: FormActionKind.DELETE_IMAGE,
+                              payload: index,
+                            })
+                          }
+                        >
+                          <img
+                            alt="image"
+                            style={{ fontSize: "0px" }}
+                            src={i}
+                            width={100}
+                            height={100}
+                          />
+                        </span>
+                      ))
+                    ) : (
+                      <></>
+                    )}
+                  </div>
                   <div className="p-4 mt-4 flex justify-evenly ">
                     {canPost ? (
                       <Button
@@ -359,16 +430,15 @@ const AddNewItem = ({
                     />
                   </div>
                 </form>
-        
               </Dialog.Panel>
               <Notification
-                    message={notify.message}
-                    show={notify.show}
-                    error={notify.error}
-                    onAnimEnd={() =>
-                      setNotify({ error: false, message: "", show: false })
-                    }
-                  />
+                message={notify.message}
+                show={notify.show}
+                error={notify.error}
+                onAnimEnd={() =>
+                  setNotify({ error: false, message: "", show: false })
+                }
+              />
             </div>
           </Transition.Child>
         </Dialog>

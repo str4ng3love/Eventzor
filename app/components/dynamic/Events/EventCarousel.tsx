@@ -1,10 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Heading1, Heading3, Heading4 } from "../static/Heading";
+import { Heading1, Heading3, Heading4 } from "../../static/Heading";
 import Image from "next/image";
 import { BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi";
 import Link from "next/link";
-import SpinnerMini from "../static/SpinnerMini";
+import SpinnerMini from "../../static/SpinnerMini";
 interface Props {
   items: {
     title: string;
@@ -20,7 +20,7 @@ interface Props {
   fullWidthBlur?: boolean;
   darkBgAlpha?: boolean;
 }
-const Carousel = ({
+const EventCarousel = ({
   items,
   heading,
   darkBgAlpha = false,
@@ -201,4 +201,4 @@ const Carousel = ({
   }
 };
 
-export default Carousel;
+export default EventCarousel;

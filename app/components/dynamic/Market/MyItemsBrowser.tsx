@@ -188,9 +188,9 @@ const MyItemsBrowser = () => {
               stopDisplayingFn={() => {
                 setEdit({ show: false, item: null });
               }}
+            
               triggerFetchFn={() => getItem(edit.item?.id)}
               type={edit.item.itemType}
-              fn={() => {}}
               isPreorder={edit.item.preorder}
             />
           ) : (

@@ -3,7 +3,7 @@ import Notification from "../../static/Notification";
 import React, { useState, Fragment, useReducer } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import Button from "../Button";
-import EditImages from "./EditImages";
+import EditImages from "../EditImages";
 
 // Can't import enum type from schema.prisma file for some reason
  enum Status {
@@ -291,14 +291,7 @@ const EditEvent = ({...props}:Props) => {
                   <div className="p-4 flex justify-center ">
                         <EditImages images={props.images} id={props.id}/>
                   </div>
-                  <Notification
-                    message={notify.message}
-                    show={notify.show}
-                    error={notify.error}
-                    onAnimEnd={() =>
-                      setNotify({ error: false, message: "", show: false })
-                    }
-                  />
+                
                   <div className="p-4 mt-4 flex justify-evenly ">
                     {canEdit ?  <Button
                     title="Edit"
@@ -321,6 +314,14 @@ const EditEvent = ({...props}:Props) => {
                   </div>
                 </form>
               </Dialog.Panel>
+              <Notification
+                    message={notify.message}
+                    show={notify.show}
+                    error={notify.error}
+                    onAnimEnd={() =>
+                      setNotify({ error: false, message: "", show: false })
+                    }
+                  />
             </div>
           </Transition.Child>
         </Dialog>

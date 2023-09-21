@@ -32,7 +32,9 @@ async function handler(req: Request) {
         body.price.length === 0 ||
         parseFloat(body.price) < 0 ||
         typeof body.type !== "string" ||
-        body.type.length === 0
+        body.type.length === 0 ||
+        typeof body.image !== "string" ||
+        body.image.length < 3
       ) {
         return NextResponse.json(
           { error: "Please provide correct/missing values" },
@@ -51,6 +53,7 @@ async function handler(req: Request) {
             preorder: body.isPreorder,
             releaseDate:  body.isPreorder ? new Date(body.releaseDate) : null,
             price: parseFloat(body.price),
+            images: [body.image]
           },
         });
 

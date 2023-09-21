@@ -1,9 +1,9 @@
 "use client";
 
-import Notification from "../../static/Notification";
+import Notification from "../static/Notification";
 import Image from "next/image";
 import { useState, Fragment } from "react";
-import Button from "../Button";
+import Button from "./Button";
 import { Dialog, Transition } from "@headlessui/react";
 
 interface Props {
@@ -40,7 +40,8 @@ const EditImages = ({ images, id }: Props) => {
   };
   return (
     <>
-      <Button title="Show Images"
+      <Button
+        title="Show Images"
         text="Images"
         fn={() => {
           setShow(true);
@@ -59,7 +60,6 @@ const EditImages = ({ images, id }: Props) => {
             <div className="bg-black/80 fixed inset-0" aria-hidden />
             <div className="fixed inset-0 flex items-center justify-center p-4 backdrop-blur-sm">
               <Dialog.Panel
-              
                 className={
                   "relative p-8 bg-bg_interactive text-text dark:bg-bg_interactive  w-[30rem] shadow-md shadow-black overflow-y-scroll"
                 }
@@ -69,43 +69,44 @@ const EditImages = ({ images, id }: Props) => {
                 </Dialog.Title>
                 <div className="flex flex-col justify-center items-center">
                   <div className="p-4 flex justify-between z-20 gap-2 ">
-                    {/*TODO: combat: error (probably) because of headlessUI portal being rendered twice */}
-                    {imgArr ? 
+                    {imgArr ? (
                       imgArr.map((im, index) => (
-                        <>
+                        <div key={index}>
                           {selected === index && confirm ? (
-                            <div key={index} className="flex flex-col items-center justify-evenly gap-2 p-4" >
-                              <Button
-                              title="Confirm changes"
-                                text="Confirm"
-                                bgColor="bg-red-600"
-                                fn={() => {
-                                  setImgArr((prev) =>
-                                    prev.filter((i) => i !== im)
-                                  );
+                            <>
+                             
+                              <div className="flex flex-col items-center justify-evenly gap-2 p-4">
+                                <Button
+                                  title="Confirm changes"
+                                  text="Confirm"
+                                  bgColor="bg-red-600"
+                                  fn={() => {
+                                    setImgArr((prev) =>
+                                      prev.filter((i) => i !== im)
+                                    );
 
-                                  setConfirm(false);
-                                  setSelected(null);
-                                }}
-                              />
-                              <Button
-                              title="Cancel"
-                                text="cancel"
-                                fn={() => {
-                                  {
                                     setConfirm(false);
                                     setSelected(null);
-                                  }
-                                }}
-                              />
-                            </div>
+                                  }}
+                                />
+                                <Button
+                                  title="Cancel"
+                                  text="cancel"
+                                  fn={() => {
+                                    {
+                                      setConfirm(false);
+                                      setSelected(null);
+                                    }
+                                  }}
+                                />
+                              </div>
+                            </>
                           ) : (
                             <span
                               onClick={(e) => {
                                 setConfirm(true);
                                 setSelected(index);
                               }}
-                              key={index}
                               className="flex items-center relative after:flex after:items-center after:justify-center hover:after:content-['Delete'] hover:after:absolute after:top-0 after:left-0 after:bg-black/50 after:w-full after:h-full "
                             >
                               <Image
@@ -117,16 +118,18 @@ const EditImages = ({ images, id }: Props) => {
                               />
                             </span>
                           )}
-                        </>
+                        </div>
                       ))
-                     : 
-                      <h2 key={self.crypto.randomUUID()}>There are no images</h2>
-                    }
+                    ) : (
+                      <h2 key={self.crypto.randomUUID()}>
+                        There are no images
+                      </h2>
+                    )}
                   </div>
                   <div className="flex flex-col">
                     <div className="flex justify-between gap-2 p-2">
                       <Button
-                      title="Add new image"
+                        title="Add new image"
                         text="add new"
                         fn={(e) => {
                           setImgArr((prev) => [...prev, url]);
@@ -143,7 +146,7 @@ const EditImages = ({ images, id }: Props) => {
                     <div className="flex justify-center p-2">
                       {canEdit ? (
                         <Button
-                        title="Save changes"
+                          title="Save changes"
                           text="save changes"
                           fn={(e) => {
                             setCanEdit(false);
@@ -152,7 +155,7 @@ const EditImages = ({ images, id }: Props) => {
                         />
                       ) : (
                         <Button
-                        title="Working..."
+                          title="Working..."
                           text="Saving..."
                           bgColor="bg-bg"
                           fn={(e) => {}}

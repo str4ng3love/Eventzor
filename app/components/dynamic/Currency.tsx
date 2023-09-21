@@ -78,7 +78,7 @@ const Currency = ({
           {selected.name ==='initial' ? <SpinnerMini />: selected?.name.toLocaleUpperCase() }
         </Listbox.Button>
         <Listbox.Options
-          className={`absolute bg-primary  flex flex-row z-50 ring-2 ring-primary`}
+          className={`absolute bg-primary flex flex-row z-50 ring-2 ring-primary`}
         >
           {currencies && currencies.length > 0 ? (
             currencies.map((currency) => (

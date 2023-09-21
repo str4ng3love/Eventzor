@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/ConnectPrisma";
-import Carousel from "../components/dynamic/Carousel";
+import EventCarousel from "../components/dynamic/Events/EventCarousel";
 import EventsBrowser from "../components/dynamic/Events/EventsBrowser";
-import Image from "next/image";
+
 const getNewEvents = async () => {
   const newEvents = await prisma.event.findMany({
     orderBy: { eventDate: "asc" },
@@ -27,7 +27,7 @@ const page = async () => {
     <main className="flex flex-col items-center min-h-[calc(100dvh_-_4rem)]">
       {/* TODO: [slugified] dynamic page for a single event */}
       <div className="lg:bg-event-hero w-full bg-cover bg-center bg-no-repeat transition-all">
-        <Carousel heading="Upcoming events" items={newEvents} darkBgAlpha={false} fullWidthBlur={true}/>
+        <EventCarousel heading="Upcoming events" items={newEvents} darkBgAlpha={false} fullWidthBlur={true}/>
       </div>
 
       {/* TODO: Event browser with sorting, pagination etc */}

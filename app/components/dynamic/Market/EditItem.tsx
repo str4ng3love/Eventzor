@@ -3,6 +3,7 @@ import Notification from "../../static/Notification";
 import React, { useState, Fragment, useReducer } from "react";
 import { Dialog, Listbox, Transition } from "@headlessui/react";
 import Button from "../Button";
+import EditImages from "../EditImages";
 
 type ItemType = "tshirt" | "cap" | "poster" | "bracelet" | "sticker";
 let options: ItemType[] = ["bracelet", "cap", "poster", "sticker", "tshirt"];
@@ -86,11 +87,12 @@ const reducer = (state: InputState, action: InputAction) => {
 interface Props extends InputState {
   id: string;
   show: boolean;
+  images:string[];
   stopDisplayingFn: () => void;
-  fn: (e: React.MouseEvent) => void;
   triggerFetchFn: () => void;
 }
 const EditItem = ({ ...props }: Props) => {
+
   const [selected, setSelected] = useState(props.type);
   const [canEdit, setCanEdit] = useState(true);
   const [notify, setNotify] = useState({
@@ -299,7 +301,9 @@ const EditItem = ({ ...props }: Props) => {
                   ) : (
                     <></>
                   )}
-                  
+                    <div className="p-4 flex justify-center ">
+                        <EditImages images={props.images} id={props.id}/>
+                  </div>
                   <div className="p-4 mt-4 flex justify-evenly ">
                     {canEdit ? (
                       <Button
@@ -326,7 +330,7 @@ const EditItem = ({ ...props }: Props) => {
                     />
                   </div>
                 </form>
-              </Dialog.Panel>
+              </Dialog.Panel>s
               <Notification
                     message={notify.message}
                     show={notify.show}

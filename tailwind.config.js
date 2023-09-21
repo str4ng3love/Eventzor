@@ -8,6 +8,7 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
+        "item-hero": 'url("/images/hero_item.jpeg")',
         "event-hero": 'url("/images/hero_event.jpeg")',
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":

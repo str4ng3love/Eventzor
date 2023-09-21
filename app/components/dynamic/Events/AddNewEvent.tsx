@@ -22,7 +22,8 @@ import Button from "../Button";
   INPUT_ESTART = "Events starting date",
   INPUT_STATUS = "Status of the event",
   INPUT_PRICE = "Ticket price",
-  INPUT_IMAGE = "Image for promotion"
+  INPUT_IMAGE = "Image for promotion",
+  DELETE_IMAGE = "Delete a image"
 }
  interface InputAction {
   type: FormActionKind;
@@ -37,7 +38,7 @@ import Button from "../Button";
   location: string;
   price: number;
   status: Status;
-  image: string;
+  image: string[];
 }
 
  const reducer = (state: InputState, action: InputAction) => {
@@ -89,7 +90,18 @@ import Button from "../Button";
     case FormActionKind.INPUT_IMAGE: {
       return {
         ...state,
-        image: payload as string
+        image: [...state.image, payload as string],
+      };
+    }
+    case FormActionKind.DELETE_IMAGE: {
+      return {
+        ...state,
+
+        image: [
+          ...state.image.filter(
+            (image, index) => index !== (payload as number)
+          ),
+        ],
       };
     }
     default:
@@ -106,6 +118,7 @@ interface Props {
 const AddNewEvent = ({optimisticFn, optimisticFnClnUp, refetchTrigger}:Props) => {
   const [show, setShow] = useState(false);
   const [canPost, setCanPost] = useState(true)
+  const [image, setImage] =useState('')
   const [notify, setNotify] = useState({
     show: false,
     message: "",
@@ -124,7 +137,7 @@ const AddNewEvent = ({optimisticFn, optimisticFnClnUp, refetchTrigger}:Props) =>
     closingDate: closingDate,
     eventDate: eventDate,
     price: 0,
-    image:""
+    image: []
   });
 
   const handleCreate = async (state: InputState) => {
@@ -304,28 +317,58 @@ const AddNewEvent = ({optimisticFn, optimisticFnClnUp, refetchTrigger}:Props) =>
                       min={0}
                     />
                   </div>
-                  <div className="p-4 flex justify-between ">
-                    <label className="p-1 min-w-[10ch] mr-2">
-                      Image Link
-                    </label>
-                    <input
-                    onPaste={(e) =>
-                      dispatch({
-                        type: FormActionKind.INPUT_IMAGE,
-                        payload: e.currentTarget.value,
-                      })}
-                      onChange={(e) =>
+                  <div className="flex p-4 flex-col justify-center items-center">
+                    <div className="pb-8 flex justify-between w-full ">
+                      <label className="p-1 min-w-[10ch] mr-2">
+                        Image Link
+                      </label>
+                      <input
+                        className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
+                        type="text"
+                        value={image}
+                        onChange={(e) => setImage(e.currentTarget.value)}
+                        onPaste={(e) => setImage(e.currentTarget.value)}
+                      />
+                    </div>
+                    <Button
+                      title="add picture"
+                      text="add"
+                      fn={() => {
+                        if (image.length === 0) return;
                         dispatch({
                           type: FormActionKind.INPUT_IMAGE,
-                          payload: e.currentTarget.value,
-                        })
-                      }
-                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
-                      type="text"
-                     
+                          payload: image,
+                        });
+                        setImage("");
+                      }}
                     />
                   </div>
-          
+                  <div className="flex gap-1">
+                    {state.image && state.image.length > 0 ? (
+                      state.image.map((i, index) => (
+                        <span
+                          key={index}
+                          className="flex items-center relative after:flex after:items-center after:justify-center hover:after:content-['Delete'] hover:after:absolute after:top-0 after:left-0 after:bg-black/50 w-fit h-fit after:w-full after:h-full"
+                          onClick={() =>
+                            dispatch({
+                              type: FormActionKind.DELETE_IMAGE,
+                              payload: index,
+                            })
+                          }
+                        >
+                          <img
+                            alt="image"
+                            style={{ fontSize: "0px" }}
+                            src={i}
+                            width={100}
+                            height={100}
+                          />
+                        </span>
+                      ))
+                    ) : (
+                      <></>
+                    )}
+                  </div>
                   <div className="p-4 mt-4 flex justify-evenly ">
                     {canPost ? 
                     <Button title="Create"
