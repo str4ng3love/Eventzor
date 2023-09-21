@@ -3,54 +3,65 @@ import { prisma } from "../../../lib/ConnectPrisma";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
+
 async function handler(req: Request) {
   const session = await getServerSession(options);
-  if (req.method === "POST") {
+  if(req.method==="GET"){
+    if (session?.user?.name) {
+      try {
+        const items = await prisma.marketItem.findMany({where:{merchantName: session.user.name}})
+        return NextResponse.json({items})
+      } catch (error) {
+        console.log(error)
+        return NextResponse.json({error:"Internal server error"}, {status:500})
+      }
+    } else {
+      return NextResponse.json({error:"Unathorized"}, {status:401})
+    }
+  }else  if (req.method === "POST") {
     if (session?.user?.name) {
       const body = await req.json();
-console.log(    parseFloat(body.price) < 0 )
+
       if (
         body.amount <= 0 ||
         body.description.length < 3 ||
-        typeof(body.description)!== "string" ||
+        typeof body.description !== "string" ||
         body.item.length <= 3 ||
-        typeof(body.item) !== "string" ||
-        typeof(body.isBuyOrder) !== "boolean" ||
-        typeof(body.isPreorder) !== "boolean" ||
+        typeof body.item !== "string" ||
+        typeof body.isPreorder !== "boolean" ||
         body.price.length === 0 ||
-        parseFloat(body.price) < 0
+        parseFloat(body.price) < 0 ||
+        typeof body.type !== "string" ||
+        body.type.length === 0
       ) {
         return NextResponse.json(
           { error: "Please provide correct/missing values" },
           { status: 200 }
         );
       }
-    let date = new Date()
-    let orderDate = body.releaseDate
-    console.log(orderDate)
 
       try {
-        const newOrder = await prisma.order.create({
+        const newItem = await prisma.marketItem.create({
           data: {
             amount: parseInt(body.amount),
             description: body.description,
             item: body.item,
-            isBuyOrder: body.isBuyOrder,
+            itemType: body.type,
             merchantName: session?.user?.name,
             preorder: body.isPreorder,
-            releaseDate: new Date(body.releaseDate) || null,
+            releaseDate:  body.isPreorder ? new Date(body.releaseDate) : null,
             price: parseFloat(body.price),
           },
         });
 
-        if (newOrder) {
+        if (newItem) {
           return NextResponse.json(
-            { message: "Order created successfully" },
+            { message: "Item created successfully" },
             { status: 200 }
           );
         } else {
           return NextResponse.json(
-            { error: "Could not create the order" },
+            { error: "Could not create new item" },
             { status: 200 }
           );
         }
@@ -68,19 +79,19 @@ console.log(    parseFloat(body.price) < 0 )
     if (session?.user?.name) {
       const body = await req.json();
       if (!body.id) {
-        return NextResponse.json({ error: "Please provide order ID" });
+        return NextResponse.json({ error: "Please provide item ID" });
       }
       try {
-        const deletedOrder = await prisma.order.delete({
+        const deletedItem = await prisma.marketItem.delete({
           where: { id: body.id, merchantName: session.user.name },
         });
-        if (!deletedOrder) {
+        if (!deletedItem) {
           return NextResponse.json(
-            { error: "Order not found" },
+            { error: "Item not found" },
             { status: 404 }
           );
         } else {
-          return NextResponse.json({ message: "Order deleted successfull" });
+          return NextResponse.json({ message: "Item deleted successfull" });
         }
       } catch (error) {
         console.log(error);
@@ -98,35 +109,43 @@ console.log(    parseFloat(body.price) < 0 )
       if (!body) {
         return NextResponse.json({ error: "Bad request" }, { status: 400 });
       }
-    if(parseInt(body.state.price) <= 0){
-      return NextResponse.json({error: "Price cannot be lower or equal 0"})
-    }
-    if(parseInt(body.state.amount) <= 0){
-      return NextResponse.json({error: "Amount cannot be lower or equal 0"})
-    }
-    if(parseInt(body.state.amount) > 10000){
-      return NextResponse.json({error: "Amount of items cannot exceed 10 000 units"})
-    }
+      if (parseInt(body.price) <= 0) {
+        return NextResponse.json({ error: "Price cannot be lower or equal 0" });
+      }
+      if (parseInt(body.amount) <= 0) {
+        return NextResponse.json({
+          error: "Amount cannot be lower or equal 0",
+        });
+      }
+      if (parseInt(body.amount) > 10000) {
+        return NextResponse.json({
+          error: "Amount of items cannot exceed 10 000 units",
+        });
+      }
       try {
-        const updatedOrder = await prisma.order.update({
+        console.log(body);
+        const updatedItem = await prisma.marketItem.update({
           where: {
             id: body.id,
           },
           data: {
-           amount: parseInt(body.state.amount),
-           price: parseFloat(body.state.price),
-           description: body.state.description,
-           item: body.state.item
-            
+            amount: parseInt(body.amount),
+            price: parseFloat(body.price),
+            // type: body.type,
+            description: body.description,
+            preorder: body.isPreorder,
+            item: body.item,
+            releaseDate: body.isPreorder ? body.releaseDate : null,
           },
         });
-        if (!updatedOrder) {
+        if (!updatedItem) {
           return NextResponse.json(
             { error: "Internal server error" },
             { status: 500 }
           );
         }
-        return NextResponse.json({ message: "Order updated successfully" });
+
+        return NextResponse.json({ message: "Item updated successfully" });
       } catch (error) {
         console.log(error);
         return NextResponse.json(
@@ -139,19 +158,19 @@ console.log(    parseFloat(body.price) < 0 )
     }
   } else {
     try {
-      const orders = await prisma.order.findMany({});
-      if (!orders) {
+      const items = await prisma.marketItem.findMany({});
+      if (!items) {
         return NextResponse.json(
           { error: "Something went wrong" },
           { status: 400 }
         );
-      } else if (orders.length === 0) {
+      } else if (items.length === 0) {
         return NextResponse.json(
-          { message: "No orders found." },
+          { message: "No items found." },
           { status: 404 }
         );
       } else {
-        return NextResponse.json(orders);
+        return NextResponse.json(items);
       }
     } catch (error) {
       console.log(error);

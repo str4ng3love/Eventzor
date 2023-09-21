@@ -1,4 +1,4 @@
-import { Event, Order } from "@prisma/client";
+import { Event, MarketItem, Order } from "@prisma/client";
 
 const sortEvents = (arr: Event[], sorter: number | string): Event[] => {
   let sortedArr: Event[];
@@ -51,4 +51,22 @@ const sortOrders = (arr: Order[], sorter: number | string): Order[] => {
 
   return sortedArr;
 };
-export { sortEvents, sortOrders };
+const sortItems = (arr: MarketItem[], sorter: number | string): Order[] => {
+  let sortedArr: MarketItem[];
+  if (sorter.toString().toLowerCase().includes("amount")) {
+    sortedArr = arr.sort((a, b) => a.amount - b.amount);
+  }  else if (sorter.toString().toLowerCase() === "item") {
+    sortedArr = arr.sort((a, b) => {
+      const titleA = a.item.toLowerCase();
+      const titleB = b.item.toLowerCase();
+      return titleA.localeCompare(titleB);
+    });
+  } else if (sorter.toString().toLowerCase().includes("price")) {
+    sortedArr = arr.sort((a, b) => a.price - b.price);
+  }else {
+    sortedArr = arr;
+  }
+
+  return sortedArr;
+};
+export { sortEvents, sortOrders, sortItems };

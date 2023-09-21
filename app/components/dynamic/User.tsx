@@ -26,7 +26,7 @@ const User = () => {
           >
             <Menu.Items>
               <div className="absolute  mt-2 bg-black">
-                <div className="my-1 flex justify-start items-center">
+                <div className="my-1 flex justify-start items-center ">
                   <Menu.Item>
                     {({ active }) => (
                       <Link href={"/dashboard"} className={`${active ? "bg-link":""} p-2 flex justify-start items-center transition-all duration-300`}>

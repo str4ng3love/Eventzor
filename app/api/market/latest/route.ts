@@ -3,16 +3,16 @@ import { options } from "../../auth/[...nextauth]/options"
 import { NextResponse } from "next/server"
 import {prisma} from '../../../../lib/ConnectPrisma'
 
-export async function handler(req:Request){
+async function handler(req:Request){
     if(req.method !== "GET"){
         return NextResponse.json({error: 'Bad request'}, {status:400})
     }
     try {
     const session = await getServerSession(options)
     if(session?.user?.name){
-        const latestOrder = await prisma.order.findFirst({where: {merchantName: session.user.name}, orderBy:{id:'desc'}})
-        if(latestOrder){
-            return NextResponse.json(latestOrder)
+        const latestItem = await prisma.marketItem.findFirst({where: {merchantName: session.user.name}, orderBy:{id:'desc'}})
+        if(latestItem){
+            return NextResponse.json(latestItem)
         } else {
             return NextResponse.json({error: 'Something went wrong.'})
         }

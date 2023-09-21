@@ -85,22 +85,23 @@ model Event {
 }
 
 model MarketItem {
-  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  id           String       @id @default(auto()) @map("_id") @db.ObjectId
   item         String
   description  String
   price        Float
   amount       Int
-  amountSold   Int       @default(0)
-  preorder     Boolean   @default(false)
+  amountSold   Int          @default(0)
+  preorder     Boolean      @default(false)
   releaseDate  DateTime?
-  isBuyOrder   Boolean   @default(false)
   imageUrl     String[]
-  merchant     User      @relation(fields: [merchantName], references: [name])
+  merchant     User         @relation(fields: [merchantName], references: [name])
   merchantName String
+  itemType ItemType
   images       String[]
   comments     Comment[]
   dislikes     Dislike[]
   likes        Like[]
+  
 }
 
 enum Status {
@@ -115,6 +116,14 @@ enum CommentStatus {
   flaggedAsDeleted
   reported
   brokeToS
+}
+
+enum ItemType {
+  tshirt
+  cap
+  poster
+  bracelet
+  sticker
 }
 
 model Comment {

@@ -6,15 +6,15 @@ async function handler(req: Request, { params }: { params: { slug: string } }) {
   const slug = params.slug;
 
   try {
-    const order = await prisma.marketItem.findUnique({ where: { id: slug } });
-    if (!order) {
+    const item = await prisma.marketItem.findUnique({ where: { id: slug } });
+    if (!item) {
       return NextResponse.json(
-        { error: `No order with id of ${slug}` },
+        { error: `No item with id of ${slug}` },
         { status: 404 }
       );
     }
 
-    return NextResponse.json(order);
+    return NextResponse.json(item);
   } catch (error) {
     console.log(error);
     if(error instanceof PrismaClientKnownRequestError){

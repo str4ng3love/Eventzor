@@ -125,6 +125,7 @@ const ChangePassword = () => {
         <div className="flex p-8 justify-center">
           {canChangePass ? (
             <Button
+            title="Update your password"
               text="Update"
               fn={() => {
                 setCanChangePass(false)
@@ -132,7 +133,7 @@ const ChangePassword = () => {
               }}
             />
           ) : (
-            <Button text="Updating..." fn={() => {}} bgColor={'bg-bg'} interactive={false} />
+            <Button title="Working" text="Updating..." fn={() => {}} bgColor={'bg-bg'} interactive={false} />
           )}
         </div>
         <Notification

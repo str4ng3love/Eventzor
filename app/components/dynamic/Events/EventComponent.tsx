@@ -1,4 +1,4 @@
-"use client";
+
 import { Event } from "@prisma/client";
 import DropDownMini from "../DropDownMini";
 import { BiDotsVertical } from "react-icons/bi";

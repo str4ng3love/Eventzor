@@ -1,11 +1,12 @@
 "use client";
-import { FaHouseUser, FaCog } from "react-icons/fa";
+import { FaHouseUser, FaCog} from "react-icons/fa";
 import { BsCalendar3EventFill } from "react-icons/bs";
 import { TbFileSpreadsheet } from "react-icons/tb";
 import { usePathname } from 'next/navigation'
 
 import { useEffect, useState } from "react";
 import NavItem from "./NavItem";
+import { BiMoney } from "react-icons/bi";
 
 const Nav = () => {
   const [selected, setSelected] = useState('home');
@@ -30,6 +31,14 @@ const Nav = () => {
         fn={(e, href) =>{setSelected(href)}}
         selected={selected}
         label="navigate to events page"
+      />
+           <NavItem
+        text="market"
+        Icon={BiMoney}
+        href="/dashboard/market"
+        fn={(e, href) =>{setSelected(href)}}
+        selected={selected}
+        label="navigate to market page"
       />
       <NavItem
         text="orders"

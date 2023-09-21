@@ -97,11 +97,13 @@ import Button from "../Button";
   }
 };
 interface Props {
-  fn:(e:React.MouseEvent)=> void;
+
   refetchTrigger: ()=>void;
-  
+  optimisticFn: (e: React.MouseEvent) => void;
+  optimisticFnClnUp: () => void;
+
 }
-const AddNewEvent = ({fn, refetchTrigger}:Props) => {
+const AddNewEvent = ({optimisticFn, optimisticFnClnUp, refetchTrigger}:Props) => {
   const [show, setShow] = useState(false);
   const [canPost, setCanPost] = useState(true)
   const [notify, setNotify] = useState({
@@ -150,13 +152,16 @@ const AddNewEvent = ({fn, refetchTrigger}:Props) => {
         },
         body: JSON.stringify(state),
       });
-      const dat = await resp.json();
-      refetchTrigger()
+      const data = await resp.json();
+      
+    
       setCanPost(true);
-      if (dat.error) {
-        setNotify({ error: true, show: true, message: dat.error });
+      if (data.error) {
+        setNotify({ error: true, show: true, message: data.error });
+        optimisticFnClnUp()
       } else {
-        setNotify({ error: false, show: true, message: dat.message });
+        setNotify({ error: false, show: true, message: data.message });
+        refetchTrigger()
       }
     } catch (error) {
       console.log(error);
@@ -320,20 +325,13 @@ const AddNewEvent = ({fn, refetchTrigger}:Props) => {
                      
                     />
                   </div>
-                  <Notification
-                    message={notify.message}
-                    show={notify.show}
-                    error={notify.error}
-                    onAnimEnd={() =>
-                      setNotify({ error: false, message: "", show: false })
-                    }
-                  />
+          
                   <div className="p-4 mt-4 flex justify-evenly ">
                     {canPost ? 
                     <Button title="Create"
                       text="Create"
                       fn={(e) => {
-                        fn(e);
+                        optimisticFn(e);
                         handleCreate(state);
                       }}
                     />:  <Button
@@ -351,6 +349,14 @@ const AddNewEvent = ({fn, refetchTrigger}:Props) => {
                   </div>
                 </form>
               </Dialog.Panel>
+              <Notification
+                    message={notify.message}
+                    show={notify.show}
+                    error={notify.error}
+                    onAnimEnd={() =>
+                      setNotify({ error: false, message: "", show: false })
+                    }
+                  />
             </div>
           </Transition.Child>
         </Dialog>

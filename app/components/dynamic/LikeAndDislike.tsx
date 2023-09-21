@@ -4,6 +4,8 @@ import ButtonWithIcon from "./ButtonWithIcon";
 import { useEffect, useState } from "react";
 import ButtonSkeleton from "../static/ButtonSkeleton";
 import { getIDType } from "@/helpers/getIDtype";
+import { useSession } from "next-auth/react";
+import LoginForm from "./LoginForm";
 interface Props {
   commentId?: string;
   eventId?: string;
@@ -28,25 +30,32 @@ const LikeAndDislike = ({
   const [liked, setLiked] = useState<unknown>();
   const [disliked, setDisliked] = useState<unknown>();
   const [working, setWorking] = useState(false);
+  const { data: session } = useSession();
+  const [showLogin, setShowLogin] = useState(false)
 
   const CheckStatus = async () => {
-    try {
-      const { urlPart, id } = getIDType(commentId, eventId, itemId);
-      const searchParams = new URLSearchParams({ id, type: urlPart });
-      const resp = await fetch(`/api/social?` + searchParams);
-      const data = await resp.json();
-      if (data.social._count.likes > 0) {
-        setLiked(true);
-        setDisliked(false)
-      } else if (data.social._count.dislikes > 0) {
-        setLiked(false)
-        setDisliked(true);
-      } else {
-        setLiked(false)
-        setDisliked(false);
+    if (session?.user) {
+      try {
+        const { urlPart, id } = getIDType(commentId, eventId, itemId);
+        const searchParams = new URLSearchParams({ id, type: urlPart });
+        const resp = await fetch(`/api/social?` + searchParams);
+        const data = await resp.json();
+        if (data.social._count.likes > 0) {
+          setLiked(true);
+          setDisliked(false);
+        } else if (data.social._count.dislikes > 0) {
+          setLiked(false);
+          setDisliked(true);
+        } else {
+          setLiked(false);
+          setDisliked(false);
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
+    } else {
+      setDisliked(false);
+      setLiked(false);
     }
   };
   const handleLike = async () => {
@@ -143,58 +152,95 @@ const LikeAndDislike = ({
   return (
     <>
       {typeof liked !== "boolean" ? (
-      <>  <ButtonSkeleton />  <ButtonSkeleton /></>
+        <>
+          {" "}
+          <ButtonSkeleton /> <ButtonSkeleton />
+        </>
       ) : (
-        <div className="flex h-fit gap-2">
-          {liked ? (
-            <ButtonWithIcon
-              size="1em"
-              Icon={BiSolidLike}
-              bgColor="bg-transparent"
-              title="Like"
-              fn={() => {
-                working ? null : handleLike();
-              }}
-              text={parentData.amountOfLikes.toString()}
-            />
-          ) : (
-            <ButtonWithIcon
-              size="1em"
-              Icon={BiLike}
-              bgColor="bg-transparent"
-              title="Like"
-              fn={() => {
-                working ? null : handleLike();
-              }}
-              text={parentData.amountOfLikes.toString()}
-            />
-          )}
+        <>
+          {session?.user ? (
+            <div className="flex h-fit gap-2">
+              {liked ? (
+                <ButtonWithIcon
+                  size="1em"
+                  Icon={BiSolidLike}
+                  bgColor="bg-transparent"
+                  title="Like"
+                  fn={() => {
+                    working ? null : handleLike();
+                  }}
+                  text={parentData.amountOfLikes.toString()}
+                />
+              ) : (
+                <ButtonWithIcon
+                  size="1em"
+                  Icon={BiLike}
+                  bgColor="bg-transparent"
+                  title="Remove like"
+                  fn={() => {
+                    working ? null : handleLike();
+                  }}
+                  text={parentData.amountOfLikes.toString()}
+                />
+              )}
 
-          {disliked ? (
-            <ButtonWithIcon
-              size="1em"
-              Icon={BiSolidDislike}
-              bgColor="bg-transparent"
-              title="Like"
-              fn={() => {
-                working ? null : handleDislike();
-              }}
-              text={parentData.amountOfDislikes.toString()}
-            />
+              {disliked ? (
+                <ButtonWithIcon
+                  size="1em"
+                  Icon={BiSolidDislike}
+                  bgColor="bg-transparent"
+                  title="Dislike"
+                  fn={() => {
+                    working ? null : handleDislike();
+                  }}
+                  text={parentData.amountOfDislikes.toString()}
+                />
+              ) : (
+                <ButtonWithIcon
+                  size="1em"
+                  Icon={BiDislike}
+                  bgColor="bg-transparent"
+                  title="Remove dislike"
+                  fn={() => {
+                    working ? null : handleDislike();
+                  }}
+                  text={parentData.amountOfDislikes.toString()}
+                />
+              )}
+            </div>
           ) : (
-            <ButtonWithIcon
-              size="1em"
-              Icon={BiDislike}
-              bgColor="bg-transparent"
-              title="Like"
-              fn={() => {
-                working ? null : handleDislike();
-              }}
-              text={parentData.amountOfDislikes.toString()}
-            />
+            <>
+             
+              <div className="flex h-fit gap-2">
+                <ButtonWithIcon
+                  size="1em"
+                  Icon={BiLike}
+                  bgColor="bg-transparent"
+                  title="Login to Like"
+                  fn={() => {
+                 setShowLogin(true)
+                  }}
+                  text={parentData.amountOfLikes.toString()}
+                />
+
+                <ButtonWithIcon
+                  size="1em"
+                  Icon={BiDislike}
+                  bgColor="bg-transparent"
+                  title="Login to Dislike"
+                  fn={() => {
+                   setShowLogin(true)
+                  }}
+                  text={parentData.amountOfDislikes.toString()}
+                />
+              </div>
+            </>
           )}
-        </div>
+        </>
       )}
+      { showLogin ? <LoginForm show cleanUp={()=> setShowLogin(false)}/> : <></>}
+
+      
     </>
   );
 };

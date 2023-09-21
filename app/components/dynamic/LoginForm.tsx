@@ -101,14 +101,7 @@ useEffect(()=>{
                     />
                   </div>
                 </form>
-                <Notification
-                  message={notify.message}
-                  show={notify.show}
-                  error={notify.error}
-                  onAnimEnd={() =>
-                    setNotify({ error: false, message: "", show: false })
-                  }
-                />
+           
 
                 <div className="flex justify-around pt-8">
                   <Button
@@ -119,14 +112,25 @@ useEffect(()=>{
                   />
                   <Button title="Cancel" text="Cancel" fn={() => setOpen(false)}></Button>
                 </div>
+             
                 <div className="flex flex-col justify-around pt-8 ">
              
-             <span className="p-4">Don't have an account?</span>
+             <span className="p-4">Don&apos;t have an account?</span>
             <RegisterForm />
                 </div>
               </Dialog.Panel>
+              <Notification
+                  message={notify.message}
+                  show={notify.show}
+                  error={notify.error}
+                  onAnimEnd={() =>
+                    setNotify({ error: false, message: "", show: false })
+                  }
+                />
             </div>
+        
           </Transition.Child>
+    
         </Dialog>
       </Transition>
     </>

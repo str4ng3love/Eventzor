@@ -1,9 +1,11 @@
+
 import "./globals.css";
 import type { Metadata } from "next";
 import { Public_Sans } from "next/font/google";
 import Header from "./components/static/Header/Header";
 import { getServerSession } from "next-auth";
 import SessionProvider from "./components/SessionProvider";
+
 
 const publicSans = Public_Sans({ subsets: ["latin"] });
 
