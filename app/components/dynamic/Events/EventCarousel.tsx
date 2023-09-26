@@ -31,6 +31,9 @@ const EventCarousel = ({
   const [active, setActive] = useState(0);
   const [currency, setCurrency] = useState({ name: "initial", rate: 1 });
 
+  const readAdress = () => {
+    console.log(encodeURI(items[active].title));
+  };
   const handleChange = async (image: string) => {
     setPlayFadeOut(true);
     setTimeout(() => {
@@ -81,13 +84,14 @@ const EventCarousel = ({
     return (
       <div
         className={`${
-          fullWidthBlur ? "w-full flex justify-center backdrop-blur-sm shadow-[inset_0rem_0rem_3rem_black] py-4" : ""
+          fullWidthBlur
+            ? "w-full flex justify-center backdrop-blur-sm shadow-[inset_0rem_0rem_3rem_black] pb-4 pt-20"
+            : ""
         } ${darkBgAlpha ? "lg:bg-black/20 " : ""}`}
       >
         <div className={`flex flex-col lg:w-[50rem] w-[30rem]`}>
-         
-            <Heading1 text={heading} />
-         
+          <Heading1 text={heading} />
+
           <div className="flex items-center justify-between h-[20rem] ">
             <span
               onClick={(e) =>
@@ -99,7 +103,7 @@ const EventCarousel = ({
             </span>
             <div className=" w-full h-full flex justify-between ring-2 ring-primary shadow-omni">
               <Link
-                href={`/events/${items[active].title}`}
+                href={"/events/" + encodeURIComponent(items[active].title)}
                 title={items[active].title}
                 className={`relative group lg:w-[67%] w-full overflow-hidden  bg-black`}
               >
@@ -145,6 +149,7 @@ const EventCarousel = ({
                     />
                   ))}
                 </div>
+          
                 <div className="shrink-0 text-sm flex flex-col items-end justify-between">
                   <span className="p-1">
                     {items[active].eventDate.toLocaleDateString()}

@@ -2,11 +2,13 @@
 import { Event } from "@prisma/client";
 import DropDownMini from "../DropDownMini";
 import { BiDotsVertical } from "react-icons/bi";
+import InfoPopover from "../Popover";
 
 
 interface EventProps extends Event {
   delFn: (e: React.MouseEvent) => void;
   editFn: (e: React.MouseEvent) => void;
+  isEmpty?:boolean
 }
 const EventComponent = ({ ...props }: EventProps) => {
 
@@ -32,6 +34,7 @@ const EventComponent = ({ ...props }: EventProps) => {
           {new Date(props.closingDate).toTimeString().slice(0, 5)}
         </td>
         <td className="p-2">{props.organizerName}</td>
+        <td className="w-[12ch] p-2">{props.isEmpty? <InfoPopover fn={(e)=>props.editFn(e)} text="!" message="There are no images attached to your event, this wont allow the event to be found on the website."/> :<></>}</td>
         <td className="overflow-visible h-[100%] ml-8 p-0 flex items-center justify-center">
           <DropDownMini
             items={[

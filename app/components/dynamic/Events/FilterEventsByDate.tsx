@@ -7,13 +7,17 @@ import ButtonWithIcon from "../ButtonWithIcon";
 import Button from "../Button";
 
 interface Props {
+  passDates?:(dates:{ startDate: string, endDate: string})=>void,
+  defaultDates?: {
+    startDate: string, endDate: string
+  }
   fn:(e:React.MouseEvent, dates:{ startDate: string, endDate: string}) => void;
   title:string;
 }
 
-const FilterEventsByDate = ({fn, title}:Props) => {
+const FilterEventsByDate = ({passDates,defaultDates,fn, title}:Props) => {
   const [show, setShow] = useState(false);
-  const [dates, setDates] = useState({ startDate: new Date().toISOString().slice(0, -8), endDate: new Date().toISOString().slice(0, -8) });
+  const [dates, setDates] = useState({ startDate: defaultDates? defaultDates.startDate :  new Date().toISOString().slice(0, -8), endDate: defaultDates? defaultDates.endDate : new Date().toISOString().slice(0, -8) });
   const [notify, setNotify] = useState({
     show: false,
     message: "",
@@ -108,8 +112,11 @@ const FilterEventsByDate = ({fn, title}:Props) => {
                       fn={(e) => {
                         if(dates.endDate < dates.startDate){
                           setNotify({error:true, show:true, message:"Invalid Parametes, Second Field Should Container Later Date"})
+                         
                         } else {
                           fn(e, dates)
+
+                          passDates? passDates(dates) : null
                         }
                       }}
                     />

@@ -3,27 +3,40 @@ import { useEffect, useState } from "react";
 import ButtonWithIcon from "../ButtonWithIcon";
 import Link from "next/link";
 import { BiX } from "react-icons/bi";
-interface Props {
-  title: string;
-  amount: number;
-  price: number;
+import { CartItemData } from "./ShoppingCart";
+interface Props extends CartItemData {
   currency: { name: String; rate: number };
-  id: string;
   delFn: (e: React.MouseEvent, id: string) => void;
   closeFn: (e: React.MouseEvent) => void;
 }
 
-const CartEventItem = ({ ...props }: Props) => {
+const CartItem = ({ ...props }: Props) => {
   const [amount, setAmount] = useState(props.amount);
+  // console.log(props)
+  useEffect(() => {
+    const cart = localStorage.getItem("cart");
+    if (cart) {
+      const cartArr: CartItemData[] = Array.from(JSON.parse(cart));
+      const updatedArr = cartArr.map((i) => {
+        if (i.id == props.id) {
+          return { ...i, amount: amount };
+        } else {
+          return i;
+        }
+      });
+     localStorage.setItem('cart', JSON.stringify(updatedArr))
+     window.dispatchEvent(new Event('storage'))
+    }
 
+  }, [amount]);
   return (
     <div className="flex justify-between p-2 items-center w-full">
       <Link
         onClick={(e) => props.closeFn(e)}
-        href={`/events/${props.title}`}
+        href={`${"/" + props.type + "/" + props.item}`}
         className="p-2 m-r1 w-[25ch] overflow-hidden text-ellipsis whitespace-nowrap"
       >
-        {props.title}
+        {props.item}
       </Link>
       <input
         type="number"
@@ -57,11 +70,11 @@ const CartEventItem = ({ ...props }: Props) => {
           Icon={BiX}
           size="1em"
           bgColor="bg-secondary"
-          fn={(e) => props.delFn(e, props.title)}
+          fn={(e) => props.delFn(e, props.item)}
         />
       </span>
     </div>
   );
 };
 
-export default CartEventItem;
+export default CartItem;

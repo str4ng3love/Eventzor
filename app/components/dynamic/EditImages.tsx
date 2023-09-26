@@ -6,11 +6,17 @@ import { useState, Fragment } from "react";
 import Button from "./Button";
 import { Dialog, Transition } from "@headlessui/react";
 
+export enum CallType {
+  event="events",
+  item='market'
+}
 interface Props {
   images: string[];
   id: string;
+  triggerRefetch:()=>void
+  type: CallType;
 }
-const EditImages = ({ images, id }: Props) => {
+const EditImages = ({type, triggerRefetch, images, id }: Props) => {
   const [show, setShow] = useState(false);
   const [imgArr, setImgArr] = useState(images);
   const [canEdit, setCanEdit] = useState(true);
@@ -24,7 +30,7 @@ const EditImages = ({ images, id }: Props) => {
   });
 
   const handleImageUpdate = async () => {
-    const resp = await fetch("/api/events/images", {
+    const resp = await fetch(`/api/${type}/images`, {
       method: "PATCH",
       headers: { "contnet-type": "application-json" },
       body: JSON.stringify({ images: imgArr, id: id }),
@@ -35,6 +41,7 @@ const EditImages = ({ images, id }: Props) => {
       setNotify({ error: true, show: true, message: dat.error });
     } else {
       setCanEdit(true);
+      triggerRefetch()
       setNotify({ error: false, show: true, message: dat.message });
     }
   };

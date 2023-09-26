@@ -3,7 +3,7 @@ import Notification from "../../static/Notification";
 import React, { useState, Fragment, useReducer } from "react";
 import { Dialog, Listbox, Transition } from "@headlessui/react";
 import Button from "../Button";
-import EditImages from "../EditImages";
+import EditImages, { CallType } from "../EditImages";
 
 type ItemType = "tshirt" | "cap" | "poster" | "bracelet" | "sticker";
 let options: ItemType[] = ["bracelet", "cap", "poster", "sticker", "tshirt"];
@@ -112,7 +112,7 @@ const EditItem = ({ ...props }: Props) => {
   const handleEdit = async (state: InputState) => {
 
     try {
-      const resp = await fetch("/api/market", {
+      const resp = await fetch("/api/market/user", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -127,6 +127,10 @@ const EditItem = ({ ...props }: Props) => {
         setNotify({ error: true, show: true, message: dat.error });
    
       } else {
+        // revalidation
+        // const resp = await fetch('/api/revalidate?'+ new URLSearchParams({path:'/dashboard/market'}), {method:"POST"})
+        // const message = await resp.json()
+        // console.log(message)
         setNotify({ error: false, show: true, message: dat.message });
       }
     } catch (error) {
@@ -302,7 +306,7 @@ const EditItem = ({ ...props }: Props) => {
                     <></>
                   )}
                     <div className="p-4 flex justify-center ">
-                        <EditImages images={props.images} id={props.id}/>
+                        <EditImages type={CallType.item} triggerRefetch={props.triggerFetchFn} images={props.images} id={props.id}/>
                   </div>
                   <div className="p-4 mt-4 flex justify-evenly ">
                     {canEdit ? (

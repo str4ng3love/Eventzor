@@ -6,9 +6,10 @@ import { options } from "../../auth/[...nextauth]/options";
 
 async function handler(req: Request) {
   const session = await getServerSession(options);
+  let regex = /[#]/g
   if (session?.user?.name) {
   if (req.method == "POST") {
-    
+
       const body = await req.json();
       if (
         typeof body.title != "string" ||
@@ -29,10 +30,17 @@ async function handler(req: Request) {
           { status: 200 }
         );
       }
+      let test = regex.test(body.title)
+      if(test){
+        return NextResponse.json(
+          { error: `Title cannot use reserved character '#"` },
+          { status: 200 }
+        );
+      }
       try {
         const event = await prisma.event.create({
           data: {
-            title: body.title,
+            title: body.title.trim(),
             description: body.description,
             location: body.location,
             tickets: parseInt(body.tickets),
@@ -40,8 +48,7 @@ async function handler(req: Request) {
             closingDate: new Date(body.closingDate),
             organizerName: session.user.name,
             price: parseFloat(body.price),
-            images: [body.image]
-
+            images: body.image
           },
         });
         if (event) {
@@ -94,12 +101,21 @@ async function handler(req: Request) {
   } else if (req.method == "PATCH"){
   
     const body = await req.json();
-  if(parseInt(body.state.tickets) <= 0){
+
+  if(parseInt(body.tickets) <= 0){
     return NextResponse.json({error: "Amount of tickets must be higher than 0"})
+  }
+ 
+  let test = regex.test(body.title)
+  if(test){
+    return NextResponse.json(
+      { error: `Title cannot use reserved character '#"` }, 
+      { status: 200 }
+    );
   }
     try {
 
-      const updatedEvent = await prisma.event.update({where:{id: body.id, organizerName:session.user.name}, data:{title: body.state.title, description: body.state.description, location: body.state.location, eventDate: body.state.eventDate, closingDate:body.state.closingDate, status:body.state.status, tickets: parseInt(body.state.tickets)}});
+      const updatedEvent = await prisma.event.update({where:{id: body.id, organizerName:session.user.name}, data:{title: body.title.trim(), description: body.description, location: body.location.trim(), eventDate: body.eventDate, closingDate:body.closingDate, status:body.status, tickets: parseInt(body.tickets)}});
       if (!updatedEvent) {
         return NextResponse.json(
           { error: "Internal server error" },
@@ -118,7 +134,9 @@ async function handler(req: Request) {
       );
     }
   } else {
+
     const events = await prisma.event.findMany({where:{organizerName:session.user.name}});
+
     if (events) {
       return NextResponse.json(events);
     } else {

@@ -73,7 +73,7 @@ const ItemCarousel = ({
     return (
       <div
         className={`${
-          fullWidthBlur ? "w-full flex justify-center backdrop-blur-sm shadow-[inset_0rem_0rem_3rem_black] py-4" : ""
+          fullWidthBlur ? "w-full flex justify-center backdrop-blur-sm shadow-[inset_0rem_0rem_3rem_black] pb-4 pt-20" : ""
         } ${darkBgAlpha ? "lg:bg-black/40 " : ""}`}
       >
         <div className={`flex flex-col lg:w-[50rem] w-[30rem]`}>
@@ -91,7 +91,7 @@ const ItemCarousel = ({
             </span>
             <div className=" w-full h-full flex justify-between ring-2 ring-primary shadow-omni">
               <Link
-                href={`/events/${items[active].item}`}
+                href={`/market/${items[active].item}`}
                 title={items[active].item}
                 className={`relative group lg:w-[67%] w-full overflow-hidden  bg-black`}
               >
@@ -104,7 +104,7 @@ const ItemCarousel = ({
                   blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
                   style={{ objectFit: "cover" }}
                   sizes="(max-width: 750px"
-                  alt="events image"
+                  alt="item image"
                   src={selectedImage}
                   className={`${
                     playFadeOut ? "animate-fadeOut300" : "animate-fadeIn300"
@@ -115,9 +115,10 @@ const ItemCarousel = ({
                 <h3 className="p-2 first-letter:uppercase font-bold text-xl grow-[1]">
                   {items[active].item}
                 </h3>
-                <div className="grid grid-cols-3 gap-2 px-2 overflow-hidden relative h-1/2 grow-[1]">
+                <div className="grid grid-cols-3 gap-2 px-2 items-start align-top overflow-hidden relative h-1/2 grow-[1] ">
                   {items[active].images.map((i, index) => (
                     <Image
+                    title={index.toString()}
                       className={` ${
                         i === selectedImage ? "ring-2 ring-link" : ""
                       } hover:ring-2 ring-link self-center transition-all duration-300`}
@@ -127,7 +128,7 @@ const ItemCarousel = ({
                         }
                         handleChange(i);
                       }}
-                      alt="events image"
+                      alt={'items image'}
                       placeholder="blur"
                       blurDataURL="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkOAMAANIAzr59FiYAAAAASUVORK5CYII="
                       key={index}

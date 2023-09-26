@@ -52,6 +52,7 @@ model User {
   comments      Comment[]
   dislikes      Dislike[]
   likes         Like[]
+  orders        Order[]
 
   @@unique([username])
 }
@@ -66,48 +67,68 @@ model VerificationToken {
 }
 
 model Event {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
   title         String
   description   String
   tickets       Int
-  ticketsSold   Int       @default(0)
+  ticketsSold   Int         @default(0)
   eventDate     DateTime
   closingDate   DateTime
   location      String
   price         Float
-  status        Status    @default(active)
-  organizer     User      @relation(fields: [organizerName], references: [name])
+  status        StatusEvent @default(open)
+  organizer     User        @relation(fields: [organizerName], references: [name])
   organizerName String
   images        String[]
   comments      Comment[]
   dislikes      Dislike[]
   likes         Like[]
+  orderId        Order?       @relation(fields: [orders], references: [id])
+  orders       String?      @db.ObjectId
 }
 
 model MarketItem {
-  id           String       @id @default(auto()) @map("_id") @db.ObjectId
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
   item         String
   description  String
   price        Float
   amount       Int
-  amountSold   Int          @default(0)
-  preorder     Boolean      @default(false)
+  amountSold   Int       @default(0)
+  preorder     Boolean   @default(false)
   releaseDate  DateTime?
-  merchant     User         @relation(fields: [merchantName], references: [name])
+  merchant     User      @relation(fields: [merchantName], references: [name])
   merchantName String
-  itemType ItemType
+  itemType     ItemType
   images       String[]
   comments     Comment[]
   dislikes     Dislike[]
   likes        Like[]
-  
+  orderId      Order?     @relation(fields: [orders], references: [id])
+  orders      String?    @db.ObjectId
 }
 
-enum Status {
-  active
-  inactive
-  paused
+model Order {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  buyer   User   @relation(fields: [buyerId], references: [id])
+  buyerId String @db.ObjectId
+  items  MarketItem[]
+  events Event[]
+  status StatusOrder @default(pendingPayment)
+  shippingAdress String
+}
+
+enum StatusEvent {
+  open
+  closed
+  completed
   canceled
+}
+
+enum StatusOrder {
+  canceled
+  completed
+  shipping
+  pendingPayment
 }
 
 enum CommentStatus {

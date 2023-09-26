@@ -3,15 +3,15 @@ import Notification from "../../static/Notification";
 import React, { useState, Fragment, useReducer } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import Button from "../Button";
-import EditImages from "../EditImages";
-
-// Can't import enum type from schema.prisma file for some reason
- enum Status {
-  active="active",
-  inactive ="inactive",
-  paused="paused",
-  canceled="canceled",
-}
+import EditImages, { CallType } from "../EditImages";
+import { StatusEvent } from "@prisma/client";
+// // Can't import enum type from schema.prisma file for some reason
+//  enum Status {
+//   active="active",
+//   inactive ="inactive",
+//   paused="paused",
+//   canceled="canceled",
+// }
 
  enum FormActionKind {
   INPUT_TITLE = "Input event title",
@@ -25,7 +25,7 @@ import EditImages from "../EditImages";
 }
  interface InputAction {
   type: FormActionKind;
-  payload: string | number | Status | Date;
+  payload: string | number | StatusEvent | Date;
 }
  export interface InputState {
   title: string;
@@ -35,7 +35,7 @@ import EditImages from "../EditImages";
   closingDate: Date;
   price: number;
   location: string;
-  status: Status | any;
+  status: StatusEvent | any;
 }
 
  const reducer = (state: InputState, action: InputAction) => {
@@ -134,12 +134,12 @@ const EditEvent = ({...props}:Props) => {
       });
     }
     try {
-      const resp = await fetch("/api/events", {
+      const resp = await fetch("/api/events/user", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({state, id: props.id})
+        body: JSON.stringify({...state, id: props.id})
       });
       const dat = await resp.json();
       setCanEdit(true)
@@ -289,7 +289,7 @@ const EditEvent = ({...props}:Props) => {
                     />
                   </div>
                   <div className="p-4 flex justify-center ">
-                        <EditImages images={props.images} id={props.id}/>
+                        <EditImages type={CallType.event} triggerRefetch={()=>props.triggerFetchFn()} images={props.images} id={props.id}/>
                   </div>
                 
                   <div className="p-4 mt-4 flex justify-evenly ">

@@ -1,7 +1,7 @@
 
 import { Heading2, Heading4 } from "../../components/static/Heading";
 
-import { OrderBrowser } from "@/app/components/dynamic/Orders/OrderBrowser";
+// import { OrderBrowser } from "@/app/components/dynamic/Orders/OrderBrowser";
 
 
 const page = async () => {

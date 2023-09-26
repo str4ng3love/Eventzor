@@ -1,15 +1,19 @@
 "use client";
 
 import { useState, useRef } from "react";
-import Button from "./Button";
+import Button from "../Button";
 
 interface Props {
   item: string;
+  id:string;
+  type:string;
+  price:number;
 }
 
-const AddToCart = ({ item }: Props) => {
+const AddToCart = ({ item,type, price, id }: Props) => {
   const [amount, setAmount] = useState(1);
   const inputEl = useRef<HTMLInputElement>(null);
+ 
   return (
     <div className="w-full flex flex-col justify-start items-center p-8 dark:text-text text-interactive_text">
       <div
@@ -33,23 +37,26 @@ const AddToCart = ({ item }: Props) => {
       title="Add to cart"
         text="Add to cart"
         fn={() => {
-          let prev = localStorage.getItem("cart");
+          let prev = localStorage.getItem("cart")
+          console.log(prev?.length)
 
-          if (prev !== null) {
+          if (prev !== null && prev.length > 0) {
             let prevString = JSON.parse(prev);
-            if(prevString[prevString.length-1].id === item){
+            if(prevString[prevString.length-1].id === id){
+              prevString[prevString.length-1].item = item
               prevString[prevString.length-1].amount = amount
+              prevString[prevString.length-1].price = price
               localStorage.setItem("cart", JSON.stringify(prevString));
               window.dispatchEvent(new Event('storage'))
             } else {
-              prevString.push({ id: item, amount: amount });
+              prevString.push({ id: id, amount: amount, type:type, price:price, item:item });
               localStorage.setItem("cart", JSON.stringify(prevString));
               window.dispatchEvent(new Event('storage'))
             }
           } else {
             localStorage.setItem(
               "cart",
-              JSON.stringify([{ id: item, amount: amount }])
+              JSON.stringify([{ id: id, amount: amount, type:type, price:price, item:item }])
             );
             window.dispatchEvent(new Event('storage'))
           }

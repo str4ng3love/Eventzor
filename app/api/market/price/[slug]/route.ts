@@ -6,18 +6,17 @@ import { NextResponse } from "next/server";
 
 async function handler(req: Request, { params }: { params: { slug: string } }) {
     const slug = params.slug;
-    console.log(slug)
     try {
-      const event = await prisma.event.findUnique({ where: { id: slug }, select: {title:true, id:true , price:true} });
+      const item = await prisma.marketItem.findUnique({ where: { id: slug }, select: {item:true, id:true , price:true} });
 
-      if (!event) {
+      if (!item) {
         return NextResponse.json(
           { error: `No event with id of ${slug}` },
           { status: 404 }
         );
       }
   
-      return NextResponse.json(event);
+      return NextResponse.json(item);
     } catch (error) {
       console.log(error);
       if(error instanceof PrismaClientKnownRequestError){

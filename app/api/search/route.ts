@@ -22,7 +22,7 @@ async function handler(req: Request) {
         console.log(error);
       }
       try {
-        const orders = await prisma.order.findMany({ where: { item: {contains: query, mode:"insensitive"} }, select: {id: true, item: true } });
+        const orders = await prisma.marketItem.findMany({ where: { item: {contains: query, mode:"insensitive"} }, select: {id: true, item: true } });
         Object.assign(queryResponse,{orders}) 
         console.log(queryResponse)
       } catch (error) {

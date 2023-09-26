@@ -14,6 +14,10 @@ import EventSkeleton from "../../static/EventSkeleton";
 import SpinnerMini from "../../static/SpinnerMini";
 
 const MyEventBrowser = () => {
+  const [filteredDates, setFilteredDates] = useState<{
+    startDate: string;
+    endDate: string;
+  }>();
   const [eventsArr, setEventsArr] = useState<Event[] | null>(null);
   const [sorter, setSorter] = useState("event");
   const [filtered, setFiltered] = useState<Event[] | null>();
@@ -52,6 +56,7 @@ const MyEventBrowser = () => {
                           tickets: data.tickets,
                           ticketsSold: data.ticketsSold,
                           title: data.title,
+                          orders: data.orders,
                         }
                       : e
                   )
@@ -79,7 +84,7 @@ const MyEventBrowser = () => {
   };
   const getEvents = async () => {
     try {
-      const resp = await fetch(`/api/events/user`, {cache:'no-store'});
+      const resp = await fetch(`/api/events/user`, { cache: "no-store" });
       const events = await resp.json();
 
       if (events.error) {
@@ -169,6 +174,10 @@ const MyEventBrowser = () => {
                 />
                 <FilterEventsByDate
                   title="Filter by Date"
+                  defaultDates={filteredDates}
+                  passDates={(dates) => {
+                    setFilteredDates(dates);
+                  }}
                   fn={(e, dates) => {
                     setFiltered([
                       ...eventsArr.filter((event) => {
@@ -192,6 +201,9 @@ const MyEventBrowser = () => {
               <>
                 <FilterEventsByDate
                   title="Filter by Date"
+                  passDates={(dates) => {
+                    setFilteredDates(dates);
+                  }}
                   fn={(e, dates) => {
                     setFiltered([
                       ...eventsArr.filter((event) => {
@@ -218,7 +230,9 @@ const MyEventBrowser = () => {
                 setOptimisticComp(true);
               }}
               refetchTrigger={() => getEvent()}
-              optimisticFnClnUp={()=>{setOptimisticComp(false)}}
+              optimisticFnClnUp={() => {
+                setOptimisticComp(false);
+              }}
             />
           </div>
           <table className="my-8  w-full text-sm table">
@@ -230,11 +244,13 @@ const MyEventBrowser = () => {
                 <th className="p-2 text-start">Closing Date</th>
                 <th className="p-2 text-start">Organizer</th>
                 <th className="p-2 text-start"></th>
+                <th className="p-2 text-start"></th>
               </tr>
 
               {filtered
                 ? filtered.map((event) => (
                     <EventComponent
+                      isEmpty={event.images.length === 0}
                       key={event.id}
                       {...event}
                       delFn={() => {
@@ -247,6 +263,7 @@ const MyEventBrowser = () => {
                   ))
                 : eventsArr.map((event) => (
                     <EventComponent
+                      isEmpty={event.images.length === 0}
                       key={event.id}
                       {...event}
                       delFn={() => {

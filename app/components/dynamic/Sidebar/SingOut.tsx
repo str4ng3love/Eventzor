@@ -6,7 +6,7 @@ import Button from "../Button"
 
 const SingOut = () => {
   return (
-    <Button text="logout" fn={()=>signOut()}/>
+    <Button title="Sign out" text="logout" fn={()=>signOut()}/>
   )
 }
 

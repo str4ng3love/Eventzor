@@ -76,7 +76,7 @@ const EventsBrowser = ({ events }: Props) => {
     }
   }, []);
   return (
-    <div className="lg:w-[75%] w-full bg-gradient-to-bl from-primary to-slate-900 ring-2 ring-primary flex lg:flex-col my-2 flex-row justify-between">
+    <div className="lg:w-[75%] w-full bg-gradient-to-bl from-primary to-slate-900 ring-2 ring-primary flex lg:flex-col my-2 flex-row justify-between shadow-[0rem_0rem_1rem_black]">
       <div className="bg-black/50 p-4 flex xl:justify-start gap-2 lg:justify-center flex-col lg:flex-row justify-start">
         <Button
           title="Newest"

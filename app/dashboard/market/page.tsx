@@ -1,10 +1,11 @@
-export const dynamic = "force-dynamic";
+
 
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import { Heading2, Heading4 } from "../../components/static/Heading";
 import { getServerSession } from "next-auth";
 import { prisma } from "@/lib/ConnectPrisma";
 import MyItemsBrowser from "@/app/components/dynamic/Market/MyItemsBrowser";
+
 
 const getItems = async () => {
   const session = await getServerSession(options);
@@ -16,13 +17,13 @@ const getItems = async () => {
     orderBy: [{ item: "asc" }],
   });
 
-  return {
-    items,
-  };
+  return items;
 };
 
 const page = async () => {
-
+  
+  // const items = await getItems()
+  // console.log(items)
   return (
     <>
       <div className="flex flex-col pl-10">
@@ -34,4 +35,4 @@ const page = async () => {
   );
 };
 
-export default page;
+export default page ;

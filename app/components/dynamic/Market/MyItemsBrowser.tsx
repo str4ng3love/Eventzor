@@ -10,7 +10,9 @@ import ItemComponent from "./ItemComponent";
 import EditItem from "./EditItem";
 import AddNewItem from "./AddNewItem";
 import SpinnerMini from "../../static/SpinnerMini";
-
+// interface Props {
+//   items: MarketItem[];
+// }
 const MyItemsBrowser = () => {
   const [itemsArr, setItemsArr] = useState<MarketItem[] | null>(null);
   const [optimisticComp, setOptimisticComp] = useState(false);
@@ -129,7 +131,11 @@ const MyItemsBrowser = () => {
     fetch()
   }, []);
   if (itemsArr === null) {
-    return <div className="flex items-center justify-center min-h-[calc(100dvh_-_30%)]"><SpinnerMini h="h-32" w="w-32" borderSize="border-[1rem]" /></div>;
+    return (
+      <div className="flex items-center justify-center min-h-[calc(100dvh_-_30%)]">
+        <SpinnerMini h="h-32" w="w-32" borderSize="border-[1rem]" />
+      </div>
+    );
   } else {
     return (
       <>
@@ -159,12 +165,13 @@ const MyItemsBrowser = () => {
                 <th className="p-2 text-start">Item</th>
                 <th className="p-2 text-start">Price</th>
                 <th className="p-2 text-start">Sold&nbsp;/&nbsp;Amount</th>
-
+                <th className="p-2 text-start"></th>  
                 <th className="p-2 text-start"></th>
               </tr>
 
               {itemsArr?.map((item, i) => (
                 <ItemComponent
+                isEmpty={item.images.length === 0}
                   key={i}
                   {...item}
                   delFn={() => {
@@ -175,9 +182,14 @@ const MyItemsBrowser = () => {
                   }}
                 />
               ))}
-               {itemsArr.length === 0 ? <tr><td>No Items in Database</td></tr>:<></>}
-             
-              
+              {itemsArr.length === 0 ? (
+                  <tr className="w-full flex justify-center p-8">
+                  <td>No Items in Database</td>
+                </tr>
+              ) : (
+                <></>
+              )}
+
               {optimisticComp ? <OrderSkeleton /> : <></>}
             </tbody>
           </table>
@@ -188,8 +200,9 @@ const MyItemsBrowser = () => {
               stopDisplayingFn={() => {
                 setEdit({ show: false, item: null });
               }}
-            
-              triggerFetchFn={() => getItem(edit.item?.id)}
+              triggerFetchFn={() => {
+                getItem(edit.item?.id);
+              }}
               type={edit.item.itemType}
               isPreorder={edit.item.preorder}
             />

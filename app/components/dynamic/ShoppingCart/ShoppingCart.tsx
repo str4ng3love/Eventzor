@@ -3,37 +3,41 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { useState, Fragment, useEffect } from "react";
 import { BiCart } from "react-icons/bi";
-import CartEventItem from "./CartEventItem";
 import CartButton from "./CartButton";
 import Button from "../Button";
 import Currency from "../Currency";
+import CartItem from "./CartItem";
 
-interface EventItem {
+export interface CartItemData {
   id: string;
-  title: string;
+  amount: number;
+  type: string;
   price: number;
+  item: string;
 }
-
 const ShoppingCart = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [storage, setStorage] = useState<{ id: string; amount: number }[]>([]);
-  const [isLoadingEvents, setIsLoadingEvents] = useState(true);
-  const [eventItems, setEventItems] = useState<EventItem[]>([]);
+  const [total, setTotal] = useState<number>();
+  const [isLoadingItems, setIsLoadingItems] = useState(true);
+  const [cartItems, setCartItems] = useState<CartItemData[]>([]);
   const [newEntries, setNewEntries] = useState(0);
   const [currency, setCurrency] = useState({ name: "usd", rate: 1 });
-  // todo: read currency from localstorage
-  const fetchTitle = async (id: string) => {
-    try {
-      const resp = await fetch(`/api/events/price/${id}`);
-      const data = await resp.json();
 
-      return data;
-    } catch (error) {
-      console.log(error);
+  const calcTotal = (arr: CartItemData[]) => {
+
+    const total = arr.reduce((acc, val) => {
+      acc = acc + val.price * currency.rate * val.amount;
+      return parseFloat(acc.toFixed(2));
+    }, 0);
+    setTotal(total);
+  };
+  const updateCart = (data: CartItemData[]) => {
+    if (data.length > 0) {
+      localStorage.setItem("cart", JSON.stringify(data));
+    } else {
+      localStorage.removeItem("cart");
     }
   };
-  // TODO: trace and react to changes in local storage API
-
   useEffect(() => {
     const cart = localStorage.getItem("cart");
     if (cart) {
@@ -55,6 +59,7 @@ const ShoppingCart = () => {
           name: selectedCurrency.name,
           rate: selectedCurrency.rate,
         });
+      
       }
     });
 
@@ -65,28 +70,17 @@ const ShoppingCart = () => {
   }, []);
   useEffect(() => {
     let cart = localStorage.getItem("cart");
-
-    if (cart && JSON.parse(cart) !== storage) {
-      let cartItems = JSON.parse(cart);
-      setStorage(cartItems);
+    if (cart && JSON.parse(cart)) {
+      let cartItems: CartItemData[] = JSON.parse(cart);
+      setCartItems(cartItems);
+      calcTotal(cartItems);
+      setIsLoadingItems(false);
     } else {
-      setStorage([]);
-      setIsLoadingEvents(false);
+      setCartItems([]);
+      setIsLoadingItems(false);
     }
   }, [isOpen]);
-  useEffect(() => {
-    if (storage !== undefined) {
-      (async () => {
-        let fetchedItems = await Promise.all(
-          storage.map((i: { id: string }) => fetchTitle(i.id))
-        );
-        if (fetchedItems.length > 0) {
-          setEventItems(fetchedItems);
-          setIsLoadingEvents(false);
-        }
-      })();
-    }
-  }, [storage]);
+
   useEffect(() => {
     let prefCurrency = localStorage.getItem("currency");
     if (prefCurrency) {
@@ -97,6 +91,11 @@ const ShoppingCart = () => {
       });
     }
   }, [isOpen]);
+  useEffect(() => {
+    updateCart(cartItems);
+    setNewEntries(cartItems.length);
+   calcTotal(cartItems);
+  }, [cartItems]);
   return (
     <>
       <CartButton
@@ -145,22 +144,23 @@ const ShoppingCart = () => {
                   />
                 </div>
                 <div className="flex flex-col p-4 mt-8">
-                  {isLoadingEvents ? (
+                  {isLoadingItems ? (
                     <h3>Loading ...</h3>
                   ) : (
                     <>
-                      {eventItems.length > 0 && storage.length !== 0 ? (
-                        eventItems.map((i, index) => (
-                          <CartEventItem
+                      {cartItems.length > 0 ? (
+                        cartItems.map((i, index) => (
+                          <CartItem
                             closeFn={(e) => setIsOpen(false)}
                             id={i.id}
                             key={index}
-                            title={i.title}
-                            amount={storage[index].amount}
+                            type={i.type}
+                            item={i.item}
+                            amount={i.amount}
                             price={i.price}
                             currency={currency}
                             delFn={() => {
-                              setEventItems((prev) => [
+                              setCartItems((prev) => [
                                 ...prev.filter((p) => p.id != i.id),
                               ]);
                             }}
@@ -173,29 +173,32 @@ const ShoppingCart = () => {
                   )}
                 </div>
 
-                {!isLoadingEvents && eventItems.length > 0 ? (
+                {!isLoadingItems && cartItems.length > 0 ? (
                   <div className="flex justify-end">
                     <div className=" ring-4 ring-primary p-2 text-xl font-bold">
                       <span className="mr-1">Total :</span>
-                      <span className="mr-1">
-                        {eventItems.reduce((acc, val, index) => {
-                          acc = acc + (val.price * currency.rate)* storage[index].amount;
-                          return parseFloat(acc.toFixed(2));
-                        }, 0)}
-                      </span>
+                      <span className="mr-1">{total}</span>
                       <span>{currency.name.toLocaleUpperCase()}</span>
                     </div>
                   </div>
                 ) : (
                   <></>
                 )}
-                {eventItems.length > 0 ? (
+                {cartItems.length > 0 ? (
                   <div className="flex items-center justify-center h-full pt-10">
-                    <Button title="Continue" text="Continue" fn={(e) => setIsOpen(false)} />
+                    <Button
+                      title="Continue"
+                      text="Continue"
+                      fn={(e) => setIsOpen(false)}
+                    />
                   </div>
                 ) : (
                   <div className="flex items-center justify-center h-full pt-10">
-                    <Button title="Close" text="Close" fn={(e) => setIsOpen(false)} />
+                    <Button
+                      title="Close"
+                      text="Close"
+                      fn={(e) => setIsOpen(false)}
+                    />
                   </div>
                 )}
               </Dialog.Panel>

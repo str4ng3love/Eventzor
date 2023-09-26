@@ -1,4 +1,4 @@
-import Test from "./components/dynamic/Test";
+
 
 
 export default async function Home() {
@@ -10,8 +10,8 @@ export default async function Home() {
           under construction
         </h2>
       </span>
-
    {/* <Test /> */}
     </div>
   );
 }
+ 

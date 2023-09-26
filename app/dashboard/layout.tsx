@@ -13,7 +13,7 @@ export default async function Layout({
   const user = session?.user;
   if (user) {
     return (
-      <main className="flex bg-bg_sidebar dark:bg-black h-[calc(100dvh_-_4rem)]">
+      <main className="flex bg-bg_sidebar dark:bg-black h-screen pt-16">
         <Sidebar />
         <section className="ring-2 ring-slate-600 dark:ring-primary bg-bg w-full mt-2  rounded-smoothLT">
           {children}

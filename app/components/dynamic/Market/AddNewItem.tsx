@@ -167,7 +167,7 @@ const AddNewItem = ({
 
     try {
       setCanPost(false);
-      const resp = await fetch("/api/market", {
+      const resp = await fetch("/api/market/user", {
         method: "POST",
         headers: {
           "Content-Type": "Application/json",

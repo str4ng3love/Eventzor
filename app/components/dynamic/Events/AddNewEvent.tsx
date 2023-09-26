@@ -5,14 +5,6 @@ import { Dialog, Transition } from "@headlessui/react";
 import Button from "../Button";
 
 
-// Can't import enum type from schema.prisma file for some reason
- enum Status {
-  active,
-  inactive,
-  paused,
-  canceled,
-}
-
  enum FormActionKind {
   INPUT_TITLE = "Input event title",
   INPUT_DESC = "Input event description",
@@ -20,14 +12,13 @@ import Button from "../Button";
   INPUT_LOCATION = "Location at which the event will take place",
   INPUT_ECLOSING = "Events closing date",
   INPUT_ESTART = "Events starting date",
-  INPUT_STATUS = "Status of the event",
   INPUT_PRICE = "Ticket price",
   INPUT_IMAGE = "Image for promotion",
   DELETE_IMAGE = "Delete a image"
 }
  interface InputAction {
   type: FormActionKind;
-  payload: string | number | Status | Date;
+  payload: string | number | Date;
 }
  interface InputState {
   title: string;
@@ -37,7 +28,6 @@ import Button from "../Button";
   closingDate: Date;
   location: string;
   price: number;
-  status: Status;
   image: string[];
 }
 
@@ -131,7 +121,6 @@ const AddNewEvent = ({optimisticFn, optimisticFnClnUp, refetchTrigger}:Props) =>
   const [state, dispatch] = useReducer(reducer, {
     title: "",
     description: "",
-    status: Status.active,
     tickets: 0,
     location: "",
     closingDate: closingDate,
@@ -158,7 +147,7 @@ const AddNewEvent = ({optimisticFn, optimisticFnClnUp, refetchTrigger}:Props) =>
 
     try {
       setCanPost(false);
-      const resp = await fetch("/api/events", {
+      const resp = await fetch("/api/events/user", {
         method: "POST",
         headers: {
           "Content-Type": "Application/json",
@@ -198,7 +187,7 @@ const AddNewEvent = ({optimisticFn, optimisticFnClnUp, refetchTrigger}:Props) =>
             <div className="fixed inset-0 flex items-center justify-center p-4 backdrop-blur-sm">
               <Dialog.Panel
                 className={
-                  "relative p-8 bg-bg_interactive text-text dark:bg-bg_interactive  w-[30rem] shadow-md shadow-black overflow-y-scroll"
+                  "relative p-8 bg-bg_interactive text-text dark:bg-bg_interactive max-h-[90%] w-[50%] shadow-md shadow-black overflow-y-scroll"
                 }
               >
                 <Dialog.Title className={"p-2 font-bold text-xl text-center"}>

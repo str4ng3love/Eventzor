@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 
 async function handler(req: Request) {
   const session = await getServerSession(options);
-  console.log('hitt')
+let regex = /[#]/g
   if (session?.user?.name) {
     if (req.method === "GET") {
       try {
@@ -40,13 +40,19 @@ async function handler(req: Request) {
           { status: 200 }
         );
       }
-
+      let test = regex.test(body.item)
+      if(test){
+        return NextResponse.json(
+          { error: `Item cannot use reserved character '#"` },
+          { status: 200 }
+        );
+      }
       try {
         const newItem = await prisma.marketItem.create({
           data: {
             amount: parseInt(body.amount),
             description: body.description,
-            item: body.item,
+            item: body.item.trim(),
             itemType: body.type,
             merchantName: session?.user?.name,
             preorder: body.isPreorder,
@@ -115,8 +121,16 @@ async function handler(req: Request) {
           error: "Amount of items cannot exceed 10 000 units",
         });
       }
+      let test = regex.test(body.item)
+   
+      if(test){
+        return NextResponse.json(
+          { error: `Title cannot use reserved character '#"` },
+          { status: 200 }
+        );
+      }
       try {
-        console.log(body);
+       
         const updatedItem = await prisma.marketItem.update({
           where: {
             id: body.id,
@@ -127,7 +141,7 @@ async function handler(req: Request) {
             // type: body.type,
             description: body.description,
             preorder: body.isPreorder,
-            item: body.item,
+            item: body.item.trim(),
             releaseDate: body.isPreorder ? body.releaseDate : null,
           },
         });
@@ -137,7 +151,7 @@ async function handler(req: Request) {
             { status: 500 }
           );
         }
-
+   
         return NextResponse.json({ message: "Item updated successfully" });
       } catch (error) {
         console.log(error);

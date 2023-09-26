@@ -76,7 +76,7 @@ const ItemsBrowser = ({ items }: Props) => {
     }
   }, []);
   return (
-    <div className="lg:w-[75%] w-full bg-gradient-to-bl from-primary to-slate-900 ring-2 ring-primary flex lg:flex-col my-2 flex-row justify-between">
+    <div className="lg:w-[75%] w-full bg-gradient-to-bl from-primary to-slate-900 ring-2 ring-primary flex lg:flex-col my-2 flex-row justify-between shadow-[0rem_0rem_1rem_black]">
       <div className="bg-black/50 p-4 flex xl:justify-start gap-2 lg:justify-center flex-col lg:flex-row justify-start">
         <Button
           title="Newest"
@@ -170,7 +170,7 @@ const ItemsBrowser = ({ items }: Props) => {
               itemsArr.map((i) => (
                 <Link
                   href={`/market/${i.item}`}
-                  className="ring-2 p-1 my-1 hover:bg-gradient-to-tl from-link via-link_active to-link transition-all duration-300 h-20 flex justify-between "
+                  className="relative overflow-clip ring-2 p-1 my-1 hover:bg-gradient-to-tl from-link via-link_active to-link transition-all duration-300 h-20 flex justify-between "
                   key={i.id}
                 >
                   <div className="flex">
@@ -187,23 +187,16 @@ const ItemsBrowser = ({ items }: Props) => {
                       <span className="overflow-hidden text-ellipsis sm:text-sm">
                         {i.item}
                       </span>
-                      {/* <span className="self-end md:text-sm text-xs">
-                        {new Date(i.eventDate).toUTCString().slice(0, -7)}
-                        &nbsp;GMT
-                      </span> */}
+                      <span className="self-end lg:self-start md:text-sm text-xs first-letter:uppercase">
+                        {i.itemType}
+                      </span>
                     </div>
-                    {/* <span className="self-end text-sm w-40 p-2 h-full hidden md:block overflow-clip text-ellipsis">
-                      {i.location}
-                    </span> */}
+                 
                   </div>
-                  <div className="text-sm flex">
-                    {/* <span className="p-2 whitespace-nowrap xl:block hidden">
-                      Available to:&nbsp;
+                  <div className="text-sm flex ">
+                    <span className="self-end text-sm w-40 p-2 h-full hidden md:block overflow-clip text-ellipsis">
+                      
                     </span>
-                    <span className="self-end w-40 p-2 xl:block hidden">
-                      {new Date(e.closingDate).toUTCString().slice(0, -7)}
-                      &nbsp;GMT
-                    </span> */}
                     <span className="flex justify-end self-center font-semibold w-[20ch] px-2 lg:text-lg overflow-hidden text-ellipsis">
                       {currency.name === "initial" ? (
                         <SpinnerMini />
@@ -216,6 +209,10 @@ const ItemsBrowser = ({ items }: Props) => {
                         : ""}
                     </span>
                   </div>
+                  {i.preorder === false ? 
+                    <span className="p-1 absolute whitespace-nowrap xl:flex items-center hidden -rotate-[55deg] text-lg translate-x-[-30%] top-1/4 w-[8rem] justify-center left-0 h-8 bg-violet-600">
+                          Preorder
+                    </span> : <></>}
                 </Link>
               ))
             ) : (

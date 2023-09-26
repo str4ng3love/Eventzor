@@ -15,7 +15,7 @@ const CartButton = ({ Icon, fn, size, bgColor, title, newEntries }: Props) => {
       {newEntries === 0 ? (
         <button
           title={title}
-          className={`relative first-letter:capitalize hover:-translate-y-1  hover:scale-105 font-bold p-2 text-interactive_text dark:text-text rounded-xl hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-300 ${bgColor} `}
+          className={`cursor-pointer  relative first-letter:capitalize hover:-translate-y-1  hover:scale-105 font-bold p-2 text-interactive_text dark:text-text rounded-xl hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-300 ${bgColor} `}
           onClick={(e) => fn(e)}
         >
           <Icon size={size} />
@@ -24,7 +24,7 @@ const CartButton = ({ Icon, fn, size, bgColor, title, newEntries }: Props) => {
         <button
           id="cart-btn"
           title={title}
-          className={`relative first-letter:capitalize hover:-translate-y-1  hover:scale-105 font-bold p-2 text-interactive_text dark:text-text rounded-xl hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-300 ${bgColor} 
+          className={`cursor-pointer  relative first-letter:capitalize hover:-translate-y-1  hover:scale-105 font-bold p-2 text-interactive_text dark:text-text rounded-xl hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-300 ${bgColor} 
           `}
           onClick={(e) => fn(e)}
         >
