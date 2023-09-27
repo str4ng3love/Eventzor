@@ -1,14 +1,25 @@
 "use client";
 
-import { MarketItem } from "@prisma/client";
 import { useEffect, useState } from "react";
 import Button from "../Button";
 import Link from "next/link";
 import Image from "next/image";
 import SpinnerMini from "../../static/SpinnerMini";
+import { ItemType } from "@prisma/client";
 
 interface Props {
-    items: MarketItem[];
+  items: {
+    id: string;
+    item: string;
+    price: number;
+    amount: number;
+    amountSold: number;
+    preorder: boolean;
+    releaseDate: Date | null;
+    merchantName: string;
+    itemType: ItemType;
+    images: string[];
+  }[];
 }
 // todo: generic- finish up
 
@@ -74,6 +85,7 @@ const ItemsBrowser = ({ items }: Props) => {
         rate: 1,
       });
     }
+
   }, []);
   return (
     <div className="lg:w-[75%] w-full bg-gradient-to-bl from-primary to-slate-900 ring-2 ring-primary flex lg:flex-col my-2 flex-row justify-between shadow-[0rem_0rem_1rem_black]">
@@ -191,12 +203,9 @@ const ItemsBrowser = ({ items }: Props) => {
                         {i.itemType}
                       </span>
                     </div>
-                 
                   </div>
                   <div className="text-sm flex ">
-                    <span className="self-end text-sm w-40 p-2 h-full hidden md:block overflow-clip text-ellipsis">
-                      
-                    </span>
+                    <span className="self-end text-sm w-40 p-2 h-full hidden md:block overflow-clip text-ellipsis"></span>
                     <span className="flex justify-end self-center font-semibold w-[20ch] px-2 lg:text-lg overflow-hidden text-ellipsis">
                       {currency.name === "initial" ? (
                         <SpinnerMini />
@@ -209,10 +218,13 @@ const ItemsBrowser = ({ items }: Props) => {
                         : ""}
                     </span>
                   </div>
-                  {i.preorder === true ? 
-                    <span className="p-1 absolute whitespace-nowrap xl:flex items-center hidden -rotate-[55deg] text-lg translate-x-[-30%] top-1/4 w-[8rem] justify-center left-0 h-8 bg-violet-600">
-                          Preorder
-                    </span> : <></>}
+                  {i.preorder === true ? (
+                    <span className="p-1 absolute whitespace-nowrap flex items-center -rotate-[55deg] text-lg translate-x-[-30%] top-1/4 w-[8rem] justify-center left-0 h-8 bg-violet-600">
+                      Preorder
+                    </span>
+                  ) : (
+                    <></>
+                  )}
                 </Link>
               ))
             ) : (

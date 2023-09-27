@@ -17,7 +17,7 @@ const getItems = async () => {
   const items = await prisma.marketItem.findMany({
     orderBy: { id: "asc" },
     take: 20,
-    where:{images:{isEmpty:false}}
+    where:{images:{isEmpty:false}}, select:{amount:true, amountSold:true, images:true, id:true, item:true, merchantName:true, preorder:true, releaseDate:true, price:true, itemType:true}
   });
   return {
     items,
