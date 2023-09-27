@@ -41,14 +41,12 @@ const name = decodeURIComponent(params.slug)
             </div>
             <div className="flex flex-col ring-2 rounded-t-none ring-primary rounded-md p-2 lg:text-sm md:text-base">
               <div  title="Tickets are being sold until this date" className="flex justify-between p-1">
-            
+              <span>Coming :</span>
+              <span>{item.releaseDate?.toUTCString().slice(0, -7)}</span>
               </div>
-              <div  title="Date of event happening" className="flex justify-between p-1">
-           
-            
-              </div>
+          
               <div title="Organizer's profile" className="flex justify-between p-1">
-                <span>Organizer&nbsp;:&nbsp;</span>
+                <span>Seller&nbsp;:&nbsp;</span>
                 <span className="hover:text-link transition-all duration-300">
                   <Link href={"#"}>{item.merchantName}</Link>
                 </span>

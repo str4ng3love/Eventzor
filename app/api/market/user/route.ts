@@ -1,5 +1,6 @@
 import { options } from "../../auth/[...nextauth]/options";
 import { prisma } from "@/lib/ConnectPrisma";
+import { ItemType } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
@@ -130,7 +131,9 @@ let regex = /[#]/g
         );
       }
       try {
-       
+        // @ts-ignore
+        const type= ItemType[body.type as string as keyof ItemType]
+ 
         const updatedItem = await prisma.marketItem.update({
           where: {
             id: body.id,
@@ -138,11 +141,11 @@ let regex = /[#]/g
           data: {
             amount: parseInt(body.amount),
             price: parseFloat(body.price),
-            // type: body.type,
+            itemType: type,
             description: body.description,
             preorder: body.isPreorder,
             item: body.item.trim(),
-            releaseDate: body.isPreorder ? body.releaseDate : null,
+            releaseDate: body.isPreorder ? new Date(body.releaseDate) : null,
           },
         });
         if (!updatedItem) {

@@ -209,7 +209,7 @@ const ItemsBrowser = ({ items }: Props) => {
                         : ""}
                     </span>
                   </div>
-                  {i.preorder === false ? 
+                  {i.preorder === true ? 
                     <span className="p-1 absolute whitespace-nowrap xl:flex items-center hidden -rotate-[55deg] text-lg translate-x-[-30%] top-1/4 w-[8rem] justify-center left-0 h-8 bg-violet-600">
                           Preorder
                     </span> : <></>}

@@ -1,6 +1,6 @@
 "use client";
 import Notification from "../../static/Notification";
-import React, { useState, Fragment, useReducer } from "react";
+import React, { useState, Fragment, useReducer, useEffect } from "react";
 import { Dialog, Listbox, Transition } from "@headlessui/react";
 import Button from "../Button";
 import EditImages, { CallType } from "../EditImages";
@@ -27,7 +27,7 @@ interface InputState {
   amount: number;
   isPreorder: boolean;
   type: string;
-  releaseDate?: Date | null;
+  releaseDate?: Date |string | null;
   price: number;
 }
 const date = new Date();
@@ -66,9 +66,10 @@ const reducer = (state: InputState, action: InputAction) => {
       };
     }
     case FormActionKind.INPUT_RELEASE: {
+      console.log(payload);
       return {
         ...state,
-        releaseDate: payload as Date,
+        releaseDate: payload as Date|string,
       };
     }
     case FormActionKind.INPUT_PRICE: {
@@ -87,12 +88,11 @@ const reducer = (state: InputState, action: InputAction) => {
 interface Props extends InputState {
   id: string;
   show: boolean;
-  images:string[];
+  images: string[];
   stopDisplayingFn: () => void;
   triggerFetchFn: () => void;
 }
 const EditItem = ({ ...props }: Props) => {
-
   const [selected, setSelected] = useState(props.type);
   const [canEdit, setCanEdit] = useState(true);
   const [notify, setNotify] = useState({
@@ -106,11 +106,11 @@ const EditItem = ({ ...props }: Props) => {
     amount: props.amount,
     type: props.type,
     isPreorder: props.isPreorder,
-    releaseDate: props.releaseDate,
+    releaseDate: props.releaseDate ? new Date(props.releaseDate).toISOString().slice(0,-8) : null,
     price: props.price,
   });
-  const handleEdit = async (state: InputState) => {
 
+  const handleEdit = async (state: InputState) => {
     try {
       const resp = await fetch("/api/market/user", {
         method: "PATCH",
@@ -122,10 +122,9 @@ const EditItem = ({ ...props }: Props) => {
       const dat = await resp.json();
       setCanEdit(true);
       props.triggerFetchFn();
- 
+
       if (dat.error) {
         setNotify({ error: true, show: true, message: dat.error });
-   
       } else {
         // revalidation
         // const resp = await fetch('/api/revalidate?'+ new URLSearchParams({path:'/dashboard/market'}), {method:"POST"})
@@ -134,8 +133,8 @@ const EditItem = ({ ...props }: Props) => {
         setNotify({ error: false, show: true, message: dat.message });
       }
     } catch (error) {
-      setCanEdit(true)
-      setNotify({ error: false, show: true, message: "Something went wrong"});
+      setCanEdit(true);
+      setNotify({ error: false, show: true, message: "Something went wrong" });
       console.log(error);
     }
   };
@@ -259,6 +258,7 @@ const EditItem = ({ ...props }: Props) => {
                   <div className="p-4 flex justify-between ">
                     <label className="p-1 min-w-[10ch] mr-2">Preorder ?</label>
                     <input
+                      checked={state.isPreorder}
                       onChange={(e) =>
                         dispatch({
                           type: FormActionKind.INPUT_IS_PREORDER,
@@ -275,7 +275,16 @@ const EditItem = ({ ...props }: Props) => {
                         Release date
                       </label>
                       <input
-                           min={date.toISOString().slice(0,-8)}
+                        value={
+                          state.releaseDate
+                            ?  state.releaseDate as string
+                            : new Date(date.setDate(date.getDate() + 1))
+                                .toISOString()
+                                .slice(0, -8)
+                        }
+                        min={new Date(date.setDate(date.getDate() + 1))
+                          .toISOString()
+                          .slice(0, -8)}
                         onInvalid={() => {
                           setNotify({
                             error: true,
@@ -283,15 +292,6 @@ const EditItem = ({ ...props }: Props) => {
                             message: "Please provide a valid date",
                           });
                         }}
-                        value={
-                          state.releaseDate 
-                            ? new Date(state.releaseDate)
-                                .toISOString()
-                                .slice(0, -8)
-                            : new Date(date.setDate(date.getDate() + 1))
-                                .toISOString()
-                                .slice(0, -8)
-                        }
                         onChange={(e) =>
                           dispatch({
                             type: FormActionKind.INPUT_RELEASE,
@@ -305,8 +305,13 @@ const EditItem = ({ ...props }: Props) => {
                   ) : (
                     <></>
                   )}
-                    <div className="p-4 flex justify-center ">
-                        <EditImages type={CallType.item} triggerRefetch={props.triggerFetchFn} images={props.images} id={props.id}/>
+                  <div className="p-4 flex justify-center ">
+                    <EditImages
+                      type={CallType.item}
+                      triggerRefetch={props.triggerFetchFn}
+                      images={props.images}
+                      id={props.id}
+                    />
                   </div>
                   <div className="p-4 mt-4 flex justify-evenly ">
                     {canEdit ? (
@@ -334,15 +339,16 @@ const EditItem = ({ ...props }: Props) => {
                     />
                   </div>
                 </form>
-              </Dialog.Panel>s
+              </Dialog.Panel>
+              s
               <Notification
-                    message={notify.message}
-                    show={notify.show}
-                    error={notify.error}
-                    onAnimEnd={() =>
-                      setNotify({ error: false, message: "", show: false })
-                    }
-                  />
+                message={notify.message}
+                show={notify.show}
+                error={notify.error}
+                onAnimEnd={() =>
+                  setNotify({ error: false, message: "", show: false })
+                }
+              />
             </div>
           </Transition.Child>
         </Dialog>
