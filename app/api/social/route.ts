@@ -14,6 +14,14 @@ async function handler (req:Request){
         const social = await prisma.comment.findFirst({where:{id:id}, select:{_count:{select:{likes:{where:{userName:session.user.name}}, dislikes:{where:{userName:session.user.name}}}}}})
         return NextResponse.json({social})
     }
+    if(type === "item"){
+        const social = await prisma.marketItem.findFirst({where:{id:id}, select:{_count:{select:{likes:{where:{userName:session.user.name}}, dislikes:{where:{userName:session.user.name}}}}}})
+        return NextResponse.json({social})
+    }
+    if(type === "event"){
+        const social = await prisma.event.findFirst({where:{id:id}, select:{_count:{select:{likes:{where:{userName:session.user.name}}, dislikes:{where:{userName:session.user.name}}}}}})
+        return NextResponse.json({social})
+    }
   
 }
 

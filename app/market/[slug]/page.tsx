@@ -7,6 +7,7 @@ import AddToCart from "@/app/components/dynamic/ShoppingCart/AddToCart";
 import PriceDisplay from "@/app/components/static/PriceDisplay";
 import Comments from "@/app/components/dynamic/Events/Comments";
 import getItem from "@/helpers/getIItem";
+import LikeAndDislike from "@/app/components/dynamic/LikeAndDislike";
 
 const page = async ({params}:{params:{slug:string}}) => {
 const name = decodeURIComponent(params.slug)
@@ -23,7 +24,7 @@ const name = decodeURIComponent(params.slug)
             </div>
             <ImageBrowser images={item.images} />
           </div>
-          <div className="bg-black/20">Implement likes and other shanenigans</div>
+          <div className="bg-black/20 "><LikeAndDislike itemId={item.id} amountOfLikes={item._count.likes} amountOfDislikes={item._count.dislikes} showRatioBar/></div>
           <div className="p-4 flex flex-col justify-start rounded-md bg-bg_interactive dark:bg-black/20 row-start-3 col-span-3">
             <p className="indent-4">{item.description}</p>
           </div>

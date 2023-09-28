@@ -25,6 +25,7 @@ const getComments = async (id: string) => {
 };
 const Comments = async ({ eventId }: Props) => {
   const comments = await getComments(eventId);
+
   return (
     <div className="flex my-8 w-[85%] justify-between">
       <div className="p-2  bg-black/20 w-full">
@@ -46,8 +47,9 @@ const Comments = async ({ eventId }: Props) => {
             />
           ))
         ) : (
-          <>no comments found</>
+          <></>
         )}
+
       </div>
 
       <div className="p-4 mx-2 bg-black/20 min-w-[15%] h-fit">

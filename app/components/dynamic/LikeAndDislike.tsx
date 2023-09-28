@@ -12,6 +12,7 @@ interface Props {
   itemId?: string;
   amountOfLikes: number;
   amountOfDislikes: number;
+  showRatioBar?: boolean;
 }
 const LikeAndDislike = ({
   commentId,
@@ -19,6 +20,7 @@ const LikeAndDislike = ({
   itemId,
   amountOfLikes,
   amountOfDislikes,
+  showRatioBar,
 }: Props) => {
   const [parentData, setParentData] = useState({
     commentId,
@@ -31,7 +33,7 @@ const LikeAndDislike = ({
   const [disliked, setDisliked] = useState<unknown>();
   const [working, setWorking] = useState(false);
   const { data: session } = useSession();
-  const [showLogin, setShowLogin] = useState(false)
+  const [showLogin, setShowLogin] = useState(false);
 
   const CheckStatus = async () => {
     if (session?.user) {
@@ -145,17 +147,16 @@ const LikeAndDislike = ({
       console.log(error);
     }
   };
+
   useEffect(() => {
     CheckStatus();
   }, []);
-
   return (
-    <>
+    <div className="w-full p-2">
       {typeof liked !== "boolean" ? (
-        <>
-          {" "}
+        <div className="flex h-fit gap-2">
           <ButtonSkeleton /> <ButtonSkeleton />
-        </>
+        </div>
       ) : (
         <>
           {session?.user ? (
@@ -165,7 +166,7 @@ const LikeAndDislike = ({
                   size="1em"
                   Icon={BiSolidLike}
                   bgColor="bg-transparent"
-                  title="Like"
+                  title="Remove like"
                   fn={() => {
                     working ? null : handleLike();
                   }}
@@ -176,7 +177,7 @@ const LikeAndDislike = ({
                   size="1em"
                   Icon={BiLike}
                   bgColor="bg-transparent"
-                  title="Remove like"
+                  title="Like"
                   fn={() => {
                     working ? null : handleLike();
                   }}
@@ -189,7 +190,7 @@ const LikeAndDislike = ({
                   size="1em"
                   Icon={BiSolidDislike}
                   bgColor="bg-transparent"
-                  title="Dislike"
+                  title="Remove dislike"
                   fn={() => {
                     working ? null : handleDislike();
                   }}
@@ -200,7 +201,7 @@ const LikeAndDislike = ({
                   size="1em"
                   Icon={BiDislike}
                   bgColor="bg-transparent"
-                  title="Remove dislike"
+                  title="Dislike"
                   fn={() => {
                     working ? null : handleDislike();
                   }}
@@ -210,7 +211,6 @@ const LikeAndDislike = ({
             </div>
           ) : (
             <>
-             
               <div className="flex h-fit gap-2">
                 <ButtonWithIcon
                   size="1em"
@@ -218,7 +218,7 @@ const LikeAndDislike = ({
                   bgColor="bg-transparent"
                   title="Login to Like"
                   fn={() => {
-                 setShowLogin(true)
+                    setShowLogin(true);
                   }}
                   text={parentData.amountOfLikes.toString()}
                 />
@@ -229,19 +229,56 @@ const LikeAndDislike = ({
                   bgColor="bg-transparent"
                   title="Login to Dislike"
                   fn={() => {
-                   setShowLogin(true)
+                    setShowLogin(true);
                   }}
                   text={parentData.amountOfDislikes.toString()}
                 />
               </div>
             </>
           )}
+          {showRatioBar ? (
+            <div className="bg-bg_interactive w-full flex justify-between h-1">
+              {(parentData.amountOfLikes !== 0 &&
+                parentData.amountOfDislikes !== 0) ||
+              isNaN(
+                (parentData.amountOfLikes /
+                  (parentData.amountOfLikes + parentData.amountOfDislikes)) *
+                  100
+              ) ? (
+                ""
+              ) : (
+                <>
+                  <span
+                    className={`h-1 block w-[${
+                      (parentData.amountOfLikes /
+                        (parentData.amountOfLikes +
+                          parentData.amountOfDislikes)) *
+                      100
+                    }%]  bg-primary`}
+                  ></span>
+                  <span
+                    className={`w-[${
+                      100 -
+                      (parentData.amountOfLikes /
+                        (parentData.amountOfLikes +
+                          parentData.amountOfDislikes)) *
+                        100
+                    }%] bg-secondary block h-1`}
+                  ></span>
+                </>
+              )}
+            </div>
+          ) : (
+            <></>
+          )}
         </>
       )}
-      { showLogin ? <LoginForm show cleanUp={()=> setShowLogin(false)}/> : <></>}
-
-      
-    </>
+      {showLogin ? (
+        <LoginForm show cleanUp={() => setShowLogin(false)} />
+      ) : (
+        <></>
+      )}
+    </div>
   );
 };
 

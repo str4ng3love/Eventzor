@@ -7,6 +7,7 @@ import Link from "next/link";
 import AddToCart from "@/app/components/dynamic/ShoppingCart/AddToCart";
 import PriceDisplay from "@/app/components/static/PriceDisplay";
 import Comments from "@/app/components/dynamic/Events/Comments";
+import LikeAndDislike from "@/app/components/dynamic/LikeAndDislike";
 
 const page = async ({params}:{params:{slug:string}}) => {
 const title = decodeURIComponent(params.slug)
@@ -25,7 +26,7 @@ const title = decodeURIComponent(params.slug)
             </div>
             <ImageBrowser images={event.images} />
           </div>
-          <div className="bg-black/20">Implement likes and other shenanigans
+          <div className="bg-black/20 flex  justify-center"><LikeAndDislike eventId={event.id} amountOfLikes={event._count.likes} amountOfDislikes={event._count.dislikes} showRatioBar/>
           </div>
           <div className="p-4 flex flex-col justify-start rounded-md bg-bg_interactive dark:bg-black/20 row-start-3 col-span-3">
             <p className="indent-4">{event.description}</p>
