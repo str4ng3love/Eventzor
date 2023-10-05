@@ -7,6 +7,9 @@ import CartButton from "./CartButton";
 import Button from "../Button";
 import Currency from "../Currency";
 import CartItem from "./CartItem";
+import ShippingForm, { ShippingMethod } from "./ShippingForm";
+import Notification from "../../static/Notification";
+import { useRouter } from "next/navigation";
 
 export interface CartItemData {
   id: string;
@@ -16,15 +19,26 @@ export interface CartItemData {
   item: string;
 }
 const ShoppingCart = () => {
+  const router = useRouter()
+  const [notify, setNotify] = useState({
+    error: false,
+    show: false,
+    message: "",
+  });
   const [isOpen, setIsOpen] = useState(false);
+  const [shippingData, setShipppingData] = useState<{
+    method: ShippingMethod;
+    phoneNumber?: number;
+    adress?: string;
+  }>({ adress: "", method: ShippingMethod.email, phoneNumber: undefined });
   const [total, setTotal] = useState<number>();
   const [isLoadingItems, setIsLoadingItems] = useState(true);
+  const [isWorking, setIsWorking] = useState(false);
   const [cartItems, setCartItems] = useState<CartItemData[]>([]);
   const [newEntries, setNewEntries] = useState(0);
   const [currency, setCurrency] = useState({ name: "usd", rate: 1 });
-
+  const [showShipping, setShowShipping] = useState(false);
   const calcTotal = (arr: CartItemData[]) => {
-
     const total = arr.reduce((acc, val) => {
       acc = acc + val.price * currency.rate * val.amount;
       return parseFloat(acc.toFixed(2));
@@ -38,6 +52,40 @@ const ShoppingCart = () => {
       localStorage.removeItem("cart");
     }
   };
+  const clearCartAndComponent = () =>{
+    setIsWorking(false)
+    localStorage.removeItem('cart')
+    window.dispatchEvent(new Event('storage'))
+  }
+  const createOrder = async () => {
+    setIsWorking(true);
+    try {
+      const resp = await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          order: { items: cartItems, currency: currency, shippingData },
+        }),
+      });
+      const message = await resp.json();
+      if (message.message) {
+
+        setNotify({ show: true, error: false, message: message.message });
+        setIsWorking(false);
+       
+      } else {
+        setIsWorking(false);
+        setNotify({
+          show: true,
+          error: true,
+          message: message.error,
+        });
+      }
+    } catch (error) {
+      setIsWorking(false);
+      console.log(error);
+    }
+  };
   useEffect(() => {
     const cart = localStorage.getItem("cart");
     if (cart) {
@@ -47,8 +95,10 @@ const ShoppingCart = () => {
     window.addEventListener("storage", () => {
       const cart = localStorage.getItem("cart");
       if (cart) {
-        let cartItems = JSON.parse(cart);
-        setNewEntries(cartItems.length);
+        let cartContent = JSON.parse(cart);
+
+        setCartItems(cartContent);
+        setNewEntries(cartContent.length);
       }
     });
     window.addEventListener("currency", () => {
@@ -59,7 +109,6 @@ const ShoppingCart = () => {
           name: selectedCurrency.name,
           rate: selectedCurrency.rate,
         });
-      
       }
     });
 
@@ -94,7 +143,7 @@ const ShoppingCart = () => {
   useEffect(() => {
     updateCart(cartItems);
     setNewEntries(cartItems.length);
-   calcTotal(cartItems);
+    calcTotal(cartItems);
   }, [cartItems]);
   return (
     <>
@@ -130,10 +179,10 @@ const ShoppingCart = () => {
                 }
               >
                 <Dialog.Title className={"font-bold text-xl text-start pb-2"}>
-                  Shopping Cart
+                  {showShipping ? "Shipping Info" : "Shopping Cart"}
                 </Dialog.Title>
                 <Dialog.Description className={"text-sm font-semibold"}>
-                  Manage your Items
+                  {showShipping ? "" : "Manage your Items"}
                 </Dialog.Description>
                 <div className="flex justify-end">
                   <Currency
@@ -148,52 +197,158 @@ const ShoppingCart = () => {
                     <h3>Loading ...</h3>
                   ) : (
                     <>
-                      {cartItems.length > 0 ? (
-                        cartItems.map((i, index) => (
-                          <CartItem
-                            closeFn={(e) => setIsOpen(false)}
-                            id={i.id}
-                            key={index}
-                            type={i.type}
-                            item={i.item}
-                            amount={i.amount}
-                            price={i.price}
-                            currency={currency}
-                            delFn={() => {
-                              setCartItems((prev) => [
-                                ...prev.filter((p) => p.id != i.id),
-                              ]);
+                      {showShipping ? (
+                        <>
+                          <ShippingForm
+                            fn={(shippingData) => {
+                              setShipppingData(shippingData);
+                              setShowShipping(false);
                             }}
+                            method={shippingData.method}
+                            adress={shippingData.adress}
+                            phone={shippingData.phoneNumber}
                           />
-                        ))
+                        </>
                       ) : (
-                        <h3>Your Cart is Empty</h3>
+                        <>
+                          {cartItems.length > 0 ? (
+                            cartItems.map((i, index) => (
+                              <CartItem
+                                closeFn={(e) => setIsOpen(false)}
+                                id={i.id}
+                                key={index}
+                                type={i.type}
+                                item={i.item}
+                                amount={i.amount}
+                                price={i.price}
+                                currency={currency}
+                                delFn={() => {
+                                  setCartItems((prev) => [
+                                    ...prev.filter((p) => p.id != i.id),
+                                  ]);
+                                }}
+                              />
+                            ))
+                          ) : (
+                            <h3>Your Cart is Empty</h3>
+                          )}
+                        </>
                       )}
                     </>
                   )}
                 </div>
+                {showShipping ? (
+                  <></>
+                ) : (
+                  <>
+                    <div className="flex justify-between">
+                      <div className="flex flex-col w-full ">
+                        <span className="p-1 text-lg">Shipping</span>
+                        <div className="flex">
+                          <span className="w-[16ch] p-1 first-letter:uppercase">
+                            method&nbsp;:&nbsp;
+                          </span>
+                          <span className="p-1 first-letter:uppercase">
+                            {shippingData?.method}
+                          </span>
+                        </div>
+                        {shippingData?.method !== "Email" ? (
+                          <>
+                            <div className="flex">
+                              <span className="w-[16ch] p-1 first-letter:uppercase">
+                                mailing adress&nbsp;:&nbsp;
+                              </span>
+                              <span className="p-1 first-letter:uppercase">
+                                {shippingData?.adress}
+                              </span>
+                            </div>
+                            <div className="flex">
+                              <span className="w-[16ch] p-1 first-letter:uppercase">
+                                phone number&nbsp;:&nbsp;
+                              </span>
+                              <span className="p-1 first-letter:uppercase">
+                                {shippingData?.phoneNumber}
+                              </span>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <span className="p-1 first-letter:uppercase">
+                              We'll use the email adress provided at
+                              registration.
+                            </span>
+                          </>
+                        )}
+                      </div>
+                      <div className="flex items-center">
+                        <Button
+                          title="Change shipping info"
+                          text="Change"
+                          fn={(e) => setShowShipping(true)}
+                        />
+                      </div>
+                    </div>
+                  </>
+                )}
 
                 {!isLoadingItems && cartItems.length > 0 ? (
-                  <div className="flex justify-end">
-                    <div className=" ring-4 ring-primary p-2 text-xl font-bold">
-                      <span className="mr-1">Total :</span>
-                      <span className="mr-1">{total}</span>
-                      <span>{currency.name.toLocaleUpperCase()}</span>
-                    </div>
-                  </div>
+                  <>
+                    {showShipping ? (
+                      <></>
+                    ) : (
+                      <div className="flex justify-end">
+                        <div className=" ring-4 ring-primary p-2 text-xl font-bold">
+                          <span className="mr-1">Total :</span>
+                          <span className="mr-1">{total}</span>
+                          <span>{currency.name.toLocaleUpperCase()}</span>
+                        </div>
+                      </div>
+                    )}
+                  </>
                 ) : (
                   <></>
                 )}
                 {cartItems.length > 0 ? (
-                  <div className="flex items-center justify-center h-full pt-10">
-                    <Button
-                      title="Continue"
-                      text="Continue"
-                      fn={(e) => setIsOpen(false)}
-                    />
+                  <div className="flex items-center justify-end h-full pt-10 gap-2">
+                    <>
+                      {showShipping ? (
+                        <></>
+                      ) : (
+                        <>
+                          <Button
+                            title="Close"
+                            text="Close"
+                            fn={(e) => setIsOpen(false)}
+                          />
+                          <>
+                            {isWorking ? (
+                              <Button
+                                title="Working..."
+                                text="Working..."
+                                fn={() => {}}
+                                interactive={false}
+                                bgColor="bg-bg"
+                              />
+                            ) : (
+                              <Button
+                                title="Continue"
+                                text="Continue"
+                                fn={() => createOrder()}
+                              />
+                            )}
+                          </>
+                        </>
+                      )}
+                    </>
                   </div>
                 ) : (
-                  <div className="flex items-center justify-center h-full pt-10">
+                  <div className="flex items-center justify-end h-full pt-10 gap-2">
+                    <Button
+                  title="Open Orders"
+                  text="Open Orders"
+                  link="/finalize"
+                  fn={(e)=>setIsOpen(false)}
+                />
                     <Button
                       title="Close"
                       text="Close"
@@ -202,10 +357,14 @@ const ShoppingCart = () => {
                   </div>
                 )}
               </Dialog.Panel>
+          <>
+              <Notification error={notify.error} message={notify.message} onAnimEnd={()=>{setNotify({error:false, show:false, message:''})}} show={notify.show} />
+      </>
             </div>
           </Transition.Child>
         </Dialog>
       </Transition>
+      
     </>
   );
 };

@@ -3,8 +3,7 @@ import { NextResponse } from "next/server";
 
 async function handler(req: Request) {
   if (req.method === "GET") {
-    await prisma.marketItem.deleteMany({})
-    await prisma.event.deleteMany({})
+ await prisma.order.deleteMany({})
 return NextResponse.json({message:"Items and Events deleted"})
   }
 }

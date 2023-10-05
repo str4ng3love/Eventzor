@@ -83,8 +83,6 @@ model Event {
   comments      Comment[]
   dislikes      Dislike[]
   likes         Like[]
-  orderId        Order?       @relation(fields: [orders], references: [id])
-  orders       String?      @db.ObjectId
 }
 
 model MarketItem {
@@ -103,18 +101,18 @@ model MarketItem {
   comments     Comment[]
   dislikes     Dislike[]
   likes        Like[]
-  orderId      Order?     @relation(fields: [orders], references: [id])
-  orders      String?    @db.ObjectId
 }
 
 model Order {
-  id      String @id @default(auto()) @map("_id") @db.ObjectId
-  buyer   User   @relation(fields: [buyerId], references: [id])
-  buyerId String @db.ObjectId
-  items  MarketItem[]
-  events Event[]
-  status StatusOrder @default(pendingPayment)
-  shippingAdress String
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  buyer          User         @relation(fields: [buyerName], references: [name])
+  buyerName      String
+  amounts Json[]
+  status         StatusOrder  @default(pendingPayment)
+  currency       String
+  shippingAdress String?
+  phoneNumber    Int?
+  orderedAt DateTime @default(now())
 }
 
 enum StatusEvent {

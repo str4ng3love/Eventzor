@@ -38,7 +38,7 @@ const AddToCart = ({ item,type, price, id }: Props) => {
         text="Add to cart"
         fn={() => {
           let prev = localStorage.getItem("cart")
-          console.log(prev?.length)
+       
 
           if (prev !== null && prev.length > 0) {
             let prevString = JSON.parse(prev);
