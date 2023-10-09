@@ -7,18 +7,18 @@ import { prisma } from "@/lib/ConnectPrisma";
 import MyItemsBrowser from "@/app/components/dynamic/Market/MyItemsBrowser";
 
 
-const getItems = async () => {
-  const session = await getServerSession(options);
+// const getItems = async () => {
+//   const session = await getServerSession(options);
 
-  const items = await prisma.marketItem.findMany({
-    where: {
-      merchantName: session?.user?.name as string,
-    },
-    orderBy: [{ item: "asc" }],
-  });
+//   const items = await prisma.marketItem.findMany({
+//     where: {
+//       merchantName: session?.user?.name as string,
+//     },
+//     orderBy: [{ item: "asc" }],
+//   });
 
-  return items;
-};
+//   return items;
+// };
 
 const page = async () => {
   
