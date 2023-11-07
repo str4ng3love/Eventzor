@@ -61,6 +61,7 @@ const LikeAndDislike = ({
     }
   };
   const handleLike = async () => {
+    
     try {
       setWorking(true);
       if (!liked && disliked) {
@@ -70,16 +71,19 @@ const LikeAndDislike = ({
           amountOfLikes: (prev.amountOfLikes += 1),
         }));
       } else if (liked) {
+
         setParentData((prev) => ({
           ...prev,
-          amountOfLikes: (prev.amountOfLikes -= 1),
+          amountOfLikes: (prev.amountOfLikes -=1),
         }));
       } else {
+    
         setParentData((prev) => ({
           ...prev,
-          amountOfLikes: (prev.amountOfLikes += 1),
+          amountOfLikes: (prev.amountOfLikes +=1),
         }));
       }
+     
       if (disliked) {
         setDisliked(false);
       }
@@ -89,7 +93,7 @@ const LikeAndDislike = ({
         parentData.eventId,
         parentData.itemId
       );
-
+    
       const resp = await fetch(`/api/social/like/${urlPart}`, {
         method: liked ? "DELETE" : "POST",
         headers: { "content-type": "application/json" },
@@ -240,30 +244,28 @@ const LikeAndDislike = ({
             <div className="bg-bg_interactive w-full flex justify-between h-1">
               {(parentData.amountOfLikes !== 0 &&
                 parentData.amountOfDislikes !== 0) ||
-              isNaN(
-                (parentData.amountOfLikes /
-                  (parentData.amountOfLikes + parentData.amountOfDislikes)) *
+                isNaN(
+                  (parentData.amountOfLikes /
+                    (parentData.amountOfLikes + parentData.amountOfDislikes)) *
                   100
-              ) ? (
+                ) ? (
                 ""
               ) : (
                 <>
                   <span
-                    className={`h-1 block w-[${
+                    className={`h-1 block w-[${(parentData.amountOfLikes /
+                        (parentData.amountOfLikes +
+                          parentData.amountOfDislikes)) *
+                      100
+                      }%]  bg-primary`}
+                  ></span>
+                  <span
+                    className={`w-[${100 -
                       (parentData.amountOfLikes /
                         (parentData.amountOfLikes +
                           parentData.amountOfDislikes)) *
                       100
-                    }%]  bg-primary`}
-                  ></span>
-                  <span
-                    className={`w-[${
-                      100 -
-                      (parentData.amountOfLikes /
-                        (parentData.amountOfLikes +
-                          parentData.amountOfDislikes)) *
-                        100
-                    }%] bg-secondary block h-1`}
+                      }%] bg-secondary block h-1`}
                   ></span>
                 </>
               )}
@@ -278,6 +280,7 @@ const LikeAndDislike = ({
       ) : (
         <></>
       )}
+
     </div>
   );
 };

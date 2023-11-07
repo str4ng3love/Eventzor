@@ -38,6 +38,7 @@ const ShoppingCart = () => {
   const [newEntries, setNewEntries] = useState(0);
   const [currency, setCurrency] = useState({ name: "usd", rate: 1 });
   const [showShipping, setShowShipping] = useState(false);
+  const [showShippingForm, setShowShippingForm] = useState(false)
   const calcTotal = (arr: CartItemData[]) => {
     const total = arr.reduce((acc, val) => {
       acc = acc + val.price * currency.rate * val.amount;
@@ -52,10 +53,13 @@ const ShoppingCart = () => {
       localStorage.removeItem("cart");
     }
   };
-  const clearCartAndComponent = () =>{
+  const clearCartAndComponent = () => {
+
     setIsWorking(false)
+    setIsOpen(false)
     localStorage.removeItem('cart')
     window.dispatchEvent(new Event('storage'))
+    router.push("/orders")
   }
   const createOrder = async () => {
     setIsWorking(true);
@@ -69,10 +73,7 @@ const ShoppingCart = () => {
       });
       const message = await resp.json();
       if (message.message) {
-
-        setNotify({ show: true, error: false, message: message.message });
-        setIsWorking(false);
-       
+        clearCartAndComponent()
       } else {
         setIsWorking(false);
         setNotify({
@@ -113,8 +114,8 @@ const ShoppingCart = () => {
     });
 
     return () => {
-      window.removeEventListener("storage", () => {});
-      window.removeEventListener("currency", () => {});
+      window.removeEventListener("storage", () => { });
+      window.removeEventListener("currency", () => { });
     };
   }, []);
   useEffect(() => {
@@ -237,7 +238,7 @@ const ShoppingCart = () => {
                     </>
                   )}
                 </div>
-                {showShipping ? (
+                {cartItems.length === 0 || showShipping ? (
                   <></>
                 ) : (
                   <>
@@ -273,8 +274,8 @@ const ShoppingCart = () => {
                           </>
                         ) : (
                           <>
-                            <span className="p-1 first-letter:uppercase">
-                              We'll use the email adress provided at
+                            <span className="p-1 first-letter:uppercase mt-2 mr-2">
+                              We&apos;ll use the email adress provided at
                               registration.
                             </span>
                           </>
@@ -325,7 +326,7 @@ const ShoppingCart = () => {
                               <Button
                                 title="Working..."
                                 text="Working..."
-                                fn={() => {}}
+                                fn={() => { }}
                                 interactive={false}
                                 bgColor="bg-bg"
                               />
@@ -344,11 +345,11 @@ const ShoppingCart = () => {
                 ) : (
                   <div className="flex items-center justify-end h-full pt-10 gap-2">
                     <Button
-                  title="Open Orders"
-                  text="Open Orders"
-                  link="/finalize"
-                  fn={(e)=>setIsOpen(false)}
-                />
+                      title="Open Orders"
+                      text="Open Orders"
+                      link="/orders"
+                      fn={(e) => setIsOpen(false)}
+                    />
                     <Button
                       title="Close"
                       text="Close"
@@ -357,14 +358,14 @@ const ShoppingCart = () => {
                   </div>
                 )}
               </Dialog.Panel>
-          <>
-              <Notification error={notify.error} message={notify.message} onAnimEnd={()=>{setNotify({error:false, show:false, message:''})}} show={notify.show} />
-      </>
+
             </div>
           </Transition.Child>
         </Dialog>
       </Transition>
-      
+      <>
+        <Notification error={notify.error} message={notify.message} onAnimEnd={() => { setNotify({ error: false, show: false, message: '' }) }} show={notify.show} />
+      </>
     </>
   );
 };
