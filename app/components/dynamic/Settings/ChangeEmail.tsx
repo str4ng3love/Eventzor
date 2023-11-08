@@ -16,7 +16,7 @@ const ChangeEmail = () => {
 
   const handleEmailChange = async (email: string) => {
     try {
-      const resp = await fetch("/api/user/update-email", {
+      const resp = await fetch("/api/user/email", {
         method: "POST",
         headers: { "content-type": "application-json" },
         body: JSON.stringify({ email }),
@@ -35,7 +35,7 @@ const ChangeEmail = () => {
   return (
     <>
       <div className="flex flex-col w-fit p-4 my-4">
-        <Heading4 text="Change your email adress" />
+        <Heading4 text="Change your email address" />
         <div className="p-4 flex gap-2 items-center">
           <label className="p-1 w-[16ch]">Email</label>
           {showEdit ? (

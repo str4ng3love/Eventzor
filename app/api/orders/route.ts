@@ -16,8 +16,8 @@ async function handler(req: Request) {
     let events = order.items.filter(
       (i: { type: string }) => i.type === "event"
     );
-    if (items.length > 0 && order.shippingData.adress.length === 0) {
-      return NextResponse.json({ error: "Please provide an adress." });
+    if (items.length > 0 && order.shippingData.address.length === 0) {
+      return NextResponse.json({ error: "Please provide an address." });
     }
 
     let amounts = items.concat(events)
@@ -32,7 +32,7 @@ async function handler(req: Request) {
             amounts: amounts,
             buyerName: session.user?.name ? session.user?.name : "",
             phoneNumber: order.shippingData.name,
-            shippingAdress: order.shippingData.adress,
+            shippingAddress: order.shippingData.address,
             status: "pendingPayment",
           },
         });

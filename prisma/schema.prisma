@@ -110,7 +110,7 @@ model Order {
   amounts Json[]
   status         StatusOrder  @default(pendingPayment)
   currency       String
-  shippingAdress String?
+  shippingAddress String?
   phoneNumber    Int?
   orderedAt DateTime @default(now())
 }

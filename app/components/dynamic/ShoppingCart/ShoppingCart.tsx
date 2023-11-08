@@ -29,8 +29,8 @@ const ShoppingCart = () => {
   const [shippingData, setShipppingData] = useState<{
     method: ShippingMethod;
     phoneNumber?: number;
-    adress?: string;
-  }>({ adress: "", method: ShippingMethod.email, phoneNumber: undefined });
+    address?: string;
+  }>({ address: "", method: ShippingMethod.email, phoneNumber: undefined });
   const [total, setTotal] = useState<number>();
   const [isLoadingItems, setIsLoadingItems] = useState(true);
   const [isWorking, setIsWorking] = useState(false);
@@ -206,7 +206,7 @@ const ShoppingCart = () => {
                               setShowShipping(false);
                             }}
                             method={shippingData.method}
-                            adress={shippingData.adress}
+                            address={shippingData.address}
                             phone={shippingData.phoneNumber}
                           />
                         </>
@@ -257,10 +257,10 @@ const ShoppingCart = () => {
                           <>
                             <div className="flex">
                               <span className="w-[16ch] p-1 first-letter:uppercase">
-                                mailing adress&nbsp;:&nbsp;
+                                mailing address&nbsp;:&nbsp;
                               </span>
                               <span className="p-1 first-letter:uppercase">
-                                {shippingData?.adress}
+                                {shippingData?.address}
                               </span>
                             </div>
                             <div className="flex">
@@ -275,7 +275,7 @@ const ShoppingCart = () => {
                         ) : (
                           <>
                             <span className="p-1 first-letter:uppercase mt-2 mr-2">
-                              We&apos;ll use the email adress provided at
+                              We&apos;ll use the email address provided at
                               registration.
                             </span>
                           </>

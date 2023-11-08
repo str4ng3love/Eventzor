@@ -10,10 +10,10 @@ interface Props {
   fn: (shippingData: {
     method: ShippingMethod;
     phoneNumber?: number;
-    adress?: string;
+    address?: string;
   }) => void;
   method: ShippingMethod;
-  adress?:string;
+  address?:string;
   phone?:number;
 }
 export enum ShippingMethod {
@@ -21,7 +21,7 @@ export enum ShippingMethod {
   email = "Email",
   priorityMail = "Priority Mail",
 }
-const ShippingForm = ({ fn, method, adress, phone }: Props) => {
+const ShippingForm = ({ fn, method, address, phone }: Props) => {
   //export to Shopingcart.tsx
   const [selected, setSelected] = useState(method);
   const [notify, setNotify] = useState({
@@ -31,7 +31,7 @@ const ShippingForm = ({ fn, method, adress, phone }: Props) => {
   });
   const [shippingMethod, setShippingMethod] = useState<ShippingMethod>(method);
   const [shippingPhone, setPhone] = useState<number | undefined>();
-  const [shippingAdress, setAdress] = useState<string | undefined>();
+  const [shippingAddress, setAddress] = useState<string | undefined>();
   return (
     <>
       <div className="flex flex-col">
@@ -90,13 +90,13 @@ const ShippingForm = ({ fn, method, adress, phone }: Props) => {
           <>
             <div className="flex my-1">
               <label className="w-[14ch] whitespace-nowrap p-1">
-                Mailing Adress
+                Mailing Address
               </label>
               <textarea
                 placeholder="00-234 Imagineville Warden st. 200/2"
                 className="p-1 w-[24ch] text-black resize-none h-[10rem]"
-                onInput={(e) => setAdress(e.currentTarget.value)}
-                value={shippingAdress}
+                onInput={(e) => setAddress(e.currentTarget.value)}
+                value={shippingAddress}
               />
             </div>
             <div className="flex my-1 ">
@@ -136,16 +136,16 @@ const ShippingForm = ({ fn, method, adress, phone }: Props) => {
               if (shippingMethod === ShippingMethod.email) {
                 fn({
                   method: shippingMethod,
-                  adress: adress,
+                  address: address,
                   phoneNumber: phone,
                 });
               } else {
-                if ((shippingPhone === undefined) || shippingAdress === undefined) {
+                if ((shippingPhone === undefined) || shippingAddress === undefined) {
                   setNotify({ error: true, message: "Please provide missing values", show: true });
                 } else if(typeof(shippingPhone) !== 'number'){
                   setNotify({ error: true, message: "Phone number has to be a number", show: true });
                 }else {
-                  fn({method:shippingMethod, adress:shippingAdress, phoneNumber:shippingPhone})
+                  fn({method:shippingMethod, address:shippingAddress, phoneNumber:shippingPhone})
                 }
               }
             }}

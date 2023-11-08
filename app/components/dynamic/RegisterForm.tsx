@@ -68,7 +68,7 @@ const RegisterForm = () => {
                 <form onSubmit={(e) => e.preventDefault()}>
                   <div className="p-4 flex justify-between ">
                     <label className="p-1 min-w-[10ch] mr-2">
-                      Email adress
+                      Email address
                     </label>
                     <input
                       onChange={(e) => setEmail(e.currentTarget.value)}

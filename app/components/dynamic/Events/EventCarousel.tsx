@@ -31,7 +31,7 @@ const EventCarousel = ({
   const [active, setActive] = useState(0);
   const [currency, setCurrency] = useState({ name: "initial", rate: 1 });
 
-  const readAdress = () => {
+  const readAddress = () => {
     console.log(encodeURI(items[active].title));
   };
   const handleChange = async (image: string) => {

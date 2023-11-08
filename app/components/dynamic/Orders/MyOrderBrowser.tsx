@@ -7,8 +7,10 @@ import Button from "../Button";
 import Notification from "../../static/Notification";
 
 export const MyOrderBrowser = () => {
-  const [show, setShow] = useState(false);
-  const [notify, setNotify] =useState({message:'', show:false, error:false })
+  const [show, setShow] = useState(true);
+  const [email, setEmail] = useState<string | null>(null)
+  const [notify, setNotify] = useState({ message: '', show: false, error: false })
+  const [working, setWorking] = useState(false)
   const [ordersArr, setOrdersArr] = useState<
     {
       total: number;
@@ -22,25 +24,37 @@ export const MyOrderBrowser = () => {
     }[]
   >();
   const [currency, setCurrency] = useState({ name: "usd", rate: 1 });
-
   const [total, setTotal] = useState<number[]>();
+  const getEmail = async () => {
+    setWorking(true)
+    try {
+      const resp = await fetch("/api/user/email")
+      const email = await resp.json()
 
+      setWorking(false)
+      if (email) {
+        setEmail(email.email)
+      }
+    } catch (error) {
+      setWorking(false)
+      console.log(error)
+    }
+  }
   const cancelOrder = async (id: string) => {
-    
-    const rollback = ordersArr? [...ordersArr] : []
-    setOrdersArr((prev)=> prev?.filter(o=>o.id !==id))
+    const rollback = ordersArr ? [...ordersArr] : []
+    setOrdersArr((prev) => prev?.filter(o => o.id !== id))
     try {
       const resp = await fetch("/api/orders/my_orders", {
         method: "DELETE",
-        body: JSON.stringify({id}),
+        body: JSON.stringify({ id }),
         headers: { "Content-Type": "application/json" },
       });
-      const message =  await resp.json()
-      if(message.error){
-        setNotify({error:true, message:'Something went wrong, try again later', show:true})
+      const message = await resp.json()
+      if (message.error) {
+        setNotify({ error: true, message: 'Something went wrong, try again later', show: true })
         setOrdersArr(rollback)
       } else {
-        setNotify({error:false, message:message.message, show:true})
+        setNotify({ error: false, message: message.message, show: true })
       }
     } catch (error) {
       setOrdersArr(rollback)
@@ -51,13 +65,14 @@ export const MyOrderBrowser = () => {
     try {
       const resp = await fetch("/api/orders/my_orders");
       const orders = await resp.json();
+
       if (orders.error) {
       } else {
         const orderStringify = JSON.stringify(orders);
         const ordersParsed = JSON.parse(orderStringify);
         setOrdersArr(ordersParsed);
       }
-    } catch (error) {}
+    } catch (error) { }
   };
   const calcTotal = (
     arr: { amounts: { price: number; amount: number }[] }[]
@@ -75,6 +90,7 @@ export const MyOrderBrowser = () => {
       await getOrders();
     })();
   }, []);
+
   useEffect(() => {
     window.addEventListener("currency", () => {
       const currency = localStorage.getItem("currency");
@@ -88,7 +104,7 @@ export const MyOrderBrowser = () => {
     });
 
     return () => {
-      window.removeEventListener("currency", () => {});
+      window.removeEventListener("currency", () => { });
     };
   });
   useEffect(() => {
@@ -112,14 +128,14 @@ export const MyOrderBrowser = () => {
             size="1em"
             text="show"
             title="show my orders"
-            fn={() => setShow(true)}
+            fn={() => setShow(false)}
           />
         ) : (
           <Button
             size="1em"
             text="hide"
             title="show my orders"
-            fn={() => setShow(false)}
+            fn={() => setShow(true)}
           />
         )}
       </div>
@@ -134,40 +150,52 @@ export const MyOrderBrowser = () => {
                   <div className="flex gap-2">
                     <span className="p-1">Order ID:</span>
                     <span className="p-1">{o.id}</span>
+                  
                   </div>
                   <span className="p-1">Items:</span>
                   <div className="group h-fit ">
-                    {o.amounts.length > 0 ? (
-                      o.amounts.map(
-                        (a: {
-                          id: string;
-                          item: string;
-                          amount: number;
-                          price: number;
-                        }) => (
-                          <div
-                            key={a.id}
-                            className="p-2 my-1 font-normal flex gap-2 justify-between w-[25rem] text-sm ring-2 ring-primary "
-                          >
-                            <span className="p-1 w-[20ch] overflow-hidden text-ellipsis">
-                              {a.item}
-                            </span>
-                            <span className="p-1 w-[4ch] flex justify-end">
-                              {a.amount}
-                            </span>
-                            <span className="p-1 w-[10ch] flex justify-end uppercase">
-                              {a.price} &nbsp; {currency.name}
-                            </span>
-                          </div>
-                        )
-                      )
-                    ) : (
+                    {o.amounts.length > 0 ? o.amounts.map((a: { id: string; item: string; amount: number; price: number; }, index) => (
+                      <div key={a.id}>
+                        <div
+
+                          className="p-2 my-1 font-normal flex gap-2 justify-between w-[25rem] text-sm ring-2 ring-primary"
+                        >
+                          <span className="p-1 w-[20ch] overflow-hidden text-ellipsis">
+                            {a.item}
+                          </span>
+                          <span className="p-1 w-[4ch] flex justify-end">
+                            {a.amount}
+                          </span>
+                          <span className="p-1 w-[10ch] flex justify-end uppercase">
+                            {a.price} &nbsp; {currency.name}
+                          </span>
+                        </div>
+
+                      </div>
+                    )
+
+                    ) :
                       <></>
-                    )}
+                    }
+                    <div className="p-1">
+                      <span className="">
+                        Delivery :&nbsp;
+                      </span>
+                      <span className="">{o.shippingAddress ? "physical" : "digital via email"}</span>
+
+                    </div>
+                    <div className="h-16 flex items-center">
+                      {!o.shippingAddress && !email ? <Button size="text-xs ml-2" text={!working ? "show" : "working..."} interactive={working ? false : true} bgColor={working ? "bg-transparent" : "bg-link"} fn={() => { getEmail() }} title="show email" /> : <span>{email}</span>}
+                      {o.shippingAddress? <div>
+                        <span>{ o.shippingAddress}</span>
+                        <Button text="..." title="change adress" fn={()=>{}} size="text-xs ml-4"/>
+                      </div> :<></>} 
+                    </div>
+
                   </div>
                   <div className="flex gap-2 justify-between w-[25rem]">
                     <span className="p-1 w-[24ch]">Total:</span>
-                    <span className="p-1 uppercase ">
+                    <span className="p-1 uppercase">
                       {total ? total[i] : null}&nbsp;{currency.name}
                     </span>
                   </div>
@@ -177,12 +205,12 @@ export const MyOrderBrowser = () => {
                   </div>
                 </div>
                 <div className="flex flex-col items-start gap-4 p-8">
-                  <Button text="Continue" title="CONTINUE" fn={() => {}} />
+                  <Button text="Continue" title="CONTINUE" fn={() => { }} />
                   <Button
                     text="Cancel"
                     title="cancel"
                     bgColor="bg-secondary"
-                    fn={() => {cancelOrder(o.id)}}
+                    fn={() => { cancelOrder(o.id) }}
                   />
                 </div>
               </div>
@@ -197,7 +225,7 @@ export const MyOrderBrowser = () => {
         <></>
       )}
     </div>
-    <Notification {...notify} onAnimEnd={()=>{setNotify({error:false, message:'', show:false})}} />
-    </>
+    <Notification {...notify} onAnimEnd={() => { setNotify({ error: false, message: '', show: false }) }} />
+  </>
   );
 };
