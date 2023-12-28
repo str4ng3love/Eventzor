@@ -116,7 +116,7 @@ const EventCarousel = ({
                   blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
                   style={{ objectFit: "cover" }}
                   sizes="(max-width: 750px"
-                  alt="events image"
+                  alt="event's image"
                   src={selectedImage}
                   className={`${
                     playFadeOut ? "animate-fadeOut300" : "animate-fadeIn300"

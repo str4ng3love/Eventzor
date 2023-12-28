@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { options } from "../../../auth/[...nextauth]/options";
 import { prisma } from "@/lib/ConnectPrisma";
+
 async function handler(req: Request) {
   const session = await getServerSession(options);
   if (!session?.user?.name)
@@ -44,7 +45,7 @@ async function handler(req: Request) {
  
         });
       } else {
-        const dislike = await prisma.comment.update({
+        const comment = await prisma.comment.update({
           where: { id: body.id },
           data: {
             dislikes: {

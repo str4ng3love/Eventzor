@@ -39,6 +39,7 @@ const LikeAndDislike = ({
     if (session?.user) {
       try {
         const { urlPart, id } = getIDType(commentId, eventId, itemId);
+        
         const searchParams = new URLSearchParams({ id, type: urlPart });
         const resp = await fetch(`/api/social?` + searchParams);
         const data = await resp.json();
@@ -100,7 +101,7 @@ const LikeAndDislike = ({
         body: JSON.stringify({ id }),
       });
       const data = await resp.json();
-
+      
       setWorking(false);
     } catch (error) {
       setWorking(false);
@@ -153,6 +154,7 @@ const LikeAndDislike = ({
   };
 
   useEffect(() => {
+    
     CheckStatus();
   }, []);
   return (
@@ -242,15 +244,12 @@ const LikeAndDislike = ({
           )}
           {showRatioBar ? (
             <div className="bg-bg_interactive w-full flex justify-between h-1">
-              {(parentData.amountOfLikes !== 0 &&
-                parentData.amountOfDislikes !== 0) ||
+              {(parentData.amountOfDislikes !==0 && parentData.amountOfLikes !== 0) ||
                 isNaN(
                   (parentData.amountOfLikes /
                     (parentData.amountOfLikes + parentData.amountOfDislikes)) *
                   100
-                ) ? (
-                ""
-              ) : (
+                ) ?  (
                 <>
                   <span
                     className={`h-1 block w-[${(parentData.amountOfLikes /
@@ -268,7 +267,12 @@ const LikeAndDislike = ({
                       }%] bg-secondary block h-1`}
                   ></span>
                 </>
-              )}
+              ):<> {parentData.amountOfLikes === 0 ? <span
+                className={`h-1 block w-[100%]  bg-secondary`}
+              ></span> :
+              <span
+                className={`w-[100%] bg-primary block h-1`}
+              ></span>}</>}
             </div>
           ) : (
             <></>

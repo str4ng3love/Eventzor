@@ -39,7 +39,7 @@ const page = async () => {
         {/* TODO: [slugified] dynamic page for a single event */}
         <div className="lg:bg-event-hero w-full bg-cover bg-center bg-no-repeat transition-all">
           <EventCarousel
-            heading="Upcoming events"
+            heading="Newest Events"
             items={newEvents}
             darkBgAlpha={false}
             fullWidthBlur={true}

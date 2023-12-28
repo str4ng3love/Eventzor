@@ -79,19 +79,6 @@ const EventsBrowser = ({ events }: Props) => {
     <div className="lg:w-[75%] w-full bg-gradient-to-bl from-primary to-slate-900 ring-2 ring-primary flex lg:flex-col my-2 flex-row justify-between shadow-[0rem_0rem_1rem_black]">
       <div className="bg-black/50 p-4 flex xl:justify-start gap-2 lg:justify-center flex-col lg:flex-row justify-start">
         <Button
-          title="Newest"
-          text="Newest"
-          fn={(e) => {
-            if (e.currentTarget.innerHTML === selected) {
-              return;
-            } else {
-              setSelected(e.currentTarget.innerHTML);
-              getEvents(e.currentTarget.innerHTML, itemsAmount, page);
-            }
-          }}
-          bgColor={selected === "Newest" ? "bg-link underline" : "bg-link"}
-        />
-        <Button
           title="All items"
           text="All Items"
           fn={(e) => {
@@ -175,9 +162,9 @@ const EventsBrowser = ({ events }: Props) => {
                 >
                   <div className="flex">
                     <Image
-                      style={{ objectFit: "cover" }}
-                      width={150}
-                      height={150}
+                      style={{ objectFit: "cover", width:"150px", height:"auto" }}
+                      width={500}
+                      height={500}
                       placeholder="blur"
                       blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
                       alt="Events Image"

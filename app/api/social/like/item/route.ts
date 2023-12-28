@@ -10,9 +10,9 @@ async function handler(req: Request) {
   if (req.method === "GET") {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
-    console.log(id)
+
     const like = await prisma.like.findFirst({
-      where: { AND: [{ userName: session?.user?.name }, { eventId: id }] },
+      where: { AND: [{ userName: session?.user?.name }, { MarketItemId: id }] },
     });
 
     return NextResponse.json({ like });
@@ -23,7 +23,7 @@ async function handler(req: Request) {
 
   if (req.method === "POST") {
     try {
-      const comment = await prisma.event.findFirst({
+      const like = await prisma.marketItem.findFirst({
         where: {
           AND: [
             { id: body.id },
@@ -36,22 +36,23 @@ async function handler(req: Request) {
         },
       });
 
-      if (comment) {
-        return NextResponse.json({ message: "Comment already liked" });
+      if (like) {
+        return NextResponse.json({ message: "Item already liked"});
       } else {
-        const event = await prisma.event.update({
+        const item = await prisma.marketItem.update({
           where: { id: body.id },
           data: {
             likes: {
               create: {
                 user: { connect: { name: session.user?.name as string } },
               },
-            }, dislikes: { deleteMany: { userName: session.user.name } }
+            }, dislikes:{deleteMany:{userName:session.user.name}}
           },
         });
-        revalidatePath(`/events/${event.title}`, "page")
+        revalidatePath(`/market/${item.item}`, "page")
         return NextResponse.json({
-          message: "Like created successfully"
+          message: "Like created successfully",
+          like,
         });
       }
     } catch (error) {
@@ -60,11 +61,11 @@ async function handler(req: Request) {
   }
   if (req.method === "DELETE") {
     try {
-      const event = await prisma.event.update({
+      const item = await prisma.marketItem.update({
         where: { id: body.id },
         data: { likes: { deleteMany: { userName: session.user.name } } },
       });
-      revalidatePath(`/events/${event.title}`, "page")
+      revalidatePath(`/market/${item.item}`, "page")
       return NextResponse.json({ message: "Like deleted successfully" });
     } catch (error) {
       console.log(error);

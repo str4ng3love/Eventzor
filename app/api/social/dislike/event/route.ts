@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { options } from "../../../auth/[...nextauth]/options";
 import { prisma } from "@/lib/ConnectPrisma";
+import { revalidatePath } from "next/cache";
 async function handler(req: Request) {
   const session = await getServerSession(options);
   if (!session?.user?.name)
@@ -10,11 +11,11 @@ async function handler(req: Request) {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
 
-    const like = await prisma.like.findFirst({
+    const dislike = await prisma.dislike.findFirst({
       where: { AND: [{ userName: session?.user?.name }, { commentId: id }] },
     });
 
-    return NextResponse.json({ like });
+    return NextResponse.json({ dislike });
   }
   const body = await req.json();
   if (!body)
@@ -25,7 +26,7 @@ async function handler(req: Request) {
 
   if (req.method === "POST") {
     try {
-      const comment = await prisma.event.findFirst({
+      const event = await prisma.event.findFirst({
         where: {
           AND: [
             { id: body.id },
@@ -38,13 +39,13 @@ async function handler(req: Request) {
         },
       });
 
-      if (comment) {
+      if (event) {
         return NextResponse.json({
-          message: "Comment already disliked",
+          message: "Event already disliked",
  
         });
       } else {
-        const dislike = await prisma.event.update({
+        const event = await prisma.event.update({
           where: { id: body.id },
           data: {
             dislikes: {
@@ -55,6 +56,7 @@ async function handler(req: Request) {
             likes: { deleteMany: { userName: session.user.name } },
           },
         });
+        revalidatePath(`/events/${event.title}`, 'page')
         return NextResponse.json({
           message: "Dislike created successfully",
         });
@@ -69,11 +71,11 @@ async function handler(req: Request) {
   }
   if (req.method === "DELETE") {
     try {
-      const dislike = await prisma.event.update({
+      const event = await prisma.event.update({
         where: { id: body.id },
         data: { dislikes: { deleteMany: { userName: session.user.name } } },
       });
-
+      revalidatePath(`/events/${event.title}`, 'page')
       return NextResponse.json({ message: "Disike deleted successfully" });
     } catch (error) {
       console.log(error);

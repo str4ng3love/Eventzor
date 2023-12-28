@@ -187,9 +187,9 @@ const ItemsBrowser = ({ items }: Props) => {
                 >
                   <div className="flex">
                     <Image
-                      style={{ objectFit: "cover" }}
-                      width={150}
-                      height={150}
+                      style={{ objectFit: "cover", height:"auto", width:"150px" }}
+                      width={500}
+                      height={500}
                       placeholder="blur"
                       blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
                       alt="Events Image"
