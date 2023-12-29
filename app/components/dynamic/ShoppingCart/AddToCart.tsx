@@ -17,7 +17,7 @@ const AddToCart = ({ item,type, price, id }: Props) => {
   return (
     <div className="w-full flex flex-col justify-start items-center p-8 dark:text-text text-interactive_text">
       <div
-        className="flex items-center mb-8"
+        className="flex md:flex-row flex-col items-center mb-8"
         onClick={() => {
           inputEl.current?.focus();
         }}
@@ -26,7 +26,7 @@ const AddToCart = ({ item,type, price, id }: Props) => {
         <input
           ref={inputEl}
           value={amount}
-          className="xl:w-40 lg:w-24 bg-inherit focus:text-text focus:ring-0 focus:outline-none focus:bg-bg p-2 rounded-md transition-all duration-500"
+          className="xl:w-40 w-24  bg-inherit focus:text-text focus:ring-0 focus:outline-none focus:bg-bg p-2 rounded-md transition-all duration-500"
           type="number"
           min={1}
           onChange={(e) => setAmount(parseInt(e.currentTarget.value))}

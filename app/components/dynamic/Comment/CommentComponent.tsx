@@ -60,6 +60,7 @@ const CommentComponent = ({
   const [showReplies, setShowReplies] = useState(false);
   const [edit, setEdit] = useState(false);
   const { data: session } = useSession();
+
   const getReplies = async (parentId: string) => {
     try {
       const resp = await fetch(
@@ -164,9 +165,8 @@ const CommentComponent = ({
                 className="cursor-pointer flex items-center text-link rounded-md transition-all duration-300"
               >
                 <span
-                  className={`${
-                    showReplies ? "-rotate-180" : "rotate-0"
-                  } transition-all duration-300`}
+                  className={`${showReplies ? "-rotate-180" : "rotate-0"
+                    } transition-all duration-300`}
                 >
                   <BiDownArrow />
                 </span>
@@ -296,8 +296,9 @@ const CommentComponent = ({
             </div>
           )}
 
-          <div className="flex p-2 w-full gap-2">
+          <div className="flex p-2 w-full gap-2 flex-col">
             <LikeAndDislike
+              hidden={true}
               commentId={id}
               amountOfLikes={comment.likes}
               amountOfDislikes={comment.dislikes}
@@ -315,9 +316,8 @@ const CommentComponent = ({
                 className="cursor-pointer flex items-center text-link rounded-md transition-all duration-300"
               >
                 <span
-                  className={`${
-                    showReplies ? "-rotate-180" : "rotate-0"
-                  } transition-all duration-300`}
+                  className={`${showReplies ? "-rotate-180" : "rotate-0"
+                    } transition-all duration-300`}
                 >
                   <BiDownArrow />
                 </span>

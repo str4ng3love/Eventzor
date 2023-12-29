@@ -12,7 +12,7 @@ import LikeAndDislike from "@/app/components/dynamic/LikeAndDislike";
 const page = async ({params}:{params:{slug:string}}) => {
 const name = decodeURIComponent(params.slug)
   const  item  = await getItem(decodeURI(name));
-
+console.log(item)
   if (item !== null) {
     return (
       <main className="flex flex-col items-center min-h-[calc(100dvh_-_4rem)] pt-20">
@@ -24,7 +24,7 @@ const name = decodeURIComponent(params.slug)
             </div>
             <ImageBrowser images={item.images} />
           </div>
-          <div className="bg-black/20 "><LikeAndDislike itemId={item.id} amountOfLikes={item._count.likes} amountOfDislikes={item._count.dislikes} showRatioBar/></div>
+          <div className="bg-black/20 "><LikeAndDislike itemId={item.id} amountOfLikes={item._count.likes} amountOfDislikes={item._count.dislikes} /></div>
           <div className="p-4 flex flex-col justify-start rounded-md bg-bg_interactive dark:bg-black/20 row-start-3 col-span-3">
             <p className="indent-4">{item.description}</p>
           </div>
@@ -64,7 +64,7 @@ const name = decodeURIComponent(params.slug)
 
         <Heading2 text={name} />
         <Heading3 text="Item not found" />
-        <Button title="Go back" text="go back" link="/market" />
+        <Button title="Go back to Market" text="go back to Market" link="/market" />
       </main>
     );
   }

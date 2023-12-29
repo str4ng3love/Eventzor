@@ -245,7 +245,7 @@ const Reply = ({
           </div>
         )}
         <div className="flex p-2 w-full gap-2">
-          <LikeAndDislike commentId={id} amountOfLikes={amountOfLikes} amountOfDislikes={amountOfDislikes}/>
+          <LikeAndDislike commentId={id} amountOfLikes={amountOfLikes} amountOfDislikes={amountOfDislikes} hidden/>
           <AddComment  title="Reply" reply parentId={reply.id} callback={()=>setReply((prev)=>({...prev, amountOfReplies: amountOfReplies+1}))}/>
         </div>
         {reply.amountOfReplies && reply.amountOfReplies > 0 ? (

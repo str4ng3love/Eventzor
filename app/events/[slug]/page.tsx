@@ -74,7 +74,7 @@ const title = decodeURIComponent(params.slug)
 
         <Heading2 text={title} />
         <Heading3 text="event not found" />
-        <Button title="Go back" text="go back" link="/events" />
+        <Button title="Go back to Events" text="go back to Events" link="/events" />
       </main>
     );
   }

@@ -12,7 +12,7 @@ interface Props {
   itemId?: string;
   amountOfLikes: number;
   amountOfDislikes: number;
-  showRatioBar?: boolean;
+  hidden?: boolean;
 }
 const LikeAndDislike = ({
   commentId,
@@ -20,7 +20,7 @@ const LikeAndDislike = ({
   itemId,
   amountOfLikes,
   amountOfDislikes,
-  showRatioBar,
+  hidden=false
 }: Props) => {
   const [parentData, setParentData] = useState({
     commentId,
@@ -39,7 +39,7 @@ const LikeAndDislike = ({
     if (session?.user) {
       try {
         const { urlPart, id } = getIDType(commentId, eventId, itemId);
-        
+
         const searchParams = new URLSearchParams({ id, type: urlPart });
         const resp = await fetch(`/api/social?` + searchParams);
         const data = await resp.json();
@@ -62,7 +62,7 @@ const LikeAndDislike = ({
     }
   };
   const handleLike = async () => {
-    
+
     try {
       setWorking(true);
       if (!liked && disliked) {
@@ -75,16 +75,16 @@ const LikeAndDislike = ({
 
         setParentData((prev) => ({
           ...prev,
-          amountOfLikes: (prev.amountOfLikes -=1),
+          amountOfLikes: (prev.amountOfLikes -= 1),
         }));
       } else {
-    
+
         setParentData((prev) => ({
           ...prev,
-          amountOfLikes: (prev.amountOfLikes +=1),
+          amountOfLikes: (prev.amountOfLikes += 1),
         }));
       }
-     
+
       if (disliked) {
         setDisliked(false);
       }
@@ -94,14 +94,14 @@ const LikeAndDislike = ({
         parentData.eventId,
         parentData.itemId
       );
-    
+
       const resp = await fetch(`/api/social/like/${urlPart}`, {
         method: liked ? "DELETE" : "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ id }),
       });
       const data = await resp.json();
-      
+
       setWorking(false);
     } catch (error) {
       setWorking(false);
@@ -154,7 +154,7 @@ const LikeAndDislike = ({
   };
 
   useEffect(() => {
-    
+
     CheckStatus();
   }, []);
   return (
@@ -242,41 +242,27 @@ const LikeAndDislike = ({
               </div>
             </>
           )}
-          {showRatioBar ? (
-            <div className="bg-bg_interactive w-full flex justify-between h-1">
-              {(parentData.amountOfDislikes !==0 && parentData.amountOfLikes !== 0) ||
-                isNaN(
-                  (parentData.amountOfLikes /
-                    (parentData.amountOfLikes + parentData.amountOfDislikes)) *
-                  100
-                ) ?  (
-                <>
-                  <span
-                    className={`h-1 block w-[${(parentData.amountOfLikes /
-                        (parentData.amountOfLikes +
-                          parentData.amountOfDislikes)) *
-                      100
-                      }%]  bg-primary`}
+
+          <div className={`bg-bg_interactive w-full flex justify-between h-1 ${hidden ? "hidden": ""}`}>
+            {parentData.amountOfLikes === 0 && parentData.amountOfDislikes === 0 ? "" :
+              <>
+               
+                  <span className={`h-1 block w-[${((parentData.amountOfLikes /
+                  (parentData.amountOfLikes +
+                    parentData.amountOfDislikes)) *
+                  100).toFixed(0)
+                    }%]  bg-primary`}
                   ></span>
-                  <span
-                    className={`w-[${100 -
-                      (parentData.amountOfLikes /
-                        (parentData.amountOfLikes +
-                          parentData.amountOfDislikes)) *
-                      100
-                      }%] bg-secondary block h-1`}
+                <span className={`h-1 block w-[${((parentData.amountOfDislikes /
+                  (parentData.amountOfLikes +
+                    parentData.amountOfDislikes)) *
+                  100).toFixed(0)
+                    }%]  bg-secondary`}
                   ></span>
-                </>
-              ):<> {parentData.amountOfLikes === 0 ? <span
-                className={`h-1 block w-[100%]  bg-secondary`}
-              ></span> :
-              <span
-                className={`w-[100%] bg-primary block h-1`}
-              ></span>}</>}
-            </div>
-          ) : (
-            <></>
-          )}
+              
+              </>}
+          </div>
+
         </>
       )}
       {showLogin ? (
@@ -290,3 +276,34 @@ const LikeAndDislike = ({
 };
 
 export default LikeAndDislike;
+
+
+// {(parentData.amountOfDislikes !==0 && parentData.amountOfLikes !== 0) ||
+//   isNaN(
+//     (parentData.amountOfLikes /
+//       (parentData.amountOfLikes + parentData.amountOfDislikes)) *
+//     100
+//   ) ?  (
+//   <>
+//     <span
+//       className={`h-1 block w-[${(parentData.amountOfLikes /
+//           (parentData.amountOfLikes +
+//             parentData.amountOfDislikes)) *
+//         100
+//         }%]  bg-primary`}
+//     ></span>
+//     <span
+//       className={`w-[${100 -
+//         (parentData.amountOfLikes /
+//           (parentData.amountOfLikes +
+//             parentData.amountOfDislikes)) *
+//         100
+//         }%] bg-secondary block h-1`}
+//     ></span>
+//   </>
+// ):<> {parentData.amountOfLikes === 0 ? <span
+//   className={`h-1 block w-[100%]  bg-secondary`}
+// ></span> :
+// <span
+//   className={`w-[100%] bg-primary block h-1`}
+// ></span>}</>}

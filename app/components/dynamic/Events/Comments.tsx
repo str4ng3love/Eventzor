@@ -2,14 +2,16 @@
 import AddComment from "../Comment/AddComment";
 import { prisma } from "@/lib/ConnectPrisma";
 import CommentComponent from "../Comment/CommentComponent";
-
+import { unstable_noStore as noStore } from 'next/cache';
 
 interface Props {
   eventId: string;
 }
-const getComments = async (id: string) => {
 
+const getComments = async (id: string) => {
+noStore()
     try {
+      
       const comments = prisma.comment.findMany({
         where: { eventId: id },
         orderBy: { createdAt: "desc" },
