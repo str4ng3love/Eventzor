@@ -8,6 +8,7 @@ interface Props {
   interactive?: boolean;
   title: string;
   size?: string;
+  active?: boolean;
 }
 const Button = ({
   fn,
@@ -17,6 +18,8 @@ const Button = ({
   interactive = true,
   title,
   size = "text-base",
+  active = false
+
 }: Props) => {
   return (
     <>
@@ -24,11 +27,9 @@ const Button = ({
         <Link href={link}>
           <button
             title={title}
-            className={`${size} whitespace-nowrap cursor-default first-letter:capitalize min-w-[11ch] font-bold p-2 ${bgColor} text-interactive_text dark:text-text rounded-xl ${
-              interactive
-                ? "cursor-pointer hover:-translate-y-1 hover:scale-105 hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-300"
+            className={`${bgColor} ${active ? "dark:text-interactive_text text-text bg-text" : "text-interactive_text dark:text-text"} ${size} whitespace-nowrap cursor-default first-letter:capitalize min-w-[11ch] font-bold p-2 rounded-xl ${interactive ? "cursor-pointer hover:-translate-y-1 hover:scale-105 hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-300"
                 : ""
-            }`}
+              }`}
             onClick={(e) => fn(e)}
           >
             {text}
@@ -40,11 +41,9 @@ const Button = ({
       {fn && !link ? (
         <button
           title={title}
-          className={`${size} whitespace-nowrap cursor-default first-letter:capitalize min-w-[11ch] font-bold p-2 ${bgColor} text-interactive_text dark:text-text rounded-xl ${
-            interactive
-              ? "cursor-pointer hover:-translate-y-1 hover:scale-105 hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-300"
-              : ""
-          }`}
+          className={`${bgColor} ${active ? "dark:text-interactive_text text-text bg-text" : "text-interactive_text dark:text-text"} ${size} whitespace-nowrap cursor-default first-letter:capitalize min-w-[11ch] font-bold p-2 rounded-xl ${interactive ? "cursor-pointer hover:-translate-y-1 hover:scale-105 hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-300"
+          : ""
+        }`}
           onClick={(e) => fn(e)}
         >
           {text}
@@ -56,11 +55,9 @@ const Button = ({
         <Link
           title={title}
           href={link}
-          className={`${size} whitespace-nowrap text-center first-letter:capitalize min-w-[11ch] font-bold p-2 ${bgColor} text-interactive_text dark:text-text rounded-xl ${
-            interactive
-              ? "cursor-pointer hover:-translate-y-1 hover:scale-105 hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-300"
-              : ""
-          }`}
+          className={`${bgColor} ${active ? "dark:text-interactive_text text-text bg-text" : "text-interactive_text dark:text-text"} ${size} whitespace-nowrap cursor-default first-letter:capitalize min-w-[11ch] font-bold p-2 rounded-xl ${interactive ? "cursor-pointer hover:-translate-y-1 hover:scale-105 hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-300"
+          : ""
+        }`}
         >
           {text}
         </Link>

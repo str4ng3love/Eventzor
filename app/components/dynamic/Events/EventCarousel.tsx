@@ -103,7 +103,7 @@ const EventCarousel = ({
             </span>
             <div className=" w-full h-full flex justify-between ring-2 ring-primary shadow-omni">
               <Link
-                href={"/events/" + encodeURIComponent(items[active].title)}
+                href={"/event/" + encodeURIComponent(items[active].title)}
                 title={items[active].title}
                 className={`relative group lg:w-[67%] w-full overflow-hidden  bg-black`}
               >

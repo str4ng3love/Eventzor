@@ -6,14 +6,15 @@ import Button from "./Button";
 import { Dialog, Transition } from "@headlessui/react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import RegisterForm from "./RegisterForm";
+
 
 
 interface Props {
   show?: boolean;
-  cleanUp?: ()=>void
+  cleanUp?: ()=>void;
+
 }
-const LoginForm = ({show=false, cleanUp}:Props) => {
+const LoginForm = ({show=false, cleanUp }:Props) => {
 
   const [isOpen, setOpen] = useState(show);
   const [username, setUsername] = useState("");
@@ -34,17 +35,8 @@ const LoginForm = ({show=false, cleanUp}:Props) => {
     if (resp?.error) {
       setNotify({ error: true, show: true, message: "Invalid Credentials" });
     } else {
-      setNotify({
-        error: false,
-        show: true,
-        message: "Logged in Successfully",
-      });
-      setTimeout(() => {
-        setOpen(false);
-        setNotify({ error: false, message: "", show: false });
-     
-        router.refresh()
-      }, 2000);
+    
+      router.refresh()
     }
   };
 useEffect(()=>{
@@ -54,7 +46,7 @@ useEffect(()=>{
 }, [isOpen])
   return (
     <>
-      {show? <></>: <Button title="Log in" text="log in" fn={() => setOpen(true)} />}
+      {show? <></>: <Button title="Log in" text="log in" fn={() => {setOpen(true)}} />}
 
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog
@@ -112,14 +104,7 @@ useEffect(()=>{
                   />
                   <Button title="Cancel" text="Cancel" fn={() => setOpen(false)}></Button>
                 </div>
-             
-                <div className="flex flex-col justify-around pt-8 ">
-             
-             <span className="p-4">Don&apos;t have an account?</span>
-            <RegisterForm />
-                </div>
-              </Dialog.Panel>
-              <Notification
+            <Notification
                   message={notify.message}
                   show={notify.show}
                   error={notify.error}
@@ -127,8 +112,14 @@ useEffect(()=>{
                     setNotify({ error: false, message: "", show: false })
                   }
                 />
+             
+                <div className="flex flex-col justify-around pt-8 ">
+             
+             <span className="p-4">Don&apos;t have an account?</span>
+                </div>
+              </Dialog.Panel>
+           
             </div>
-        
           </Transition.Child>
     
         </Dialog>

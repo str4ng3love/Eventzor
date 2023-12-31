@@ -1,11 +1,17 @@
 "use client";
-import { useState, Fragment } from "react";
+import { useState, Fragment, useEffect } from "react";
 import Button from "./Button";
 import { Dialog, Transition } from "@headlessui/react";
 import Notification from "../static/Notification";
 import { NotificationObj } from "../static/Notification";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
-const RegisterForm = () => {
+interface Props {
+  show?: boolean;
+  cleanUp?: ()=>void;
+}
+const RegisterForm = ({cleanUp,show}:Props) => {
   const [isOpen, setOpen] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -16,6 +22,7 @@ const RegisterForm = () => {
     message: "",
     show: false,
   });
+  const router = useRouter()
   const handleRegister = async (
     username: string,
     password: string,
@@ -30,11 +37,26 @@ const RegisterForm = () => {
       body: JSON.stringify({ username, password, confirm, email }),
     });
     const respParsed = await resp.json();
-    respParsed.message
-      ? setNotify({ show: true, message: respParsed.message, error: false })
-      : setNotify({ show: true, message: respParsed.error, error: true });
+    if(respParsed.error){
+      setNotify({show:true, error:true, message:respParsed.error.message})
+    } else {
+      const resp = await signIn("credentials", {
+        username,
+        password,
+        redirect: false,
+      });
+      if(resp?.error){
+          setNotify({show:true, error:true, message:"Something went wrong."})
+      } else {
+        router.refresh()
+      }
+    }
   };
-
+  useEffect(()=>{
+    if(cleanUp && !isOpen){
+      cleanUp()
+    }
+  }, [isOpen])
   return (
     <>
       <Button title="Register an account" text="register" fn={() => setOpen(true)} />
@@ -101,18 +123,11 @@ const RegisterForm = () => {
                     />
                   </div>
                 </form>
-                <Notification
-                  message={notify.message}
-                  show={notify.show}
-                  error={notify.error}
-                  onAnimEnd={() =>
-                    setNotify({ error: false, message: "", show: false })
-                  }
-                />
+
 
                 <div className="flex justify-around pt-8">
                   <Button
-                  title="Register"
+                    title="Register"
                     text="register"
                     fn={() => {
                       handleRegister(username, password, confirm, email);
@@ -120,10 +135,25 @@ const RegisterForm = () => {
                   />
                   <Button title="Cancel registration" text="Cancel" fn={() => setOpen(false)}></Button>
                 </div>
+                <Notification
+                  message={notify.message}
+                  show={notify.show}
+                  error={notify.error}
+                  onAnimEnd={() => { setNotify({ error: false, message: "", show: false }); setOpen(false) }
+                  }
+                />
+                 <div className="flex flex-col justify-around pt-8 ">
+             
+             <span className="p-4">Already have an account?</span>
+       
+                </div>
               </Dialog.Panel>
             </div>
+
           </Transition.Child>
+
         </Dialog>
+
       </Transition>
     </>
   );

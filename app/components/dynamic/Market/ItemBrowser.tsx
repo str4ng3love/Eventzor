@@ -171,7 +171,7 @@ const ItemsBrowser = ({ items }: Props) => {
           }
         />
       </div>
-      <div className="flex flex-col p-4 justify-start xl:mx-0 mx-2 transition-all duration-300 h-[50rem]">
+      <div className="flex flex-col p-4 justify-start xl:mx-0 mx-2 transition-all duration-300 min-h-[50rem]">
         {isLoadinig ? (
           <div className="flex justify-center items-center mt-10 w-full">
             <SpinnerMini />
