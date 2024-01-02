@@ -11,13 +11,13 @@ interface Props {
   bgColor?: string;
 }
 
-const DropDown = ({ items, title, fn, bgColor = " bg-link" }: Props) => {
+const DropDown = ({ items, title, fn, bgColor = "bg-link", size='text-base' }: Props) => {
   return (
     <div className="">
       {/* Prop `id` did not match. Server: "headlessui-menu-button-:R6crb9mcq:" Client: "headlessui-menu-button-:Rpjdd6pj9:"  || Next.js Error as of 10.08.23, should be fixed in upcoming release.||Resolved */}
       <Menu>
         <Menu.Button
-          className={` first-letter:capitalize min-w-[10ch] hover:-translate-y-1 hover:scale-105 font-bold p-2 ${bgColor} text-interactive_text dark:text-text rounded-xl hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-300`}
+          className={` first-letter:capitalize min-w-[10ch] hover:-translate-y-1 hover:scale-105 font-bold p-2 ${size} ${bgColor} text-interactive_text dark:text-text rounded-xl hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-300`}
         >
           <>{title}</>
         </Menu.Button>

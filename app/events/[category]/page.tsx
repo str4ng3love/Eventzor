@@ -5,10 +5,12 @@ import { Prisma } from "@prisma/client";
 import { notFound } from "next/navigation";
 
 
-const page = async ({ params }: { params: { category: string } }) => {
+const page = async ({ params, searchParams }: { params: { category: string }, searchParams: { [key: string]: string | string[] | undefined } }) => {
 
-    const getEventsAndAmount = async (query: Prisma.EventFindManyArgs|null) => {
-        if(query === null){
+    const getEventsAndAmount = async (query: Prisma.EventFindManyArgs | null) => {
+        console.log(`Skipping: ${range * page} positions, taking: ${range} documents`)
+       
+        if (query === null) {
             return notFound()
         }
         const [events, count] = await prisma.$transaction([
@@ -21,16 +23,23 @@ const page = async ({ params }: { params: { category: string } }) => {
     }
     const category = decodeURIComponent(params.category)
     let queryOptions
+
+    
+
+    const page = typeof searchParams.page === "string" ? parseInt(searchParams.page)-1 : 0
+    const range = typeof searchParams.range === "string" ? parseInt(searchParams.range) : 10
+
+
     switch (category) {
         case "popular":
             const queryPopular: Prisma.EventFindManyArgs = {
-                where: { images: { isEmpty: false } }, take: 10
+                where: { images: { isEmpty: false } }, skip: range*page ,take: range
             }
             queryOptions = queryPopular
             break;
         case "most-liked":
             const queryLiked: Prisma.EventFindManyArgs = {
-                where: { images: { isEmpty: false } }, take: 10, orderBy: {
+                where: { images: { isEmpty: false } }, skip: range*page ,take: range, orderBy: {
                     likes: {
                         _count: "desc"
                     }
@@ -40,31 +49,29 @@ const page = async ({ params }: { params: { category: string } }) => {
             break;
         case "upcoming":
             const queryUpcoming: Prisma.EventFindManyArgs = {
-                where: { images: { isEmpty: false } }, take: 10, orderBy: { ticketsSold: "desc" }
+                where: { images: { isEmpty: false } }, skip: range*page ,take: range, orderBy: { ticketsSold: "desc" }
             }
             queryOptions = queryUpcoming
             break;
         case "sales-ending":
             const querySalesEnding: Prisma.EventFindManyArgs = {
-                where: { images: { isEmpty: false } }, take: 10, orderBy: { closingDate: 'asc' },
+                where: { images: { isEmpty: false } }, skip: range*page ,take: range, orderBy: { closingDate: 'asc' },
             }
             queryOptions = querySalesEnding
             break;
         case "all-items":
 
             const queryAll: Prisma.EventFindManyArgs = {
-                where: { images: { isEmpty: false } }, take: 10, orderBy: { title: "asc" }
+                where: { images: { isEmpty: false } }, skip: range*page ,take: range, orderBy: { title: "asc" }
             }
             queryOptions = queryAll
             break;
         default:
-            
+
             queryOptions = null
             break;
     }
-   
-    
-    
+
     const { events, count } = await getEventsAndAmount(queryOptions)
     if (events.length === 0) {
         return (
@@ -79,6 +86,7 @@ const page = async ({ params }: { params: { category: string } }) => {
 
                 {/* TODO: Event browser with sorting, pagination etc */}
                 <EventsBrowser events={events} count={count} selectedCategory={category.replace("-", " ")} />
+                
             </>
         );
     }

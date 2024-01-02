@@ -6,9 +6,10 @@ import Button from "../Button";
 import Link from "next/link";
 import Image from "next/image";
 import SpinnerMini from "../../static/SpinnerMini";
-import PaginationButton from "../PaginationButton";
-import { useRouter } from "next/navigation";
-
+import PaginationButtons from "../PaginationButtons";
+import { useRouter, useSearchParams } from "next/navigation";
+import DropDown from "../DropDown";
+import placeholder from '@/public/images/placeholder.svg'
 interface Props {
   events: Event[];
   count: number;
@@ -17,13 +18,15 @@ interface Props {
 // todo: generic- finish up
 
 const EventsBrowser = ({ events, count, selectedCategory }: Props) => {
+  const searchParams = useSearchParams()
+  let currentPage = searchParams.get("page")
+  let currentRange = searchParams.get("range")
   const [eventsArr, setEventsArr] = useState(events);
   const [selected, setSelected] = useState(selectedCategory);
   const [isLoadinig, setIsLoading] = useState(false);
-  const [page, setPage] = useState(1);
-  const [itemsAmount, setItemsAmount] = useState(10);
+  const [page, setPage] = useState(currentPage ? parseInt(currentPage) : 1);
   const [currency, setCurrency] = useState({ name: "initial", rate: 1 });
-
+  const [range, setRange] = useState(currentRange ? parseInt(currentRange) : 10)
   const router = useRouter()
 
 
@@ -47,7 +50,11 @@ const EventsBrowser = ({ events, count, selectedCategory }: Props) => {
       window.removeEventListener("currency", () => { });
     };
   }, []);
-
+  useEffect(() => {
+    setEventsArr(events)
+    currentPage = searchParams.get("page")
+    setPage(parseInt(currentPage ? currentPage : "1"))
+  }, [events])
   useEffect(() => {
     let prefCurrency = localStorage.getItem("currency");
     if (prefCurrency) {
@@ -65,9 +72,10 @@ const EventsBrowser = ({ events, count, selectedCategory }: Props) => {
     }
   }, []);
 
-  return (
-    <div className="lg:w-[75%] w-full bg-gradient-to-bl from-primary to-slate-900 ring-2 ring-primary flex lg:flex-col flex-row justify-between shadow-[0rem_0rem_1rem_black] my-12">
+  return (<>
+    <div className="lg:w-[75%] w-full bg-gradient-to-bl from-primary to-slate-900 ring-2 ring-primary flex lg:flex-col flex-row justify-between shadow-[0rem_0rem_1rem_black] mt-12 pb-12">
       <div className="bg-black/50 p-4 flex xl:justify-start gap-2 lg:justify-center flex-col lg:flex-row justify-start">
+
         <Button
           title="All items"
           text="All Items"
@@ -77,7 +85,8 @@ const EventsBrowser = ({ events, count, selectedCategory }: Props) => {
               return;
             } else {
               setSelected(e.currentTarget.innerHTML);
-              router.push("/events/all-items", { scroll: false });
+              let searchParams = new URLSearchParams({ page: `1`, range: `${range}` })
+              router.push("/events/all-items" + "?" + searchParams, { scroll: false });
             }
           }}
           bgColor="bg-link"
@@ -91,7 +100,8 @@ const EventsBrowser = ({ events, count, selectedCategory }: Props) => {
               return;
             } else {
               setSelected(e.currentTarget.innerHTML);
-              router.push("/events/popular", { scroll: false });
+              let searchParams = new URLSearchParams({ page: `1`, range: `${range}` })
+              router.push("/events/popular" + "?" + searchParams, { scroll: false });
             }
           }}
           bgColor="bg-link"
@@ -99,8 +109,17 @@ const EventsBrowser = ({ events, count, selectedCategory }: Props) => {
         <Button
           title="Most liked"
           text="Most Liked"
-          fn={() => router.push("/events/most-liked", { scroll: false })}
-          bgColor={selected?.toLowerCase() === "Mmost liked" ? "bg-link underline" : "bg-link"}
+          active={selected?.toLowerCase() === "most liked"}
+          fn={(e) => {
+            if (e.currentTarget.innerHTML === selected) {
+              return;
+            } else {
+              setSelected(e.currentTarget.innerHTML);
+              let searchParams = new URLSearchParams({ page: `1`, range: `${range}` })
+              router.push("/events/most-liked" + "?" + searchParams, { scroll: false });
+            }
+          }}
+          bgColor="bg-link"
         />
         <Button
           title="Upcoming"
@@ -111,7 +130,8 @@ const EventsBrowser = ({ events, count, selectedCategory }: Props) => {
               return;
             } else {
               setSelected(e.currentTarget.innerHTML);
-              router.push("/events/upcoming", { scroll: false });
+              let searchParams = new URLSearchParams({ page: `1`, range: `${range}` })
+              router.push("/events/upcoming" + "?" + searchParams, { scroll: false });
             }
           }}
           bgColor="bg-link"
@@ -125,11 +145,15 @@ const EventsBrowser = ({ events, count, selectedCategory }: Props) => {
               return;
             } else {
               setSelected(e.currentTarget.innerHTML);
-              router.push("/events/sales-ending", { scroll: false });
+              let searchParams = new URLSearchParams({ page: `1`, range: `${range}` })
+              router.push("/events/sales-ending" + "?" + searchParams, { scroll: false });
             }
           }}
           bgColor="bg-link"
         />
+        <div className="flex items-center justify-center ">
+          <DropDown fn={(e) => { setRange(parseInt(e.currentTarget.innerHTML)); let searchParams = new URLSearchParams({ range: e.currentTarget.innerHTML}); router.push(`/events/${selected?.toLowerCase().replace(" ", "-")}` + "?" + searchParams, { scroll: false }) }} items={["10", "25", "50"]} title={`show: ${range}`} size="text-sm" bgColor="" />
+        </div>
       </div>
       <div className="flex flex-col p-4 justify-start xl:mx-0 mx-2 transition-all duration-300 min-h-[50rem] my-2">
         {isLoadinig ? (
@@ -151,7 +175,7 @@ const EventsBrowser = ({ events, count, selectedCategory }: Props) => {
                       width={500}
                       height={500}
                       placeholder="blur"
-                      blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+                      blurDataURL={"data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkOAMAANIAzr59FiYAAAAASUVORK5CYII="}
                       alt="Events Image"
                       src={e.images[0]}
                     />
@@ -198,14 +222,14 @@ const EventsBrowser = ({ events, count, selectedCategory }: Props) => {
           </>
         )}
       </div>
-      {count > 10 ?
-        <div className="p-2 bg-black/50 flex justify-center items-center">
-
-          <PaginationButton fetchPage={() => { }} count={count} limit={10} />
-
-        </div> : <></>}
 
     </div>
+    {count > 10 ?
+      <div className="p-2 bg-black/50 justify-center items-center flex gap-2 -translate-y-14">
+
+        <PaginationButtons handleClick={(e, i) => { setPage(i); let searchParams = new URLSearchParams({ page: `${i}`, range: `${range}` }); router.push(`/events/${selected?.toLowerCase().replace(" ", "-")}` + "?" + searchParams, { scroll: false }) }} count={count} limit={range} activePage={page} />
+
+      </div> : <></>}</>
   );
 };
 

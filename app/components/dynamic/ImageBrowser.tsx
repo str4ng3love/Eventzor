@@ -4,8 +4,10 @@ import { useState } from "react";
 import Image from "next/image";
 
 
+
 interface Props {
   images: string[];
+
 }
 const ImageBrowser = ({ images }: Props) => {
   const [selected, setSelected] = useState(0);
@@ -20,6 +22,7 @@ const ImageBrowser = ({ images }: Props) => {
   };
   return (
     <div className="w-full h-[400px] relative shadow-omni dark:shadow-none ring-2 ring-primary">
+
       <Image
         onClick={() => {}}
         fill
@@ -40,7 +43,7 @@ const ImageBrowser = ({ images }: Props) => {
           key={index}
             onClick={() => handleChange(index)}
             placeholder="blur"
-            blurDataURL="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkOAMAANIAzr59FiYAAAAASUVORK5CYII="
+            blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
             width={70}
             height={50}
             style={{ objectFit: "cover" }}

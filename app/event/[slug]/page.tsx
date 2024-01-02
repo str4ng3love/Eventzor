@@ -13,8 +13,8 @@ const page = async ({params}:{params:{slug:string}}) => {
 const title = decodeURIComponent(params.slug)
 
   const  event  = await getEvent(decodeURI(title));
- 
   if (event !== null) {
+
     return (
       <main className="flex flex-col items-center min-h-[calc(100dvh_-_4rem)] pt-20">
         <div className="grid grid-cols-3 justify-between lg:w-[80%] lg:gap-4 gap-2 w-full p-4 transition-all duration-300 ">
@@ -24,9 +24,10 @@ const title = decodeURIComponent(params.slug)
               <span>{event.eventDate.toUTCString().slice(0, -7)}&nbsp;GMT</span>
               <span>{event.location}</span>
             </div>
-            <ImageBrowser images={event.images} />
+    
+            <ImageBrowser images={event.images}  />
           </div>
-          <div className="bg-black/20 flex  justify-center"><LikeAndDislike eventId={event.id} amountOfLikes={event._count.likes} amountOfDislikes={event._count.dislikes} showRatioBar/>
+          <div className="bg-black/20 flex  justify-center"><LikeAndDislike eventId={event.id} amountOfLikes={event._count.likes} amountOfDislikes={event._count.dislikes}/>
           </div>
           <div className="p-4 flex flex-col justify-start rounded-md bg-bg_interactive dark:bg-black/20 row-start-3 col-span-3">
             <p className="indent-4">{event.description}</p>
