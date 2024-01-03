@@ -9,25 +9,29 @@ import SpinnerMini from "../../static/SpinnerMini";
 import PaginationButtons from "../PaginationButtons";
 import { useRouter, useSearchParams } from "next/navigation";
 import DropDown from "../DropDown";
-import placeholder from '@/public/images/placeholder.svg'
+import { FaArrowDown, FaArrowUp } from 'react-icons/fa'
+
 interface Props {
   events: Event[];
   count: number;
   selectedCategory?: string
+  orderAsc?: boolean
 }
 // todo: generic- finish up
 
-const EventsBrowser = ({ events, count, selectedCategory }: Props) => {
+const EventsBrowser = ({ events, count, selectedCategory = "all-items", orderAsc = true }: Props) => {
+  const router = useRouter()
   const searchParams = useSearchParams()
   let currentPage = searchParams.get("page")
   let currentRange = searchParams.get("range")
+
   const [eventsArr, setEventsArr] = useState(events);
   const [selected, setSelected] = useState(selectedCategory);
   const [isLoadinig, setIsLoading] = useState(false);
   const [page, setPage] = useState(currentPage ? parseInt(currentPage) : 1);
   const [currency, setCurrency] = useState({ name: "initial", rate: 1 });
-  const [range, setRange] = useState(currentRange ? parseInt(currentRange) : 10)
-  const router = useRouter()
+  const [range, setRange] = useState(currentRange ? Math.abs(parseInt(currentRange)) : 10)
+  const [asc, setAsc] = useState(orderAsc)
 
 
   useEffect(() => {
@@ -53,8 +57,9 @@ const EventsBrowser = ({ events, count, selectedCategory }: Props) => {
   useEffect(() => {
     setEventsArr(events)
     currentPage = searchParams.get("page")
-    setPage(parseInt(currentPage ? currentPage : "1"))
+    setPage(Math.abs(parseInt(currentPage ? currentPage : "1")))
   }, [events])
+
   useEffect(() => {
     let prefCurrency = localStorage.getItem("currency");
     if (prefCurrency) {
@@ -77,82 +82,110 @@ const EventsBrowser = ({ events, count, selectedCategory }: Props) => {
       <div className="bg-black/50 p-4 flex xl:justify-start gap-2 lg:justify-center flex-col lg:flex-row justify-start">
 
         <Button
-          title="All items"
-          text="All Items"
+          title={`All items ${!asc ? "ascending" : "descending"}`}
+          text={`All Items`}
+          Icon={asc ?  FaArrowUp : FaArrowDown}
           active={selected?.toLowerCase() === "all items"}
           fn={(e) => {
-            if (e.currentTarget.innerHTML === selected) {
-              return;
+            let searchParams
+            if (selected?.toLowerCase() === "all items") {
+
+              searchParams = new URLSearchParams({ page: `1`, range: `${range}`, order: `${asc ? "desc": "asc"}` })
+              setAsc(!asc)
             } else {
-              setSelected(e.currentTarget.innerHTML);
-              let searchParams = new URLSearchParams({ page: `1`, range: `${range}` })
-              router.push("/events/all-items" + "?" + searchParams, { scroll: false });
+              setSelected(e.currentTarget.innerHTML.split("<")[0]);
+              setAsc(true)
+              searchParams = new URLSearchParams({ page: `1`, range: `${range}`, order: "asc" })
             }
+            router.push("/events/all-items" + "?" + searchParams, { scroll: false });
+
           }}
           bgColor="bg-link"
         />
         <Button
-          title="Popular"
+          title={`Popular ${!asc ? "ascending" : "descending"}`}
           text="Popular"
+          Icon={asc ?  FaArrowUp : FaArrowDown}
           active={selected?.toLowerCase() === "popular"}
           fn={(e) => {
-            if (e.currentTarget.innerHTML === selected) {
-              return;
+            let searchParams
+            if (selected?.toLowerCase() === "popular") {
+              searchParams = new URLSearchParams({ page: `1`, range: `${range}`, order: `${asc ? "desc": "asc"}` })
+              setAsc(!asc)
             } else {
-              setSelected(e.currentTarget.innerHTML);
-              let searchParams = new URLSearchParams({ page: `1`, range: `${range}` })
-              router.push("/events/popular" + "?" + searchParams, { scroll: false });
+              setSelected(e.currentTarget.innerHTML.split("<")[0]);
+              setAsc(true)
+              searchParams = new URLSearchParams({ page: `1`, range: `${range}`, order: "asc" })
             }
+            router.push("/events/popular" + "?" + searchParams, { scroll: false });
           }}
           bgColor="bg-link"
         />
         <Button
-          title="Most liked"
+          title={`Most liked  ${!asc ? "ascending" : "descending"}`}
           text="Most Liked"
+          Icon={asc ?  FaArrowUp : FaArrowDown}
           active={selected?.toLowerCase() === "most liked"}
           fn={(e) => {
-            if (e.currentTarget.innerHTML === selected) {
-              return;
+            let searchParams
+            if (selected?.toLowerCase() === "most liked") {
+
+              searchParams = new URLSearchParams({ page: `1`, range: `${range}`, order: `${asc ? "desc": "asc"}` })
+              setAsc(!asc)
             } else {
-              setSelected(e.currentTarget.innerHTML);
-              let searchParams = new URLSearchParams({ page: `1`, range: `${range}` })
-              router.push("/events/most-liked" + "?" + searchParams, { scroll: false });
+              setSelected(e.currentTarget.innerHTML.split("<")[0]);
+              setAsc(true)
+              searchParams = new URLSearchParams({ page: `1`, range: `${range}`, order: "asc" })
             }
+            router.push("/events/most-liked" + "?" + searchParams, { scroll: false });
+
           }}
           bgColor="bg-link"
         />
         <Button
-          title="Upcoming"
+          title={`Upcoming ${!asc ? "ascending" : "descending"}`}
           text="Upcoming"
+          Icon={asc ?  FaArrowUp : FaArrowDown}
           active={selected?.toLowerCase() === "upcoming"}
           fn={(e) => {
-            if (e.currentTarget.innerHTML === selected) {
-              return;
+            let searchParams
+            if (selected?.toLowerCase() === "upcoming") {
+
+              searchParams = new URLSearchParams({ page: `1`, range: `${range}`, order: `${asc ? "desc": "asc"}` })
+              setAsc(!asc)
             } else {
-              setSelected(e.currentTarget.innerHTML);
-              let searchParams = new URLSearchParams({ page: `1`, range: `${range}` })
-              router.push("/events/upcoming" + "?" + searchParams, { scroll: false });
+              setSelected(e.currentTarget.innerHTML.split("<")[0]);
+              setAsc(true)
+              searchParams = new URLSearchParams({ page: `1`, range: `${range}`, order: "asc" })
             }
+            router.push("/events/upcoming" + "?" + searchParams, { scroll: false });
+
           }}
           bgColor="bg-link"
         />
         <Button
-          title="Sales ending"
+          title={`Sales Ending ${!asc ? "ascending" : "descending"}`}
           text="Sales Ending"
+          Icon={asc ?  FaArrowUp : FaArrowDown}
           active={selected?.toLocaleLowerCase() === "sales ending"}
           fn={(e) => {
-            if (e.currentTarget.innerHTML === selected) {
-              return;
+            let searchParams
+            if (selected?.toLowerCase() === "sales ending") {
+
+              searchParams = new URLSearchParams({ page: `1`, range: `${range}`, order: `${asc ? "desc": "asc"}` })
+              setAsc(!asc)
             } else {
-              setSelected(e.currentTarget.innerHTML);
-              let searchParams = new URLSearchParams({ page: `1`, range: `${range}` })
-              router.push("/events/sales-ending" + "?" + searchParams, { scroll: false });
+              setSelected(e.currentTarget.innerHTML.split("<")[0]);
+              setAsc(true)
+              searchParams = new URLSearchParams({ page: `1`, range: `${range}`, order: "asc" })
             }
+            router.push("/events/sales-ending" + "?" + searchParams, { scroll: false });
+
           }}
           bgColor="bg-link"
         />
         <div className="flex items-center justify-center ">
-          <DropDown fn={(e) => { setRange(parseInt(e.currentTarget.innerHTML)); let searchParams = new URLSearchParams({ range: e.currentTarget.innerHTML}); router.push(`/events/${selected?.toLowerCase().replace(" ", "-")}` + "?" + searchParams, { scroll: false }) }} items={["10", "25", "50"]} title={`show: ${range}`} size="text-sm" bgColor="" />
+          <DropDown fn={(e) => { setRange(parseInt(e.currentTarget.innerHTML)); let searchParams = new URLSearchParams({ range: e.currentTarget.innerHTML }); router.push(`/events/${selected?.toLowerCase().replace(" ", "-")}` + "?" + searchParams, { scroll: false }) }} items={["10", "25", "50"]} title={`show: ${range}`} size="text-sm" bgColor="" />
         </div>
       </div>
       <div className="flex flex-col p-4 justify-start xl:mx-0 mx-2 transition-all duration-300 min-h-[50rem] my-2">
@@ -164,6 +197,7 @@ const EventsBrowser = ({ events, count, selectedCategory }: Props) => {
           <>
             {eventsArr.length > 0 ? (
               eventsArr.map((e) => (
+
                 <Link
                   href={`/event/${e.title}`}
                   className="ring-2 p-1 my-1 hover:bg-gradient-to-tl from-link via-link_active to-link transition-all duration-300 h-20 flex justify-between "
@@ -213,6 +247,7 @@ const EventsBrowser = ({ events, count, selectedCategory }: Props) => {
                     </span>
                   </div>
                 </Link>
+
               ))
             ) : (
               <div className="flex justify-center mt-10">

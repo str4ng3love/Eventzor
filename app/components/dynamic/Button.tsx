@@ -1,5 +1,7 @@
 "use client";
+
 import Link from "next/link";
+import { IconType, icons } from "react-icons";
 interface Props {
   text: string;
   fn?: (e: React.MouseEvent) => void;
@@ -9,6 +11,7 @@ interface Props {
   title: string;
   size?: string;
   active?: boolean;
+  Icon?: IconType
 }
 const Button = ({
   fn,
@@ -18,7 +21,8 @@ const Button = ({
   interactive = true,
   title,
   size = "text-base",
-  active = false
+  active = false,
+  Icon
 
 }: Props) => {
   return (
@@ -27,12 +31,12 @@ const Button = ({
         <Link href={link}>
           <button
             title={title}
-            className={`${bgColor} ${active ? "dark:text-interactive_text text-text bg-text" : "text-interactive_text dark:text-text"} ${size} whitespace-nowrap cursor-default first-letter:capitalize min-w-[11ch] font-bold p-2 rounded-xl ${interactive ? "cursor-pointer hover:-translate-y-1 hover:scale-105 hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-300"
+            className={`${bgColor} gap-2 flex items-center justify-center   ${active ? "dark:text-interactive_text text-text bg-text" : "text-interactive_text dark:text-text"} ${size} whitespace-nowrap cursor-default first-letter:capitalize min-w-[11ch] font-bold p-2 rounded-xl ${interactive ? "cursor-pointer hover:-translate-y-1 hover:scale-105 hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-300"
                 : ""
               }`}
             onClick={(e) => fn(e)}
           >
-            {text}
+            {text}{Icon && active? <Icon /> : null}
           </button>
         </Link>
       ) : (
@@ -41,12 +45,12 @@ const Button = ({
       {fn && !link ? (
         <button
           title={title}
-          className={`${bgColor} ${active ? "dark:text-interactive_text text-text bg-text" : "text-interactive_text dark:text-text"} ${size} whitespace-nowrap cursor-default first-letter:capitalize min-w-[11ch] font-bold p-2 rounded-xl ${interactive ? "cursor-pointer hover:-translate-y-1 hover:scale-105 hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-300"
+          className={`${bgColor} gap-2 flex items-center justify-center   ${active ? "dark:text-interactive_text text-text bg-text" : "text-interactive_text dark:text-text"} ${size} whitespace-nowrap cursor-default first-letter:capitalize min-w-[11ch] font-bold p-2 rounded-xl ${interactive ? "cursor-pointer hover:-translate-y-1 hover:scale-105 hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-300"
           : ""
         }`}
           onClick={(e) => fn(e)}
         >
-          {text}
+          {text}{Icon && active? <Icon  /> : null}
         </button>
       ) : (
         <></>
@@ -55,11 +59,11 @@ const Button = ({
         <Link
           title={title}
           href={link}
-          className={`${bgColor} ${active ? "dark:text-interactive_text text-text bg-text" : "text-interactive_text dark:text-text"} ${size} whitespace-nowrap cursor-default first-letter:capitalize min-w-[11ch] font-bold p-2 rounded-xl ${interactive ? "cursor-pointer hover:-translate-y-1 hover:scale-105 hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-300"
+          className={`${bgColor} gap-2 flex items-center justify-center   ${active ? "dark:text-interactive_text text-text bg-text" : "text-interactive_text dark:text-text"} ${size} whitespace-nowrap cursor-default first-letter:capitalize min-w-[11ch] font-bold p-2 rounded-xl ${interactive ? "cursor-pointer hover:-translate-y-1 hover:scale-105 hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-300"
           : ""
         }`}
         >
-          {text}
+          {text}{Icon && active? <Icon /> : null}
         </Link>
       ) : (
         <></>

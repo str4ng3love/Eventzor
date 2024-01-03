@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import EventCarousel from "../components/dynamic/Events/EventCarousel";
 import { getNewestEvents } from "@/helpers/getEvent";
 
+
 export const metadata: Metadata = {
     title: "Dashboard Demo | Events",
     description: "Dashboard Demo",
@@ -26,7 +27,9 @@ export default async function layout({
         </div>
 
         {/* TODO: Event browser with sorting, pagination etc */}
+       
         {children}
+       
       </main>
     );
 }
