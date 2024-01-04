@@ -24,7 +24,7 @@ console.log(item)
             </div>
             <ImageBrowser images={item.images} />
           </div>
-          <div className="bg-black/20 "><LikeAndDislike itemId={item.id} amountOfLikes={item._count.likes} amountOfDislikes={item._count.dislikes} /></div>
+          <div className="bg-black/20 flex justify-center"><LikeAndDislike itemId={item.id} amountOfLikes={item._count.likes} amountOfDislikes={item._count.dislikes} /></div>
           <div className="p-4 flex flex-col justify-start rounded-md bg-bg_interactive dark:bg-black/20 row-start-3 col-span-3">
             <p className="indent-4">{item.description}</p>
           </div>

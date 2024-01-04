@@ -1,23 +1,23 @@
 import Button from "@/app/components/dynamic/Button";
-import EventsBrowser from "@/app/components/dynamic/Events/EventsBrowser";
 import { prisma } from "@/lib/ConnectPrisma";
 import { Prisma } from "@prisma/client";
 import { notFound } from "next/navigation";
+import ItemsBrowser from "../../components/dynamic/Market/ItemBrowser";
 
 
 const page = async ({ params, searchParams }: { params: { category: string }, searchParams: { [key: string]: string | string[] | undefined } }) => {
 
-    const getEventsAndAmount = async (query: Prisma.EventFindManyArgs | null) => {
+    const getItemsAndAmount = async (query: Prisma.MarketItemFindManyArgs | null) => {
 
 
         if (query === null) {
             return notFound()
         }
-        const [events, count] = await prisma.$transaction([
-            prisma.event.findMany(query), prisma.event.count({ where: query.where })
+        const [items, count] = await prisma.$transaction([
+            prisma.marketItem.findMany(query), prisma.marketItem.count({ where: query.where })
         ])
         return {
-            events, count
+            items, count
         }
 
     }
@@ -84,13 +84,13 @@ const page = async ({ params, searchParams }: { params: { category: string }, se
 
         switch (category) {
             case "popular":
-                const queryPopular: Prisma.EventFindManyArgs = {
-                    where: { images: { isEmpty: false } }, skip: range * page, take: range, orderBy: { ticketsSold: order === "asc" ? order : "desc" }
+                const queryPopular: Prisma.MarketItemFindManyArgs = {
+                    where: { images: { isEmpty: false } }, skip: range * page, take: range, orderBy: { amountSold: order === "asc" ? order : "desc" }
                 }
                 queryOptions = queryPopular
                 break;
             case "most-liked":
-                const queryLiked: Prisma.EventFindManyArgs = {
+                const queryLiked: Prisma.MarketItemFindManyArgs = {
                     where: { images: { isEmpty: false } }, skip: range * page, take: range, orderBy: {
                         likes: {
                             _count: order === "asc" ? order : "desc"
@@ -100,21 +100,21 @@ const page = async ({ params, searchParams }: { params: { category: string }, se
                 queryOptions = queryLiked
                 break;
             case "upcoming":
-                const queryUpcoming: Prisma.EventFindManyArgs = {
-                    where: { images: { isEmpty: false } }, skip: range * page, take: range, orderBy: { ticketsSold: order === "asc" ? order : "desc" }
+                const queryUpcoming: Prisma.MarketItemFindManyArgs = {
+                    where: { images: { isEmpty: false } }, skip: range * page, take: range, orderBy: { releaseDate: order === "asc" ? order : "desc" }
                 }
                 queryOptions = queryUpcoming
                 break;
             case "sales-ending":
-                const querySalesEnding: Prisma.EventFindManyArgs = {
-                    where: { images: { isEmpty: false } }, skip: range * page, take: range, orderBy: { closingDate: order === "asc" ? order : "desc" },
+                const querySalesEnding: Prisma.MarketItemFindManyArgs = {
+                    where: { images: { isEmpty: false } }, skip: range * page, take: range, orderBy: {  },
                 }
                 queryOptions = querySalesEnding
                 break;
             case "all-items":
 
-                const queryAll: Prisma.EventFindManyArgs = {
-                    where: { images: { isEmpty: false } }, skip: range * page, take: range, orderBy: { title: order === "asc" ? order : "desc" }
+                const queryAll: Prisma.MarketItemFindManyArgs = {
+                    where: { images: { isEmpty: false } }, skip: range * page, take: range, orderBy: { item: order === "asc" ? order : "desc" }
                 }
                 queryOptions = queryAll
                 break;
@@ -124,11 +124,11 @@ const page = async ({ params, searchParams }: { params: { category: string }, se
                 break;
         }
 
-        const { events, count } = await getEventsAndAmount(queryOptions)
-        if (events.length === 0) {
+        const { items, count } = await getItemsAndAmount(queryOptions)
+        if (items.length === 0) {
             return (
                 <div className="mt-12 flex flex-col items-center justify-center">
-                    <h1 className="font-bold text-xl mb-12">There are no Events in the DB</h1>
+                    <h1 className="font-bold text-xl mb-12">There are no Items in the DB</h1>
                     <Button title="go to home" text="go to Home" link="/" />
                 </div>
             );
@@ -138,7 +138,7 @@ const page = async ({ params, searchParams }: { params: { category: string }, se
                 <>
 
                     {/* TODO: Event browser with sorting, pagination etc */}
-                    <EventsBrowser events={events} count={count} currentPage={page + 1} currentRange={range} selectedCategory={category.replace("-", " ")} orderAsc={order === "asc" ? true : false} />
+                    <ItemsBrowser items={items} count={count} currentPage={page + 1} currentRange={range} selectedCategory={category.replace("-", " ")} orderAsc={order === "asc" ? true : false} />
 
                 </>
             );

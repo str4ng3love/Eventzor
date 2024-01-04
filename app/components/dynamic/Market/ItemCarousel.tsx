@@ -91,7 +91,7 @@ const ItemCarousel = ({
             </span>
             <div className=" w-full h-full flex justify-between ring-2 ring-primary shadow-omni">
               <Link
-                href={`/market/${items[active].item}`}
+                href={`/item/${items[active].item}`}
                 title={items[active].item}
                 className={`relative group lg:w-[67%] w-full overflow-hidden  bg-black`}
               >

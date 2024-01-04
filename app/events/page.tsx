@@ -4,16 +4,6 @@ import EventsBrowser from "../components/dynamic/Events/EventsBrowser";
 import Button from "../components/dynamic/Button";
 import { Prisma } from "@prisma/client";
 
-const getNewEvents = async () => {
-  const newEvents = await prisma.event.findMany({
-    orderBy: { eventDate: "asc" },
-    take: 10,
-    where: { images: { isEmpty: false } }
-  });
-  return {
-    newEvents,
-  };
-};
 const getEventsAndAmount = async () => {
   const query: Prisma.EventFindManyArgs = {
     where: { images: { isEmpty: false } }, take: 10

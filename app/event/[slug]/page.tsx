@@ -27,7 +27,7 @@ const title = decodeURIComponent(params.slug)
     
             <ImageBrowser images={event.images}  />
           </div>
-          <div className="bg-black/20 flex  justify-center"><LikeAndDislike eventId={event.id} amountOfLikes={event._count.likes} amountOfDislikes={event._count.dislikes}/>
+          <div className="bg-black/20 flex justify-center"><LikeAndDislike eventId={event.id} amountOfLikes={event._count.likes} amountOfDislikes={event._count.dislikes}/>
           </div>
           <div className="p-4 flex flex-col justify-start rounded-md bg-bg_interactive dark:bg-black/20 row-start-3 col-span-3">
             <p className="indent-4">{event.description}</p>

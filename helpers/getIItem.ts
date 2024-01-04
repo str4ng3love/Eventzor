@@ -7,3 +7,13 @@ export default async function getItem(name: string){
 
     return item
 }
+export const getNewestItems = async () => {
+    const items = await prisma.marketItem.findMany({
+        orderBy: { id: "desc" },
+        take: 10,
+        where: { images: { isEmpty: false } }
+    });
+    return {
+        items,
+    };
+}
