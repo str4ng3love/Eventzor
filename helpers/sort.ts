@@ -1,12 +1,12 @@
 import { Event, MarketItem } from "@prisma/client";
 
-const sortEvents = (arr: Event[], sorter: number | string): Event[] => {
+const sortEvents = (arr: Event[], sorter: string): Event[] => {
   let sortedArr: Event[];
   if (sorter.toString().toLowerCase().includes("tickets")) {
     sortedArr = arr.sort((a, b) => a.tickets - b.tickets);
-  } else if (sorter.toString().toLowerCase() === "date") {
+  } else if (sorter.toString().toLowerCase() === "date") { 
     sortedArr = [...arr].sort(
-      (a, b) => a.eventDate.getTime() - b.eventDate.getTime()
+      (a, b) => new Date(a.eventDate).getTime() - new Date(b.eventDate).getTime()
     );
   } else if (sorter.toString().toLowerCase() === "event") {
     sortedArr = arr.sort((a, b) => {

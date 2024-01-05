@@ -5,7 +5,7 @@ import User from "../../dynamic/User";
 
 const Header = () => {
   return (
-    <nav className="h-[4rem] bg-bg_sidebar text-interactive_text dark:text-text z-20 dark:bg-black/50 flex justify-between items-center fixed w-full">
+    <nav className="h-[4rem] bg-bg_sidebar text-interactive_text dark:text-text z-20 dark:bg-black/50 flex justify-between items-center fixed w-full backdrop-blur-sm">
       <div className="ml-32">
         <HeaderNav dest="/" text="home" />
         <HeaderNav dest="/events" text="events" />
