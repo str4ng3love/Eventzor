@@ -24,7 +24,7 @@ const name = decodeURIComponent(params.slug)
           <div className="p-4 flex flex-col justify-start rounded-md bg-bg_interactive dark:bg-black/20 row-start-3 col-span-3">
             <p className="indent-4">{item.description}</p>
           </div>
-          <div className="p-4 flex flex-col justify-start rounded-md bg-bg_interactive dark:bg-black/20 h-fit row-start-1 col-start-3 self-start max-w-md">
+          <div className="p-4 flex flex-col justify-start rounded-md bg-bg_interactive dark:bg-black/20 h-fit row-start-1 col-start-3 self-start max-w-sm">
             <div className=" bg-primary ring-2 ring-primary rounded-t-md p-2">
               <div className="flex justify-between p-1 text-interactive_text dark:text-text">
                 <span>Price&nbsp;:</span>
