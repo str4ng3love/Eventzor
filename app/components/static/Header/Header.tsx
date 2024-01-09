@@ -1,7 +1,8 @@
 import Currency from "../../dynamic/Currency";
 import HeaderNav from "../../dynamic/Header/HeaderNav";
 import ShoppingCart from "../../dynamic/ShoppingCart/ShoppingCart";
-import User from "../../dynamic/User";
+import UserMenu from "../../dynamic/UserMenu";
+
 
 const Header = () => {
   return (
@@ -12,7 +13,7 @@ const Header = () => {
         <HeaderNav dest="/market" text="market" />
       </div>
       <div className="mr-32 flex items-center gap-4">
-        <User />
+        <UserMenu />
         <span className="lg:block hidden ">
           <Currency />
         </span>

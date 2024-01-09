@@ -251,13 +251,13 @@ const LikeAndDislike = ({
                   (parentData.amountOfLikes +
                     parentData.amountOfDislikes)) *
                   100).toFixed(0)
-                    }%]  bg-primary`}
+                    }%] bg-primary`}
                   ></span>
                 <span className={`h-1 block w-[${((parentData.amountOfDislikes /
                   (parentData.amountOfLikes +
                     parentData.amountOfDislikes)) *
                   100).toFixed(0)
-                    }%]  bg-secondary`}
+                    }%] bg-secondary`}
                   ></span>
               
               </>}

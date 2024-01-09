@@ -19,6 +19,7 @@ const getItemsAndAmount = async () => {
 const page = async () => {
 
   const { items, count } = await getItemsAndAmount();
+
   if (items.length === 0) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center">

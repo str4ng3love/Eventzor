@@ -316,8 +316,8 @@ const EditItem = ({ ...props }: Props) => {
                   <div className="p-4 mt-4 flex justify-evenly ">
                     {canEdit ? (
                       <Button
-                        title="Edit"
-                        text="Edit"
+                        title="Save"
+                        text="Save"
                         fn={() => {
                           setCanEdit(false);
                           handleEdit(state);
@@ -325,8 +325,8 @@ const EditItem = ({ ...props }: Props) => {
                       />
                     ) : (
                       <Button
-                        title="Working ..."
-                        text="Editing..."
+                        title="Saving ..."
+                        text="Saving..."
                         interactive={false}
                         bgColor={"bg-bg"}
                         fn={() => {}}

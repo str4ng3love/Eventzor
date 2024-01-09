@@ -167,7 +167,7 @@ const AddNewItem = ({
 
     try {
       setCanPost(false);
-      const resp = await fetch("/api/market/user", {
+      const resp = await fetch("/api/market", {
         method: "POST",
         headers: {
           "Content-Type": "Application/json",
@@ -374,6 +374,7 @@ const AddNewItem = ({
                           type: FormActionKind.INPUT_IMAGE,
                           payload: image,
                         });
+                  
                         setImage("");
                       }}
                     />

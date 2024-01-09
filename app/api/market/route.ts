@@ -2,42 +2,55 @@ import { options } from "../auth/[...nextauth]/options";
 import { prisma } from "../../../lib/ConnectPrisma";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
 
 async function handler(req: Request) {
   const session = await getServerSession(options);
-  if(req.method==="GET"){
+  let regex = /[#]/g
+
+  if (req.method === "GET") {
     if (session?.user?.name) {
       try {
-        const items = await prisma.marketItem.findMany({where:{merchantName: session.user.name}})
-        return NextResponse.json({items})
+        const items = await prisma.marketItem.findMany({ where: { merchantName: session.user.name } })
+        return NextResponse.json({ items })
       } catch (error) {
         console.log(error)
-        return NextResponse.json({error:"Internal server error"}, {status:500})
+        return NextResponse.json({ error: "Internal server error" }, { status: 500 })
       }
     } else {
-      return NextResponse.json({error:"Unathorized"}, {status:401})
+      return NextResponse.json({ error: "Unathorized" }, { status: 401 })
     }
-  }else  if (req.method === "POST") {
+  } else if (req.method === "POST") {
+  
     if (session?.user?.name) {
       const body = await req.json();
-
       if (
         body.amount <= 0 ||
         body.description.length < 3 ||
         typeof body.description !== "string" ||
-        body.item.length <= 3 ||
         typeof body.item !== "string" ||
         typeof body.isPreorder !== "boolean" ||
         body.price.length === 0 ||
         parseFloat(body.price) < 0 ||
         typeof body.type !== "string" ||
-        body.type.length === 0 ||
-        typeof body.image !== "string" ||
-        body.image.length < 3
+        body.type.length === 0
       ) {
         return NextResponse.json(
           { error: "Please provide correct/missing values" },
+          { status: 200 }
+        );
+      }
+      if(  body.item.length <= 3 ){
+        return NextResponse.json(
+          { error: `Item's name have to be atleast 4 characters long` },
+          { status: 200 }
+        );
+      }
+      let test = regex.test(body.item)
+      if(test){
+        return NextResponse.json(
+          { error: `Item cannot use reserved character '#"` },
           { status: 200 }
         );
       }
@@ -51,13 +64,15 @@ async function handler(req: Request) {
             itemType: body.type,
             merchantName: session?.user?.name,
             preorder: body.isPreorder,
-            releaseDate:  body.isPreorder ? new Date(body.releaseDate) : null,
+            releaseDate: body.isPreorder ? new Date(body.releaseDate) : null,
             price: parseFloat(body.price),
-            images: [body.image]
+            images: body.image
           },
         });
 
         if (newItem) {
+          revalidatePath('/market', "page")
+          revalidatePath('/market', "layout")
           return NextResponse.json(
             { message: "Item created successfully" },
             { status: 200 }
@@ -69,7 +84,7 @@ async function handler(req: Request) {
           );
         }
       } catch (error) {
-        console.log(error);
+        console.log(error); 
         return NextResponse.json(
           { error: "Internal server error" },
           { status: 500 }
@@ -94,6 +109,8 @@ async function handler(req: Request) {
             { status: 404 }
           );
         } else {
+          revalidatePath('/market', "page")
+          revalidatePath('/market', "layout")
           return NextResponse.json({ message: "Item deleted successfull" });
         }
       } catch (error) {
@@ -126,7 +143,7 @@ async function handler(req: Request) {
         });
       }
       try {
-        console.log(body);
+
         const updatedItem = await prisma.marketItem.update({
           where: {
             id: body.id,
@@ -147,7 +164,8 @@ async function handler(req: Request) {
             { status: 500 }
           );
         }
-
+        revalidatePath('/market', "page")
+        revalidatePath('/market', "layout")
         return NextResponse.json({ message: "Item updated successfully" });
       } catch (error) {
         console.log(error);

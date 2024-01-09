@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { options } from "../../auth/[...nextauth]/options";
 import { getServerSession } from "next-auth";
 import { prisma } from "@/lib/ConnectPrisma";
+import { revalidatePath } from "next/cache";
 async function handler(req: Request) {
   if (req.method === "PATCH") {
     const session = await getServerSession(options);
@@ -20,6 +21,7 @@ async function handler(req: Request) {
       if(!updatedEventImages){
         return NextResponse.json({ error: "Internal server error" }, { status: 500 });
       } else {
+        revalidatePath("/dashboard/events", 'page')
         return NextResponse.json({message: 'Images updated successfully'});
       }
     } else {

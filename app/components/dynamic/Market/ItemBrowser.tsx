@@ -22,7 +22,6 @@ interface Props {
 
 
 const ItemsBrowser = ({ items, count, selectedCategory = "all items", orderAsc = true, currentPage=1, currentRange=10 }: Props) => {
-  
   const router = useRouter()
 
   const [selected, setSelected] = useState(selectedCategory);
@@ -207,7 +206,7 @@ const ItemsBrowser = ({ items, count, selectedCategory = "all items", orderAsc =
                     {i.item}
                   </span>
                   <span className="self-end text-xs">
-                    {i.preorder&&i.releaseDate? `Available from: ${i.releaseDate.toUTCString().slice(0, -7)}` : ""}
+                    {i.preorder && i.releaseDate && i.releaseDate > new Date(Date.now()) ? `Available from: ${i.releaseDate.toUTCString().slice(0, -7)}` : ""}
                   </span>
                 </div>
                 <span className="self-end text-sm w-40 p-2 h-full hidden md:block overflow-clip text-ellipsis">
@@ -231,7 +230,7 @@ const ItemsBrowser = ({ items, count, selectedCategory = "all items", orderAsc =
                     : ""}
                 </span>
               </div>
-              {i.preorder === true ? (
+              {i.preorder === true && i.releaseDate? i.releaseDate > new Date(Date.now()): null ? (
                     <span className="p-1 absolute whitespace-nowrap flex items-center -rotate-[55deg] text-lg translate-x-[-30%] top-1/4 w-[8rem] justify-center left-0 h-8 bg-violet-600">
                       Preorder
                     </span>

@@ -8,44 +8,40 @@ import PriceDisplay from "@/app/components/static/PriceDisplay";
 import Comments from "@/app/components/dynamic/Events/Comments";
 import getItem from "@/helpers/getIItem";
 import LikeAndDislike from "@/app/components/dynamic/LikeAndDislike";
+import DisplayStock from "@/app/components/static/DisplayStock";
 
 const page = async ({params}:{params:{slug:string}}) => {
 const name = decodeURIComponent(params.slug)
   const  item  = await getItem(decodeURI(name));
-console.log(item)
   if (item !== null) {
     return (
       <main className="flex flex-col items-center min-h-[calc(100dvh_-_4rem)] pt-20">
         <div className="grid grid-cols-3 justify-between lg:w-[80%] lg:gap-4 gap-2 w-full p-4 transition-all duration-300 ">
           <div className="p-4 flex flex-col rounded-md bg-bg_interactive dark:bg-black/20 col-span-2 row-span-2 ">
             <h2 className="p-4 font-bold text-2xl">{item.item}</h2>
-            <div className="flex flex-col p-2 my-8">
-             
-            </div>
             <ImageBrowser images={item.images} />
           </div>
-          <div className="bg-black/20 flex justify-center"><LikeAndDislike itemId={item.id} amountOfLikes={item._count.likes} amountOfDislikes={item._count.dislikes} /></div>
           <div className="p-4 flex flex-col justify-start rounded-md bg-bg_interactive dark:bg-black/20 row-start-3 col-span-3">
             <p className="indent-4">{item.description}</p>
           </div>
-          <div className="p-4 flex flex-col justify-start rounded-md bg-bg_interactive dark:bg-black/20 h-fit row-start-1 col-start-3 self-start">
+          <div className="p-4 flex flex-col justify-start rounded-md bg-bg_interactive dark:bg-black/20 h-fit row-start-1 col-start-3 self-start max-w-md">
             <div className=" bg-primary ring-2 ring-primary rounded-t-md p-2">
               <div className="flex justify-between p-1 text-interactive_text dark:text-text">
-               
-              </div>
-              <div className="flex justify-between p-1 text-interactive_text dark:text-text">
-                <span>Price:&nbsp;</span>
+                <span>Price&nbsp;:</span>
                 <PriceDisplay price={item.price}/>
               </div>
-              <AddToCart price={item.price} type={'market'} item={item.item}  id={item.id}
+              <div className="flex justify-between p-1 text-interactive_text dark:text-text">
+                <span>Stock&nbsp;:</span>
+                <DisplayStock amount={item.amount} amountSold={item.amountSold}/>
+              </div>
+              <AddToCart price={item.price} type={'market'} item={item.item}  id={item.id} amountLeft={item.amount}
                 />
             </div>
-            <div className="flex flex-col ring-2 rounded-t-none ring-primary rounded-md p-2 lg:text-sm md:text-base">
-              <div  title="Tickets are being sold until this date" className="flex justify-between p-1">
+            <div className="flex flex-col ring-2 rounded-t-none ring-primary rounded-md p-2 lg:text-sm md:text-base mb-7">
+           {item.preorder && item.releaseDate && item.releaseDate > new Date(Date.now()) ?    <div  title="Tickets are being sold until this date" className="flex justify-between p-1">
               <span>Coming :</span>
               <span>{item.releaseDate?.toUTCString().slice(0, -7)}</span>
-              </div>
-          
+              </div>: <></>}
               <div title="Organizer's profile" className="flex justify-between p-1">
                 <span>Seller&nbsp;:&nbsp;</span>
                 <span className="hover:text-link transition-all duration-300">
@@ -53,6 +49,7 @@ console.log(item)
                 </span>
               </div>
             </div>
+                <LikeAndDislike itemId={item.id} amountOfLikes={item._count.likes} amountOfDislikes={item._count.dislikes} />
           </div>
         </div>
         <Comments eventId={item.id}/>

@@ -8,11 +8,12 @@ import AddToCart from "@/app/components/dynamic/ShoppingCart/AddToCart";
 import PriceDisplay from "@/app/components/static/PriceDisplay";
 import Comments from "@/app/components/dynamic/Events/Comments";
 import LikeAndDislike from "@/app/components/dynamic/LikeAndDislike";
+import DisplayStock from "@/app/components/static/DisplayStock";
 
-const page = async ({params}:{params:{slug:string}}) => {
-const title = decodeURIComponent(params.slug)
+const page = async ({ params }: { params: { slug: string } }) => {
+  const title = decodeURIComponent(params.slug)
 
-  const  event  = await getEvent(decodeURI(title));
+  const event = await getEvent(decodeURI(title));
   if (event !== null) {
 
     return (
@@ -24,34 +25,34 @@ const title = decodeURIComponent(params.slug)
               <span>{event.eventDate.toUTCString().slice(0, -7)}&nbsp;GMT</span>
               <span>{event.location}</span>
             </div>
-    
-            <ImageBrowser images={event.images}  />
+
+            <ImageBrowser images={event.images} />
           </div>
-          <div className="bg-black/20 flex justify-center"><LikeAndDislike eventId={event.id} amountOfLikes={event._count.likes} amountOfDislikes={event._count.dislikes}/>
-          </div>
+      
           <div className="p-4 flex flex-col justify-start rounded-md bg-bg_interactive dark:bg-black/20 row-start-3 col-span-3">
             <p className="indent-4">{event.description}</p>
           </div>
           <div className="p-4 flex flex-col justify-start rounded-md bg-bg_interactive dark:bg-black/20 h-fit row-start-1 col-start-3 self-start">
             <div className=" bg-primary ring-2 ring-primary rounded-t-md p-2">
               <div className="flex justify-between p-1 text-interactive_text dark:text-text">
-                <span>Tickets Left:&nbsp;</span>
-                <span>{event.tickets - event.ticketsSold}</span>
+                <span>Price&nbsp;:</span>
+                <PriceDisplay price={event.price} />
               </div>
               <div className="flex justify-between p-1 text-interactive_text dark:text-text">
-                <span>Price:&nbsp;</span>
-                <PriceDisplay price={event.price}/>
+                <span>Tickets&nbsp;:</span>
+                <DisplayStock amount={event.tickets} amountSold={event.ticketsSold} />
               </div>
-              <AddToCart id={event.id} price={event.price} type={'event'} item={event.title} />
+
+              <AddToCart id={event.id} price={event.price} type={'event'} item={event.title} amountLeft={event.tickets} saleEnded={event.closingDate > new Date(Date.now())? false : true}/>
             </div>
-            <div className="flex flex-col ring-2 rounded-t-none ring-primary rounded-md p-2 lg:text-sm md:text-base">
-              <div  title="Tickets are being sold until this date" className="flex justify-between p-1">
-                <span>Closing Date&nbsp;:&nbsp;</span>
+            <div className="flex flex-col ring-2 rounded-t-none ring-primary rounded-md p-2 lg:text-sm md:text-base mb-7">
+              <div title="Tickets are being sold until this date" className="flex justify-between p-1">
+                <span>Sold until&nbsp;:&nbsp;</span>
                 <span>
-                  {event.closingDate.toUTCString().slice(0, -7)}&nbsp;GMT
+                  {event.closingDate > new Date(Date.now()) ? event.closingDate.toUTCString().slice(0, -7)+` GMT`: "Sale over"}
                 </span>
               </div>
-              <div  title="Date of event happening" className="flex justify-between p-1">
+              <div title="Date of event happening" className="flex justify-between p-1">
                 <span>Event Date&nbsp;:&nbsp;</span>
                 <span>
                   {event.eventDate.toUTCString().slice(0, -7)}&nbsp;GMT
@@ -64,9 +65,12 @@ const title = decodeURIComponent(params.slug)
                 </span>
               </div>
             </div>
+          
+            <LikeAndDislike eventId={event.id} amountOfLikes={event._count.likes} amountOfDislikes={event._count.dislikes} />
+         
           </div>
         </div>
-        <Comments eventId={event.id}/>
+        <Comments eventId={event.id} />
       </main>
     );
   } else {

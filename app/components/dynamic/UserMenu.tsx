@@ -8,7 +8,7 @@ import { Menu, Transition } from "@headlessui/react";
 import Link from "next/link";
 import { TbFileSpreadsheet } from "react-icons/tb";
 
-const User = () => {
+const UserMenu = () => {
   const [showLogin, setShowLogin] = useState(false);
 
   const { data: session } = useSession();
@@ -96,4 +96,4 @@ const User = () => {
   }
 };
 
-export default User;
+export default UserMenu;

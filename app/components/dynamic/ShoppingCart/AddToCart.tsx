@@ -8,9 +8,11 @@ interface Props {
   id:string;
   type:string;
   price:number;
+  amountLeft: number;
+  saleEnded?: boolean
 }
 
-const AddToCart = ({ item,type, price, id }: Props) => {
+const AddToCart = ({ item,type, price, id, amountLeft, saleEnded=false }: Props) => {
   const [amount, setAmount] = useState(1);
   const inputEl = useRef<HTMLInputElement>(null);
  
@@ -34,11 +36,15 @@ const AddToCart = ({ item,type, price, id }: Props) => {
       </div>
       {/* TODO: proper localstorage fn */}
       <Button
+      interactive={amountLeft === 0 || saleEnded ? false : true}
       title="Add to cart"
         text="Add to cart"
         fn={() => {
+          if(amountLeft === 0){
+            return
+          }
           let prev = localStorage.getItem("cart")
-       
+          
 
           if (prev !== null && prev.length > 0) {
             let prevString = JSON.parse(prev);

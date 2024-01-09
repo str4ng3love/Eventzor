@@ -59,6 +59,7 @@ const MyItemsBrowser = () => {
       }
     }
   };
+  
   const getItems = async () => {
     try {
       const resp = await fetch("/api/market/user", { cache: "no-store" });
@@ -120,7 +121,7 @@ const MyItemsBrowser = () => {
     } catch (error) {
       setNotify({ error: true, show: true, message: "Something went wrong" });
     }
-    console.log(itemsArr);
+ 
   };
 
   useEffect(() => {
