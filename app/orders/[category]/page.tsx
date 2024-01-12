@@ -14,17 +14,20 @@ const page = async ({ params, searchParams }: { params: { category: string }, se
   const order = searchParams.order === "desc"? 'desc' : 'asc'
   const category = params.category
   let query: StatusOrder | null
+
   switch (category) {
     case 'pending':
       query = "pendingPayment"
       break;
-    case 'active':
+    case 'shipping':
       query = "shipping"
       break;
     case 'completed':
       query = "completed"
       break;
-
+      case 'canceled':
+        query = "canceled"
+        break;
     default:
       query = null
       break;
@@ -49,7 +52,7 @@ const page = async ({ params, searchParams }: { params: { category: string }, se
         <div className=" pt-20 w-full flex justify-center">
           <div className="w-[80%] p-8">
 
-            <Heading1 text={`you have no ${category} orders`} />
+            <Heading1 text={`you have no ${category!=='shipping' ? category: ""} orders ${category==='shipping' ? "in"+" "+category: ""}`} />
 
           </div>
         </div>

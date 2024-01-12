@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth";
 import { options } from "../../auth/[...nextauth]/options";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/ConnectPrisma";
+import { revalidatePath } from "next/cache";
 
 async function handler(req: Request) {
   const session = await getServerSession(options);
@@ -31,8 +32,9 @@ async function handler(req: Request) {
         where: { id: body.id },
         data: { status: "canceled" },
       });
- 
+      console.log(order)
       if (order) {
+        revalidatePath('/orders')
         return NextResponse.json(
           { message: "Order cancelled successfully" },
           { status: 200 }

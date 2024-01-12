@@ -37,7 +37,7 @@ async function handler(req: Request) {
           },
         });
 
-      return NextResponse.json({ message: "Order created." });
+      return NextResponse.json({ message: "Order created.", id: newOrder.id });
     } catch (error) {
       console.log(error);
       return NextResponse.json({ error: "Could not create order." });

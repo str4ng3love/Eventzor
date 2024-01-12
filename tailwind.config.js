@@ -9,6 +9,7 @@ module.exports = {
     extend: {
       backgroundImage: {
         "item-hero": 'url("/images/hero_item.jpeg")',
+        "lips": 'url("/images/lips.svg")',
         "event-hero": 'url("/images/hero_event.jpeg")',
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":

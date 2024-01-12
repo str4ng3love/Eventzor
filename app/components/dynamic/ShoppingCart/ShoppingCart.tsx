@@ -38,7 +38,6 @@ const ShoppingCart = () => {
   const [newEntries, setNewEntries] = useState(0);
   const [currency, setCurrency] = useState({ name: "usd", rate: 1 });
   const [showShipping, setShowShipping] = useState(false);
-  const [showShippingForm, setShowShippingForm] = useState(false)
   const calcTotal = (arr: CartItemData[]) => {
     const total = arr.reduce((acc, val) => {
       acc = acc + val.price * currency.rate * val.amount;
@@ -74,6 +73,7 @@ const ShoppingCart = () => {
       const message = await resp.json();
       if (message.message) {
         clearCartAndComponent()
+        router.push(`/payguy/${message.id}`)
       } else {
         setIsWorking(false);
         setNotify({
@@ -311,7 +311,15 @@ const ShoppingCart = () => {
                 )}
                 {cartItems.length > 0 ? (
                   <div className="flex items-center justify-end h-full pt-10 gap-2">
+
                     <>
+                    <Button
+                      title="Open Orders"
+                      text="Open Orders"
+                      link="/orders"
+                      bgColor="bg-link self-start"
+                      fn={(e) => setIsOpen(false)}
+                    />
                       {showShipping ? (
                         <></>
                       ) : (
@@ -334,7 +342,8 @@ const ShoppingCart = () => {
                               <Button
                                 title="Continue"
                                 text="Continue"
-                                fn={() => createOrder()}
+                                fn={() =>createOrder()}
+                                
                               />
                             )}
                           </>
