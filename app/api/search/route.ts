@@ -10,7 +10,7 @@ async function handler(req: Request) {
     let queryResponse = {}
     if (typeof query === "string") {
       try {
-        const users = await prisma.user.findMany({ where: { name: {contains: query, mode:"insensitive"} }, select: {id: true, username: true } });
+        const users = await prisma.user.findMany({ where: { name: {contains: query, mode:"insensitive"} }, select: {id: true, name: true } });
         Object.assign(queryResponse,{users}) 
       } catch (error) {
         console.log(error);

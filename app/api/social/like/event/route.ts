@@ -3,6 +3,9 @@ import { getServerSession } from "next-auth";
 import { options } from "../../../auth/[...nextauth]/options";
 import { prisma } from "@/lib/ConnectPrisma";
 import { revalidatePath } from "next/cache";
+import { ObjectId } from "bson";
+
+
 async function handler(req: Request) {
   const session = await getServerSession(options);
   if (!session?.user?.name)
@@ -10,7 +13,7 @@ async function handler(req: Request) {
   if (req.method === "GET") {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
-    console.log(id)
+
     const like = await prisma.like.findFirst({
       where: { AND: [{ userName: session?.user?.name }, { eventId: id }] },
     });
@@ -29,7 +32,7 @@ async function handler(req: Request) {
             { id: body.id },
             {
               likes: {
-                some: { user: { username: session.user?.name as string } },
+                some: { user: { name: session.user?.name as string } },
               },
             },
           ],
@@ -37,19 +40,43 @@ async function handler(req: Request) {
       });
 
       if (comment) {
+
         return NextResponse.json({ message: "Comment already liked" });
       } else {
-        const event = await prisma.event.update({
-          where: { id: body.id },
-          data: {
-            likes: {
-              create: {
-                user: { connect: { name: session.user?.name as string } },
+        const event = await prisma.$transaction(async (tx) => {
+          const organizer = await tx.user.findFirst({
+            where: {
+              events: {
+                some: { id: body.id }
+              }
+            }
+          })
+          const notification = await tx.notification.findFirst({ where: { eventId: body.id }, select: { id: true } })
+    
+
+          if (!organizer) {
+            return
+          }
+          const event = await tx.event.update({
+            where: { id: body.id },
+            data: {
+              notification: {
+                upsert: { where: { id: notification ? notification.id : undefined }, update: { markedAsDeleted: false }, create: { action: "like", userInit: { connect: { name: session.user?.name as string } }, userRecip: { connect: { name: organizer.name } } } }
               },
-            }, dislikes: { deleteMany: { userName: session.user.name } }
-          },
-        });
-        revalidatePath(`/events/${event.title}`, "page")
+              likes: {
+                create: {
+                  user: { connect: { name: session.user?.name as string } },
+                },
+              },
+              dislikes: { deleteMany: { userName: session.user?.name as string } },
+            }, select: { organizerName: true, title: true }
+          })
+
+          return event
+        })
+        // SSE Broadcast
+        // revalidatePath("/", "page")
+        revalidatePath(`/events/${event?.title}`, "page")
         return NextResponse.json({
           message: "Like created successfully"
         });
@@ -60,10 +87,18 @@ async function handler(req: Request) {
   }
   if (req.method === "DELETE") {
     try {
-      const event = await prisma.event.update({
-        where: { id: body.id },
-        data: { likes: { deleteMany: { userName: session.user.name } } },
+      const event = await prisma.$transaction(async (tx) => {
+        const event = tx.event.update({
+          where: { id: body.id },
+          data: { likes: { deleteMany: { userName: session?.user?.name as string } } },
+        })
+        await tx.notification.updateMany({ where: { AND: [{ eventId: body.id }, { initiator: session.user?.name as string }] }, data: { markedAsDeleted: true } })
+        return event
       });
+
+
+      // SSE Broadcast
+      // revalidatePath("/", "page")
       revalidatePath(`/events/${event.title}`, "page")
       return NextResponse.json({ message: "Like deleted successfully" });
     } catch (error) {

@@ -33,7 +33,7 @@ async function handler(req: Request) {
                         { id: body.id },
                         {
                             dislikes: {
-                                some: { user: { username: session.user?.name as string } },
+                                some: { user: { name: session.user?.name as string } },
                             },
                         },
                     ],

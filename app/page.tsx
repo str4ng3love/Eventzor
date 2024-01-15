@@ -1,4 +1,4 @@
-
+import Notifications from "./components/dynamic/Notifications/Notifications";
 
 
 export default async function Home() {
@@ -12,36 +12,40 @@ export default async function Home() {
       </span>
       <div>
 
-      to do:
-      <ul>
-        <li>
-          - orders page
-        </li>
-        <li>
-          - notifications
-        </li>
-        <li>
-          - user page
-        </li>
-        <li>
-          - search
-        </li>
-        <li>
-          - landing page
-        </li>
-        <li>
-          - footer
-        </li>
-        <li>
-          - background animations
-        </li>
-        <li>
-          - improve portal animation and positioning
-        </li>
-      </ul>
+        to do:
+        <ul>
+          <li>
+            - orders page
+          </li>
+          <li>
+            - notifications
+          </li>
+          <li>
+            - user page
+          </li>
+          <li>
+            - search
+          </li>
+          <li>
+            - landing page
+          </li>
+          <li>
+            - footer
+          </li>
+          <li>
+            - background animations
+          </li>
+          <li>
+            - improve portal animation and positioning
+          </li>
+        </ul>
       </div>
-   {/* <Test /> */}
+      {/* <Test /> */}
+
+      <Notifications />
+
     </div>
+
+
   );
 }
- 
