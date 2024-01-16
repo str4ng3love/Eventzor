@@ -6,9 +6,9 @@ import { prisma } from "@/lib/ConnectPrisma"
 async function handler(req: Request) {
     const session = await getServerSession(options)
     if (!session?.user?.name) {
-        return NextResponse.json({ message: "Please login in to get notifications" })
+        return NextResponse.json({ message: "Not Authorized. Please login in to get notifications" })
     } else {
-        const notifications = await prisma.notification.findMany({ where: { AND: [{ userRecip: { name: session.user.name } }, { markedAsDeleted: false }] } })
+        const notifications = await prisma.notification.findMany({ where: { AND: [{ userRecip: { name: session.user.name } }] } })
         return NextResponse.json({ notifications })
     }
 }

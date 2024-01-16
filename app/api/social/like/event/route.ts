@@ -51,8 +51,8 @@ async function handler(req: Request) {
               }
             }
           })
-          const notification = await tx.notification.findFirst({ where: { eventId: body.id }, select: { id: true } })
-    
+          const notification = await tx.notification.findFirst({ where: { eventId: body.id, action:'like' }, select: { id: true } })
+          const randomId = new ObjectId().toString()
 
           if (!organizer) {
             return
@@ -61,7 +61,7 @@ async function handler(req: Request) {
             where: { id: body.id },
             data: {
               notification: {
-                upsert: { where: { id: notification ? notification.id : undefined }, update: { markedAsDeleted: false }, create: { action: "like", userInit: { connect: { name: session.user?.name as string } }, userRecip: { connect: { name: organizer.name } } } }
+                upsert: { where: { id: notification ? notification.id : randomId }, update: { markedAsDeleted: false }, create: { action: "like", userInit: { connect: { name: session.user?.name as string } }, userRecip: { connect: { name: organizer.name } } } }
               },
               likes: {
                 create: {
@@ -74,8 +74,10 @@ async function handler(req: Request) {
 
           return event
         })
+        if(!event?.title){
+          return NextResponse.json({error: "Something went wrong."})
+         }
         // SSE Broadcast
-        // revalidatePath("/", "page")
         revalidatePath(`/events/${event?.title}`, "page")
         return NextResponse.json({
           message: "Like created successfully"
@@ -83,6 +85,7 @@ async function handler(req: Request) {
       }
     } catch (error) {
       console.log(error);
+      return NextResponse.json({error:error});
     }
   }
   if (req.method === "DELETE") {
@@ -92,17 +95,17 @@ async function handler(req: Request) {
           where: { id: body.id },
           data: { likes: { deleteMany: { userName: session?.user?.name as string } } },
         })
-        await tx.notification.updateMany({ where: { AND: [{ eventId: body.id }, { initiator: session.user?.name as string }] }, data: { markedAsDeleted: true } })
+        await tx.notification.updateMany({ where: { AND: [{ eventId: body.id }, { initiator: session.user?.name as string }, {action:"like"}] }, data: { markedAsDeleted: true } })
         return event
       });
 
 
       // SSE Broadcast
-      // revalidatePath("/", "page")
       revalidatePath(`/events/${event.title}`, "page")
       return NextResponse.json({ message: "Like deleted successfully" });
     } catch (error) {
       console.log(error);
+      return NextResponse.json({error:error});
     }
   }
 }

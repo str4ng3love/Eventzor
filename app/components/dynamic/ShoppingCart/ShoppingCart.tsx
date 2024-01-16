@@ -73,7 +73,7 @@ const ShoppingCart = () => {
       const message = await resp.json();
       if (message.message) {
         clearCartAndComponent()
-        router.push(`/payguy/${message.id}`)
+        router.push(`/lipps/${message.id}`)
       } else {
         setIsWorking(false);
         setNotify({

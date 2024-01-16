@@ -21,14 +21,14 @@ const ImageBrowser = ({ images }: Props) => {
     }, 150);
   };
   return (
-    <div className="w-full h-[400px] relative shadow-omni dark:shadow-none ring-2 ring-primary">
+    <div className="w-full h-[400px] relative shadow-omni dark:shadow-none ring-2 ring-primary bg-primary">
 
       <Image
         onClick={() => {}}
         fill
         placeholder="blur"
         blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-        style={{ objectFit: "cover" }}
+        style={{ objectFit: "contain" }}
         sizes="(max-width: 750px, mix-height: 300px"
         alt="events image"
         src={images[selected]}

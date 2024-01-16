@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { options } from "../../../auth/[...nextauth]/options";
 import { prisma } from "@/lib/ConnectPrisma";
+import { ObjectId } from "bson";
 async function handler(req: Request) {
   const session = await getServerSession(options);
   if (!session?.user?.name)
@@ -38,35 +39,64 @@ async function handler(req: Request) {
       if (comment) {
         return NextResponse.json({ message: "Comment already liked"});
       } else {
-        const like = await prisma.comment.update({
-          where: { id: body.id },
-          data: {
-            likes: {
-              create: {
-                user: { connect: { name: session.user?.name as string } },
+        const comment = await prisma.$transaction(async (tx) => {
+          const commenter = await tx.comment.findFirst({
+            where: {
+              id: body.id
+            }
+          })
+          const notification = await tx.notification.findFirst({ where: { commentId: body.id }, select: { id: true } })
+          const randomId = new ObjectId().toString()
+
+          if (!commenter) {
+            return 
+          }
+          const comment = await tx.comment.update({
+            where: { id: body.id },
+            data: {
+              notification: {
+                upsert: { where: { id: notification ? notification.id : randomId }, update: { markedAsDeleted: false }, create: { action: "like", userInit: { connect: { name: session.user?.name as string } }, userRecip: { connect: { name: commenter.authorName } } } }
               },
-            }, dislikes:{deleteMany:{userName:session.user.name}}
-          },
-        });
+              likes: {
+                create: {
+                  user: { connect: { name: session.user?.name as string } },
+                },
+              },
+              dislikes: { deleteMany: { userName: session.user?.name as string } },
+            }, select: { authorName: true}
+          })
+
+          return comment
+        })
+        if(!comment){
+          return NextResponse.json({error: "Something went wrong."})
+         }
+            // SSE Broadcast
+       
         return NextResponse.json({
           message: "Like created successfully",
-          like,
         });
       }
     } catch (error) {
       console.log(error);
+      return NextResponse.json({error:error});
     }
   }
   if (req.method === "DELETE") {
     try {
-      const like = await prisma.comment.update({
-        where: { id: body.id },
-        data: { likes: { deleteMany: { userName: session.user.name } } },
+      await prisma.$transaction(async (tx) => {
+        tx.comment.update({
+          where: { id: body.id },
+          data: { likes: { deleteMany: { userName: session?.user?.name as string } } },
+        })
+        await tx.notification.updateMany({ where: { AND: [{ commentId: body.id }, { initiator: session.user?.name as string }] }, data: { markedAsDeleted: true } })
+        return
       });
 
       return NextResponse.json({ message: "Like deleted successfully" });
     } catch (error) {
       console.log(error);
+      return NextResponse.json({error:error});
     }
   }
 }

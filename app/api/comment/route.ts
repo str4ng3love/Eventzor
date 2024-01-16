@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import { options } from "../auth/[...nextauth]/options";
 import { prisma } from "@/lib/ConnectPrisma";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 async function handler(req: Request) {
   if (req.method === "GET") {
@@ -24,57 +25,31 @@ async function handler(req: Request) {
     }
 
     try {
-      let text = body.comment;
 
-      if (body.parentId) {
-        if (
-          typeof body.comment !== "string" ||
-          body.comment.length <= 0 ||
-          typeof body.parentId !== "string" ||
-          body.parentId.length <= 0
-        ) {
+        if ( body.parentId.length === 0||body.comment.length === 0 ||body.parentId.length === 0) {
           return NextResponse.json(
             { error: "Invalid comment data" },
             { status: 400 }
           );
         }
-        const comment = await prisma.comment.create({
-          data: {
-            createdAt: new Date(Date.now()),
-            message: text,
-            authorName: session.user.name,
-            parentId: body.parentId,
-          },
-        });
+        const comment = await prisma.$transaction(async (tx)=>{
+          const comment = await tx.comment.create({
+            data: {
+              createdAt: new Date(Date.now()),
+              message: body.comment,
+              authorName: session?.user?.name as string,
+              parentId: body.parentId,
+            },
+            
+          });
+        await tx.comment.update({where:{id: comment.id}, data:{notification:{create:{action:"comment", userInit:{connect:{name: session.user?.name as string}}, userRecip:{connect:{name:comment.authorName}}}}}})
+          return comment
+        })
+      //  SSE Broadcast
         return NextResponse.json(
           { message: "Comment created successfully", comment },
           { status: 200 }
         );
-      } else {
-        if (
-          typeof body.comment !== "string" ||
-          body.comment.length <= 0 ||
-          typeof body.event !== "string" ||
-          body.event.length <= 0
-        ) {
-          return NextResponse.json(
-            { error: "Invalid comment data" },
-            { status: 400 }
-          );
-        }
-        const comment = await prisma.comment.create({
-          data: {
-            createdAt: new Date(Date.now()),
-            message: text,
-            authorName: session.user.name,
-            eventId: body.event,
-          },
-        });
-        return NextResponse.json(
-          { message: "Comment created successfully", comment },
-          { status: 200 }
-        );
-      }
     } catch (error) {
       console.log(error);
       return NextResponse.json(
@@ -113,7 +88,7 @@ async function handler(req: Request) {
     });
   } else if (req.method === "PATCH") {
     const body = await req.json();
-    console.log(body);
+  
     if (!body || body.id.length <= 0 || body.text <= 0) {
       return NextResponse.json({
         error: "Please provide a valid comment update",
@@ -123,7 +98,7 @@ async function handler(req: Request) {
       where: { id: body.id },
       data: { message: body.text, updatedAt: new Date() },
     });
-    console.log(updatedComment);
+  
     if (!updatedComment) {
       return NextResponse.json({ error: "something went wrong" });
     }

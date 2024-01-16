@@ -17,7 +17,7 @@ export default async function layout({
     return (
         <main className="flex flex-col items-center min-h-screen">
 
-        <div className="lg:bg-event-hero w-full bg-cover bg-center bg-no-repeat transition-all">
+        <div className="lg:bg-item-hero w-full bg-cover bg-center bg-no-repeat transition-all">
           <ItemCarousel
             heading="Newest Items"
             items={items}
