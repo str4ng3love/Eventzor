@@ -6,7 +6,7 @@ import ImageBrowser from "@/app/components/dynamic/ImageBrowser";
 import Link from "next/link";
 import AddToCart from "@/app/components/dynamic/ShoppingCart/AddToCart";
 import PriceDisplay from "@/app/components/static/PriceDisplay";
-import Comments from "@/app/components/dynamic/Events/Comments";
+import Comments from "@/app/components/dynamic/Comment/Comments";
 import LikeAndDislike from "@/app/components/dynamic/LikeAndDislike";
 import DisplayStock from "@/app/components/static/DisplayStock";
 
@@ -70,7 +70,7 @@ const page = async ({ params }: { params: { slug: string } }) => {
          
           </div>
         </div>
-        <Comments eventId={event.id} />
+        <Comments eventId={event.id} itemId={null} />
       </main>
     );
   } else {

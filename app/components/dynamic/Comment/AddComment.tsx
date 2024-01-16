@@ -6,20 +6,19 @@ import { useSession } from "next-auth/react";
 import LoginForm from "../LoginForm";
 import Notification from "../../static/Notification";
 import { useRouter } from "next/navigation";
+import { CommentType } from "@/types/enums";
 
 interface Props {
   title: string;
-  eventId?: string;
-  author?: string;
   reply?: boolean;
-  parentId?: string;
+  id: string;
+  type: CommentType
   callback?: () => void;
 }
 const AddComment = ({
-  eventId,
-  author,
+  type,
+  id,
   reply = false,
-  parentId,
   title,
   callback,
 }: Props) => {
@@ -33,17 +32,19 @@ const AddComment = ({
   const [comment, setComment] = useState("");
   const { data: session } = useSession();
   const [isPending, startTransition] = useTransition();
+  // ↑ ??
   const router = useRouter();
+
   const handleCreate = async () => {
     try {
-      const resp = await fetch("/api/comment", {
-        method: "POST",
-        body: JSON.stringify({
-          event: eventId,
-          comment: comment,
-          author: author,
-        }),
-      });
+     const resp = await fetch("/api/comment", {
+          method: "POST",
+          body: JSON.stringify({
+            type: type,
+            id: id,
+            comment: comment,
+          }),
+        })
       const data = await resp.json();
 
       if (data.error) {
@@ -65,7 +66,8 @@ const AddComment = ({
         method: "POST",
         body: JSON.stringify({
           comment: comment,
-          parentId: parentId,
+          type:type,
+          id:id
         }),
       });
       const data = await resp.json();
@@ -94,9 +96,8 @@ const AddComment = ({
     <>
       {show ? (
         <div
-          className={`w-full px-4 ${
-            reply ? "border-t-2 border-primary pt-4 border-dashed mt-4" : ""
-          }`}
+          className={`w-full px-4 ${reply ? "border-t-2 border-primary pt-4 border-dashed mt-4" : ""
+            }`}
         >
           {reply ? (
             <h4 className="p-1 text-sm">Leave a Reply</h4>
@@ -113,9 +114,8 @@ const AddComment = ({
           />
 
           <div
-            className={`flex items-center ${
-              reply ? "justify-between" : "justify-end "
-            } gap-2`}
+            className={`flex items-center ${reply ? "justify-between" : "justify-end "
+              } gap-2`}
           >
             <div className="p-2 flex gap-2">
               <Button

@@ -11,6 +11,7 @@ import { useSession } from "next-auth/react";
 import { CommentStatus } from "@prisma/client";
 import Button from "../Button";
 import LikeAndDislike from "../LikeAndDislike";
+import { CommentType } from "@/types/enums";
 
 interface Props {
   id: string;
@@ -246,7 +247,7 @@ const Reply = ({
         )}
         <div className="flex p-2 w-full gap-2">
           <LikeAndDislike commentId={id} amountOfLikes={amountOfLikes} amountOfDislikes={amountOfDislikes} hidden/>
-          <AddComment  title="Reply" reply parentId={reply.id} callback={()=>setReply((prev)=>({...prev, amountOfReplies: amountOfReplies+1}))}/>
+          <AddComment  title="Reply" reply id={id} callback={()=>setReply((prev)=>({...prev, amountOfReplies: amountOfReplies+1}))} type={CommentType.parent}/>
         </div>
         {reply.amountOfReplies && reply.amountOfReplies > 0 ? (
           <div className="flex flex-col p-2 w-full gap-2">

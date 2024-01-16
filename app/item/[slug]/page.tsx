@@ -5,7 +5,7 @@ import ImageBrowser from "@/app/components/dynamic/ImageBrowser";
 import Link from "next/link";
 import AddToCart from "@/app/components/dynamic/ShoppingCart/AddToCart";
 import PriceDisplay from "@/app/components/static/PriceDisplay";
-import Comments from "@/app/components/dynamic/Events/Comments";
+import Comments from "@/app/components/dynamic/Comment/Comments";
 import getItem from "@/helpers/getIItem";
 import LikeAndDislike from "@/app/components/dynamic/LikeAndDislike";
 import DisplayStock from "@/app/components/static/DisplayStock";
@@ -52,7 +52,7 @@ const name = decodeURIComponent(params.slug)
                 <LikeAndDislike itemId={item.id} amountOfLikes={item._count.likes} amountOfDislikes={item._count.dislikes} />
           </div>
         </div>
-        <Comments eventId={item.id}/>
+        <Comments itemId={item.id} eventId={null}/>
       </main>
     );
   } else {

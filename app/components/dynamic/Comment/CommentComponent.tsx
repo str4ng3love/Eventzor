@@ -13,6 +13,7 @@ import { useSession } from "next-auth/react";
 import Button from "../Button";
 import Notification from "../../static/Notification";
 import LikeAndDislike from "../LikeAndDislike";
+import { CommentType } from "@/types/enums";
 
 interface Props {
   id: string;
@@ -304,7 +305,7 @@ const CommentComponent = ({
               amountOfDislikes={comment.dislikes}
             />
 
-            <AddComment title="Reply" reply parentId={id} />
+            <AddComment title="Reply" reply id={id} type={CommentType.parent} />
           </div>
           {amountOfReplies && amountOfReplies > 0 ? (
             <div className="flex flex-col p-2 w-full gap-2">

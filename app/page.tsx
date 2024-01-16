@@ -15,10 +15,10 @@ export default async function Home() {
         to do:
         <ul>
           <li>
-            - orders page
+            - orders page X
           </li>
           <li>
-            - notifications
+            - notifications 
           </li>
           <li>
             - user page
