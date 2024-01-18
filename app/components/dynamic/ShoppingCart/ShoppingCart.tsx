@@ -52,6 +52,9 @@ const ShoppingCart = () => {
       localStorage.removeItem("cart");
     }
   };
+
+// TO DO: something is removing cookie from local storage -> fix it
+
   const clearCartAndComponent = () => {
 
     setIsWorking(false)

@@ -1,6 +1,6 @@
 import Logo from "../Logo";
 import Nav from "../../dynamic/Sidebar/Nav";
-import Notifications from "../../dynamic/Sidebar/Notifications";
+
 import Search from "../../dynamic/Search";
 import { FaIcons } from "react-icons/fa";
 import SingOut from "../../dynamic/Sidebar/SingOut";
@@ -14,7 +14,7 @@ const Sidebar = () => {
         <Logo text="Dashboard" Icon={FaIcons} />
         <div className="flex flex-col items-center pt-4 pb-8 border-b-2 border-primary text-sm ">
           <Search />
-          <Notifications />
+      
         </div>
         <Nav />
       </div>

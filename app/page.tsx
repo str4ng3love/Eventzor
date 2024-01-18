@@ -1,4 +1,6 @@
-import Notifications from "./components/dynamic/Notifications/Notifications";
+
+import NotificationsTest from "./components/dynamic/Notifications/NotificationsTest";
+
 
 
 export default async function Home() {
@@ -42,7 +44,7 @@ export default async function Home() {
       </div>
       {/* <Test /> */}
 
-      <Notifications />
+      <NotificationsTest />
 
     </div>
 

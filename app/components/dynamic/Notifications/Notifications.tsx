@@ -1,53 +1,29 @@
 'use client'
 
-import { useEffect, useState } from "react"
-import SpinnerMini from "../../static/SpinnerMini"
-import { Notification } from "@prisma/client"
+import { useEffect, useState } from "react";
+import Icon from "../../static/Icon";
+import { FaBell } from "react-icons/fa";
 
 const Notifications = () => {
-    const [notifications, setNotifications] = useState<Notification[] | null>(null)
+  const [event, setEvent] = useState(0)
+  useEffect(() => {
+    const eventSource = new EventSource('/api/sse')
 
 
-    const getNotifications = async () => {
-        try {
-            const resp = await fetch('/api/notifications', { cache: "no-store" })
-            const notifications = await resp.json()
-            return notifications
-        } catch (error) {
-            console.log(error)
-        }
+
+    eventSource.onmessage = (e) => setEvent(prev => prev + 1)
+    return () => {
+      eventSource.close()
     }
-    useEffect(() => {
+  }, [])
+  return (
+    <div className={`relative group flex items-center justify-start w-full cursor-pointer text-text_inactive `}>
+      {event > 0 ? <span className="absolute bg-secondary flex items-center justify-center rounded-full h-6 w-6 top-0 right-0 -translate-y-[0.5rem] translate-x-[1rem] text-white">
+        {event}
+      </span> : <></>}
+      <Icon textSize="text-base" textColor="text-text_inactive group-hover:text-white transition-all duration-300" Icon={FaBell} />
+    </div>
+  );
+};
 
-        (async () => {
-
-            const { notifications } = await getNotifications()
-
-            setNotifications(notifications)
-        })()
-    }, [])
-    useEffect(() => {
-        console.log(notifications)
-    }, [notifications])
-
-    if (notifications === null) {
-        return (
-            <SpinnerMini borderSize="border-4" h="h-4" w="w-4" />
-        )
-    }
-    return (
-        <>  <span>Notifications list:</span>
-            {notifications ?
-                <div>{notifications.map((n, k) =>
-                    <>
-                        {!n.markedAsDeleted ?
-                            <div key={k}>
-                                <span>{n.commentId || n.marketItemId || n.orderId}&nbsp;{n.action}&nbsp;by&nbsp;{n.initiator}&nbsp;{n.markedAsDeleted ? "deleted" : ""}</span>
-                            </div> : <></>}
-                    </>)}
-                </div> : <></>}
-        </>
-    )
-}
-
-export default Notifications
+export default Notifications;

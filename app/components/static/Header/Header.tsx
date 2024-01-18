@@ -1,6 +1,7 @@
 import Currency from "../../dynamic/Currency";
 import HeaderNav from "../../dynamic/Header/HeaderNav";
 import ShoppingCart from "../../dynamic/ShoppingCart/ShoppingCart";
+import Notifications from "../../dynamic/Notifications/Notifications";
 import UserMenu from "../../dynamic/UserMenu";
 
 
@@ -18,6 +19,7 @@ const Header = () => {
           <Currency />
         </span>
         <ShoppingCart />
+        <Notifications />
       </div>
     </nav>
   );

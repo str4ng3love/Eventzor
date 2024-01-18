@@ -1,4 +1,5 @@
 import { options } from "@/app/api/auth/[...nextauth]/options";
+import { TriggerNotification } from "@/helpers/EventEmitter";
 import { prisma } from "@/lib/ConnectPrisma";
 import { ObjectId } from "bson";
 import { getServerSession } from "next-auth";
@@ -75,7 +76,7 @@ async function handler(req: Request) {
                             likes: { deleteMany: { userName: session.user?.name as string } },
                         }, select: { merchantName: true, item: true }
                     })
-
+                    TriggerNotification(organizer.name)
                     return item
                 })
                 if (!item?.item) {

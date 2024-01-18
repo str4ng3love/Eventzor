@@ -4,6 +4,7 @@ import { options } from "../../../auth/[...nextauth]/options";
 import { prisma } from "@/lib/ConnectPrisma";
 import { revalidatePath } from "next/cache";
 import { ObjectId } from "bson";
+import { TriggerNotification } from "@/helpers/EventEmitter";
 async function handler(req: Request) {
   const session = await getServerSession(options);
   if (!session?.user?.name)
@@ -68,7 +69,7 @@ async function handler(req: Request) {
               dislikes: { deleteMany: { userName: session.user?.name as string } },
             }, select: { merchantName: true, item: true }
           })
-
+          TriggerNotification(organizer.name)
           return item
         })
        if(!item?.item){

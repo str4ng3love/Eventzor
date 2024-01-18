@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { options } from "../../../auth/[...nextauth]/options";
 import { prisma } from "@/lib/ConnectPrisma";
 import { ObjectId } from "bson";
+import { TriggerNotification } from "@/helpers/EventEmitter";
 async function handler(req: Request) {
   const session = await getServerSession(options);
   if (!session?.user?.name)
@@ -65,7 +66,7 @@ async function handler(req: Request) {
               dislikes: { deleteMany: { userName: session.user?.name as string } },
             }, select: { authorName: true}
           })
-
+          TriggerNotification(commenter.authorName)
           return comment
         })
         if(!comment){
