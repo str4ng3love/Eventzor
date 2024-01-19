@@ -71,7 +71,7 @@ async function handler(req: Request) {
                 likes: { deleteMany: { userName: session.user?.name as string } },
               }, select: { authorName: true }
             })
-            TriggerNotification(commenter.authorName)
+            TriggerNotification([commenter.authorName])
             return comment
           })
           if (!comment) {

@@ -88,7 +88,7 @@ async function handler(req: Request) {
         const [comment] = await prisma.$transaction([prisma.comment.create(query)])
 
         await prisma.comment.update({ where: { id: comment.id }, data: { notification: { create: { action: "comment", userInit: { connect: { name: session.user?.name as string } }, userRecip: { connect: { name: comment.authorName } } } } } })
-        TriggerNotification(comment.authorName)
+        TriggerNotification([comment.authorName])
         //  SSE Broadcast
         return NextResponse.json(
           { message: "Comment created successfully" },

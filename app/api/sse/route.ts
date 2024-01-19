@@ -1,41 +1,48 @@
 import { emitter } from "@/helpers/EventEmitter";
 import { getServerSession } from "next-auth";
 
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { options } from "../auth/[...nextauth]/options";
 
 
-export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 
 
 
-async function handler() {
+
+async function handler(req: NextRequest) {
     const session = await getServerSession(options)
-
+    if (!session) {
+        return NextResponse.json({ message: "Not Authorized" })
+    }
     const listener = emitter
-
-
 
     let responseSteam = new TransformStream()
     const writer = responseSteam.writable.getWriter()
     const encoder = new TextEncoder()
+    const eventName = `Notify@${session.user?.name}`
 
+    req.signal.addEventListener("abort", async (e) => {
 
-    listener.on('Notify', (e) => {
-        console.log(e)
-if (e.recipient === session?.user?.name) {
-            writer.write(encoder.encode(`data: new item\n\n`))
-        }
+        listener.removeAllListeners(eventName)
 
     })
+    console.log('event name: ' + eventName)
+    listener.on(eventName, (e) => {
+        console.log('writing to :'+ eventName)
+        writer.write(encoder.encode(`data: new item\n\n`))
+    })
+   
 
-
-
-    return new NextResponse(responseSteam.readable, {
+    const respStream = new NextResponse(responseSteam.readable, {
         headers: {
             "Content-Type": "text/event-stream", Connection: "keep-alive", 'Cache-Control': "no-cache, no-transform"
         }
     })
+
+    return respStream
+
+
 }
 
 export { handler as GET }

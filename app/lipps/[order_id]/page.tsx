@@ -20,7 +20,7 @@ const page = async ({ params, searchParams }: { params: { order_id: string }, se
     return (
 
         <div className="flex flex-col justify-center gap-4 p-8 items-center ">
-            You're paying for order&nbsp;:<b>{id}</b>
+            You&apos;re paying for order&nbsp;:<b>{id}</b>
             <Payment id={id} orders={parsedOrders} />
 
 

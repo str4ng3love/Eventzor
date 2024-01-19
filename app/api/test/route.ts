@@ -1,5 +1,5 @@
 
-import { TriggerNotification, emitter } from "@/helpers/EventEmitter"
+import { TriggerNotification } from "@/helpers/EventEmitter"
 import { getServerSession } from "next-auth"
 import { NextResponse } from "next/server"
 import { options } from "../auth/[...nextauth]/options"
@@ -13,7 +13,7 @@ async function handler(req: Request) {
         return NextResponse.json({ error:'Not authorized' }) 
     }
 
-    TriggerNotification([session?.user?.name, "FelixWilliams"])
+    await TriggerNotification(["gresasty", "FelixWilliams"])
     return NextResponse.json({ ok: "ok" })
 }
 

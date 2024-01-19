@@ -69,7 +69,7 @@ async function handler(req: Request) {
               dislikes: { deleteMany: { userName: session.user?.name as string } },
             }, select: { merchantName: true, item: true }
           })
-          TriggerNotification(organizer.name)
+          TriggerNotification([organizer.name])
           return item
         })
        if(!item?.item){
