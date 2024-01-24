@@ -72,7 +72,6 @@ const handler = async (req: Request) => {
     const user = await prisma.user.create({
       data: {
         name: body.username,
-        username: body.username,
         password: hassedPass,
         email: body.email,
       },

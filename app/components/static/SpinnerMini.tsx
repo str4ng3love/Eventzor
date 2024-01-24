@@ -5,9 +5,9 @@ interface Props {
   w?:string;
   borderSize?:string
 }
-const SpinnerMini = ({h,w,borderSize}:Props) => {
+const SpinnerMini = ({h="h-8",w="w-8",borderSize="border-[6px]"}:Props) => {
   return (
-    <div className={`animate-spin ${h? h : "h-8"} ${w? w: "w-8"} ${borderSize? borderSize: "border-[6px]"} rounded-[50%] border-solid border-[#fff_transparent_#fff_transparent]`}>
+    <div className={`animate-spin ${h} ${w} ${borderSize} rounded-[50%] border-solid border-[#fff_transparent_#fff_transparent]`}>
        
     </div>
   )

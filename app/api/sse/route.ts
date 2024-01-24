@@ -27,12 +27,13 @@ async function handler(req: NextRequest) {
         listener.removeAllListeners(eventName)
 
     })
-    console.log('event name: ' + eventName)
+
     listener.on(eventName, (e) => {
-        console.log('writing to :'+ eventName)
+
         writer.write(encoder.encode(`data: new item\n\n`))
     })
-   
+    
+  
 
     const respStream = new NextResponse(responseSteam.readable, {
         headers: {

@@ -55,8 +55,6 @@ async function handler(req: Request) {
               }
             }
           })
-          const notification = await tx.notification.findFirst({ where: { eventId: body.id }, select: { id: true } })
-          const randomId = new ObjectId().toString()
 
           if (!organizer) {
             return
@@ -64,25 +62,25 @@ async function handler(req: Request) {
           const event = await tx.event.update({
             where: { id: body.id },
             data: {
-              notification: {
-                upsert: { where: { id: notification ? notification.id : randomId }, update: { markedAsDeleted: false }, create: { action: "dislike", userInit: { connect: { name: session.user?.name as string } }, userRecip: { connect: { name: organizer.name } } } }
-              },
               dislikes: {
                 create: {
                   user: { connect: { name: session.user?.name as string } },
                 },
               },
               likes: { deleteMany: { userName: session.user?.name as string } },
-            }, select: { organizerName: true, title: true }
+            }, select: { organizerName: true, id: true, dislikes: { where: { AND: [{ userName: { equals: session.user?.name as string } }, { eventId: body.id }] } } }
+
           })
+          await tx.notification.create({ data: { targetDislike: { connect: { id: event.dislikes[0].id } }, action: "dislike", event: { connect: { id: body.id } }, userRecip: { connect: { name: event.organizerName } }, userInit: { connect: { name: session.user?.name as string } } } })
+
           TriggerNotification([organizer.name])
           return event
         })
-        if (!event?.title) {
+        if (!event) {
           return NextResponse.json({ error: "Something went wrong." })
         }
         // SSE Broadcast
-        revalidatePath(`/events/${event?.title}`, "page")
+
         return NextResponse.json({
           message: "Dislike created successfully",
         });
@@ -102,7 +100,7 @@ async function handler(req: Request) {
           where: { id: body.id },
           data: { dislikes: { deleteMany: { userName: session?.user?.name as string } } },
         })
-        await tx.notification.updateMany({ where: { AND: [{ eventId: body.id }, { initiator: session.user?.name as string }, {action: "dislike"}] }, data: { markedAsDeleted: true } })
+        await tx.notification.deleteMany({ where: { AND: [{ eventId: body.id }, { initiator: session.user?.name as string }, { action: "dislike" }] } })
 
         return event
       });

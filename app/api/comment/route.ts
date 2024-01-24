@@ -45,6 +45,7 @@ async function handler(req: Request) {
               authorName: session?.user?.name as string,
               eventId: body.id,
             }
+            , select: { authorName: true, id: true, event: { select: { organizerName: true } } }
           }
           query = argEvent
           break;
@@ -56,7 +57,7 @@ async function handler(req: Request) {
               message: body.comment,
               authorName: session?.user?.name as string,
               marketItemId: body.id,
-            }
+            }, select: { authorName: true, id: true, marketItem: { select: { merchantName: true } } }
           }
           query = argItem
           break;
@@ -68,7 +69,8 @@ async function handler(req: Request) {
               message: body.comment,
               authorName: session?.user?.name as string,
               parentId: body.id,
-            }
+            },
+            select: { authorName: true, id: true, parent: { select: { authorName: true } } }
           }
           query = argParent
           break;
@@ -85,82 +87,117 @@ async function handler(req: Request) {
         );
       }
       if (query !== null) {
-        const [comment] = await prisma.$transaction([prisma.comment.create(query)])
+        const comment = await prisma.comment.create(query)
 
-        await prisma.comment.update({ where: { id: comment.id }, data: { notification: { create: { action: "comment", userInit: { connect: { name: session.user?.name as string } }, userRecip: { connect: { name: comment.authorName } } } } } })
-        TriggerNotification([comment.authorName])
+
+        let recipient
+        if (query.select?.event) {
+          // @ts-ignore
+          recipient = comment.event.organizerName
+          const notf = await prisma.notification.create({
+            data: {
+              targetComment: { connect: { id: comment.id } }, action: "comment", userInit: { connect: { name: session.user?.name as string } }, userRecip: { connect: { name: comment.authorName } },
+              event: { connect: { id: body.id } }
+            }
+          })
+
+        } else if (query.select?.marketItem) {
+          // @ts-ignore
+          recipient = comment.marketItem.merchantName
+          const notf = await prisma.notification.create({
+            data: {
+              targetComment: { connect: { id: comment.id } }, action: "comment", userInit: { connect: { name: session.user?.name as string } }, userRecip: { connect: { name: comment.authorName } },
+              item: { connect: { id: body.id } }
+            }
+          })
+
+        } else {
+          // @ts-ignore
+          recipient = comment.parent.authorName
+          const notf = await prisma.notification.create({
+            data: {
+              targetComment: { connect: { id: comment.id } }, action: "reply", userInit: { connect: { name: session.user?.name as string } }, userRecip: { connect: { name: comment.authorName } },
+              comment: { connect: { id: body.id } },
+            }
+          })
+
+        }
+        TriggerNotification([recipient])
         //  SSE Broadcast
         return NextResponse.json(
           { message: "Comment created successfully" },
           { status: 200 }
         );
       } else {
+        return NextResponse.json(
+          { error: "You need to provide type of comment [event, parent, item]." },
+          { status: 400 }
+        );
+      }
+
+
+    } catch (error) {
+      console.log(error);
       return NextResponse.json(
-        { error: "You need to provide type of comment [event, parent, item]." },
-        { status: 400 }
+        { error: "Internal server error" },
+        { status: 500 }
       );
     }
+  } else if (req.method === "DELETE") {
+    const body = await req.json();
+    const session = await getServerSession(options)
 
+    if (!session?.user?.name) {
+      return NextResponse.json({ error: "Not authorized" })
+    }
 
-  } catch (error) {
-    console.log(error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
-  }
-} else if (req.method === "DELETE") {
-  const body = await req.json();
-
-
-  const deletedComment = await prisma.comment.deleteMany({
-    where: { AND: [{ id: body }, { children: { none: {} } }] },
-  });
-
-  if (deletedComment.count === 0) {
     const deletedCommentUpdate = await prisma.comment.update({
-      where: { id: body },
+      where: { id: body.id, author: { name: session.user.name } },
       data: {
         status: "flaggedAsDeleted",
-      },
-      select: { id: true, status: true },
+        Notification: {
+          updateMany: {
+            where: { targetCommentId: body.id },
+            data: { markedAsDeleted: true }
+          },
+        },
+
+      }, select: { id: true, status: true },
     });
-    if (!deletedComment) {
+
+    if (!deletedCommentUpdate) {
       return NextResponse.json({ error: "Internal server error" });
     }
+
     return NextResponse.json({
       message: "Comment deleted successfully",
-      deletedCommentUpdate,
     });
-  }
 
-  return NextResponse.json({
-    message: "Comment deleted successfully",
-    deletedComment,
-  });
-} else if (req.method === "PATCH") {
-  const body = await req.json();
 
-  if (!body || body.id.length <= 0 || body.text <= 0) {
+
+  } else if (req.method === "PATCH") {
+    const body = await req.json();
+
+    if (!body || body.id.length <= 0 || body.text <= 0) {
+      return NextResponse.json({
+        error: "Please provide a valid comment update",
+      });
+    }
+    const updatedComment = await prisma.comment.update({
+      where: { id: body.id },
+      data: { message: body.text, updatedAt: new Date() },
+    });
+
+    if (!updatedComment) {
+      return NextResponse.json({ error: "something went wrong" });
+    }
     return NextResponse.json({
-      error: "Please provide a valid comment update",
+      message: "Comment updated successfully",
+      updatedComment,
     });
+  } else {
+    return NextResponse.json({ error: "Method not allowed" }, { status: 405 });
   }
-  const updatedComment = await prisma.comment.update({
-    where: { id: body.id },
-    data: { message: body.text, updatedAt: new Date() },
-  });
-
-  if (!updatedComment) {
-    return NextResponse.json({ error: "something went wrong" });
-  }
-  return NextResponse.json({
-    message: "Comment updated successfully",
-    updatedComment,
-  });
-} else {
-  return NextResponse.json({ error: "Method not allowed" }, { status: 405 });
-}
 }
 
 export { handler as POST, handler as PATCH, handler as DELETE };

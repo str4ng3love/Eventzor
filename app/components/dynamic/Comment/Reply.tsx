@@ -1,7 +1,7 @@
 "use client";
 import TimeDifference from "@/helpers/TimeDifference";
 import AddComment from "./AddComment";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SpinnerMini from "../../static/SpinnerMini";
 import { BiDotsVerticalRounded, BiDownArrow } from "react-icons/bi";
 import { ReplyProps } from "./CommentComponent";
@@ -21,8 +21,8 @@ interface Props {
   createdAt: Date;
   updatedAt?: Date | null;
   amountOfReplies: number;
-  amountOfLikes:number;
-  amountOfDislikes:number;
+  amountOfLikes: number;
+  amountOfDislikes: number;
 }
 
 const Reply = ({
@@ -39,6 +39,7 @@ const Reply = ({
   const [commentTextEdited, setCommentTextEdited] = useState("");
   const [fallbackText, setFallbackText] = useState("");
   const [edit, setEdit] = useState(false);
+  const [whenCommented, setWhenCommented] = useState<string>()
   const [reply, setReply] = useState({
     authorName,
     id,
@@ -63,7 +64,7 @@ const Reply = ({
         "/api/comment/replies?" + new URLSearchParams({ id: parentId })
       );
       const data = await resp.json();
-      console.log(data)
+
       setReplies(data);
     } catch (error) {
       console.log(error);
@@ -92,19 +93,41 @@ const Reply = ({
       console.log(error);
     }
   };
+  const handleDelete = async (id: string) => {
+    try {
+      const resp = await fetch("/api/comment", {
+        method: "DELETE",
+        body: JSON.stringify({ id }),
+      });
+      const data = await resp.json();
+      if (data.error) {
+        setNotify({ show: true, error: true, message: data.error });
+      }
+      if (data.message === reply.message) {
+        console.log('running')
+        setReply(prev=> ({...prev, status:"flaggedAsDeleted"}))
+        setNotify({ show: true, error: false, message: data.message });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useEffect(()=>{
+    setWhenCommented(TimeDifference(
+      Date.now(),
+      Date.parse(reply.createdAt?.toUTCString())
+    ))
+  }, [])
   if (status === "flaggedAsDeleted") {
+
+
     return (
       <div className="border-l-4 border-primary border-solid flex w-full flex-col my-2 pl-2">
         <div className="flex items-center  justify-between">
-          <div className="">
+          <div className="flex items-center">
             <span>{authorName}</span>
             <span className="text-sm pl-4">
-              {createdAt
-                ? TimeDifference(
-                    Date.now(),
-                    Date.parse(createdAt.toUTCString())
-                  )
-                : ""}
+            {whenCommented? whenCommented :<SpinnerMini borderSize="border-2" h="h-2" w="w-2"/>}
             </span>
           </div>
         </div>
@@ -122,9 +145,8 @@ const Reply = ({
               className="cursor-pointer flex items-center text-link rounded-md transition-all duration-300"
             >
               <span
-                className={`${
-                  showReplies ? "-rotate-180" : "rotate-0"
-                } transition-all duration-300`}
+                className={`${showReplies ? "-rotate-180" : "rotate-0"
+                  } transition-all duration-300`}
               >
                 <BiDownArrow />
               </span>
@@ -165,20 +187,17 @@ const Reply = ({
         )}
       </div>
     );
+
   } else {
     return (
       <div className={`border-l-4 ${reply.authorName === session?.user?.name ? "border-primary" : "border-bg_interactive"} border-solid flex w-full flex-col my-2 pl-2`}>
         <div className="flex items-center  justify-between">
-          <div className="">
+          <div className="flex items-center">
+
             <span>{reply.authorName}</span>
             <span className="text-sm pl-4">
               {reply.updatedAt ? "(edited) " : ""}
-              {reply.createdAt
-                ? TimeDifference(
-                    Date.now(),
-                    Date.parse(createdAt.toUTCString())
-                  )
-                : ""}
+              {whenCommented? whenCommented :<SpinnerMini borderSize="border-2" h="h-2" w="w-2"/>}
             </span>
           </div>
           <div>
@@ -186,7 +205,7 @@ const Reply = ({
               <div>
                 <DropDownMini
                   items={[
-                    { text: "delete", fn: () => {} },
+                    { text: "delete", fn: () => { handleDelete(reply.id)} },
                     {
                       text: "Edit",
                       fn: () => {
@@ -238,6 +257,7 @@ const Reply = ({
                   setEdit(false);
                 }}
               />
+
             </div>
           </div>
         ) : (
@@ -245,9 +265,9 @@ const Reply = ({
             {FormatString(reply.message)}
           </div>
         )}
-        <div className="flex p-2 w-full gap-2">
-          <LikeAndDislike commentId={id} amountOfLikes={amountOfLikes} amountOfDislikes={amountOfDislikes} hidden/>
-          <AddComment  title="Reply" reply id={id} callback={()=>setReply((prev)=>({...prev, amountOfReplies: amountOfReplies+1}))} type={CommentType.parent}/>
+        <div className="flex flex-col p-2 w-full gap-2">
+          <LikeAndDislike commentId={id} amountOfLikes={amountOfLikes} amountOfDislikes={amountOfDislikes} hidden />
+          <AddComment title="Reply" reply id={id} callback={() => setReply((prev) => ({ ...prev, amountOfReplies: amountOfReplies + 1 }))} type={CommentType.parent} />
         </div>
         {reply.amountOfReplies && reply.amountOfReplies > 0 ? (
           <div className="flex flex-col p-2 w-full gap-2">
@@ -259,9 +279,8 @@ const Reply = ({
               className="cursor-pointer flex items-center text-link rounded-md transition-all duration-300"
             >
               <span
-                className={`${
-                  showReplies ? "-rotate-180" : "rotate-0"
-                } transition-all duration-300`}
+                className={`${showReplies ? "-rotate-180" : "rotate-0"
+                  } transition-all duration-300`}
               >
                 <BiDownArrow />
               </span>

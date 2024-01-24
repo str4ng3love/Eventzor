@@ -4,6 +4,7 @@ interface Props {
   Icon: IconType;
   textSize?:string;
   textColor?: string;
+  
 }
 
 const Icon = ({ Icon,textColor='text-text', textSize='text-lg' }: Props) => {

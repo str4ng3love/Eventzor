@@ -30,7 +30,7 @@ async function handler(req: Request) {
             { id: body.id },
             {
               likes: {
-                some: { user: { username: session.user?.name as string } },
+                some: { user: { name: session.user?.name as string } },
               },
             },
           ],
@@ -38,7 +38,7 @@ async function handler(req: Request) {
       });
 
       if (comment) {
-        return NextResponse.json({ message: "Comment already liked"});
+        return NextResponse.json({ message: "Comment already liked" });
       } else {
         const comment = await prisma.$transaction(async (tx) => {
           const commenter = await tx.comment.findFirst({
@@ -46,58 +46,61 @@ async function handler(req: Request) {
               id: body.id
             }
           })
-          const notification = await tx.notification.findFirst({ where: { commentId: body.id }, select: { id: true } })
-          const randomId = new ObjectId().toString()
 
           if (!commenter) {
-            return 
+            // need to handle it better
+            return
           }
           const comment = await tx.comment.update({
             where: { id: body.id },
             data: {
-              notification: {
-                upsert: { where: { id: notification ? notification.id : randomId }, update: { markedAsDeleted: false }, create: { action: "like", userInit: { connect: { name: session.user?.name as string } }, userRecip: { connect: { name: commenter.authorName } } } }
-              },
               likes: {
                 create: {
                   user: { connect: { name: session.user?.name as string } },
                 },
               },
               dislikes: { deleteMany: { userName: session.user?.name as string } },
-            }, select: { authorName: true}
+            }, select: {
+              authorName: true, id: true, likes: { where: { AND: [{ userName: { equals: session.user?.name as string } }, { commentId: body.id }] } }
+            }
           })
+
+          await tx.notification.create({ data: { targetLike: { connect: { id: comment.likes[0].id } }, action: "like", comment: { connect: { id: body.id } }, userRecip: { connect: { name: comment.authorName } }, userInit: { connect: { name: session.user?.name as string } } } })
+
           TriggerNotification([commenter.authorName])
           return comment
         })
-        if(!comment){
-          return NextResponse.json({error: "Something went wrong."})
-         }
-            // SSE Broadcast
-       
+        if (!comment) {
+          return NextResponse.json({ error: "Something went wrong." })
+        }
+        // SSE Broadcast
+
         return NextResponse.json({
           message: "Like created successfully",
         });
       }
     } catch (error) {
       console.log(error);
-      return NextResponse.json({error:error});
+      return NextResponse.json({ error: error });
     }
   }
   if (req.method === "DELETE") {
     try {
-      await prisma.$transaction(async (tx) => {
-        tx.comment.update({
+      const comment = await prisma.$transaction(async (tx) => {
+        const comment = await tx.comment.update({
           where: { id: body.id },
           data: { likes: { deleteMany: { userName: session?.user?.name as string } } },
         })
-        await tx.notification.updateMany({ where: { AND: [{ commentId: body.id }, { initiator: session.user?.name as string }] }, data: { markedAsDeleted: true } })
-        return
+        await tx.notification.deleteMany({ where: { AND: [{ comment: { id: body.id } }, { initiator: session.user?.name as string }, { action: "like" }] } })
+
+
+        return comment
       });
 
       return NextResponse.json({ message: "Like deleted successfully" });
     } catch (error) {
       console.log(error);
-      return NextResponse.json({error:error});
+      return NextResponse.json({ error: error });
     }
   }
 }

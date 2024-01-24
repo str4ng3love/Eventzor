@@ -36,17 +36,10 @@ const NotificationsTest = () => {
         )
     }
     return (
-        <>  <span>Notifications list:</span>
-            {notifications ?
-                <div>{notifications.map((n, k) =>
-                    <div key={k}>
-                        {!n.markedAsDeleted ?
-                            <div key={k}>
-                                <span>{n.commentId || n.marketItemId || n.orderId}&nbsp;{n.action}&nbsp;by&nbsp;{n.initiator}&nbsp;{n.markedAsDeleted ? "deleted" : ""}</span>
-                            </div> : <></>}
-                    </div>)}
-                </div> : <></>}
+        <>  <span>Notifications list:{notifications.length}</span>
+           
                 <Button text="xxxx" title="xxx" fn={async (e)=>{test()}}/>
+            
         </>
     )
 }

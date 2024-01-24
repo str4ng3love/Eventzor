@@ -39,7 +39,7 @@ async function handler(req: Request) {
       });
 
       if (item) {
-        return NextResponse.json({ message: "Item already liked"});
+        return NextResponse.json({ message: "Item already liked" });
       } else {
         const item = await prisma.$transaction(async (tx) => {
           const organizer = await tx.user.findFirst({
@@ -49,33 +49,37 @@ async function handler(req: Request) {
               }
             }
           })
-          const notification = await tx.notification.findFirst({ where: { orderId: body.id, action:"like" }, select: { id: true } })
+          const notification = await tx.notification.findFirst({ where: { orderId: body.id, action: "like" }, select: { id: true } })
           const randomId = new ObjectId().toString()
 
           if (!organizer) {
+            // need to handle it better
             return
           }
           const item = await tx.marketItem.update({
             where: { id: body.id },
             data: {
-              notification: {
-                upsert: { where: { id: notification ? notification.id : randomId }, update: { markedAsDeleted: false }, create: { action: "like", userInit: { connect: { name: session.user?.name as string } }, userRecip: { connect: { name: organizer.name } } } }
-              },
               likes: {
                 create: {
                   user: { connect: { name: session.user?.name as string } },
                 },
               },
               dislikes: { deleteMany: { userName: session.user?.name as string } },
-            }, select: { merchantName: true, item: true }
+            }, select: {
+              merchantName: true, item: true, id: true, likes: {
+                where: { AND: [{ userName: { equals: session.user?.name as string } }, { MarketItemId: body.id }] }
+              }
+            }
           })
+          await tx.notification.create({ data: { targetLike: { connect: { id: item.likes[0].id } }, action: "like", comment: { connect: { id: body.id } }, userRecip: { connect: { name: item.merchantName } }, userInit: { connect: { name: session.user?.name as string } } } })
+
           TriggerNotification([organizer.name])
           return item
         })
-       if(!item?.item){
-        return NextResponse.json({error: "Something went wrong."})
-       }
-           // SSE Broadcast 
+        if (!item?.item) {
+          return NextResponse.json({ error: "Something went wrong." })
+        }
+        // SSE Broadcast 
         revalidatePath(`/market/${item?.item}`, "page")
         return NextResponse.json({
           message: "Like created successfully"
@@ -83,7 +87,7 @@ async function handler(req: Request) {
       }
     } catch (error) {
       console.log(error);
-      return NextResponse.json({error:error});
+      return NextResponse.json({ error: error });
     }
   }
   if (req.method === "DELETE") {
@@ -93,7 +97,7 @@ async function handler(req: Request) {
           where: { id: body.id },
           data: { likes: { deleteMany: { userName: session?.user?.name as string } } },
         })
-        await tx.notification.updateMany({ where: { AND: [{ marketItemId: body.id }, { initiator: session.user?.name as string },{action:'like'}] }, data: { markedAsDeleted: true } })
+        await tx.notification.deleteMany({ where: { AND: [{ item: { id: body.id } }, { initiator: session.user?.name as string }, { action: 'like' }] } })
         return item
       });
 
@@ -103,7 +107,7 @@ async function handler(req: Request) {
       return NextResponse.json({ message: "Like deleted successfully" });
     } catch (error) {
       console.log(error);
-      return NextResponse.json({error:error});
+      return NextResponse.json({ error: error });
     }
   }
 }

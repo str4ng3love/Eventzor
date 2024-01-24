@@ -60,6 +60,7 @@ const CommentComponent = ({
   const [replies, setReplies] = useState<ReplyProps[]>([]);
   const [showReplies, setShowReplies] = useState(false);
   const [edit, setEdit] = useState(false);
+  const [whenCommented, setWhenCommented] = useState<string>()
   const { data: session } = useSession();
 
   const getReplies = async (parentId: string) => {
@@ -111,7 +112,7 @@ const CommentComponent = ({
     try {
       const resp = await fetch("/api/comment", {
         method: "DELETE",
-        body: JSON.stringify(id),
+        body: JSON.stringify({ id: id }),
       });
       const data = await resp.json();
       console.log(data);
@@ -137,19 +138,22 @@ const CommentComponent = ({
       likes,
       dislikes,
     });
+    setWhenCommented(TimeDifference(
+      Date.now(),
+      Date.parse(comment.createdAt?.toUTCString())
+    ))
+
   }, []);
   if (status === "flaggedAsDeleted") {
+
     return (
       <>
         <div className="flex w-full flex-col my-4 hover:ring-2 ring-primary rounded-md">
           <div className=" p-2 w-full flex items-center justify-between">
-            <div>
+            <div className="flex items-center">
               <span>{comment.author}</span>
               <span className="text-sm pl-4">
-                {TimeDifference(
-                  Date.now(),
-                  Date.parse(comment.createdAt?.toUTCString())
-                )}
+                {whenCommented? whenCommented :<SpinnerMini borderSize="border-2" h="h-2" w="w-2"/>}
               </span>
             </div>
           </div>
@@ -175,6 +179,7 @@ const CommentComponent = ({
                   {amountOfReplies}&nbsp;
                   {amountOfReplies > 1 ? "replies" : "reply"}
                 </span>
+
               </div>
               {showReplies ? (
                 <>
@@ -225,14 +230,11 @@ const CommentComponent = ({
       <>
         <div className="flex w-full flex-col my-4 hover:ring-2 ring-primary rounded-md">
           <div className=" p-2 w-full flex items-center justify-between">
-            <div>
+            <div className="flex items-center">
               <span>{comment.author}</span>
-              <span className="text-sm pl-4">
+              <span className="text-sm pl-4 flex items-center">
                 {comment.updatedAt ? "(edited) " : ""}
-                {TimeDifference(
-                  Date.now(),
-                  Date.parse(comment.createdAt?.toUTCString())
-                )}
+                {whenCommented? whenCommented :<SpinnerMini borderSize="border-2" h="h-2" w="w-2"/>}
               </span>
             </div>
             <div>
