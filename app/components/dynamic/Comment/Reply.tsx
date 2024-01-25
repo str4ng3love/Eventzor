@@ -48,6 +48,8 @@ const Reply = ({
     updatedAt,
     amountOfReplies,
     status,
+    amountOfLikes,
+    amountOfDislikes
   });
   const [showReplies, setShowReplies] = useState(false);
   const [notify, setNotify] = useState({
@@ -94,18 +96,20 @@ const Reply = ({
     }
   };
   const handleDelete = async (id: string) => {
+  
     try {
       const resp = await fetch("/api/comment", {
         method: "DELETE",
         body: JSON.stringify({ id }),
       });
-      const data = await resp.json();
+      const data:{message?:string, error?:string} = await resp.json();
       if (data.error) {
         setNotify({ show: true, error: true, message: data.error });
       }
-      if (data.message === reply.message) {
-        console.log('running')
-        setReply(prev=> ({...prev, status:"flaggedAsDeleted"}))
+
+      if (data.message?.includes('successfully')) {
+
+        setReply((prev)=> ({...prev, status:"flaggedAsDeleted"}))
         setNotify({ show: true, error: false, message: data.message });
       }
     } catch (error) {
@@ -118,14 +122,15 @@ const Reply = ({
       Date.parse(reply.createdAt?.toUTCString())
     ))
   }, [])
-  if (status === "flaggedAsDeleted") {
+
+  if (reply.status === "flaggedAsDeleted") {
 
 
     return (
       <div className="border-l-4 border-primary border-solid flex w-full flex-col my-2 pl-2">
         <div className="flex items-center  justify-between">
           <div className="flex items-center">
-            <span>{authorName}</span>
+            <span>{reply.authorName}</span>
             <span className="text-sm pl-4">
             {whenCommented? whenCommented :<SpinnerMini borderSize="border-2" h="h-2" w="w-2"/>}
             </span>
@@ -135,11 +140,13 @@ const Reply = ({
         <div className=" p-2 w-full break-words text-sm text-text_inactive">
           Comment deleted
         </div>
-        {amountOfReplies && amountOfReplies > 0 ? (
+        {reply.amountOfReplies && reply.amountOfReplies > 0 ? (
           <div className="flex flex-col p-2 w-full gap-2">
             <div
               onClick={(e) => {
-                getReplies(id);
+                if(!showReplies){
+                  getReplies(id);
+                }
                 setShowReplies(!showReplies);
               }}
               className="cursor-pointer flex items-center text-link rounded-md transition-all duration-300"
@@ -151,8 +158,8 @@ const Reply = ({
                 <BiDownArrow />
               </span>
               <span className="px-2">
-                {amountOfReplies}&nbsp;
-                {amountOfReplies > 1 ? "replies" : "reply"}
+                {reply.amountOfReplies}&nbsp;
+                {reply.amountOfReplies > 1 ? "replies" : "reply"}
               </span>
             </div>
             {showReplies ? (
@@ -256,7 +263,7 @@ const Reply = ({
                 fn={() => {
                   setEdit(false);
                 }}
-              />
+              /> 
 
             </div>
           </div>
@@ -266,14 +273,16 @@ const Reply = ({
           </div>
         )}
         <div className="flex flex-col p-2 w-full gap-2">
-          <LikeAndDislike commentId={id} amountOfLikes={amountOfLikes} amountOfDislikes={amountOfDislikes} hidden />
-          <AddComment title="Reply" reply id={id} callback={() => setReply((prev) => ({ ...prev, amountOfReplies: amountOfReplies + 1 }))} type={CommentType.parent} />
+          <LikeAndDislike commentId={reply.id} amountOfLikes={reply.amountOfLikes} amountOfDislikes={reply.amountOfDislikes} hidden />
+          <AddComment title="Reply" reply id={reply.id} callback={() => setReply((prev) => ({ ...prev, amountOfReplies: amountOfReplies + 1 }))} type={CommentType.parent} />
         </div>
         {reply.amountOfReplies && reply.amountOfReplies > 0 ? (
           <div className="flex flex-col p-2 w-full gap-2">
             <div
               onClick={(e) => {
-                getReplies(id);
+                if(!showReplies){
+                  getReplies(id);
+                }
                 setShowReplies(!showReplies);
               }}
               className="cursor-pointer flex items-center text-link rounded-md transition-all duration-300"

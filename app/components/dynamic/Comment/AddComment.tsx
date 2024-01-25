@@ -12,7 +12,8 @@ interface Props {
   title: string;
   reply?: boolean;
   id: string;
-  type: CommentType
+  type: CommentType;
+  triggerRefetchFN?: () => void;
   callback?: () => void;
 }
 const AddComment = ({
@@ -21,6 +22,7 @@ const AddComment = ({
   reply = false,
   title,
   callback,
+  triggerRefetchFN
 }: Props) => {
   const [notify, setNotify] = useState({
     error: false,
@@ -31,26 +33,30 @@ const AddComment = ({
   const [show, setShow] = useState(false);
   const [comment, setComment] = useState("");
   const { data: session } = useSession();
+  const [isWorking, setIsWorking] = useState(false)
   const [isPending, startTransition] = useTransition();
   // ↑ ??
   const router = useRouter();
 
   const handleCreate = async () => {
+    setIsWorking(true)
     try {
-     const resp = await fetch("/api/comment", {
-          method: "POST",
-          body: JSON.stringify({
-            type: type,
-            id: id,
-            comment: comment,
-          }),
-        })
+      const resp = await fetch("/api/comment", {
+        method: "POST",
+        body: JSON.stringify({
+          type: type,
+          id: id,
+          comment: comment,
+        }),
+      })
       const data = await resp.json();
 
       if (data.error) {
+        setIsWorking(false)
         setNotify({ message: data.error, show: true, error: true });
       } else {
         startTransition(() => {
+          setIsWorking(false)
           setNotify({ message: data.message, show: true, error: false });
           router.refresh();
           setShow(false);
@@ -61,22 +67,26 @@ const AddComment = ({
     }
   };
   const handleCreateReply = async () => {
+    setIsWorking(true)
     try {
       const resp = await fetch("/api/comment", {
         method: "POST",
         body: JSON.stringify({
           comment: comment,
-          type:type,
-          id:id
+          type: type,
+          id: id
         }),
       });
       const data = await resp.json();
       //todo optimistic mount
 
       if (data.error) {
+        setIsWorking(false)
         setNotify({ message: data.error, show: true, error: true });
       } else {
         startTransition(() => {
+          setIsWorking(false)
+          triggerRefetchFN ? triggerRefetchFN() : null;
           callback ? callback() : null;
           setNotify({ message: data.message, show: true, error: false });
           router.refresh();
@@ -131,8 +141,12 @@ const AddComment = ({
                 <Button
                   size="text-sm"
                   title="Submit your reply"
-                  text="Reply"
+                  text={`${isWorking ? "Working..." : "Reply"}`}
+                  interactive={isWorking ? false : true}
                   fn={() => {
+                    if (isWorking) {
+                      return
+                    }
                     handleCreateReply();
                   }}
                 />
@@ -140,8 +154,13 @@ const AddComment = ({
                 <Button
                   size="text-sm"
                   title="Submit your comment"
-                  text="Add"
+                  text={`${isWorking ? "Working..." : "Add"}`}
+                  interactive={isWorking ? false : true}
+
                   fn={() => {
+                    if (isWorking) {
+                      return
+                    }
                     handleCreate();
                   }}
                 />

@@ -10,9 +10,11 @@ import getItem from "@/helpers/getIItem";
 import LikeAndDislike from "@/app/components/dynamic/LikeAndDislike";
 import DisplayStock from "@/app/components/static/DisplayStock";
 
-const page = async ({params}:{params:{slug:string}}) => {
-const name = decodeURIComponent(params.slug)
-  const  item  = await getItem(decodeURI(name));
+const page = async ({ params }: { params: { slug: string }}) => {
+
+
+  const name = decodeURIComponent(params.slug)
+  const item = await getItem(decodeURI(name));
   if (item !== null) {
     return (
       <main className="flex flex-col items-center min-h-[calc(100dvh_-_4rem)] pt-20">
@@ -28,20 +30,20 @@ const name = decodeURIComponent(params.slug)
             <div className=" bg-primary ring-2 ring-primary rounded-t-md p-2">
               <div className="flex justify-between p-1 text-interactive_text dark:text-text">
                 <span>Price&nbsp;:</span>
-                <PriceDisplay price={item.price}/>
+                <PriceDisplay price={item.price} />
               </div>
               <div className="flex justify-between p-1 text-interactive_text dark:text-text">
                 <span>Stock&nbsp;:</span>
-                <DisplayStock amount={item.amount} amountSold={item.amountSold}/>
+                <DisplayStock amount={item.amount} amountSold={item.amountSold} />
               </div>
-              <AddToCart price={item.price} type={'market'} item={item.item}  id={item.id} amountLeft={item.amount}
-                />
+              <AddToCart price={item.price} type={'market'} item={item.item} id={item.id} amountLeft={item.amount}
+              />
             </div>
             <div className="flex flex-col ring-2 rounded-t-none ring-primary rounded-md p-2 lg:text-sm md:text-base mb-7">
-           {item.preorder && item.releaseDate && item.releaseDate > new Date(Date.now()) ?    <div  title="Tickets are being sold until this date" className="flex justify-between p-1">
-              <span>Coming :</span>
-              <span>{item.releaseDate?.toUTCString().slice(0, -7)}</span>
-              </div>: <></>}
+              {item.preorder && item.releaseDate && item.releaseDate > new Date(Date.now()) ? <div title="Tickets are being sold until this date" className="flex justify-between p-1">
+                <span>Coming :</span>
+                <span>{item.releaseDate?.toUTCString().slice(0, -7)}</span>
+              </div> : <></>}
               <div title="Organizer's profile" className="flex justify-between p-1">
                 <span>Seller&nbsp;:&nbsp;</span>
                 <span className="hover:text-link transition-all duration-300">
@@ -49,10 +51,10 @@ const name = decodeURIComponent(params.slug)
                 </span>
               </div>
             </div>
-                <LikeAndDislike itemId={item.id} amountOfLikes={item._count.likes} amountOfDislikes={item._count.dislikes} />
+            <LikeAndDislike itemId={item.id} amountOfLikes={item._count.likes} amountOfDislikes={item._count.dislikes} />
           </div>
         </div>
-        <Comments itemId={item.id} eventId={null}/>
+        <Comments itemId={item.id} eventId={null} />
       </main>
     );
   } else {

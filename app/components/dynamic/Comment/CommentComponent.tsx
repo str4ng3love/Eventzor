@@ -25,6 +25,7 @@ interface Props {
   amountOfReplies?: number;
   likes: number;
   dislikes: number;
+  triggerRefetchFN?: () => void
 }
 export interface ReplyProps extends Comment {
   _count: { children: number; likes: number; dislikes: number };
@@ -39,6 +40,7 @@ const CommentComponent = ({
   amountOfReplies,
   likes,
   dislikes,
+  triggerRefetchFN
 }: Props) => {
   const [comment, setComment] = useState({
     text,
@@ -153,7 +155,7 @@ const CommentComponent = ({
             <div className="flex items-center">
               <span>{comment.author}</span>
               <span className="text-sm pl-4">
-                {whenCommented? whenCommented :<SpinnerMini borderSize="border-2" h="h-2" w="w-2"/>}
+                {whenCommented ? whenCommented : <SpinnerMini borderSize="border-2" h="h-2" w="w-2" />}
               </span>
             </div>
           </div>
@@ -164,7 +166,9 @@ const CommentComponent = ({
             <div className="flex flex-col p-2 w-full gap-2">
               <div
                 onClick={(e) => {
-                  getReplies(id);
+                  if (!showReplies) {
+                    getReplies(id);
+                  }
                   setShowReplies(!showReplies);
                 }}
                 className="cursor-pointer flex items-center text-link rounded-md transition-all duration-300"
@@ -234,7 +238,7 @@ const CommentComponent = ({
               <span>{comment.author}</span>
               <span className="text-sm pl-4 flex items-center">
                 {comment.updatedAt ? "(edited) " : ""}
-                {whenCommented? whenCommented :<SpinnerMini borderSize="border-2" h="h-2" w="w-2"/>}
+                {whenCommented ? whenCommented : <SpinnerMini borderSize="border-2" h="h-2" w="w-2" />}
               </span>
             </div>
             <div>
@@ -307,13 +311,15 @@ const CommentComponent = ({
               amountOfDislikes={comment.dislikes}
             />
 
-            <AddComment title="Reply" reply id={id} type={CommentType.parent} />
+            <AddComment triggerRefetchFN={() => { triggerRefetchFN ? triggerRefetchFN() : null }} title="Reply" reply id={id} type={CommentType.parent} />
           </div>
           {amountOfReplies && amountOfReplies > 0 ? (
             <div className="flex flex-col p-2 w-full gap-2">
               <div
                 onClick={(e) => {
-                  getReplies(id);
+                  if (!showReplies) {
+                    getReplies(id);
+                  }
                   setShowReplies(!showReplies);
                 }}
                 className="cursor-pointer flex items-center text-link rounded-md transition-all duration-300"
