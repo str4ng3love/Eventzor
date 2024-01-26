@@ -27,8 +27,8 @@ const MyItemsBrowser = () => {
     try {
       let resp;
       id
-        ? (resp = await fetch(`/api/market/${id}`))
-        : (resp = await fetch("/api/market/latest"));
+        ? (resp = await fetch(`/api/items/${id}`))
+        : (resp = await fetch("/api/items/latest"));
 
       const data = await resp.json();
 
@@ -62,7 +62,7 @@ const MyItemsBrowser = () => {
   
   const getItems = async () => {
     try {
-      const resp = await fetch("/api/market/user", { cache: "no-store" });
+      const resp = await fetch("/api/items/user", { cache: "no-store" });
       const items = await resp.json();
       if (items.error) {
         setNotify({ error: true, show: true, message: items.error });
@@ -102,7 +102,7 @@ const MyItemsBrowser = () => {
         prev ? [...prev.filter((i) => i.id !== id)] : null
       );
 
-      const resp = await fetch("/api/market", {
+      const resp = await fetch("/api/items", {
         method: "DELETE",
         headers: {
           "content-type": "application/json",

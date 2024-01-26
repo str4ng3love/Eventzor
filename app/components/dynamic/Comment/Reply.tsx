@@ -63,7 +63,7 @@ const Reply = ({
   const getReplies = async (parentId: string) => {
     try {
       const resp = await fetch(
-        "/api/comment/replies?" + new URLSearchParams({ id: parentId })
+        "/api/comments/replies?" + new URLSearchParams({ id: parentId })
       );
       const data = await resp.json();
 
@@ -74,7 +74,7 @@ const Reply = ({
   };
   const handleEdit = async (id: string, text: string) => {
     try {
-      const resp = await fetch("/api/comment", {
+      const resp = await fetch("/api/comments", {
         method: "PATCH",
         body: JSON.stringify({ id, text }),
       });
@@ -98,7 +98,7 @@ const Reply = ({
   const handleDelete = async (id: string) => {
   
     try {
-      const resp = await fetch("/api/comment", {
+      const resp = await fetch("/api/comments", {
         method: "DELETE",
         body: JSON.stringify({ id }),
       });

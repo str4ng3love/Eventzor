@@ -9,9 +9,9 @@ import { ParsedOrder } from "@/types/interfaces"
 
 
 
-const page = async ({ params, searchParams }: { params: { category: string }, searchParams:{[key:string]:string | string[]| undefined}}) => {
+const page = async ({ params, searchParams }: { params: { category: string }, searchParams: { [key: string]: string | string[] | undefined } }) => {
   const session = await getServerSession(options)
-  const order = searchParams.order === "desc"? 'desc' : 'asc'
+  const order = searchParams.order === "desc" ? 'desc' : 'asc'
   const category = params.category
   let query: StatusOrder | null
 
@@ -25,9 +25,9 @@ const page = async ({ params, searchParams }: { params: { category: string }, se
     case 'completed':
       query = "completed"
       break;
-      case 'canceled':
-        query = "canceled"
-        break;
+    case 'canceled':
+      query = "canceled"
+      break;
     default:
       query = null
       break;
@@ -40,11 +40,11 @@ const page = async ({ params, searchParams }: { params: { category: string }, se
 
     const getOrders = async () => {
 
-      const orders = await prisma.order.findMany({ where: {AND:[{ buyer: { username: session?.user?.name as string }, status: query as StatusOrder }]}, orderBy: { id: order }})
-      const parsedOrders:ParsedOrder[]= JSON.parse(JSON.stringify(orders))
+      const orders = await prisma.order.findMany({ where: { AND: [{ buyerName: session?.user?.name as string, status: query as StatusOrder }] }, orderBy: { id: order } })
+      const parsedOrders: ParsedOrder[] = JSON.parse(JSON.stringify(orders))
       return parsedOrders
     }
-   
+
     const orders = await getOrders()
 
     if (orders.length === 0) {
@@ -52,7 +52,7 @@ const page = async ({ params, searchParams }: { params: { category: string }, se
         <div className=" pt-20 w-full flex justify-center">
           <div className="w-[80%] p-8">
 
-            <Heading1 text={`you have no ${category!=='shipping' ? category: ""} orders ${category==='shipping' ? "in"+" "+category: ""}`} />
+            <Heading1 text={`you have no ${category !== 'shipping' ? category : ""} orders ${category === 'shipping' ? "in" + " " + category : ""}`} />
 
           </div>
         </div>
@@ -62,7 +62,7 @@ const page = async ({ params, searchParams }: { params: { category: string }, se
       <div className="pt-20 w-full flex justify-center">
         <div className="w-[80%] p-8">
 
-          <MyOrderBrowser ordersArray={orders} email={session?.user?.email as string}/>
+          <MyOrderBrowser ordersArray={orders} email={session?.user?.email as string} />
 
         </div>
       </div>

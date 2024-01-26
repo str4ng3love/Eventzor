@@ -147,7 +147,7 @@ const AddNewEvent = ({optimisticFn, optimisticFnClnUp, refetchTrigger}:Props) =>
 
     try {
       setCanPost(false);
-      const resp = await fetch("/api/events/user", {
+      const resp = await fetch("/api/events", {
         method: "POST",
         headers: {
           "Content-Type": "Application/json",

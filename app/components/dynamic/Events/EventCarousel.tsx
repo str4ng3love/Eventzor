@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Heading1, Heading3, Heading4 } from "../../static/Heading";
+import { Heading1} from "../../static/Heading";
 import Image from "next/image";
 import { BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi";
 import Link from "next/link";
@@ -31,9 +31,6 @@ const EventCarousel = ({
   const [active, setActive] = useState(0);
   const [currency, setCurrency] = useState({ name: "initial", rate: 1 });
 
-  const readAddress = () => {
-    console.log(encodeURI(items[active].title));
-  };
   const handleChange = async (image: string) => {
     setPlayFadeOut(true);
     setTimeout(() => {

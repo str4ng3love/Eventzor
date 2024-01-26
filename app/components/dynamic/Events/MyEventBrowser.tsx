@@ -84,7 +84,7 @@ const MyEventBrowser = () => {
   };
   const getEvents = async () => {
     try {
-      const resp = await fetch(`/api/events/user`, { cache: "no-store" });
+      const resp = await fetch(`/api/events`, { cache: "no-store" });
       const events = await resp.json();
 
       if (events.error) {

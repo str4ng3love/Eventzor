@@ -41,7 +41,7 @@ const AddComment = ({
   const handleCreate = async () => {
     setIsWorking(true)
     try {
-      const resp = await fetch("/api/comment", {
+      const resp = await fetch("/api/comments", {
         method: "POST",
         body: JSON.stringify({
           type: type,
@@ -69,7 +69,7 @@ const AddComment = ({
   const handleCreateReply = async () => {
     setIsWorking(true)
     try {
-      const resp = await fetch("/api/comment", {
+      const resp = await fetch("/api/comments", {
         method: "POST",
         body: JSON.stringify({
           comment: comment,

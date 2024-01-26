@@ -32,7 +32,7 @@ async function handler(req: Request) {
 
                     const recipients = [...new Set(await Promise.all(orderIds.map(async i => await tx.user.findFirst({ where: { OR: [{ events: { some: { id: i } } }, { marketItems: { some: { id: i } } }] }, select:{name:true} }))))]
 
-                    await Promise.all(recipients.map(async r => r === null ? null : await tx.notification.create({ data: { action: "status", orderId: order.id, initiator: session.user?.name as string, recipient: r.name } })))
+                    await Promise.all(recipients.map(async r => r === null ? null : await tx.notification.updateMany({where:{orderId:id}, data: { action: "status", orderId: order.id, initiator: session.user?.name as string, recipient: r.name } })))
 
                     return order
                 })

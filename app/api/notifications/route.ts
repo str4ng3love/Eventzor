@@ -8,7 +8,7 @@ async function handler(req: Request) {
     if (!session?.user?.name) {
         return NextResponse.json({ message: "Not Authorized. Please login in to get notifications" })
     } else {
-        const notifications = await prisma.notification.findMany({ where: { AND: [{ userRecip: { name: session.user.name } }, {markedAsDeleted:false}] }, orderBy: { id: 'desc' }, include:  {comment:{select:{message:true}} ,event: { select: { title: true } }, order: { select: { id: true } }, item: { select: { item: true } } } })
+        const notifications = await prisma.notification.findMany({ where: { AND: [{ userRecip: { name: session.user.name } }, {markedAsDeleted:false}] }, orderBy: { id: 'desc' }, include:  {comment:{select:{message:true}} ,event: { select: { title: true } }, order: { select: { id: true, status:true } }, item: { select: { item: true } } } })
  
         return NextResponse.json({ notifications })
     }

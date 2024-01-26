@@ -112,7 +112,7 @@ const EditItem = ({ ...props }: Props) => {
 
   const handleEdit = async (state: InputState) => {
     try {
-      const resp = await fetch("/api/market/user", {
+      const resp = await fetch("/api/items/user", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

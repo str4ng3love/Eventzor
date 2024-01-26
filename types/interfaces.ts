@@ -1,8 +1,15 @@
-import { Order } from "@prisma/client";
+import { Comment, Order } from "@prisma/client";
 
-interface ParsedOrder extends Omit<Order, "orderedAt">{
+interface ParsedOrder extends Omit<Order, "orderedAt"> {
     orderedAt: string
     amounts: { id: string; item: string; amount: number; price: number; }[]
 }
 
-export type {ParsedOrder}
+
+interface CommentProps extends Comment {
+    _count: {
+        likes: number, dislikes: number, children: number
+    }
+}
+
+export type { ParsedOrder, CommentProps }
