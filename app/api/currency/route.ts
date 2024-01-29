@@ -36,44 +36,6 @@ async function handler(req: Request) {
         }
       }
   }
-  // TODO: auth admin
-  // if (req.method === "POST") {
-  //   const body = await req.json();
-  //   const curr = await prisma.currency.create({
-  //     data: { exchangeRateToUSD: parseFloat(body.rate), name: body.name },
-  //   });
-  //   return NextResponse.json({ curr });
-  // } else
-
-  // if (req.method === "PATCH") {
-  // console.log('hit PATCH')
-  //     const body = await req.json();
-  //     console.log(body)
-  //     if (body.id && body.rate) {
-  //         try {
-  //             const currency = await prisma.currency.update({where: {id: body.id}, data:{exchangeRateToUSD: parseFloat(body.rate)}});
-  //             if (!currency) {
-  //               return NextResponse.json({ error: "Not found" }, { status: 404 });
-  //             } else {
-  //               return NextResponse.json({ currency });
-  //             }
-  //           } catch (error) {
-  //             if (error instanceof PrismaClientKnownRequestError) {
-  //               console.log(error);
-  //               return NextResponse.json({ error: "Bad request" }, { status: 400 });
-  //             } else {
-  //               console.log(error);
-  //               return NextResponse.json(
-  //                 { error: "Internal server error" },
-  //                 { status: 500 }
-  //               );
-  //             }
-  //           }
-  //     } else {
-  //         return NextResponse.json({ error: "Bad request" }, { status: 400 });
-  //     }
-
-  //   } else
   else {
     return NextResponse.json(
       { error: "Methond not supported" },

@@ -4,12 +4,12 @@ interface Props {
   Icon: IconType;
   textSize?:string;
   textColor?: string;
-  
+  padding?:string
 }
 
-const Icon = ({ Icon,textColor='text-text', textSize='text-lg' }: Props) => {
+const Icon = ({ Icon, padding="p-2",textColor='text-text', textSize='text-lg' }: Props) => {
   return (
-    <span className={`${textSize} p-2 ${textColor}`}>
+    <span className={`${textSize} ${padding} ${textColor}`}>
       <Icon />
     </span>
   );

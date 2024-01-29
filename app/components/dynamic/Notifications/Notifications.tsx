@@ -85,7 +85,7 @@ const Notifications = () => {
 
     })()
     const eventSource = new EventSource('/api/sse')
-    eventSource.onopen = (e) => console.log('connection open')
+
     eventSource.onmessage = (e) => { setEvent(prev => prev + 1) }
     eventSource.onerror = (e) => eventSource.close()
 
@@ -97,16 +97,18 @@ const Notifications = () => {
 
 
   return (
-    <div className={`group`} onClick={async () => { setEvent(0); if (notifications === null) setNotifications(await getNotifications()) }
-    }>
+    <div className={`relative`} >
 
 
 
       <Menu >
-        <Menu.Button className={`relative h-fit `}>
-          <Icon textSize="text-base" textColor="text-text_inactive group:hover:text-white transition-all duration-300 cursor-pointer text-text_inactive " Icon={FaBell} />    {event > 0 ? <span className="absolute bg-secondary flex items-center justify-center rounded-full h-6 w-6 top-0 right-0 translate-y-2 translate-x-[1rem] text-white">
-            {event}
-          </span> : <></>}
+        <Menu.Button className={`group h-8 w-8 flex justify-center items-center cursor-pointer hover:scale-105 hover:-translate-y-1 transition-transform duration-300`} onClick={async () => { setEvent(0); if (notifications === null) setNotifications(await getNotifications()) }
+        }>
+          <Icon padding="" textSize="text-base" textColor=" group-hover:text-text transition-all duration-300 text-text_inactive" Icon={FaBell} />
+          {event > 0 ?
+            <span className="absolute bg-secondary flex items-center justify-center rounded-full h-6 w-6 top-0 right-0 -translate-y-2 translate-x-[1rem] text-white">
+              {event}
+            </span> : <></>}
         </Menu.Button>
         <Transition
           as={Fragment}
@@ -118,7 +120,7 @@ const Notifications = () => {
           leaveTo="transform scale-95 opacity-0"
           afterLeave={() => setNotifications(null)}
         >
-          <div className="absolute flex flex-col bg-bg ring-2 ring-bg_interactive translate-x-[-80%]">
+          <div className="absolute flex flex-col bg-bg ring-2 ring-bg_interactive translate-x-[-65%]">
             <Menu.Items className={`w-[50ch] h-64 overflow-y-scroll overflow-x-hidden bg-gradient-radial from-bg_sidebar to-bg_interactive `} >
 
               {notifications ? notifications.map((n, k) =>
@@ -176,7 +178,7 @@ const Notifications = () => {
                     <div className="overflow-hidden  text-ellipsis whitespace-nowrap" onClick={async () => setSelectedEl(await getComment(n.targetCommentId as string))}>
                       <span className={`inline-block rounded-full mx-1 h-1 w-1 ${n.read ? "" : "bg-link"}`}></span>
                       <span>
-                        {n.initiator} replied to your comment "{FormatString(n.comment?.message as string)}"
+                        {n.initiator} replied to your comment &quot;{FormatString(n.comment?.message as string)}&quot;
                       </span>
                     </div>
 
@@ -199,7 +201,7 @@ const Notifications = () => {
                   <SpinnerMini />
                 </div>}
               {
-                notifications !== null && notifications.length === 0 ? <div className="flex h-full font-semibold items-center justify-center">You don't have any notification</div> : <></>
+                notifications !== null && notifications.length === 0 ? <div className="flex h-full font-semibold items-center justify-center">You don&apos;t have any notification</div> : <></>
               }
 
 

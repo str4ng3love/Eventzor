@@ -25,7 +25,7 @@ const Nav = () => {
         label="navigate to dashboard"
       />
       <NavItem
-        text="events"
+        text="my events"
         Icon={BsCalendar3EventFill}
         href="/dashboard/events"
         fn={(e, href) =>{setSelected(href)}}
@@ -33,7 +33,7 @@ const Nav = () => {
         label="navigate to events page"
       />
            <NavItem
-        text="market"
+        text="my market"
         Icon={BiMoney}
         href="/dashboard/market"
         fn={(e, href) =>{setSelected(href)}}
@@ -41,7 +41,7 @@ const Nav = () => {
         label="navigate to market page"
       />
       <NavItem
-        text="orders"
+        text="my orders"
         Icon={TbFileSpreadsheet}
         href="/dashboard/orders"
         fn={(e, href) =>{setSelected(href)}}

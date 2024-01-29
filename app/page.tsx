@@ -20,10 +20,10 @@ export default async function Home() {
             - orders page X
           </li>
           <li>
-            - notifications 
+            - notifications X
           </li>
           <li>
-            - user page
+            - user page X/?
           </li>
           <li>
             - search

@@ -68,11 +68,11 @@ const handler = async (req: Request) => {
     );
   }
   try {
-    const hassedPass = await hashPass(body.password);
+    const hashedPass = await hashPass(body.password);
     const user = await prisma.user.create({
       data: {
         name: body.username,
-        password: hassedPass,
+        password: hashedPass,
         email: body.email,
       },
     });

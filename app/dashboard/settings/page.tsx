@@ -1,6 +1,6 @@
 
 import ChangePassword from '@/app/components/dynamic/Settings/ChangePassword';
-import {Heading2, Heading4} from  '../../components/static/Heading'
+import {Heading2 } from  '../../components/static/Heading'
 import ChangeEmail from '@/app/components/dynamic/Settings/ChangeEmail';
 
 

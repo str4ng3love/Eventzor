@@ -3,6 +3,7 @@ import Notification from "../../static/Notification";
 import { useState, Fragment, useReducer } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import Button from "../Button";
+import Image from "next/image";
 
 
  enum FormActionKind {
@@ -345,7 +346,7 @@ const AddNewEvent = ({optimisticFn, optimisticFnClnUp, refetchTrigger}:Props) =>
                             })
                           }
                         >
-                          <img
+                          <Image
                             alt="image"
                             style={{ fontSize: "0px" }}
                             src={i}

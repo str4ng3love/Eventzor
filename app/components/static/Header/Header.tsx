@@ -14,12 +14,12 @@ const Header = () => {
         <HeaderNav dest="/market" text="market" />
       </div>
       <div className="mr-8 lg:mr-32 flex items-center gap-4">
-        <UserMenu />
+        <Notifications />
         <span className="lg:block hidden ">
           <Currency />
         </span>
+        <UserMenu />
         <ShoppingCart />
-        <Notifications />
       </div>
     </nav>
   );

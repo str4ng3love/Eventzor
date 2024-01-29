@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Heading1} from "../../static/Heading";
+import { Heading1 } from "../../static/Heading";
 import Image from "next/image";
 import { BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi";
 import Link from "next/link";
@@ -30,7 +30,7 @@ const EventCarousel = ({
   const [playFadeOut, setPlayFadeOut] = useState(false);
   const [active, setActive] = useState(0);
   const [currency, setCurrency] = useState({ name: "initial", rate: 1 });
-
+  
   const handleChange = async (image: string) => {
     setPlayFadeOut(true);
     setTimeout(() => {
@@ -55,7 +55,7 @@ const EventCarousel = ({
       }
     });
     return () => {
-      window.removeEventListener("currency", () => {});
+      window.removeEventListener("currency", () => { });
     };
   }, []);
   useEffect(() => {
@@ -80,14 +80,14 @@ const EventCarousel = ({
   if (items.length > 0) {
     return (
       <div
-        className={`${
-          fullWidthBlur
-            ? "w-full flex justify-center backdrop-blur-sm shadow-[inset_0rem_0rem_3rem_black] pb-4 pt-20"
-            : ""
-        } ${darkBgAlpha ? "lg:bg-black/20 " : ""}`}
+      className={`${fullWidthBlur
+        ? "w-full flex justify-center backdrop-blur-sm shadow-[inset_0rem_0rem_3rem_black] pb-4 pt-20"
+        : ""
+      } ${darkBgAlpha ? "lg:bg-black/20 " : ""}`}
       >
+
         <div className={`flex flex-col lg:w-[50rem] w-[30rem]`}>
-          <Heading1 text={heading} />
+          <Heading1 text={heading} textShadow={`[text-shadow:_0_0_30px_black]`}/>
 
           <div className="flex items-center justify-between h-[20rem] ">
             <span
@@ -115,9 +115,8 @@ const EventCarousel = ({
                   sizes="(max-width: 750px"
                   alt="event's image"
                   src={selectedImage}
-                  className={`${
-                    playFadeOut ? "animate-fadeOut300" : "animate-fadeIn300"
-                  }`}
+                  className={`${playFadeOut ? "animate-fadeOut300" : "animate-fadeIn300"
+                    }`}
                 />
               </Link>
               <div className=" hidden w-[33%] bg-gradient-to-br from-primary to-slate-900 lg:flex flex-col justify-between">
@@ -127,9 +126,8 @@ const EventCarousel = ({
                 <div className="grid grid-cols-3 gap-2 px-2 overflow-hidden relative h-1/2 grow-[1]">
                   {items[active].images.map((i, index) => (
                     <Image
-                      className={` ${
-                        i === selectedImage ? "ring-2 ring-link" : ""
-                      } hover:ring-2 ring-link self-center transition-all duration-300`}
+                      className={` ${i === selectedImage ? "ring-2 ring-link" : ""
+                        } hover:ring-2 ring-link self-center transition-all duration-300`}
                       onClick={() => {
                         if (i === selectedImage) {
                           return;
@@ -146,7 +144,7 @@ const EventCarousel = ({
                     />
                   ))}
                 </div>
-          
+
                 <div className="shrink-0 text-sm flex flex-col items-end justify-between">
                   <span className="p-1">
                     {items[active].eventDate.toLocaleDateString()}
@@ -189,9 +187,8 @@ const EventCarousel = ({
               <span
                 onClick={(e) => setActive(i)}
                 key={i}
-                className={`h-4 w-4 ${
-                  active === i ? "bg-text" : "bg-text_inactive"
-                } hover:bg-text hover:shadow-link transition-all duration-300 block mx-2 p-2 rounded-sm cursor-pointer`}
+                className={`h-4 w-4 ${active === i ? "bg-text" : "bg-text_inactive"
+                  } hover:bg-text hover:shadow-link transition-all duration-300 block mx-2 p-2 rounded-sm cursor-pointer`}
               ></span>
             ))}
           </div>

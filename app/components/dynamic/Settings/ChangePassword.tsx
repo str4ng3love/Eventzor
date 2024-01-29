@@ -31,6 +31,8 @@ const ChangePassword = () => {
         show: true,
         message: "Password has to be at least 8 characters long.",
       });
+      setCanChangePass(true)
+      
     }
     try {
       const resp = await fetch('/api/user/password', {method: "POST", headers: {
@@ -45,6 +47,7 @@ const ChangePassword = () => {
         setNotify({error: false, show: true, message: data.message})
       }
     } catch (error) {
+      setCanChangePass(true)
       console.log(error)
     }
    

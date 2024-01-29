@@ -73,8 +73,8 @@ const EventsBrowser = ({ events, count, selectedCategory = "all items", orderAsc
 
   return (<>
     <div className="lg:w-[75%] w-full mb-9 bg-gradient-to-bl from-primary to-slate-900 ring-2 ring-primary flex lg:flex-col flex-row justify-between shadow-[0rem_0rem_1rem_black] mt-12 pb-20">
-      <div className="bg-black/50 p-4 flex xl:justify-start gap-2 lg:justify-center flex-col lg:flex-row justify-start">
-
+      <div className="bg-black/50 p-4">
+      <div className="flex xl:justify-start gap-2 lg:justify-center flex-col lg:flex-row justify-start  sticky top-24 lg:top-0 lg:relative">
         <Button
           title={`All items ${asc ? "ascending" : "descending"}`}
           text={`All Items`}
@@ -180,6 +180,7 @@ const EventsBrowser = ({ events, count, selectedCategory = "all items", orderAsc
         />
         <div className="flex items-center justify-center ">
           <DropDown fn={(e) => { setRange(parseInt(e.currentTarget.innerHTML)); let searchParams = new URLSearchParams({ page: page.toString(), range: e.currentTarget.innerHTML, order: asc ? "asc" : "desc" }); router.push(`/events/${selected?.toLowerCase().replace(" ", "-")}` + "?" + searchParams, { scroll: false }) }} items={["10", "25", "50"]} title={`show: ${range}`} size="text-sm" bgColor="" />
+        </div>
         </div>
       </div>
       <div className="flex flex-col p-4 justify-start xl:mx-0 mx-2 transition-all duration-300 min-h-[50rem] my-2">

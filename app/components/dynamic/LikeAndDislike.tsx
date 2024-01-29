@@ -276,34 +276,3 @@ const LikeAndDislike = ({
 };
 
 export default LikeAndDislike;
-
-
-// {(parentData.amountOfDislikes !==0 && parentData.amountOfLikes !== 0) ||
-//   isNaN(
-//     (parentData.amountOfLikes /
-//       (parentData.amountOfLikes + parentData.amountOfDislikes)) *
-//     100
-//   ) ?  (
-//   <>
-//     <span
-//       className={`h-1 block w-[${(parentData.amountOfLikes /
-//           (parentData.amountOfLikes +
-//             parentData.amountOfDislikes)) *
-//         100
-//         }%]  bg-primary`}
-//     ></span>
-//     <span
-//       className={`w-[${100 -
-//         (parentData.amountOfLikes /
-//           (parentData.amountOfLikes +
-//             parentData.amountOfDislikes)) *
-//         100
-//         }%] bg-secondary block h-1`}
-//     ></span>
-//   </>
-// ):<> {parentData.amountOfLikes === 0 ? <span
-//   className={`h-1 block w-[100%]  bg-secondary`}
-// ></span> :
-// <span
-//   className={`w-[100%] bg-primary block h-1`}
-// ></span>}</>}

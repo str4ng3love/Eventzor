@@ -32,7 +32,7 @@ after:-translate-x-8`}
         {Icon? <Icon />: <></>}
       </span>
 
-      <span className="first-letter:uppercase p-2">{text}</span>
+      <span className="capitalize p-2">{text}</span>
     </Link>
   );
 };

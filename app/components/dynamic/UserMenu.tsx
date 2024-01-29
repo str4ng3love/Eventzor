@@ -30,7 +30,7 @@ const UserMenu = () => {
                   <Link
                     href={"/dashboard"}
                     className={`${active ? "bg-link" : ""
-                      } p-2 flex justify-start items-center transition-all duration-300`}
+                      } p-2 flex justify-between items-center transition-all duration-300`}
                   >
                     Dashboard{" "}
                     <span className="ml-4">
@@ -46,10 +46,10 @@ const UserMenu = () => {
                   <Link
                     href={"/orders"}
                     className={`${active ? "bg-link" : ""
-                      } p-2 flex justify-start items-center transition-all duration-300`}
+                      } p-2 flex justify-between items-center transition-all duration-300`}
 
                   >
-                    My Orders
+                    Orders
                     <span className="ml-4">
                       <TbFileSpreadsheet />
                     </span>
@@ -61,7 +61,7 @@ const UserMenu = () => {
                 {({ active }) => (
                   <span
                     className={`${active ? "bg-link" : ""
-                      } p-2 flex justify-start items-center transition-all duration-300`}
+                      } p-2 flex justify-between  items-center transition-all duration-300`}
                     onClick={() => signOut()}
                   >
                     Logout

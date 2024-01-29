@@ -49,8 +49,7 @@ async function handler(req: Request) {
               }
             }
           })
-          const notification = await tx.notification.findFirst({ where: { orderId: body.id, action: "like" }, select: { id: true } })
-          const randomId = new ObjectId().toString()
+
 
           if (!organizer) {
             // need to handle it better
@@ -71,7 +70,7 @@ async function handler(req: Request) {
               }
             }
           })
-          await tx.notification.create({ data: { targetLike: { connect: { id: item.likes[0].id } }, action: "like", comment: { connect: { id: body.id } }, userRecip: { connect: { name: item.merchantName } }, userInit: { connect: { name: session.user?.name as string } } } })
+          await tx.notification.create({ data: { targetLike: { connect: { id: item.likes[0].id } }, action: "like", item: { connect: { id: body.id } }, userRecip: { connect: { name: item.merchantName } }, userInit: { connect: { name: session.user?.name as string } } } })
 
           TriggerNotification([organizer.name])
           return item

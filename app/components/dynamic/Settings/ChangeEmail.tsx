@@ -25,6 +25,7 @@ const ChangeEmail = () => {
       if (dat.error) {
         setNotify({ error: true, show: true, message: dat.error });
       } else {
+        console.log(dat)
         setNotify({ error: false, show: true, message: dat.message });
         setShowEdit(false);
       }

@@ -59,7 +59,7 @@ const DropDownMini = ({
                 </Menu.Item>
               ))
             ) : (
-              <></>
+              null
             )}
           </Menu.Items>
         </Transition>

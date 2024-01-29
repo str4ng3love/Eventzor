@@ -35,10 +35,10 @@ const MyItemsBrowser = () => {
       if (data && itemsArr) {
         id
           ? setItemsArr((prev) =>
-              prev
-                ? prev.map((i) => (i.id === id ? { ...i, ...data } : i))
-                : null
-            )
+            prev
+              ? prev.map((i) => (i.id === id ? { ...i, ...data } : i))
+              : null
+          )
           : setItemsArr((prev) => (prev ? [...prev, data] : null));
 
         setOptimisticComp(false);
@@ -59,15 +59,15 @@ const MyItemsBrowser = () => {
       }
     }
   };
-  
+
   const getItems = async () => {
     try {
-      const resp = await fetch("/api/items/user", { cache: "no-store" });
+      const resp = await fetch("/api/items", { cache: "no-store" });
       const items = await resp.json();
       if (items.error) {
         setNotify({ error: true, show: true, message: items.error });
       } else {
-        return items;
+        return items.items;
       }
     } catch (error) {
       setNotify({
@@ -121,7 +121,7 @@ const MyItemsBrowser = () => {
     } catch (error) {
       setNotify({ error: true, show: true, message: "Something went wrong" });
     }
- 
+
   };
 
   useEffect(() => {
@@ -161,18 +161,20 @@ const MyItemsBrowser = () => {
           </div>
 
           <table className="my-8  w-full text-sm table">
-            <tbody className="">
-              <tr className="border-b-2 border-black/25 bg-black/40 table-row">
-                <th className="p-2 text-start">Item</th>
-                <th className="p-2 text-start">Price</th>
-                <th className="p-2 text-start">Sold&nbsp;/&nbsp;Amount</th>
-                <th className="p-2 text-start"></th>  
-                <th className="p-2 text-start"></th>
-              </tr>
+              <thead>
+                <tr className="border-b-2 border-black/25 bg-black/40 table-row">
+                  <th className="p-2 text-start">Item</th>
+                  <th className="p-2 text-start">Price</th>
+                  <th className="p-2 text-start">Sold&nbsp;/&nbsp;Amount</th>
+                  <th className="p-2 text-start"></th>
+                  <th className="p-2 text-start"></th>
+                </tr>
+              </thead>
 
+            <tbody className="">
               {itemsArr?.map((item, i) => (
                 <ItemComponent
-                isEmpty={item.images.length === 0}
+                  isEmpty={item.images.length === 0}
                   key={i}
                   {...item}
                   delFn={() => {
@@ -184,7 +186,7 @@ const MyItemsBrowser = () => {
                 />
               ))}
               {itemsArr.length === 0 ? (
-                  <tr className="w-full flex justify-center p-8">
+                <tr className="w-full flex justify-center p-8">
                   <td>No Items in Database</td>
                 </tr>
               ) : (

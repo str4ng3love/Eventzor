@@ -61,7 +61,7 @@ const page = async ({ params }: { params: { slug: string } }) => {
               <div title="Organizer's profile" className="flex justify-between p-1">
                 <span>Organizer&nbsp;:&nbsp;</span>
                 <span className="hover:text-link transition-all duration-300">
-                  <Link href={"#"}>{event.organizerName}</Link>
+                  <Link href={`/users/${event.organizerName}`}>{event.organizerName}</Link>
                 </span>
               </div>
             </div>
