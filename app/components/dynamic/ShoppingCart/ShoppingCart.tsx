@@ -34,10 +34,11 @@ const ShoppingCart = () => {
   const [total, setTotal] = useState<number>();
   const [isLoadingItems, setIsLoadingItems] = useState(true);
   const [isWorking, setIsWorking] = useState(false);
-  const [cartItems, setCartItems] = useState<CartItemData[]>([]);
+  const [cartItems, setCartItems] = useState<CartItemData[] | null>(null);
   const [newEntries, setNewEntries] = useState(0);
   const [currency, setCurrency] = useState({ name: "usd", rate: 1 });
   const [showShipping, setShowShipping] = useState(false);
+
   const calcTotal = (arr: CartItemData[]) => {
     const total = arr.reduce((acc, val) => {
       acc = acc + val.price * currency.rate * val.amount;
@@ -45,15 +46,18 @@ const ShoppingCart = () => {
     }, 0);
     setTotal(total);
   };
+
   const updateCart = (data: CartItemData[]) => {
+
     if (data.length > 0) {
+
       localStorage.setItem("cart", JSON.stringify(data));
     } else {
-      localStorage.removeItem("cart");
+      localStorage.removeItem("cart")
     }
   };
 
-// TO DO: something is removing cookie from local storage -> fix it
+  // TO DO: something is removing cookie from local storage -> fix it
 
   const clearCartAndComponent = () => {
 
@@ -144,11 +148,15 @@ const ShoppingCart = () => {
       });
     }
   }, [isOpen]);
+
   useEffect(() => {
-    updateCart(cartItems);
-    setNewEntries(cartItems.length);
-    calcTotal(cartItems);
+    if (cartItems !== null) {
+      updateCart(cartItems);
+      setNewEntries(cartItems.length);
+      calcTotal(cartItems);
+    }
   }, [cartItems]);
+
   return (
     <>
       <CartButton
@@ -215,7 +223,7 @@ const ShoppingCart = () => {
                         </>
                       ) : (
                         <>
-                          {cartItems.length > 0 ? (
+                          {cartItems !== null && cartItems.length > 0 ? (
                             cartItems.map((i, index) => (
                               <CartItem
                                 closeFn={(e) => setIsOpen(false)}
@@ -227,9 +235,12 @@ const ShoppingCart = () => {
                                 price={i.price}
                                 currency={currency}
                                 delFn={() => {
-                                  setCartItems((prev) => [
-                                    ...prev.filter((p) => p.id != i.id),
-                                  ]);
+                                  setCartItems((prev) => {
+                                    if (prev !== null) {
+                                      return [...prev.filter((p) => p.id != i.id)]
+                                    } 
+                                    return null
+                                  });
                                 }}
                               />
                             ))
@@ -241,7 +252,7 @@ const ShoppingCart = () => {
                     </>
                   )}
                 </div>
-                {cartItems.length === 0 || showShipping ? (
+                {cartItems !== null && cartItems.length === 0 || showShipping ? (
                   <></>
                 ) : (
                   <>
@@ -295,7 +306,7 @@ const ShoppingCart = () => {
                   </>
                 )}
 
-                {!isLoadingItems && cartItems.length > 0 ? (
+                {!isLoadingItems && cartItems !== null && cartItems.length > 0 ? (
                   <>
                     {showShipping ? (
                       <></>
@@ -312,17 +323,17 @@ const ShoppingCart = () => {
                 ) : (
                   <></>
                 )}
-                {cartItems.length > 0 ? (
+                {cartItems !== null && cartItems.length > 0 ? (
                   <div className="flex items-center justify-end h-full pt-10 gap-2">
 
                     <>
-                    <Button
-                      title="Open Orders"
-                      text="Open Orders"
-                      link="/orders"
-                      bgColor="bg-link self-start"
-                      fn={(e) => setIsOpen(false)}
-                    />
+                      <Button
+                        title="Open Orders"
+                        text="Open Orders"
+                        link="/orders"
+                        bgColor="bg-link self-start"
+                        fn={(e) => setIsOpen(false)}
+                      />
                       {showShipping ? (
                         <></>
                       ) : (
@@ -345,8 +356,8 @@ const ShoppingCart = () => {
                               <Button
                                 title="Continue"
                                 text="Continue"
-                                fn={() =>createOrder()}
-                                
+                                fn={() => createOrder()}
+
                               />
                             )}
                           </>
