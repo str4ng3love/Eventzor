@@ -5,7 +5,7 @@ import Icon from "../../static/Icon";
 import { FaBell } from "react-icons/fa";
 import { Menu, Transition } from "@headlessui/react";
 import SpinnerMini from "../../static/SpinnerMini";
-import { Comment, Notification, StatusOrder } from "@prisma/client";
+import {  Notification, StatusOrder } from "@prisma/client";
 import Button from "../Button";
 import { FormatString } from "@/helpers/FormatString";
 
@@ -104,11 +104,11 @@ const Notifications = () => {
       <Menu >
         <Menu.Button className={`group h-8 w-8 flex justify-center items-center cursor-pointer hover:scale-105 hover:-translate-y-1 transition-transform duration-300`} onClick={async () => { setEvent(0); if (notifications === null) setNotifications(await getNotifications()) }
         }>
-          <Icon padding="" textSize="text-base" textColor=" group-hover:text-text transition-all duration-300 text-text_inactive" Icon={FaBell} />
+          <Icon padding="" textSize="text-base" textColor="group-hover:text-text transition-all duration-300 text-text_inactive" Icon={FaBell} />
           {event > 0 ?
             <span className="absolute bg-secondary flex items-center justify-center rounded-full h-6 w-6 top-0 right-0 -translate-y-2 translate-x-[1rem] text-white">
               {event}
-            </span> : <></>}
+            </span> : null}
         </Menu.Button>
         <Transition
           as={Fragment}
@@ -134,7 +134,7 @@ const Notifications = () => {
                         {n.initiator} commented on your {n.item ? `item ${n.item.item}` : ''}{n.event ? `event "${n.event.title}"` : ''}
                       </span>
                     </div>
-                    : <></>}
+                    : null}
                   {n.action === "like" ?
 
                     <div className="overflow-hidden  text-ellipsis whitespace-nowrap" onClick={async () => {
@@ -152,7 +152,7 @@ const Notifications = () => {
                       </span>
                     </div>
 
-                    : <></>}
+                    : null}
                   {n.action === "dislike" ?
 
 
@@ -171,7 +171,7 @@ const Notifications = () => {
                       </span>
                     </div>
 
-                    : <></>}
+                    : null}
                   {n.action === "reply" ?
 
 
@@ -182,7 +182,7 @@ const Notifications = () => {
                       </span>
                     </div>
 
-                    : <></>}
+                    : null}
                   {n.action === "status" ?
 
 
@@ -193,7 +193,7 @@ const Notifications = () => {
                       </span>
                     </div>
 
-                    : <></>}
+                    : null}
 
                 </Menu.Item>)
 
@@ -201,7 +201,7 @@ const Notifications = () => {
                   <SpinnerMini />
                 </div>}
               {
-                notifications !== null && notifications.length === 0 ? <div className="flex h-full font-semibold items-center justify-center">You don&apos;t have any notification</div> : <></>
+                notifications !== null && notifications.length === 0 ? <div className="flex h-full font-semibold items-center justify-center">You don&apos;t have any notification</div> : null
               }
 
 
@@ -214,8 +214,9 @@ const Notifications = () => {
 
         </Transition>
       </Menu>
-      {selectedEl !== null ? <Portal cleanUp={() => setSelectedEl(null)} child={<CommentComponent triggerRefetchFN={async () => setSelectedEl(await getComment(selectedEl.id))} {...selectedEl} author={selectedEl.authorName} text={selectedEl.message} likes={selectedEl._count.likes} dislikes={selectedEl._count.dislikes} amountOfReplies={selectedEl._count.children} createdAt={new Date(selectedEl.createdAt)} />} /> : <></>}
-      {working ? <Portal styled={false} child={<SpinnerMini borderSize="border-[12px]" h="h-16" w="w-16" />} /> : <></>}
+      {selectedEl !== null ?
+        <Portal cleanUp={() => setSelectedEl(null)} child={<CommentComponent triggerRefetchFN={async () => setSelectedEl(await getComment(selectedEl.id))} {...selectedEl} author={selectedEl.authorName} text={selectedEl.message} likes={selectedEl._count.likes} dislikes={selectedEl._count.dislikes} amountOfReplies={selectedEl._count.children} createdAt={new Date(selectedEl.createdAt)} />} /> : null}
+      {working ? <Portal styled={false} child={<SpinnerMini borderSize="border-[12px]" h="h-16" w="w-16" />} /> : null}
     </div >
   );
 };

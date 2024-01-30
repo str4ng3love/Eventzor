@@ -10,8 +10,8 @@ async function handler(req: Request, { params }: { params: { user: string } }) {
     if (!user) {
         return NextResponse.json({ error: 'Must provide a user name' })
     }
-    const comments = await prisma.comment.findMany({ where: { authorName: user }, select: { message: true, id:true }, orderBy:{message:"desc"} })
-  
+    const comments = await prisma.comment.findMany({ where: { AND: [{ authorName: user }, { status: { not: { equals: "flaggedAsDeleted" } } }] }, select: { message: true, id: true }, orderBy: { message: "desc" } })
+
     return NextResponse.json({ comments })
 
 }

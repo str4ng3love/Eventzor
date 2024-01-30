@@ -232,8 +232,8 @@ const CommentComponent = ({
   } else {
     return (
       <>
-        <div className="flex w-full flex-col my-4 hover:ring-2 ring-primary rounded-md">
-          <div className=" p-2 w-full flex items-center justify-between">
+        <div className="flex w-full flex-col hover:ring-2 ring-primary rounded-md">
+          <div className="p-2 w-full flex items-center justify-between">
             <div className="flex items-center">
               <span>{comment.author}</span>
               <span className="text-sm pl-4 flex items-center">

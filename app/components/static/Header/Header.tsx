@@ -3,6 +3,7 @@ import HeaderNav from "../../dynamic/Header/HeaderNav";
 import ShoppingCart from "../../dynamic/ShoppingCart/ShoppingCart";
 import Notifications from "../../dynamic/Notifications/Notifications";
 import UserMenu from "../../dynamic/UserMenu";
+import Search from "../../dynamic/Search";
 
 
 const Header = () => {
@@ -14,6 +15,7 @@ const Header = () => {
         <HeaderNav dest="/market" text="market" />
       </div>
       <div className="mr-8 lg:mr-32 flex items-center gap-4">
+        <Search />
         <Notifications />
         <span className="lg:block hidden ">
           <Currency />

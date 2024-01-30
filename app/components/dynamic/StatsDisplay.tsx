@@ -18,6 +18,7 @@ const StatsDisplay = ({ user, type, stats }: Props) => {
     const [isOpen, setIsOpen] = useState(false)
     const [id, setId] = useState<string | null>(null)
     const router = useRouter()
+
     const getElements = async (type: string, user: string) => {
         try {
             const resp = await fetch(`/api/${type}/user/${user}`)
@@ -80,7 +81,7 @@ const StatsDisplay = ({ user, type, stats }: Props) => {
               <div className={`flex flex-col ${isOpen && elements === null ? "justify-center items-center h-full" : ""} mt-4 max-h-52 overflow-y-auto py-1 shadow-inner shadow-black bg-interactive_text ring-2 ring-slate-900`}>
               {
                   elements.map((e, i) => <span onClick={() => {
-                      router.push(`/${type.slice(0, -1)}/${e.item}`)
+                      setId(e.id as string)
                   }} className="cursor-pointer p-1 hover:bg-link duration-300 transition-all" key={i}>{FormatString(e.message as string)}</span>)
               }
           </div> : <></>}
