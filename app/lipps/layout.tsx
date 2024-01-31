@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import Footer from "../components/static/Footer";
 
 
 
@@ -13,7 +14,7 @@ export default async function layout({
 }) {
 
 
-    return (
+    return (<>
         <main className={`flex flex-col items-center min-h-screen w-full bg-gray-600 
        `}>
             <h1 className={`relative z-10 mt-32 text-xl p-4 mb-8 before:absolute before:top-0 before:right-0 before:translate-x-16 before:-translate-y-2 
@@ -27,5 +28,7 @@ export default async function layout({
 
 
         </main>
+        <Footer />
+        </>
     );
 }

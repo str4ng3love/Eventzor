@@ -20,7 +20,7 @@ const LikeAndDislike = ({
   itemId,
   amountOfLikes,
   amountOfDislikes,
-  hidden=false
+  hidden = false
 }: Props) => {
   const [parentData, setParentData] = useState({
     commentId,
@@ -29,12 +29,15 @@ const LikeAndDislike = ({
     amountOfLikes,
     amountOfDislikes,
   });
+
+  const { data: session } = useSession();
+
   const [liked, setLiked] = useState<unknown>();
   const [disliked, setDisliked] = useState<unknown>();
   const [working, setWorking] = useState(false);
-  const { data: session } = useSession();
   const [showLogin, setShowLogin] = useState(false);
-
+  const [likes, setLikes] = useState<string | null>(null)
+  const [dislikes, setDislikes] = useState<string | null>(null)
   const CheckStatus = async () => {
     if (session?.user) {
       try {
@@ -157,6 +160,11 @@ const LikeAndDislike = ({
 
     CheckStatus();
   }, []);
+
+  useEffect(() => {
+    setLikes(((parentData.amountOfLikes / (parentData.amountOfLikes + parentData.amountOfDislikes)) * 100).toFixed(0))
+    setDislikes(((parentData.amountOfDislikes / (parentData.amountOfLikes + parentData.amountOfDislikes)) * 100).toFixed(0))
+  }, [parentData.amountOfLikes, parentData.amountOfDislikes])
   return (
     <div className="w-full p-2">
       {typeof liked !== "boolean" ? (
@@ -243,24 +251,14 @@ const LikeAndDislike = ({
             </>
           )}
 
-          <div className={`bg-bg_interactive w-full flex justify-between h-1 ${hidden ? "hidden": ""}`}>
-            {parentData.amountOfLikes === 0 && parentData.amountOfDislikes === 0 ? "" :
-              <>
-               
-                  <span className={`h-1 block w-[${((parentData.amountOfLikes /
-                  (parentData.amountOfLikes +
-                    parentData.amountOfDislikes)) *
-                  100).toFixed(0)
-                    }%] bg-primary`}
-                  ></span>
-                <span className={`h-1 block w-[${((parentData.amountOfDislikes /
-                  (parentData.amountOfLikes +
-                    parentData.amountOfDislikes)) *
-                  100).toFixed(0)
-                    }%] bg-secondary`}
-                  ></span>
-              
-              </>}
+          <div className={`bg-bg_interactive w-full flex justify-between h-1 ${hidden ? "hidden" : ""}`}>
+        
+             
+
+                <span className={`h-1 w-[${likes}%] bg-primary`}/>
+                <span className={`h-1 w-[${dislikes}%] bg-secondary`}/>
+
+          
           </div>
 
         </>

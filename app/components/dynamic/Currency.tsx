@@ -36,7 +36,7 @@ const Currency = ({
       }
     });
     return () => {
-      window.removeEventListener("currency", () => {});
+      window.removeEventListener("currency", () => { });
     };
   }, []);
   useEffect(() => {
@@ -46,13 +46,13 @@ const Currency = ({
     if (prefCurrency) {
 
       let selectedCurrency = JSON.parse(prefCurrency);
-      
+
       setSelected({
         name: selectedCurrency.name,
         exchangeRateToUSD: selectedCurrency.rate,
       });
     } else {
-      setSelected({exchangeRateToUSD:1, name:"usd"})
+      setSelected({ exchangeRateToUSD: 1, name: "usd" })
     }
   }, []);
   useEffect(() => {
@@ -72,31 +72,32 @@ const Currency = ({
   return (
     <>
       <Listbox value={selected} onChange={setSelected}>
-        <Listbox.Button
-          className={`p-2 cursor-pointer w-fit relative hover:bg-link transition-all duration-300`}
-        >
-          {selected.name ==='initial' ? <SpinnerMini />: selected?.name.toLocaleUpperCase() }
-        </Listbox.Button>
-        <Listbox.Options
-          className={`absolute bg-black flex flex-row`}
-        >
-          {currencies && currencies.length > 0 ? (
-            currencies.map((currency) => (
-              <Listbox.Option
-                onClick={(e) => setManual(true)}
-                key={currency.id}
-                className={`${
-                  selected.name === currency.name ? "hidden" : ""
-                } hover:bg-link p-2 transition-all duration-300`}
-                value={currency}
-              >
-                {currency.name.toLocaleUpperCase()}
-              </Listbox.Option>
-            ))
-          ) : (
-            <></>
-          )}
-        </Listbox.Options>
+        <div className="relative">
+          <Listbox.Button
+            className={`p-2 cursor-pointer w-fit hover:bg-link transition-all duration-300`}
+          >
+            {selected.name === 'initial' ? <SpinnerMini /> : selected?.name.toLocaleUpperCase()}
+          </Listbox.Button>
+          <Listbox.Options
+            className={`absolute bg-black flex flex-col top-0 left-0`}
+          >
+            {currencies && currencies.length > 0 ? (
+              currencies.map((currency) => (
+                <Listbox.Option
+                  onClick={(e) => setManual(true)}
+                  key={currency.id}
+                  className={`${selected.name === currency.name ? "hidden" : ""
+                    } hover:bg-link p-2 transition-all duration-300`}
+                  value={currency}
+                >
+                  {currency.name.toLocaleUpperCase()}
+                </Listbox.Option>
+              ))
+            ) : (
+              <></>
+            )}
+          </Listbox.Options>
+        </div>
       </Listbox>
     </>
   );

@@ -17,7 +17,7 @@ const page = async ({ params }: { params: { slug: string } }) => {
   if (event !== null) {
 
     return (
-      <main className="flex flex-col items-center min-h-[calc(100dvh_-_4rem)] pt-20">
+      <main className="flex flex-col items-center min-h-[calc(100dvh_-_6rem)] pt-20">
         <div className="grid grid-cols-3 justify-between lg:w-[80%] lg:gap-4 gap-2 w-full p-4 transition-all duration-300 ">
           <div className="p-4 flex flex-col rounded-md bg-bg_interactive dark:bg-black/20 col-span-2 row-span-2 ">
             <h2 className="p-4 font-bold text-2xl">{event.title}</h2>
@@ -45,7 +45,7 @@ const page = async ({ params }: { params: { slug: string } }) => {
 
               <AddToCart id={event.id} price={event.price} type={'event'} item={event.title} amountLeft={event.tickets} saleEnded={event.closingDate > new Date(Date.now())? false : true}/>
             </div>
-            <div className="flex flex-col ring-2 rounded-t-none ring-primary rounded-md p-2 lg:text-sm md:text-base mb-7">
+            <div className="flex flex-col ring-2 rounded-t-none ring-primary rounded-md p-2 text-sm md:text-base mb-7">
               <div title="Tickets are being sold until this date" className="flex justify-between p-1">
                 <span>Sold until&nbsp;:&nbsp;</span>
                 <span>
@@ -60,7 +60,7 @@ const page = async ({ params }: { params: { slug: string } }) => {
               </div>
               <div title="Organizer's profile" className="flex justify-between p-1">
                 <span>Organizer&nbsp;:&nbsp;</span>
-                <span className="hover:text-link transition-all duration-300">
+                <span className="hover:text-link transition-all duration-300 overflow-hidden text-ellipsis">
                   <Link href={`/users/${event.organizerName}`}>{event.organizerName}</Link>
                 </span>
               </div>

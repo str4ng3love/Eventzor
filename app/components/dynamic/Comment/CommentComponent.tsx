@@ -315,7 +315,7 @@ const CommentComponent = ({
           </div>
           {amountOfReplies && amountOfReplies > 0 ? (
             <div className="flex flex-col p-2 w-full gap-2">
-              <div
+              <button
                 onClick={(e) => {
                   if (!showReplies) {
                     getReplies(id);
@@ -334,7 +334,7 @@ const CommentComponent = ({
                   {amountOfReplies}&nbsp;
                   {amountOfReplies > 1 ? "replies" : "reply"}
                 </span>
-              </div>
+              </button>
               {showReplies ? (
                 <>
                   {replies.length > 0 ? (

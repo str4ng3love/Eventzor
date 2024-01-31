@@ -6,6 +6,7 @@ import SpinnerMini from "../static/SpinnerMini"
 import { useRouter } from "next/navigation"
 import { FormatString } from "@/helpers/FormatString"
 import CommentInPortal from "./Comment/CommentInPortal"
+import Link from "next/link"
 
 
 interface Props {
@@ -44,58 +45,72 @@ const StatsDisplay = ({ user, type, stats }: Props) => {
     return (
         <>
             {stats.amount === 0 ?
-                <span onClick={async () => {
+                <button onClick={async () => {
 
                     return
-                }} className={`${stats.amount > 0 ? "cursor-pointer hover:bg-link duration-300 transition-all" : ""} p-1 min-w-full inline-block `}>{stats.amount}&nbsp;{stats.name}</span>
+                }} className={`${stats.amount > 0 ? "cursor-pointer hover:bg-link duration-300 transition-all" : ""} p-1 min-w-full inline-block `}>{stats.amount}&nbsp;{stats.name}</button>
                 :
-                <span onClick={async () => {
+                <button onClick={async () => {
 
                     setIsOpen(!isOpen)
                     if (elements === null) { setElements(await getElements(type, user)) } else {
                         return
                     }
-                }} className={`cursor-pointer hover:bg-link duration-300 transition-all p-1 min-w-full inline-block `}>{stats.amount}&nbsp;{stats.name}</span>}
+                }} className={`cursor-pointer hover:bg-link duration-300 transition-all p-1 min-w-full inline-block `}>{stats.amount}&nbsp;{stats.name}</button>}
 
             {isOpen && elements !== null && type === IType.events ?
-                  <div className={`flex flex-col ${isOpen && elements === null ? "justify-center items-center h-full" : ""} mt-4 max-h-52 overflow-y-auto py-1 shadow-inner shadow-black bg-interactive_text ring-2 ring-slate-900`}>
-                  {
-                      elements.map((e, i) => <span onClick={() => {
-                          router.push(`/${type.slice(0, -1)}/${e.item}`)
-                      }} className="cursor-pointer p-1 hover:bg-link duration-300 transition-all" key={i}>{e.title}</span>)
-                  }
-              </div> : <></>}
+                <ul className={`flex flex-col ${isOpen && elements === null ? "justify-center items-center h-full" : ""} mt-4 max-h-52 overflow-y-auto py-1 shadow-inner shadow-black bg-interactive_text ring-2 ring-slate-900`}>
+                    {
+                        elements.map((e, i) =>
+                            <li className="cursor-pointer p-1 hover:bg-link duration-300 transition-all" key={i}>
+                                <Link href={`/${type.slice(0, -1)}/${e.title}`}>
+                                    {e.title}
+                                </Link>
+                            </li>)
+                    }
+                </ul> : null}
 
             {isOpen && elements !== null && type === IType.items ?
-                <div className={`flex flex-col ${isOpen && elements === null ? "justify-center items-center h-full" : ""} mt-4 max-h-52 overflow-y-auto py-1 shadow-inner shadow-black bg-interactive_text ring-2 ring-slate-900`}>
+                <ul className={`flex flex-col ${isOpen && elements === null ? "justify-center items-center h-full" : ""} mt-4 max-h-52 overflow-y-auto py-1 shadow-inner shadow-black bg-interactive_text ring-2 ring-slate-900`}>
                     {
-                        elements.map((e, i) => <span onClick={() => {
-                            router.push(`/${type.slice(0, -1)}/${e.item}`)
-                        }} className="cursor-pointer p-1 hover:bg-link duration-300 transition-all" key={i}>{e.item}</span>)
+                        elements.map((e, i) =>
+                            <li className="cursor-pointer p-1 hover:bg-link duration-300 transition-all" key={i}>
+                                <Link href={`/${type.slice(0, -1)}/${e.item}`}>
+                                    {e.item}
+                                </Link>
+                            </li>)
                     }
-                </div> : <></>}
+                </ul> : null}
 
 
 
             {isOpen && elements !== null && type === IType.comments ?
-              <div className={`flex flex-col ${isOpen && elements === null ? "justify-center items-center h-full" : ""} mt-4 max-h-52 overflow-y-auto py-1 shadow-inner shadow-black bg-interactive_text ring-2 ring-slate-900`}>
-              {
-                  elements.map((e, i) => <span onClick={() => {
-                      setId(e.id as string)
-                  }} className="cursor-pointer p-1 hover:bg-link duration-300 transition-all" key={i}>{FormatString(e.message as string)}</span>)
-              }
-          </div> : <></>}
+                <ul className={`flex flex-col ${isOpen && elements === null ? "justify-center items-center h-full" : ""} mt-4 max-h-52 overflow-y-auto py-1 shadow-inner shadow-black bg-interactive_text ring-2 ring-slate-900`}>
+                    {
+                        elements.map((e, i) =>
+                            <li className="cursor-pointer p-1 hover:bg-link duration-300 transition-all" key={i}>
+                                <button onKeyDown={(event) => {
+                                    if (event.key === "Enter") {
+                                        setId(e.id as string)
+                                    }
+                                }}
+                                    onClick={() => { setId(e.id as string) }}>
+                                    {FormatString(e.message as string)}
+                                </button>
+                            </li>)
+                    }
+                </ul> : null}
             {isOpen && elements === null ?
                 <div className="flex items-center justify-center h-full">
-                <SpinnerMini />
+                    <SpinnerMini />
                 </div>
 
-                 : <></>}
+                : null}
 
 
 
 
-            {id ? <CommentInPortal id={id} cleanupFn={() => setId(null)} /> : <></>}
+            {id ? <CommentInPortal id={id} cleanupFn={() => setId(null)} /> : null}
         </>
     )
 }

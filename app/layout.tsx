@@ -10,8 +10,8 @@ import SessionProvider from "./components/SessionProvider";
 const publicSans = Public_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Dashboard Demo",
-  description: "Dashboard Demo",
+  title: "Eventzor",
+  description: "",
 };
 
 export default async function RootLayout({

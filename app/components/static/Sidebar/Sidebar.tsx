@@ -1,7 +1,7 @@
 import Logo from "../Logo";
 import Nav from "../../dynamic/Sidebar/Nav";
 
-import Search from "../../dynamic/Search";
+import Search from "../../dynamic/Header/Search";
 import { FaIcons } from "react-icons/fa";
 import SingOut from "../../dynamic/Sidebar/SingOut";
 

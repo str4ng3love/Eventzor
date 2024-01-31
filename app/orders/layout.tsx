@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Button from "../components/dynamic/Button";
+import Footer from "../components/static/Footer";
 
 
 
@@ -15,7 +16,8 @@ export default async function layout({
 
 
   return (
-    <main className="flex flex-col items-center min-h-screen">
+    <>
+    <main className="flex flex-col items-center min-h-[calc(100dvh_-_6rem)]">
 
       <div className="mt-[6rem]">
         <div className="p-2 gap-2 flex">
@@ -32,5 +34,7 @@ export default async function layout({
       {children}
 
     </main>
+    <Footer />
+    </>
   );
 }

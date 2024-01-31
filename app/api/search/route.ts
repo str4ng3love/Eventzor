@@ -6,7 +6,6 @@ async function handler(req: Request) {
   if (req.method === "GET") {
     const { searchParams } = new URL(req.url);
     const query = searchParams.get("query");
-    console.log(query)
     let queryResponse = {}
     if (typeof query === "string") {
       try {
@@ -22,8 +21,8 @@ async function handler(req: Request) {
         console.log(error);
       }
       try {
-        const orders = await prisma.marketItem.findMany({ where: { item: {contains: query, mode:"insensitive"} }, select: {id: true, item: true } });
-        Object.assign(queryResponse,{orders}) 
+        const items = await prisma.marketItem.findMany({ where: { item: {contains: query, mode:"insensitive"} }, select: {id: true, item: true } });
+        Object.assign(queryResponse,{items}) 
         console.log(queryResponse)
       } catch (error) {
         console.log(error);
