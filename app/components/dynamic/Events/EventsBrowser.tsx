@@ -17,12 +17,12 @@ interface Props {
   currentPage?: number;
   selectedCategory?: string
   orderAsc?: boolean
-  currentRange?:number
+  currentRange?: number
 }
 
 
-const EventsBrowser = ({ events, count, selectedCategory = "all items", orderAsc = true, currentPage=1, currentRange=10 }: Props) => {
-  
+const EventsBrowser = ({ events, count, selectedCategory = "all items", orderAsc = true, currentPage = 1, currentRange = 10 }: Props) => {
+
   const router = useRouter()
 
   const [selected, setSelected] = useState(selectedCategory);
@@ -32,6 +32,12 @@ const EventsBrowser = ({ events, count, selectedCategory = "all items", orderAsc
   const [range, setRange] = useState(currentRange)
   const [asc, setAsc] = useState(orderAsc)
 
+
+  const handleSetRange = (e: React.MouseEvent) => {
+    setRange(parseInt(e.currentTarget.innerHTML));
+    const searchParams = new URLSearchParams({ page: '1', range: e.currentTarget.innerHTML, order: asc ? "asc" : "desc" });
+    router.push(`/events/${selected?.toLowerCase().replace(" ", "-")}` + "?" + searchParams, { scroll: false })
+  }
 
   useEffect(() => {
     window.addEventListener("currency", () => {
@@ -74,113 +80,113 @@ const EventsBrowser = ({ events, count, selectedCategory = "all items", orderAsc
   return (<>
     <div className="lg:w-[75%] w-full mb-9 bg-gradient-to-bl from-primary to-slate-900 ring-2 ring-primary flex lg:flex-col flex-row justify-between shadow-[0rem_0rem_1rem_black] mt-12 pb-20">
       <div className="bg-black/50 p-4">
-      <div className="flex xl:justify-start gap-2 lg:justify-center flex-col lg:flex-row justify-start  sticky top-24 lg:top-0 lg:relative">
-        <Button
-          title={`All items ${asc ? "ascending" : "descending"}`}
-          text={`All Items`}
-          Icon={asc ? FaArrowUp : FaArrowDown}
-          active={selected?.toLowerCase() === "all items"}
-          fn={(e) => {
-            let searchParams
-            if (selected?.toLowerCase() === "all items") {
+        <div className="flex xl:justify-start gap-2 lg:justify-center flex-col lg:flex-row justify-start  sticky top-24 lg:top-0 lg:relative">
+          <Button
+            title={`All items ${asc ? "ascending" : "descending"}`}
+            text={`All Items`}
+            Icon={asc ? FaArrowUp : FaArrowDown}
+            active={selected?.toLowerCase() === "all items"}
+            fn={(e) => {
+              let searchParams
+              if (selected?.toLowerCase() === "all items") {
 
-              searchParams = new URLSearchParams({ page: `1`, range: `${range}`, order: `${asc ? "desc" : "asc"}` })
-              setAsc(!asc)
-            } else {
-              setSelected(e.currentTarget.innerHTML.split("<")[0]);
-              setAsc(true)
-              searchParams = new URLSearchParams({ page: `1`, range: `${range}`, order: "asc" })
-            }
-            router.push("/events/all-items" + "?" + searchParams, { scroll: false });
+                searchParams = new URLSearchParams({ page: `1`, range: `${range}`, order: `${asc ? "desc" : "asc"}` })
+                setAsc(!asc)
+              } else {
+                setSelected(e.currentTarget.innerHTML.split("<")[0]);
+                setAsc(true)
+                searchParams = new URLSearchParams({ page: `1`, range: `${range}`, order: "asc" })
+              }
+              router.push("/events/all-items" + "?" + searchParams, { scroll: false });
 
-          }}
-          bgColor="bg-link"
-        />
-        <Button
-          title={`Popular ${asc ? "ascending" : "descending"}`}
-          text="Popular"
-          Icon={asc ? FaArrowUp : FaArrowDown}
-          active={selected?.toLowerCase() === "popular"}
-          fn={(e) => {
-            let searchParams
-            if (selected?.toLowerCase() === "popular") {
-              searchParams = new URLSearchParams({ page: `1`, range: `${range}`, order: `${asc ? "desc" : "asc"}` })
-              setAsc(!asc)
-            } else {
-              setSelected(e.currentTarget.innerHTML.split("<")[0]);
-              setAsc(true)
-              searchParams = new URLSearchParams({ page: `1`, range: `${range}`, order: "asc" })
-            }
-            router.push("/events/popular" + "?" + searchParams, { scroll: false });
-          }}
-          bgColor="bg-link"
-        />
-        <Button
-          title={`Most liked  ${asc ? "ascending" : "descending"}`}
-          text="Most Liked"
-          Icon={asc ? FaArrowUp : FaArrowDown}
-          active={selected?.toLowerCase() === "most liked"}
-          fn={(e) => {
-            let searchParams
-            if (selected?.toLowerCase() === "most liked") {
+            }}
+            bgColor="bg-link"
+          />
+          <Button
+            title={`Popular ${asc ? "ascending" : "descending"}`}
+            text="Popular"
+            Icon={asc ? FaArrowUp : FaArrowDown}
+            active={selected?.toLowerCase() === "popular"}
+            fn={(e) => {
+              let searchParams
+              if (selected?.toLowerCase() === "popular") {
+                searchParams = new URLSearchParams({ page: `1`, range: `${range}`, order: `${asc ? "desc" : "asc"}` })
+                setAsc(!asc)
+              } else {
+                setSelected(e.currentTarget.innerHTML.split("<")[0]);
+                setAsc(true)
+                searchParams = new URLSearchParams({ page: `1`, range: `${range}`, order: "asc" })
+              }
+              router.push("/events/popular" + "?" + searchParams, { scroll: false });
+            }}
+            bgColor="bg-link"
+          />
+          <Button
+            title={`Most liked  ${asc ? "ascending" : "descending"}`}
+            text="Most Liked"
+            Icon={asc ? FaArrowUp : FaArrowDown}
+            active={selected?.toLowerCase() === "most liked"}
+            fn={(e) => {
+              let searchParams
+              if (selected?.toLowerCase() === "most liked") {
 
-              searchParams = new URLSearchParams({ page: `1`, range: `${range}`, order: `${asc ? "desc" : "asc"}` })
-              setAsc(!asc)
-            } else {
-              setSelected(e.currentTarget.innerHTML.split("<")[0]);
-              setAsc(true)
-              searchParams = new URLSearchParams({ page: `1`, range: `${range}`, order: "asc" })
-            }
-            router.push("/events/most-liked" + "?" + searchParams, { scroll: false });
+                searchParams = new URLSearchParams({ page: `1`, range: `${range}`, order: `${asc ? "desc" : "asc"}` })
+                setAsc(!asc)
+              } else {
+                setSelected(e.currentTarget.innerHTML.split("<")[0]);
+                setAsc(true)
+                searchParams = new URLSearchParams({ page: `1`, range: `${range}`, order: "asc" })
+              }
+              router.push("/events/most-liked" + "?" + searchParams, { scroll: false });
 
-          }}
-          bgColor="bg-link"
-        />
-        <Button
-          title={`Upcoming ${asc ? "ascending" : "descending"}`}
-          text="Upcoming"
-          Icon={asc ? FaArrowUp : FaArrowDown}
-          active={selected?.toLowerCase() === "upcoming"}
-          fn={(e) => {
-            let searchParams
-            if (selected?.toLowerCase() === "upcoming") {
+            }}
+            bgColor="bg-link"
+          />
+          <Button
+            title={`Upcoming ${asc ? "ascending" : "descending"}`}
+            text="Upcoming"
+            Icon={asc ? FaArrowUp : FaArrowDown}
+            active={selected?.toLowerCase() === "upcoming"}
+            fn={(e) => {
+              let searchParams
+              if (selected?.toLowerCase() === "upcoming") {
 
-              searchParams = new URLSearchParams({ page: `1`, range: `${range}`, order: `${asc ? "desc" : "asc"}` })
-              setAsc(!asc)
-            } else {
-              setSelected(e.currentTarget.innerHTML.split("<")[0]);
-              setAsc(true)
-              searchParams = new URLSearchParams({ page: `1`, range: `${range}`, order: "asc" })
-            }
-            router.push("/events/upcoming" + "?" + searchParams, { scroll: false });
+                searchParams = new URLSearchParams({ page: `1`, range: `${range}`, order: `${asc ? "desc" : "asc"}` })
+                setAsc(!asc)
+              } else {
+                setSelected(e.currentTarget.innerHTML.split("<")[0]);
+                setAsc(true)
+                searchParams = new URLSearchParams({ page: `1`, range: `${range}`, order: "asc" })
+              }
+              router.push("/events/upcoming" + "?" + searchParams, { scroll: false });
 
-          }}
-          bgColor="bg-link"
-        />
-        <Button
-          title={`Sales Ending ${asc ? "ascending" : "descending"}`}
-          text="Sales Ending"
-          Icon={asc ? FaArrowUp : FaArrowDown}
-          active={selected?.toLocaleLowerCase() === "sales ending"}
-          fn={(e) => {
-            let searchParams
-            if (selected?.toLowerCase() === "sales ending") {
+            }}
+            bgColor="bg-link"
+          />
+          <Button
+            title={`Sales Ending ${asc ? "ascending" : "descending"}`}
+            text="Sales Ending"
+            Icon={asc ? FaArrowUp : FaArrowDown}
+            active={selected?.toLocaleLowerCase() === "sales ending"}
+            fn={(e) => {
+              let searchParams
+              if (selected?.toLowerCase() === "sales ending") {
 
-              searchParams = new URLSearchParams({ page: `1`, range: `${range}`, order: `${asc ? "desc" : "asc"}` })
-              setAsc(!asc)
-            } else {
-              setSelected(e.currentTarget.innerHTML.split("<")[0]);
-              setAsc(true)
-              searchParams = new URLSearchParams({ page: `1`, range: `${range}`, order: "asc" })
-            }
-            router.push("/events/sales-ending" + "?" + searchParams, { scroll: false });
+                searchParams = new URLSearchParams({ page: `1`, range: `${range}`, order: `${asc ? "desc" : "asc"}` })
+                setAsc(!asc)
+              } else {
+                setSelected(e.currentTarget.innerHTML.split("<")[0]);
+                setAsc(true)
+                searchParams = new URLSearchParams({ page: `1`, range: `${range}`, order: "asc" })
+              }
+              router.push("/events/sales-ending" + "?" + searchParams, { scroll: false });
 
-          }}
-          bgColor="bg-link"
-        />
-        <div className="flex items-center justify-center ">
-          <DropDown fn={(e) => { setRange(parseInt(e.currentTarget.innerHTML)); let searchParams = new URLSearchParams({ page: page.toString(), range: e.currentTarget.innerHTML, order: asc ? "asc" : "desc" }); router.push(`/events/${selected?.toLowerCase().replace(" ", "-")}` + "?" + searchParams, { scroll: false }) }} items={["10", "25", "50"]} title={`show: ${range}`} size="text-sm" bgColor="" />
-        </div>
+            }}
+            bgColor="bg-link"
+          />
+          <div className="flex items-center justify-center ">
+            <DropDown fn={(e) => { handleSetRange(e) }} items={["10", "25", "50"]} title={`show: ${range}`} size="text-sm" bgColor="" />
+          </div>
         </div>
       </div>
       <div className="flex flex-col p-4 justify-start xl:mx-0 mx-2 transition-all duration-300 min-h-[50rem] my-2">

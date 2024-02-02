@@ -32,6 +32,13 @@ const ItemsBrowser = ({ items, count, selectedCategory = "all items", orderAsc =
   const [asc, setAsc] = useState(orderAsc)
 
 
+  const handleSetRange = (e: React.MouseEvent) => {
+    setRange(parseInt(e.currentTarget.innerHTML));
+    const searchParams = new URLSearchParams({ page: '1', range: e.currentTarget.innerHTML, order: asc ? "asc" : "desc" });
+    router.push(`/events/${selected?.toLowerCase().replace(" ", "-")}` + "?" + searchParams, { scroll: false })
+  }
+
+
   useEffect(() => {
     window.addEventListener("currency", () => {
       const currency = localStorage.getItem("currency");
@@ -178,7 +185,7 @@ const ItemsBrowser = ({ items, count, selectedCategory = "all items", orderAsc =
             bgColor="bg-link"
           />
           <div className="flex items-center justify-center ">
-            <DropDown fn={(e) => { setRange(parseInt(e.currentTarget.innerHTML)); let searchParams = new URLSearchParams({ page: page.toString(), range: e.currentTarget.innerHTML, order: asc ? "asc" : "desc" }); router.push(`/events/${selected?.toLowerCase().replace(" ", "-")}` + "?" + searchParams, { scroll: false }) }} items={["10", "25", "50"]} title={`show: ${range}`} size="text-sm" bgColor="" />
+            <DropDown fn={(e) => { handleSetRange(e) }} items={["10", "25", "50"]} title={`show: ${range}`} size="text-sm" bgColor="" />
           </div>
         </div>
 
@@ -214,7 +221,7 @@ const ItemsBrowser = ({ items, count, selectedCategory = "all items", orderAsc =
                 <span className="self-end text-sm w-40 p-2 h-full hidden md:block overflow-clip text-ellipsis">
                   {i.amount ? "In stock" : "out of stock"}
                 </span>
-          
+
               </div>
               <div className="text-sm flex">
 

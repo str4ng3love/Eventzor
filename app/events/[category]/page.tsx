@@ -9,13 +9,14 @@ const page = async ({ params, searchParams }: { params: { category: string }, se
 
     const getEventsAndAmount = async (query: Prisma.EventFindManyArgs | null) => {
 
-
         if (query === null) {
             return notFound()
         }
+
         const [events, count] = await prisma.$transaction([
             prisma.event.findMany(query), prisma.event.count({ where: query.where })
         ])
+
         return {
             events, count
         }
@@ -125,6 +126,7 @@ const page = async ({ params, searchParams }: { params: { category: string }, se
         }
 
         const { events, count } = await getEventsAndAmount(queryOptions)
+
         if (events.length === 0) {
             return (
                 <div className="mt-12 flex flex-col items-center justify-center">
@@ -133,7 +135,6 @@ const page = async ({ params, searchParams }: { params: { category: string }, se
                 </div>
             );
         } else {
-              
             return (
                 <>
 
