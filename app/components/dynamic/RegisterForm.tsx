@@ -13,7 +13,7 @@ interface Props {
   switchFn?: () => void;
 }
 const RegisterForm = ({ cleanUp, show, switchFn }: Props) => {
-  const [isOpen, setOpen] = useState(false);
+  const [isOpen, setOpen] = useState(show);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -60,7 +60,8 @@ const RegisterForm = ({ cleanUp, show, switchFn }: Props) => {
   }, [isOpen])
   return (
     <>
-      <Button title="Register an account" text="register" fn={() => setOpen(true)} />
+      {show ? <></> : <Button title="Register an account" text="register" fn={() => setOpen(true)} />}
+
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog
           as="div"
@@ -146,7 +147,7 @@ const RegisterForm = ({ cleanUp, show, switchFn }: Props) => {
                 <div className="flex flex-col justify-around pt-8 ">
 
                   <span className="p-4">Already have an account?</span>
-                  <Button text="Register" title="Open Login form" fn={() => { if (cleanUp && switchFn) { cleanUp(); switchFn() } }} />
+                  <Button text="Login" title="Open Login form" fn={() => { if (cleanUp && switchFn) { cleanUp(); switchFn() } }} />
                 </div>
               </Dialog.Panel>
             </div>

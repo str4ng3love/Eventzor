@@ -1,10 +1,10 @@
 "use client";
 
 import { signOut, useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { BiLogOut, BiSolidDashboard, BiUser } from "react-icons/bi";
 import LoginForm from "./LoginForm";
-import { Menu, Transition } from "@headlessui/react";
+import { Menu } from "@headlessui/react";
 import Link from "next/link";
 import { TbFileSpreadsheet } from "react-icons/tb";
 import RegisterForm from "./RegisterForm";
@@ -14,9 +14,7 @@ const UserMenu = () => {
   const [showRegister, setShowRegister] = useState(false)
   const { data: session } = useSession();
 
-  useEffect(()=>{
-    console.log(showLogin, showRegister)
-  },[showLogin, showRegister ])
+
   if (session) {
     return (
       <>
@@ -91,14 +89,16 @@ const UserMenu = () => {
         >
           <BiUser />
         </div>
-        {showLogin ? (
+        {showLogin ?
           <LoginForm show={true} cleanUp={() => setShowLogin(false)} switchFn={() => setShowRegister(true)} />
-        ) : (
-          null
-        )}
-        {showRegister ?
-          <RegisterForm show={true} cleanUp={() => setShowRegister(false)} switchFn={() => setShowLogin(true)} /> : null}
+          :
+          null}
+        {showRegister ? <RegisterForm show={true} cleanUp={() => setShowRegister(false)} switchFn={() => setShowLogin(true)} />
+          : null}
+
+
       </>
+
     );
   }
 };
