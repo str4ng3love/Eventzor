@@ -92,7 +92,7 @@ const ItemCarousel = ({
               >
                 <BiSolidLeftArrow />
               </span>
-              <div className=" w-full h-full flex justify-between ring-2 ring-primary shadow-omni">
+              <div className=" w-full h-full flex justify-between ring-2 ring-primary shadow-omni overflow-hidden">
                 <Link
                   href={`/item/${items[active].item}`}
                   title={items[active].item}
@@ -110,7 +110,7 @@ const ItemCarousel = ({
                     alt="item image"
                     src={selectedImage}
                     className={`${playFadeOut ? "animate-fadeOut300" : "animate-fadeIn300"
-                      }`}
+                      } hover:scale-105 transition-all duration-300`}
                   />
                 </Link>
                 <div className=" hidden w-[33%] bg-gradient-to-br from-primary to-slate-900 lg:flex flex-col justify-between">

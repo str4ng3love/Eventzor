@@ -20,6 +20,7 @@ interface Props {
   fullWidthBlur?: boolean;
   darkBgAlpha?: boolean;
 }
+// TO DO: animations
 const EventCarousel = ({
   items,
   heading,
@@ -98,7 +99,7 @@ const EventCarousel = ({
             >
               <BiSolidLeftArrow />
             </span>
-            <div className=" w-full h-full flex justify-between ring-2 ring-primary shadow-omni">
+            <div className=" w-full h-full flex justify-between ring-2 ring-primary shadow-omni overflow-hidden">
               <Link
                 href={"/event/" + encodeURIComponent(items[active].title)}
                 title={items[active].title}
@@ -107,6 +108,7 @@ const EventCarousel = ({
                 <span className="opacity-0 absolute z-50 h-full w-full bg-black/40 flex lg:hidden group-hover:opacity-100 justify-center items-center text-xl font-bold transition-all duration-300">
                   {items[active].title}
                 </span>
+               
                 <Image
                   fill
                   placeholder="blur"
@@ -116,7 +118,7 @@ const EventCarousel = ({
                   alt="event's image"
                   src={selectedImage}
                   className={`${playFadeOut ? "animate-fadeOut300" : "animate-fadeIn300"
-                    }`}
+                    } hover:scale-105 transition-all duration-300`}
                 />
               </Link>
               <div className=" hidden w-[33%] bg-gradient-to-br from-primary to-slate-900 lg:flex flex-col justify-between">

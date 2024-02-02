@@ -98,12 +98,12 @@ const Search = () => {
                 <Combobox.Option className={`text-sm indent-2 hover:bg-link transition-all duration-150 cursor-pointer mt-1`} value={u.name}>{u.name}</Combobox.Option>
               </Link>
             ))}
-            {results?.users.length === 0 && results?.events.length === 0 && results?.users.length === 0 ? <span className="p-1 text-sm font-thin">No results for given query</span> : null}
+            {results?.users.length === 0 && results?.events.length === 0 && results?.items.length === 0 ? <span className="p-1 text-sm font-thin">No results for given query</span> : null}
           </Combobox.Options>
         </div>
       </Combobox>
     }
-      cleanUp={() => {setShow(false), setResults(null)}}
+      cleanUp={() => { setShow(false), setResults(null) }}
 
     /> : null}
   </>

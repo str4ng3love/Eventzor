@@ -41,9 +41,9 @@ const page = async ({ params }: { params: { user: string } }) => {
                     </div>
                 </div>
             </div>
-            <div className="flex flex-col items-center justify-center mt-8">
-                {userData.events.length <= 3 ? <EventCarousel heading={`${user}'s top 3 popular events`} items={userData.events} /> : <></>}
-                {userData.marketItems.length <= 3 ? <ItemCarousel heading={`${user}'s top 3 popular items`} items={userData.marketItems} /> : <></>}
+            <div className="flex flex-col items-center justify-center my-8">
+                {userData.events.length >= 3 ? <EventCarousel heading={`${user}'s top 3 popular events`} items={userData.events} /> : <></>}
+                {userData.marketItems.length >= 3 ? <ItemCarousel heading={`${user}'s top 3 popular items`} items={userData.marketItems} /> : <></>}
             </div>
         </div>
 

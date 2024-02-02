@@ -102,7 +102,7 @@ const page = async ({ params, searchParams }: { params: { category: string }, se
                 break;
             case "upcoming":
                 const queryUpcoming: Prisma.EventFindManyArgs = {
-                    where: { images: { isEmpty: false } }, skip: range * page, take: range, orderBy: { ticketsSold: order === "asc" ? order : "desc" }
+                    where: { images: { isEmpty: false } }, skip: range * page, take: range, orderBy: { eventDate: order === "asc" ? order : "desc" }
                 }
                 queryOptions = queryUpcoming
                 break;

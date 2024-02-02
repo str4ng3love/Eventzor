@@ -1,4 +1,7 @@
 "use client"
+
+import { useEffect, useState } from "react";
+
 type Props = {
     amount: number;
     amountSold: number
@@ -6,6 +9,7 @@ type Props = {
 
 
 const DisplayStock = ({ amount, amountSold }: Props) => {
+
     const percentage = (amount / (amount + amountSold) * 100).toFixed(0)
     let bg = "bg-link"
     if (parseInt(percentage) <= 70) bg = "bg-emerald-500"
@@ -18,7 +22,7 @@ const DisplayStock = ({ amount, amountSold }: Props) => {
     }
 
     return (
-        <span className={`w-full flex justify-between items-center mx-4 ring-1 ring-text px-1 rounded-sm`}>
+        <span className={`w-[100%] flex justify-between items-center mx-4 ring-1 ring-text px-1 rounded-sm`}>
 
             <span className={`block w-[${((amount / (amount + amountSold)) * 100).toFixed(0)}%] ${bg} h-4`} />
 

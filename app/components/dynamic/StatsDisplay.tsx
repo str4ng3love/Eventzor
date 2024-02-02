@@ -18,7 +18,6 @@ const StatsDisplay = ({ user, type, stats }: Props) => {
     const [elements, setElements] = useState<{ title?: string, item?: string, message?: string, id?: string }[] | null>(null)
     const [isOpen, setIsOpen] = useState(false)
     const [id, setId] = useState<string | null>(null)
-    const router = useRouter()
 
     const getElements = async (type: string, user: string) => {
         try {

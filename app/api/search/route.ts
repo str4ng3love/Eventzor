@@ -23,7 +23,6 @@ async function handler(req: Request) {
       try {
         const items = await prisma.marketItem.findMany({ where: { item: {contains: query, mode:"insensitive"} }, select: {id: true, item: true } });
         Object.assign(queryResponse,{items}) 
-        console.log(queryResponse)
       } catch (error) {
         console.log(error);
       }

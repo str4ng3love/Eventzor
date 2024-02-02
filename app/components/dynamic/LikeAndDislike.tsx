@@ -36,8 +36,6 @@ const LikeAndDislike = ({
   const [disliked, setDisliked] = useState<unknown>();
   const [working, setWorking] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
-  const [likes, setLikes] = useState<string | null>(null)
-  const [dislikes, setDislikes] = useState<string | null>(null)
   const CheckStatus = async () => {
     if (session?.user) {
       try {
@@ -162,8 +160,8 @@ const LikeAndDislike = ({
   }, []);
 
   useEffect(() => {
-    setLikes(((parentData.amountOfLikes / (parentData.amountOfLikes + parentData.amountOfDislikes)) * 100).toFixed(0))
-    setDislikes(((parentData.amountOfDislikes / (parentData.amountOfLikes + parentData.amountOfDislikes)) * 100).toFixed(0))
+console.log(((parentData.amountOfLikes / (parentData.amountOfLikes + parentData.amountOfDislikes)) * 100).toFixed(0))
+
   }, [parentData.amountOfLikes, parentData.amountOfDislikes])
   return (
     <div className="w-full p-2">
@@ -251,14 +249,14 @@ const LikeAndDislike = ({
             </>
           )}
 
-          <div className={`bg-bg_interactive w-full flex justify-between h-1 ${hidden ? "hidden" : ""}`}>
-        
-             
+          <div className={`relative bg-bg_interactive w-[100%] flex justify-between h-1 ${hidden ? "hidden" : ""}`}>
 
-                <span className={`h-1 w-[${likes}%] bg-primary`}/>
-                <span className={`h-1 w-[${dislikes}%] bg-secondary`}/>
 
-          
+
+            <div className={`h-1 w-[${((parentData.amountOfLikes / (parentData.amountOfLikes + parentData.amountOfDislikes)) * 100).toFixed(0)}%] bg-primary`} />
+            <div className={`h-1 w-[${((parentData.amountOfDislikes / (parentData.amountOfLikes + parentData.amountOfDislikes)) * 100).toFixed(0)}%] bg-secondary`} />
+
+
           </div>
 
         </>
