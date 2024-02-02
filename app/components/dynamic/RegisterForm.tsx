@@ -9,9 +9,10 @@ import { signIn } from "next-auth/react";
 
 interface Props {
   show?: boolean;
-  cleanUp?: ()=>void;
+  cleanUp?: () => void;
+  switchFn?: () => void;
 }
-const RegisterForm = ({cleanUp,show}:Props) => {
+const RegisterForm = ({ cleanUp, show, switchFn }: Props) => {
   const [isOpen, setOpen] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -37,23 +38,23 @@ const RegisterForm = ({cleanUp,show}:Props) => {
       body: JSON.stringify({ username, password, confirm, email }),
     });
     const respParsed = await resp.json();
-    if(respParsed.error){
-      setNotify({show:true, error:true, message:respParsed.error.message})
+    if (respParsed.error) {
+      setNotify({ show: true, error: true, message: respParsed.error.message })
     } else {
       const resp = await signIn("credentials", {
         username,
         password,
         redirect: false,
       });
-      if(resp?.error){
-          setNotify({show:true, error:true, message:"Something went wrong."})
+      if (resp?.error) {
+        setNotify({ show: true, error: true, message: "Something went wrong." })
       } else {
         router.refresh()
       }
     }
   };
-  useEffect(()=>{
-    if(cleanUp && !isOpen){
+  useEffect(() => {
+    if (cleanUp && !isOpen) {
       cleanUp()
     }
   }, [isOpen])
@@ -142,10 +143,10 @@ const RegisterForm = ({cleanUp,show}:Props) => {
                   onAnimEnd={() => { setNotify({ error: false, message: "", show: false }); setOpen(false) }
                   }
                 />
-                 <div className="flex flex-col justify-around pt-8 ">
-             
-             <span className="p-4">Already have an account?</span>
-       
+                <div className="flex flex-col justify-around pt-8 ">
+
+                  <span className="p-4">Already have an account?</span>
+                  <Button text="Register" title="Open Login form" fn={() => { if (cleanUp && switchFn) { cleanUp(); switchFn() } }} />
                 </div>
               </Dialog.Panel>
             </div>

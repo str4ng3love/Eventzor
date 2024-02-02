@@ -11,10 +11,10 @@ import { useRouter } from "next/navigation";
 
 interface Props {
   show?: boolean;
-  cleanUp?: ()=>void;
-
+  cleanUp?: () => void;
+  switchFn?: () => void;
 }
-const LoginForm = ({show=false, cleanUp }:Props) => {
+const LoginForm = ({ show = false, cleanUp, switchFn }: Props) => {
 
   const [isOpen, setOpen] = useState(show);
   const [username, setUsername] = useState("");
@@ -35,22 +35,22 @@ const LoginForm = ({show=false, cleanUp }:Props) => {
     if (resp?.error) {
       setNotify({ error: true, show: true, message: "Invalid Credentials" });
     } else {
-    
+
       router.refresh()
     }
   };
-useEffect(()=>{
-  if(cleanUp && !isOpen){
-    cleanUp()
-  }
-}, [isOpen])
+  useEffect(() => {
+    if (cleanUp && !isOpen) {
+      cleanUp()
+    }
+  }, [isOpen])
   return (
     <>
-      {show? <></>: <Button title="Log in" text="log in" fn={() => {setOpen(true)}} />}
+      {show ? <></> : <Button title="Log in" text="log in" fn={() => { setOpen(true) }} />}
 
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog
-          onClose={() => {setOpen(false);}}
+          onClose={() => { setOpen(false); }}
           as="div"
           className={"z-50 relative"}
         >
@@ -93,18 +93,18 @@ useEffect(()=>{
                     />
                   </div>
                 </form>
-           
+
 
                 <div className="flex justify-around pt-8">
                   <Button
 
-                  title="Log in"
+                    title="Log in"
                     text="log in"
                     fn={() => handleLogin(username, password)}
                   />
                   <Button title="Cancel" text="Cancel" fn={() => setOpen(false)}></Button>
                 </div>
-            <Notification
+                <Notification
                   message={notify.message}
                   show={notify.show}
                   error={notify.error}
@@ -112,16 +112,17 @@ useEffect(()=>{
                     setNotify({ error: false, message: "", show: false })
                   }
                 />
-             
+
                 <div className="flex flex-col justify-around pt-8 ">
-             
-             <span className="p-4">Don&apos;t have an account?</span>
+
+                  <span className="p-4">Don&apos;t have an account?</span>
+                  <Button text="Register" title="Open Register form" fn={() => { if (cleanUp && switchFn) { cleanUp(); switchFn() } }} />
                 </div>
               </Dialog.Panel>
-           
+
             </div>
           </Transition.Child>
-    
+
         </Dialog>
       </Transition>
     </>
