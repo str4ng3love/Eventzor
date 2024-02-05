@@ -14,6 +14,11 @@ module.exports = {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        "gradient-grid":
+          "linear-gradient(90deg , var(--primary) 1%, transparent 5%), linear-gradient(270deg, var(--primary) 1%, transparent 5%), linear-gradient(180deg , var(--primary) 1%, transparent 5%), linear-gradient(0deg, var(--primary) 1%, transparent 5%)",
+      },
+      backgroundSize:{
+        "3x3": "3rem 3rem"
       },
       borderRadius: {
         smoothLT: "1rem 0rem 0rem 0rem",
@@ -36,6 +41,9 @@ module.exports = {
       boxShadow: {
         link: "var(--shadow-link)",
         omni: "var(--shadow-omni)",
+      },
+      dropShadow:{
+        "white_omni":"0px 0px 5px white"
       },
       keyframes: {
         rotateRight: {
@@ -87,6 +95,34 @@ module.exports = {
             height: "3.3rem",
           },
         },
+        gridMove: {
+          "0%, 100%": {
+            backgroundPosition: "100% 0%",
+          },
+          "25%": {
+            backgroundPosition: "0% 100%"
+          },
+          "50%": {
+            backgroundPosition: "-100% 0%"
+          },
+          "75%":{
+            backgroundPosition: "0% -100%"
+          },
+        },
+        gridMoveInverted: {
+          "0%, 100%": {
+            backgroundPosition: "0% 100%",
+          },
+          "25%": {
+            backgroundPosition: "100% 0%"
+          },
+          "50%": {
+            backgroundPosition: "0% -100%"
+          },
+          "75%":{
+            backgroundPosition: "-100% 0%"
+          },
+        },
       },
       animation: {
         rotateRight: "rotateRight linear 10s infinite",
@@ -97,6 +133,8 @@ module.exports = {
         growAndShrink: "growAndShrink ease-in-out 5s forwards",
         pingSlower: "ping 6s cubic-bezier(0, 0, 0.2, 1) infinite",
         pingSlower2: "ping 6s 3s cubic-bezier(0, 0, 0.2, 1) infinite",
+        gridMove: "gridMove linear 150s infinite",
+        gridMoveInverted: "gridMoveInverted linear 150s infinite",
       },
     },
   },

@@ -22,7 +22,7 @@ export default async function RootLayout({
   const session = await getServerSession();
   return (
     <html lang="en">
-      <body className={`${publicSans.className} min-w-[675px]`}>
+      <body className={`${publicSans.className} min-w-[675px] relative`}>
         <SessionProvider session={session}>
           <Header />
           {children}

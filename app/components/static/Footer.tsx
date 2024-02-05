@@ -23,7 +23,7 @@ const Footer = () => {
                     </ul>
                 </nav>
                 <div className="flex items-center"> 
-                        <TbNoCopyright /><span>&nbsp;MP 2024</span>
+                        <TbNoCopyright /><span>&nbsp;EVENTZOR 2024</span>
                 </div>
 
             </div>

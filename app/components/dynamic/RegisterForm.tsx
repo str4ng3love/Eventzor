@@ -12,7 +12,7 @@ interface Props {
   cleanUp?: () => void;
   switchFn?: () => void;
 }
-const RegisterForm = ({ cleanUp, show, switchFn }: Props) => {
+const RegisterForm = ({ cleanUp, show=false, switchFn }: Props) => {
   const [isOpen, setOpen] = useState(show);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");

@@ -5,9 +5,12 @@ import Notifications from "../../dynamic/Notifications/Notifications";
 import UserMenu from "../../dynamic/UserMenu";
 import Search from "../../dynamic/Header/Search";
 import Link from "next/link";
+import { getServerSession } from "next-auth";
+import { options } from "@/app/api/auth/[...nextauth]/options";
 
 
-const Header = () => {
+const Header = async () => {
+  const session = await getServerSession(options)
   return (
     <nav className="z-10 h-[4rem] bg-bg_sidebar text-interactive_text dark:text-text dark:bg-black/50 flex justify-between items-center fixed w-full backdrop-blur-sm">
       <ul className="relative ml-8 lg:ml-32 group ">
@@ -33,7 +36,8 @@ const Header = () => {
       </ul>
       <div className="mr-8 lg:mr-32 flex items-center gap-4">
         <Search />
-        <Notifications />
+
+        {session?.user?.name ? < Notifications /> : <></>}
 
         <Currency />
 
