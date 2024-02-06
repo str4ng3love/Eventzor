@@ -18,7 +18,8 @@ module.exports = {
           "linear-gradient(90deg , var(--primary) 1%, transparent 5%), linear-gradient(270deg, var(--primary) 1%, transparent 5%), linear-gradient(180deg , var(--primary) 1%, transparent 5%), linear-gradient(0deg, var(--primary) 1%, transparent 5%)",
       },
       backgroundSize:{
-        "3x3": "3rem 3rem"
+        "3x3": "3rem 3rem",
+        "6x6": "6rem 6rem"
       },
       borderRadius: {
         smoothLT: "1rem 0rem 0rem 0rem",
@@ -97,30 +98,30 @@ module.exports = {
         },
         gridMove: {
           "0%, 100%": {
-            backgroundPosition: "100% 0%",
+            backgroundPosition: "0% 50%",
           },
           "25%": {
-            backgroundPosition: "0% 100%"
+            backgroundPosition: "50% 0%",
           },
           "50%": {
-            backgroundPosition: "-100% 0%"
+            backgroundPosition: "0% -50%",
           },
           "75%":{
-            backgroundPosition: "0% -100%"
+            backgroundPosition: "-50% 0%",
           },
         },
         gridMoveInverted: {
           "0%, 100%": {
-            backgroundPosition: "0% 100%",
+            backgroundPosition: "0% -100%",
           },
           "25%": {
-            backgroundPosition: "100% 0%"
+            backgroundPosition: "-100% 0%",
           },
           "50%": {
-            backgroundPosition: "0% -100%"
+            backgroundPosition: "0% 100%",
           },
           "75%":{
-            backgroundPosition: "-100% 0%"
+            backgroundPosition: "100% 0%",
           },
         },
       },

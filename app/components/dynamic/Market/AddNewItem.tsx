@@ -3,18 +3,15 @@ import Button from "../Button";
 import { Fragment, useState, useReducer } from "react";
 import { Transition, Dialog } from "@headlessui/react";
 import Notification from "../../static/Notification";
-import { Listbox } from "@headlessui/react";
 
-// import { ItemType } from "@prisma/client";
 
-type ItemType = "tshirt" | "cap" | "poster" | "bracelet" | "sticker";
-let options: ItemType[] = ["bracelet", "cap", "poster", "sticker", "tshirt"];
+
+
 enum FormActionKind {
   INPUT_ITEM,
   INPUT_DESC,
   INPUT_AMOUNT,
   INPUT_IS_PREORDER,
-  INPUT_TYPE,
   INPUT_RELEASE,
   INPUT_PRICE,
   INPUT_IMAGE,
@@ -30,7 +27,6 @@ interface InputState {
   description: string;
   amount: number;
   isPreorder: boolean;
-  type: string;
   releaseDate?: Date | null;
   price: number;
   image: string[];
@@ -56,12 +52,6 @@ const reducer = (state: InputState, action: InputAction) => {
       return {
         ...state,
         amount: payload as number,
-      };
-    }
-    case FormActionKind.INPUT_TYPE: {
-      return {
-        ...state,
-        type: payload as string,
       };
     }
     case FormActionKind.INPUT_IS_PREORDER: {
@@ -119,7 +109,6 @@ const AddNewItem = ({
   refetchTrigger,
 }: Props) => {
   const [show, setShow] = useState(false);
-  const [selected, setSelected] = useState(options[0]);
   const [canPost, setCanPost] = useState(true);
   const [image, setImage] = useState("");
   const [notify, setNotify] = useState({
@@ -131,12 +120,29 @@ const AddNewItem = ({
     item: "",
     description: "",
     amount: 1,
-    type: options[0],
+
     isPreorder: false,
     releaseDate: null,
     price: 0,
     image: [],
   });
+  const checkIfImageExists = async (url: string) => {
+    try {
+      const resp = await fetch(url, { method: "HEAD" })
+      const contentType = resp.headers.get("content-type")
+
+      if (contentType?.includes('image')) {
+        return true
+      } else {
+        setNotify({ error: true, message: "Provided URL does not point to a valid image resource", show: true })
+        return false
+      }
+    } catch (error) {
+      setNotify({ error: true, message: "Provided URL does not point to a valid image resource", show: true })
+      console.log(error)
+      return false
+    }
+  }
   const handleCreate = async (state: InputState) => {
     if (state.amount < 0) {
       return setNotify({
@@ -209,7 +215,7 @@ const AddNewItem = ({
             <div className="fixed inset-0 flex items-center justify-center p-4 backdrop-blur-sm">
               <Dialog.Panel
                 className={
-                  "relative p-8 bg-bg_interactive text-text dark:bg-bg_interactive  w-[30rem] shadow-md shadow-black overflow-y-scroll"
+                  "relative p-8 bg-bg_interactive text-text dark:bg-bg_interactive max-h-[85%] md:w-[30rem] shadow-md shadow-black overflow-y-scroll"
                 }
               >
                 <Dialog.Title className={"p-2 font-bold text-xl text-center"}>
@@ -246,32 +252,7 @@ const AddNewItem = ({
                       className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-24 resize-none "
                     />
                   </div>{" "}
-                  <div className="p-4 flex justify-between ">
-                    <label className="p-1 min-w-[10ch] mr-2">Type</label>
-                    <div>
-                      <Listbox value={selected} onChange={setSelected}>
-                        <Listbox.Button
-                          className={`p-2 relative bg-bg_interactive ring-2 ring-primary w-fit hover:bg-link transition-all duration-300 min-w-[10ch]`}
-                        >
-                          {selected}
-                        </Listbox.Button>
-                        <Listbox.Options
-                          className={`flex flex-col absolute bg-primary ring-2 ring-primary`}
-                        >
-                          {options.map((o, index) => (
-                            <Listbox.Option
-                              onClick={(e) => setSelected(o)}
-                              key={index}
-                              className={`hover:bg-link p-2 transition-all duration-300`}
-                              value={o}
-                            >
-                              {o}
-                            </Listbox.Option>
-                          ))}
-                        </Listbox.Options>
-                      </Listbox>
-                    </div>
-                  </div>
+
                   <div className="p-4 flex justify-between ">
                     <label className="p-1 min-w-[10ch] mr-2">Price</label>
                     <input
@@ -368,15 +349,18 @@ const AddNewItem = ({
                     <Button
                       title="add picture"
                       text="add"
-                      fn={() => {
+                      fn={async () => {
                         if (image.length === 0) return;
-                        dispatch({
-                          type: FormActionKind.INPUT_IMAGE,
-                          payload: image,
-                        });
-                  
-                        setImage("");
+                        if (await checkIfImageExists(image)) {
+
+                          dispatch({
+                            type: FormActionKind.INPUT_IMAGE,
+                            payload: image,
+                          });
+                          setImage("");
+                        }
                       }}
+
                     />
                   </div>
                   <div className="flex gap-1">
@@ -421,7 +405,7 @@ const AddNewItem = ({
                         text="Adding..."
                         interactive={false}
                         bgColor="bg-bg"
-                        fn={(e) => {}}
+                        fn={(e) => { }}
                       />
                     )}
                     <Button

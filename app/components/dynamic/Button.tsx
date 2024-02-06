@@ -11,6 +11,7 @@ interface Props {
   title: string;
   size?: string;
   active?: boolean;
+  showIcon?:boolean;
   Icon?: IconType
 }
 const Button = ({
@@ -22,7 +23,8 @@ const Button = ({
   title,
   size = "text-base",
   active = false,
-  Icon
+  Icon,
+  showIcon
 
 }: Props) => {
   return (
@@ -50,7 +52,7 @@ const Button = ({
         }`}
           onClick={(e) => fn(e)}
         >
-          {text}{Icon && active? <Icon  /> : null}
+          {text}{Icon && active ||Icon && showIcon ? <Icon  /> : null}
         </button>
       ) : (
         <></>

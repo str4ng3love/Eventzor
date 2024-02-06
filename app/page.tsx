@@ -18,9 +18,10 @@ export default async function Home() {
 
   return (
     <>
-      <div className="flex flex-col items-center justify-start bg-gradient-grid bg-fixed bg-3x3 animate-gridMove after:bg-gradient-grid after:bg-3x3 after:animate-gridMoveInverted after:-z-10 after:min-h-[calc(100dvh_-_6rem)] after:block after:content-[''] after:w-full after:absolute after:hue-rotate-30 before:content-[''] before:w-full before:min-h-[calc(100dvh_-_6rem)] before:blur-lg before:bg-slate-700/20 before:absolute before:bg-fixed after:bg-fixed">
-        <div className="flex justify-center mx-10  w-full items-center min-h-[calc(100dvh_-_6rem)] backdrop-blur-sm shadow-inner shadow-black">
+      <div className="flex flex-col items-center justify-start bg-gradient-grid bg-fixed bg-3x3 animate-gridMove after:bg-gradient-grid after:bg-6x6 after:animate-gridMoveInverted after:-z-10 after:min-h-[calc(100dvh_-_6rem)] after:block after:content-[''] after:w-full after:absolute after:hue-rotate-30 before:content-[''] before:w-full before:min-h-[calc(100dvh_-_6rem)] before:blur-lg before:bg-slate-700/20 before:absolute before:bg-fixed after:bg-fixed">
+        <div className="flex justify-center mx-10  w-full items-center min-h-[calc(100dvh_-_6rem)] after:blur-sm shadow-inner shadow-black">
           <div className="w-[60%]">
+
             <h1 className="md:text-7xl font-bold py-5 uppercase drop-shadow-white_omni text-5xl">Eventzor</h1>
             <h2 className="ma:text-3xl text-2xl font-semibold py-4 pt-8">Your place to <Link className="text-link hover:text-link_active transition-all duration-300 hover:underline" href={'/events'}>find</Link> and <Link className="text-link hover:text-link_active  transition-all duration-300 hover:underline" href={'/dashboard/events'}>post</Link> hot events!</h2>
             <div className="flex flex-col items-center pt-14">

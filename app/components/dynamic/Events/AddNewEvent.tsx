@@ -6,7 +6,7 @@ import Button from "../Button";
 import Image from "next/image";
 
 
- enum FormActionKind {
+enum FormActionKind {
   INPUT_TITLE = "Input event title",
   INPUT_DESC = "Input event description",
   INPUT_TICKETS = "Input amount of available tickets",
@@ -17,11 +17,11 @@ import Image from "next/image";
   INPUT_IMAGE = "Image for promotion",
   DELETE_IMAGE = "Delete a image"
 }
- interface InputAction {
+interface InputAction {
   type: FormActionKind;
   payload: string | number | Date;
 }
- interface InputState {
+interface InputState {
   title: string;
   description: string;
   tickets: number;
@@ -32,7 +32,7 @@ import Image from "next/image";
   image: string[];
 }
 
- const reducer = (state: InputState, action: InputAction) => {
+const reducer = (state: InputState, action: InputAction) => {
   const { type, payload } = action;
 
   switch (type) {
@@ -101,15 +101,15 @@ import Image from "next/image";
 };
 interface Props {
 
-  refetchTrigger: ()=>void;
+  refetchTrigger: () => void;
   optimisticFn: (e: React.MouseEvent) => void;
   optimisticFnClnUp: () => void;
 
 }
-const AddNewEvent = ({optimisticFn, optimisticFnClnUp, refetchTrigger}:Props) => {
+const AddNewEvent = ({ optimisticFn, optimisticFnClnUp, refetchTrigger }: Props) => {
   const [show, setShow] = useState(false);
   const [canPost, setCanPost] = useState(true)
-  const [image, setImage] =useState('')
+  const [image, setImage] = useState('')
   const [notify, setNotify] = useState({
     show: false,
     message: "",
@@ -129,7 +129,23 @@ const AddNewEvent = ({optimisticFn, optimisticFnClnUp, refetchTrigger}:Props) =>
     price: 0,
     image: []
   });
+  const checkIfImageExists = async (url: string) => {
+    try {
+      const resp = await fetch(url, { method: "HEAD" })
+      const contentType = resp.headers.get("content-type")
 
+      if (contentType?.includes('image')) {
+        return true
+      } else {
+        setNotify({ error: true, message: "Provided URL does not point to a valid image resource", show: true })
+        return false
+      }
+    } catch (error) {
+      setNotify({ error: true, message: "Provided URL does not point to a valid image resource", show: true })
+      console.log(error)
+      return false
+    }
+  }
   const handleCreate = async (state: InputState) => {
     if (state.tickets < 0) {
       return setNotify({
@@ -138,7 +154,7 @@ const AddNewEvent = ({optimisticFn, optimisticFnClnUp, refetchTrigger}:Props) =>
         message: "Amount of tickets cannot be negative.",
       });
     }
-    if(state.eventDate < state.closingDate){
+    if (state.eventDate < state.closingDate) {
       return setNotify({
         error: true,
         show: true,
@@ -156,8 +172,8 @@ const AddNewEvent = ({optimisticFn, optimisticFnClnUp, refetchTrigger}:Props) =>
         body: JSON.stringify(state),
       });
       const data = await resp.json();
-      
-    
+
+
       setCanPost(true);
       if (data.error) {
         setNotify({ error: true, show: true, message: data.error });
@@ -188,7 +204,7 @@ const AddNewEvent = ({optimisticFn, optimisticFnClnUp, refetchTrigger}:Props) =>
             <div className="fixed inset-0 flex items-center justify-center p-4 backdrop-blur-sm">
               <Dialog.Panel
                 className={
-                  "relative p-8 bg-bg_interactive text-text dark:bg-bg_interactive max-h-[90%] w-[50%] shadow-md shadow-black overflow-y-scroll"
+                  "relative p-8 bg-bg_interactive text-text dark:bg-bg_interactive max-h-[85%] md:w-[50%] shadow-md shadow-black overflow-y-scroll"
                 }
               >
                 <Dialog.Title className={"p-2 font-bold text-xl text-center"}>
@@ -201,7 +217,7 @@ const AddNewEvent = ({optimisticFn, optimisticFnClnUp, refetchTrigger}:Props) =>
                   <div className="p-4 flex justify-between z-20 ">
                     <label className="p-1 min-w-[10ch] mr-2">Title</label>
                     <input
-                    min={new Date().toDateString().slice(0, -8)}
+                      min={new Date().toDateString().slice(0, -8)}
                       onChange={(e) =>
                         dispatch({
                           type: FormActionKind.INPUT_TITLE,
@@ -229,7 +245,7 @@ const AddNewEvent = ({optimisticFn, optimisticFnClnUp, refetchTrigger}:Props) =>
                   <div className="p-4 flex justify-between ">
                     <label className="p-1 min-w-[10ch] mr-2">Closing Date</label>
                     <input
-                      min={new Date().toISOString().slice(0,-8)}
+                      min={new Date().toISOString().slice(0, -8)}
                       defaultValue={closingDate.toISOString().slice(0, -8)}
                       onChange={(e) =>
                         dispatch({
@@ -247,8 +263,8 @@ const AddNewEvent = ({optimisticFn, optimisticFnClnUp, refetchTrigger}:Props) =>
                       Event Date
                     </label>
                     <input
-                    min={new Date().toISOString().slice(0,-8)}
-                    defaultValue={new Date(eventDate).toISOString().slice(0, -8)}
+                      min={new Date().toISOString().slice(0, -8)}
+                      defaultValue={new Date(eventDate).toISOString().slice(0, -8)}
                       onChange={(e) => {
                         dispatch({
                           type: FormActionKind.INPUT_ESTART,
@@ -323,13 +339,16 @@ const AddNewEvent = ({optimisticFn, optimisticFnClnUp, refetchTrigger}:Props) =>
                     <Button
                       title="add picture"
                       text="add"
-                      fn={() => {
+                      fn={async () => {
                         if (image.length === 0) return;
-                        dispatch({
-                          type: FormActionKind.INPUT_IMAGE,
-                          payload: image,
-                        });
-                        setImage("");
+                        if (await checkIfImageExists(image)) {
+
+                          dispatch({
+                            type: FormActionKind.INPUT_IMAGE,
+                            payload: image,
+                          });
+                          setImage("");
+                        }
                       }}
                     />
                   </div>
@@ -360,36 +379,39 @@ const AddNewEvent = ({optimisticFn, optimisticFnClnUp, refetchTrigger}:Props) =>
                     )}
                   </div>
                   <div className="p-4 mt-4 flex justify-evenly ">
-                    {canPost ? 
-                    <Button title="Create"
-                      text="Create"
-                      fn={(e) => {
-                        optimisticFn(e);
-                        handleCreate(state);
-                      }}
-                    />:  <Button
-                    title="Working..."
-                    text="Adding..."
-                    interactive={false}
-                    bgColor="bg-bg"
-                    fn={(e) => {
-                  
-                    }}
-                  />}
-                    <Button 
-                    title="Cancel"
-                    text="Cancel" fn={() => setShow(false)} />
+                    {canPost ?
+                      <Button title="Create"
+                        text="Create"
+                        fn={(e) => {
+                          optimisticFn(e);
+                          handleCreate(state);
+                        }}
+                      /> : <Button
+                        title="Working..."
+                        text="Adding..."
+                        interactive={false}
+                        bgColor="bg-bg"
+                        fn={(e) => {
+
+                        }}
+                      />}
+                    <Button
+                      title="Cancel"
+                      text="Cancel" fn={() => setShow(false)}
+                      bgColor="bg-secondary"
+                    />
+
                   </div>
                 </form>
               </Dialog.Panel>
               <Notification
-                    message={notify.message}
-                    show={notify.show}
-                    error={notify.error}
-                    onAnimEnd={() =>
-                      setNotify({ error: false, message: "", show: false })
-                    }
-                  />
+                message={notify.message}
+                show={notify.show}
+                error={notify.error}
+                onAnimEnd={() =>
+                  setNotify({ error: false, message: "", show: false })
+                }
+              />
             </div>
           </Transition.Child>
         </Dialog>

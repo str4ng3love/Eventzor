@@ -120,6 +120,7 @@ async function handler(req: Request) {
               comment: { connect: { id: body.id } },
             }
           })
+          console.log(notf)
 
         }
         TriggerNotification([recipient])
