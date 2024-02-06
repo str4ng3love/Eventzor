@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic'
 
 import { options } from "../api/auth/[...nextauth]/options";
 import Authenticate from "../components/Authenticate";
-import Sidebar from "../components/static/Sidebar/Sidebar";
+import Sidebar from "../components/dynamic/Sidebar/Sidebar";
 import {getServerSession} from "next-auth";
 export default async function Layout({
   children,
