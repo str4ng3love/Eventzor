@@ -235,15 +235,13 @@ const MyEventBrowser = () => {
               }}
             />
           </div>
-          <table className="my-8  w-full text-sm table">
+          <table className="my-8  w-full text-xs table">
               <thead className="">
                 <tr className="border-b-2 border-black/25 bg-black/40 table-row">
                   <th className="p-2 text-start">Date</th>
                   <th className="p-2 text-start">Event</th>
                   <th className="p-2 text-start">Tickets Remaining</th>
                   <th className="p-2 text-start">Closing Date</th>
-                  <th className="p-2 text-start">Organizer</th>
-                  <th className="p-2 text-start"></th>
                   <th className="p-2 text-start"></th>
                 </tr>
               </thead>
@@ -251,7 +249,6 @@ const MyEventBrowser = () => {
               {filtered
                 ? filtered.map((event) => (
                   <EventComponent
-                    isEmpty={event.images.length === 0}
                     key={event.id}
                     {...event}
                     delFn={() => {
@@ -264,7 +261,6 @@ const MyEventBrowser = () => {
                 ))
                 : eventsArr.map((event) => (
                   <EventComponent
-                    isEmpty={event.images.length === 0}
                     key={event.id}
                     {...event}
                     delFn={() => {

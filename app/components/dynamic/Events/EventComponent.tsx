@@ -37,8 +37,6 @@ const EventComponent = ({ ...props }: EventProps) => {
           <b>{new Date(props.closingDate).toDateString()}</b> <br />
           {new Date(props.closingDate).toTimeString().slice(0, 5)}
         </td>
-        <td className="p-2">{props.organizerName}</td>
-        <td className="w-[12ch] p-2">{props.isEmpty ? <InfoPopover fn={(e) => props.editFn(e)} text="!" message="There are no images attached to your event, this wont allow the event to be found on the website." /> : <></>}</td>
         <td className="h-[100%] ml-8 p-0 flex items-center justify-center">
           <DropDownMini
             items={[

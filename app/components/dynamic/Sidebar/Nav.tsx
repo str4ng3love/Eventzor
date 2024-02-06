@@ -1,5 +1,5 @@
 "use client";
-import { FaHouseUser, FaCog} from "react-icons/fa";
+import { FaHouseUser, FaCog } from "react-icons/fa";
 import { BsCalendar3EventFill } from "react-icons/bs";
 import { TbFileSpreadsheet } from "react-icons/tb";
 import { usePathname } from 'next/navigation'
@@ -8,10 +8,14 @@ import { useEffect, useState } from "react";
 import NavItem from "./NavItem";
 import { BiMoney } from "react-icons/bi";
 
-const Nav = () => {
+interface Props {
+  callbackFn: () => void;
+}
+
+const Nav = ({ callbackFn }: Props) => {
   const [selected, setSelected] = useState('home');
   const currentPath = usePathname()
-  useEffect(()=>{
+  useEffect(() => {
     setSelected(currentPath)
   }, [currentPath])
   return (
@@ -20,7 +24,7 @@ const Nav = () => {
         text="home"
         Icon={FaHouseUser}
         href="/dashboard"
-        fn={(e, href) =>{setSelected(href)}}
+        fn={(e, href) => { setSelected(href); callbackFn() }}
         selected={selected}
         label="navigate to dashboard"
       />
@@ -28,15 +32,15 @@ const Nav = () => {
         text="my events"
         Icon={BsCalendar3EventFill}
         href="/dashboard/events"
-        fn={(e, href) =>{setSelected(href)}}
+        fn={(e, href) => { setSelected(href); callbackFn() }}
         selected={selected}
         label="navigate to events page"
       />
-           <NavItem
+      <NavItem
         text="my market"
         Icon={BiMoney}
         href="/dashboard/market"
-        fn={(e, href) =>{setSelected(href)}}
+        fn={(e, href) => { setSelected(href); callbackFn() }}
         selected={selected}
         label="navigate to market page"
       />
@@ -44,7 +48,7 @@ const Nav = () => {
         text="my orders"
         Icon={TbFileSpreadsheet}
         href="/dashboard/orders"
-        fn={(e, href) =>{setSelected(href)}}
+        fn={(e, href) => { setSelected(href); callbackFn() }}
         selected={selected}
         label="navigate to orders page"
       />
@@ -52,7 +56,7 @@ const Nav = () => {
         text="settings"
         Icon={FaCog}
         href="/dashboard/settings"
-        fn={(e, href) =>{setSelected(href)}}
+        fn={(e, href) => { setSelected(href); callbackFn() }}
         selected={selected}
         label="navigate to settings page"
       />
