@@ -79,7 +79,7 @@ const Currency = ({
             {selected.name === 'initial' ? <SpinnerMini /> : selected?.name.toLocaleUpperCase()}
           </Listbox.Button>
           <Listbox.Options
-            className={`absolute bg-black flex flex-col top-0 left-0`}
+            className={`absolute bg-black flex flex-col top-0 left-0 z-10`}
           >
             {currencies && currencies.length > 0 ? (
               currencies.map((currency) => (
@@ -87,7 +87,7 @@ const Currency = ({
                   onClick={(e) => setManual(true)}
                   key={currency.id}
                   className={`${selected.name === currency.name ? "hidden" : ""
-                    } hover:bg-link p-2 transition-all duration-300`}
+                    } hover:bg-link p-2 transition-all duration-300 cursor-pointer`}
                   value={currency}
                 >
                   {currency.name.toLocaleUpperCase()}

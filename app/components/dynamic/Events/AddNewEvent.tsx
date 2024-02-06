@@ -326,7 +326,7 @@ const AddNewEvent = ({ optimisticFn, optimisticFnClnUp, refetchTrigger }: Props)
                   <div className="flex p-4 flex-col justify-center items-center">
                     <div className="pb-8 flex justify-between w-full ">
                       <label className="p-1 min-w-[10ch] mr-2">
-                        Image Link
+                        Image URL
                       </label>
                       <input
                         className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
@@ -379,6 +379,12 @@ const AddNewEvent = ({ optimisticFn, optimisticFnClnUp, refetchTrigger }: Props)
                     )}
                   </div>
                   <div className="p-4 mt-4 flex justify-evenly ">
+                    <Button
+                      title="Cancel adding new event"
+                      text="Cancel" 
+                      fn={() => setShow(false)}
+                      bgColor="bg-secondary"
+                    />
                     {canPost ?
                       <Button title="Create"
                         text="Create"
@@ -395,11 +401,6 @@ const AddNewEvent = ({ optimisticFn, optimisticFnClnUp, refetchTrigger }: Props)
 
                         }}
                       />}
-                    <Button
-                      title="Cancel"
-                      text="Cancel" fn={() => setShow(false)}
-                      bgColor="bg-secondary"
-                    />
 
                   </div>
                 </form>

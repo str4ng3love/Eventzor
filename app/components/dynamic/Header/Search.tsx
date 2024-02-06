@@ -38,7 +38,7 @@ const Search = () => {
 
   return (<>
     <button
-      className="relative group text-text_inactive flex py-2 w-full text-start"
+      className="relative group text-text_inactive flex py-2 text-start cursor-pointer"
       onClick={() => {
         setShow(true)
         inputEl.current?.focus();
@@ -49,7 +49,7 @@ const Search = () => {
         Icon={FaSearch}
       />
       <span className={
-        "w-40 bg-inherit focus:text-text focus:ring-0 focus:outline-none focus:bg-bg p-2 rounded-md group-hover:text-white transition-all duration-300 hidden md:inline-block"
+        "w-40  text-text ring-0 outline-none bg-bg p-2 rounded-md group-hover:text-white transition-all duration-300 md:inline-block"
       }>Search ...</span>
     </button>
     {show ? <Portal child={

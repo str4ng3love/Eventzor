@@ -5,7 +5,7 @@ import Icon from "../../static/Icon";
 import { FaBell } from "react-icons/fa";
 import { Menu, Transition } from "@headlessui/react";
 import SpinnerMini from "../../static/SpinnerMini";
-import {  Notification, StatusOrder } from "@prisma/client";
+import { Notification, StatusOrder } from "@prisma/client";
 import Button from "../Button";
 import { FormatString } from "@/helpers/FormatString";
 
@@ -102,8 +102,9 @@ const Notifications = () => {
 
 
       <Menu >
-        <Menu.Button className={`group h-8 w-8 flex justify-center items-center cursor-pointer hover:scale-105 hover:-translate-y-1 transition-transform duration-300`} onClick={async () => { setEvent(0); if (notifications === null) setNotifications(await getNotifications()) }
-        }>
+        <Menu.Button className={`group h-8 w-8 flex justify-center items-center cursor-pointer hover:scale-105 hover:-translate-y-1 transition-transform duration-300`}
+          onClick={async () => { setEvent(0); if (notifications === null) setNotifications(await getNotifications()) }}
+        >
           <Icon padding="" textSize="text-base" textColor="group-hover:text-text transition-all duration-300 text-text_inactive" Icon={FaBell} />
           {event > 0 ?
             <span className="absolute bg-secondary flex items-center justify-center rounded-full h-6 w-6 top-0 right-0 -translate-y-2 translate-x-[1rem] text-white">
@@ -120,12 +121,12 @@ const Notifications = () => {
           leaveTo="transform scale-95 opacity-0"
           afterLeave={() => setNotifications(null)}
         >
-          <div className="absolute flex flex-col bg-bg ring-2 ring-bg_interactive translate-x-[-65%]">
-            <Menu.Items className={`w-[50ch] h-64 overflow-y-scroll overflow-x-hidden bg-gradient-radial from-bg_sidebar to-bg_interactive `} >
+          <div className="absolute flex flex-col bg-bg ring-2 ring-bg_interactive right-0 mt-4">
+            <Menu.Items className={`md:w-[50ch] w-[40ch] h-64 overflow-y-scroll overflow-x-hidden bg-gradient-radial from-bg_sidebar to-bg_interactive `} >
 
               {notifications ? notifications.map((n, k) =>
 
-                <Menu.Item as={`div`} className={`p-1 hover:bg-link cursor-pointer transition-all duration-300`} key={k}>
+                <Menu.Item as={`div`} className={`p-1 hover:bg-link cursor-pointer transition-all duration-300 md:text-sm text-xs`} key={k}>
                   {n.action === "comment" ?
 
                     <div className="overflow-hidden  text-ellipsis whitespace-nowrap" onClick={async () => setSelectedEl(await getComment(n.commentId as string))}>
