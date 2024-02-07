@@ -121,8 +121,8 @@ const Notifications = () => {
           leaveTo="transform scale-95 opacity-0"
           afterLeave={() => setNotifications(null)}
         >
-          <div className="absolute flex flex-col bg-bg ring-2 ring-bg_interactive right-0 mt-4">
-            <Menu.Items className={`md:w-[50ch] w-[40ch] h-64 overflow-y-scroll overflow-x-hidden bg-gradient-radial from-bg_sidebar to-bg_interactive `} >
+          <div className="absolute flex flex-col bg-bg ring-2 ring-bg_interactive right-0 mt-4 translate-x-16">
+            <Menu.Items className={`md:w-[50ch] sm:w-[40ch] w-[30ch] h-64 overflow-y-scroll overflow-x-hidden bg-gradient-radial from-bg_sidebar to-bg_interactive `} >
 
               {notifications ? notifications.map((n, k) =>
 

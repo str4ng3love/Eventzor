@@ -87,10 +87,10 @@ const EventCarousel = ({
       } ${darkBgAlpha ? "lg:bg-black/20 " : ""}`}
       >
 
-        <div className={`flex flex-col lg:w-[50rem] w-[30rem]`}>
+        <div className={`flex flex-col md:items-start items-center lg:w-[50rem] w-[30rem]`}>
           <Heading1 text={heading} textShadow={`[text-shadow:_0_0_30px_black]`}/>
 
-          <div className="flex items-center justify-between h-[20rem] ">
+          <div className="flex items-center justify-between h-[20rem] w-full">
             <span
               onClick={(e) =>
                 setActive((prev) => (prev === 0 ? items.length - 1 : prev - 1))
@@ -184,7 +184,7 @@ const EventCarousel = ({
               <BiSolidRightArrow />
             </span>
           </div>
-          <div className="flex justify-center p-4">
+          <div className="flex justify-center p-4 w-full">
             {items.map((c, i) => (
               <span
                 onClick={(e) => setActive(i)}

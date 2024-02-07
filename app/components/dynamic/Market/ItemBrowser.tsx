@@ -78,9 +78,9 @@ const ItemsBrowser = ({ items, count, selectedCategory = "all items", orderAsc =
   }, []);
 
   return (<>
-    <div className="lg:w-[75%] mb-9 w-full bg-gradient-to-bl from-primary to-slate-900 ring-2 ring-primary flex lg:flex-col flex-row justify-between shadow-[0rem_0rem_1rem_black] mt-12 pb-20">
-      <div className="bg-black/50 p-4">
-        <div className="flex xl:justify-start gap-2 lg:justify-center flex-col lg:flex-row justify-start  sticky top-24 lg:top-0 lg:relative">
+    <div className="lg:w-[75%] w-full mb-9 bg-gradient-to-bl from-primary to-slate-900 ring-2 ring-primary flex flex-col justify-between shadow-[0rem_0rem_1rem_black] mt-12 pb-20">
+      <div className="bg-black/50 p-4 flex md:justify-start justify-center">
+        <div className="grid md:grid-cols-6 sm:grid-cols-3 grid-cols-1 gap-2 justify-center">
           <Button
             title={`All items ${asc ? "ascending" : "descending"}`}
             text={`All Items`}
@@ -197,7 +197,7 @@ const ItemsBrowser = ({ items, count, selectedCategory = "all items", orderAsc =
 
             <Link
               href={`/item/${i.item}`}
-              className="relative overflow-hidden ring-2 p-1 my-1 hover:bg-gradient-to-tl from-link via-link_active to-link transition-all duration-300 h-20 flex justify-between "
+              className="ring-2 p-1 my-1 hover:bg-gradient-to-tl from-link via-link_active to-link transition-all duration-300 h-20 flex justify-between "
               key={i.id}
             >
               <div className="flex">
@@ -207,14 +207,14 @@ const ItemsBrowser = ({ items, count, selectedCategory = "all items", orderAsc =
                   height={500}
                   placeholder="blur"
                   blurDataURL={"data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkOAMAANIAzr59FiYAAAAASUVORK5CYII="}
-                  alt="Events Image"
+                  alt="Item's Image"
                   src={i.images[0]}
                 />
-                <div className="p-2 flex flex-col justify-between w-64">
-                  <span className="overflow-hidden text-ellipsis sm:text-sm">
+                <div className="p-2 flex flex-col justify-between">
+                  <span className="md:text-base text-sm sm:text-sm overflow-hidden text-ellipsis">
                     {i.item}
                   </span>
-                  <span className="self-end text-xs">
+                  <span className="self-end md:text-sm text-xs sm:inline-block hidden">
                     {i.preorder && i.releaseDate && i.releaseDate > new Date(Date.now()) ? `Available from: ${i.releaseDate.toUTCString().slice(0, -7)}` : ""}
                   </span>
                 </div>
@@ -225,7 +225,7 @@ const ItemsBrowser = ({ items, count, selectedCategory = "all items", orderAsc =
               </div>
               <div className="text-sm flex">
 
-                <span className="flex justify-end self-center font-semibold w-[20ch] px-2 lg:text-lg overflow-hidden text-ellipsis">
+                <span className="justify-end self-center font-semibold  px-2 lg:text-lg overflow-hidden text-ellipsis hidden sm:flex">
                   {currency.name === "initial" ? (
                     <SpinnerMini />
                   ) : (
