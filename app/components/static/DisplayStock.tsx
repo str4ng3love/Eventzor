@@ -22,7 +22,7 @@ const DisplayStock = ({ amount, amountSold }: Props) => {
     }
 
     return (
-        <span className={`w-[100%] flex justify-between items-center mx-4 ring-1 ring-text px-1 rounded-sm`}>
+        <span className={`w-[100%] min-w-[5rem] flex justify-between items-center sm:mx-4  ring-1 ring-text px-1 rounded-sm`}>
 
             <span className={`block w-[${((amount / (amount + amountSold)) * 100).toFixed(0)}%] ${bg} h-4`} />
 

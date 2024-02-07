@@ -36,6 +36,7 @@ const AddToCart = ({ item,type, price, id, amountLeft, saleEnded=false }: Props)
       </div>
       {/* TODO: proper localstorage fn */}
       <Button
+      size="text-sm sm:text-base"
       interactive={amountLeft === 0 || saleEnded ? false : true}
       title="Add to cart"
         text="Add to cart"

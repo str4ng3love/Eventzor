@@ -11,15 +11,16 @@ import LikeAndDislike from "@/app/components/dynamic/LikeAndDislike";
 import DisplayStock from "@/app/components/static/DisplayStock";
 
 const page = async ({ params }: { params: { slug: string } }) => {
-  const title = decodeURIComponent(params.slug)
 
+
+  const title = decodeURIComponent(params.slug)
   const event = await getEvent(decodeURI(title));
   if (event !== null) {
 
     return (
       <main className="flex flex-col items-center min-h-[calc(100dvh_-_6rem)] pt-20">
-        <div className="grid grid-cols-3 justify-between lg:w-[80%] lg:gap-4 gap-2 w-full p-4 transition-all duration-300 ">
-          <div className="p-4 flex flex-col rounded-md bg-bg_interactive dark:bg-black/20 col-span-2 row-span-2 ">
+        <div className="grid md:grid-cols-3 grid-cols-1 lg:w-[80%] lg:gap-4 gap-2 w-full p-4 transition-all duration-300">
+          <div className="p-4 flex flex-col rounded-md bg-bg_interactive dark:bg-black/20 md:col-span-2 md:row-span-2">
             <h2 className="p-4 font-bold text-2xl">{event.title}</h2>
             <div className="flex flex-col p-2 my-8">
               <span>{event.eventDate.toUTCString().slice(0, -7)}&nbsp;GMT</span>
@@ -29,10 +30,10 @@ const page = async ({ params }: { params: { slug: string } }) => {
             <ImageBrowser images={event.images} />
           </div>
       
-          <div className="p-4 flex flex-col justify-start rounded-md bg-bg_interactive dark:bg-black/20 row-start-3 col-span-3">
+          <div className="p-4 flex flex-col justify-start rounded-md bg-bg_interactive dark:bg-black/20 md:row-start-3 md:col-span-3">
             <p className="indent-4">{event.description}</p>
           </div>
-          <div className="p-4 flex flex-col justify-start rounded-md bg-bg_interactive dark:bg-black/20 h-fit row-start-1 col-start-3 self-start max-w-sm">
+          <div className="p-4 flex flex-col justify-center rounded-md bg-bg_interactive dark:bg-black/20 h-fit md:row-start-1 md:col-start-3 place-self-auto md:mx-0 sm:mx-20">
             <div className=" bg-primary ring-2 ring-primary rounded-t-md p-2">
               <div className="flex justify-between p-1 text-interactive_text dark:text-text">
                 <span>Price&nbsp;:</span>
