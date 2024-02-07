@@ -8,6 +8,7 @@ import Link from "next/link";
 import { getServerSession } from "next-auth";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import BurgerMenu from "../../dynamic/Header/BurgerMenu";
+import DropDownNav from "../../dynamic/DropDownNav";
 
 
 const Header = async () => {
@@ -15,30 +16,13 @@ const Header = async () => {
 
   return (
     <header className="relative">
-      <nav className="z-10 h-[4rem] bg-bg_sidebar text-interactive_text dark:text-text dark:bg-black/50 flex justify-between items-center fixed w-full backdrop-blur-sm">
-        <ul className="relative ml-8 lg:ml-32 group ">
-          <li>
-            <Link className="uppercase font-bold hover:text-white hover:bg-link transition-all duration-300 block p-4 w-[12ch]" href={`/`} >{`eventzor`}</Link>
-          </li>
-          <li className="h-0 absolute transition-all duration-500 overflow-hidden group-focus-within:h-[300%] group-focus-within:opacity-100 group-hover:h-[300%] group-hover:opacity-100 opacity-0 bg-black mt-1">
-            <ul className="flex flex-col">
-              <li>
-                <Link className="-outline-offset-4 uppercase font-bold hover:text-white hover:bg-link transition-all duration-300 block p-4 w-[12ch]" href={`/events`} >{`events`}</Link>
-              </li>
-              <li>
-                <Link className="-outline-offset-4 uppercase font-bold hover:text-white hover:bg-link transition-all duration-300 block p-4 w-[12ch]" href={`/market`} >{`market`}</Link>
+      <nav className="px-10 z-10 h-[4rem] bg-bg_sidebar text-interactive_text dark:text-text dark:bg-black/50 flex justify-between items-center fixed w-full backdrop-blur-sm">
 
-              </li>
-              <li>
-                <Link className="-outline-offset-4 uppercase font-bold hover:text-white hover:bg-link transition-all duration-300 block p-4 w-[12ch]" href={`/users`} >{`users`}</Link>
+        <DropDownNav buttonTitle="Eventzor" items={[{href:"/", label:"home"}, {href:"/events", label:"events"}, {href:"/market", label:"market"}, {href:"/users", label:"users"}]} />
 
-              </li>
-            </ul>
-          </li>
 
-        </ul>
         <div className="gap-4 items-center pr-8 md:flex hidden">
-          <Search />
+          <Search minimizeOnLg />
           <Currency />
           <UserMenu />
           <ShoppingCart />

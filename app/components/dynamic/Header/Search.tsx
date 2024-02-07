@@ -5,8 +5,10 @@ import { FaSearch } from "react-icons/fa";
 import Icon from "../../static/Icon";
 import Portal from "../../Portal";
 import Link from "next/link";
-
-const Search = () => {
+interface Props {
+  minimizeOnLg?: boolean
+}
+const Search = ({ minimizeOnLg }: Props) => {
   const inputEl = useRef<HTMLInputElement>(null);
   const [canFetch, setCanFetch] = useState(true);
   const [show, setShow] = useState(false)
@@ -49,7 +51,7 @@ const Search = () => {
         Icon={FaSearch}
       />
       <span className={
-        "w-40  text-text ring-0 outline-none bg-bg p-2 rounded-md group-hover:text-white transition-all duration-300 md:inline-block"
+        `w-40  text-text ring-0 outline-none bg-bg p-2 rounded-md group-hover:text-white transition-all duration-300 ${minimizeOnLg ? "hidden" : ""}  lg:inline-block`
       }>Search ...</span>
     </button>
     {show ? <Portal child={
