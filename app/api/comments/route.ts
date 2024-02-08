@@ -90,13 +90,15 @@ async function handler(req: Request) {
         const comment = await prisma.comment.create(query)
 
 
+
+
         let recipient
         if (query.select?.event) {
           // @ts-ignore
           recipient = comment.event.organizerName
           const notf = await prisma.notification.create({
             data: {
-              targetComment: { connect: { id: comment.id } }, action: "comment", userInit: { connect: { name: session.user?.name as string } }, userRecip: { connect: { name: comment.authorName } },
+              targetComment: { connect: { id: comment.id } }, action: "comment", userInit: { connect: { name: session.user?.name as string } }, userRecip: { connect: { name: recipient } },
               event: { connect: { id: body.id } }
             }
           })
@@ -106,7 +108,7 @@ async function handler(req: Request) {
           recipient = comment.marketItem.merchantName
           const notf = await prisma.notification.create({
             data: {
-              targetComment: { connect: { id: comment.id } }, action: "comment", userInit: { connect: { name: session.user?.name as string } }, userRecip: { connect: { name: comment.authorName } },
+              targetComment: { connect: { id: comment.id } }, action: "comment", userInit: { connect: { name: session.user?.name as string } }, userRecip: { connect: { name: recipient } },
               item: { connect: { id: body.id } }
             }
           })
@@ -116,13 +118,13 @@ async function handler(req: Request) {
           recipient = comment.parent.authorName
           const notf = await prisma.notification.create({
             data: {
-              targetComment: { connect: { id: comment.id } }, action: "reply", userInit: { connect: { name: session.user?.name as string } }, userRecip: { connect: { name: comment.authorName } },
+              targetComment: { connect: { id: comment.id } }, action: "reply", userInit: { connect: { name: session.user?.name as string } }, userRecip: { connect: { name: recipient } },
               comment: { connect: { id: body.id } },
             }
           })
-          console.log(notf)
 
         }
+
         TriggerNotification([recipient])
         //  SSE Broadcast
         return NextResponse.json(

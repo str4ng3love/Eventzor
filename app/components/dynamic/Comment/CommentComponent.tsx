@@ -201,7 +201,7 @@ const CommentComponent = ({
                     ))
                   ) : (
                     <div
-                      key={self.crypto.randomUUID()}
+
                       className="w-full flex justify-center py-2"
                     >
                       <SpinnerMini />
@@ -338,7 +338,7 @@ const CommentComponent = ({
               {showReplies ? (
                 <>
                   {replies.length > 0 ? (
-                    replies.map((r) => (
+                    replies.map((r, i) => (
                       <Reply
                         amountOfLikes={r._count.likes}
                         amountOfDislikes={r._count.dislikes}
@@ -351,7 +351,7 @@ const CommentComponent = ({
                     ))
                   ) : (
                     <div
-                      key={self.crypto.randomUUID()}
+
                       className="w-full flex justify-center py-2"
                     >
                       <SpinnerMini />

@@ -96,27 +96,27 @@ const Reply = ({
     }
   };
   const handleDelete = async (id: string) => {
-  
+
     try {
       const resp = await fetch("/api/comments", {
         method: "DELETE",
         body: JSON.stringify({ id }),
       });
-      const data:{message?:string, error?:string} = await resp.json();
+      const data: { message?: string, error?: string } = await resp.json();
       if (data.error) {
         setNotify({ show: true, error: true, message: data.error });
       }
 
       if (data.message?.includes('successfully')) {
 
-        setReply((prev)=> ({...prev, status:"flaggedAsDeleted"}))
+        setReply((prev) => ({ ...prev, status: "flaggedAsDeleted" }))
         setNotify({ show: true, error: false, message: data.message });
       }
     } catch (error) {
       console.log(error);
     }
   }
-  useEffect(()=>{
+  useEffect(() => {
     setWhenCommented(TimeDifference(
       Date.now(),
       Date.parse(reply.createdAt?.toUTCString())
@@ -132,7 +132,7 @@ const Reply = ({
           <div className="flex items-center">
             <span>{reply.authorName}</span>
             <span className="text-sm pl-4">
-            {whenCommented? whenCommented :<SpinnerMini borderSize="border-2" h="h-2" w="w-2"/>}
+              {whenCommented ? whenCommented : <SpinnerMini borderSize="border-2" h="h-2" w="w-2" />}
             </span>
           </div>
         </div>
@@ -144,7 +144,7 @@ const Reply = ({
           <div className="flex flex-col p-2 w-full gap-2">
             <div
               onClick={(e) => {
-                if(!showReplies){
+                if (!showReplies) {
                   getReplies(id);
                 }
                 setShowReplies(!showReplies);
@@ -178,7 +178,7 @@ const Reply = ({
                   ))
                 ) : (
                   <div
-                    key={self.crypto.randomUUID()}
+
                     className="w-full flex justify-center py-2"
                   >
                     <SpinnerMini />
@@ -204,7 +204,7 @@ const Reply = ({
             <span>{reply.authorName}</span>
             <span className="text-sm pl-4">
               {reply.updatedAt ? "(edited) " : ""}
-              {whenCommented? whenCommented :<SpinnerMini borderSize="border-2" h="h-2" w="w-2"/>}
+              {whenCommented ? whenCommented : <SpinnerMini borderSize="border-2" h="h-2" w="w-2" />}
             </span>
           </div>
           <div>
@@ -212,7 +212,7 @@ const Reply = ({
               <div>
                 <DropDownMini
                   items={[
-                    { text: "delete", fn: () => { handleDelete(reply.id)} },
+                    { text: "delete", fn: () => { handleDelete(reply.id) } },
                     {
                       text: "Edit",
                       fn: () => {
@@ -263,7 +263,7 @@ const Reply = ({
                 fn={() => {
                   setEdit(false);
                 }}
-              /> 
+              />
 
             </div>
           </div>
@@ -280,7 +280,7 @@ const Reply = ({
           <div className="flex flex-col p-2 w-full gap-2">
             <div
               onClick={(e) => {
-                if(!showReplies){
+                if (!showReplies) {
                   getReplies(id);
                 }
                 setShowReplies(!showReplies);
@@ -314,7 +314,6 @@ const Reply = ({
                   ))
                 ) : (
                   <div
-                    key={self.crypto.randomUUID()}
                     className="w-full flex justify-center py-2"
                   >
                     <SpinnerMini />

@@ -10,13 +10,16 @@ interface Props {
     bgColor?: string;
 }
 const DropDownNav = ({ items, buttonTitle, }: Props) => {
-
+    const emitEvent = () => {
+        const event = new Event('closeBurger')
+        window.dispatchEvent(event)
+    }
 
     return (
-        <div>
+        <div className="z-50">
             <Menu>
 
-                <Menu.Button className={`uppercase font-bold hover:text-white hover:bg-link transition-all duration-300 block p-4 w-[12ch]"`}>
+                <Menu.Button className={`uppercase font-bold hover:text-white hover:bg-link transition-all duration-300 block p-4 w-[12ch]`}>
                     {buttonTitle}
                 </Menu.Button>
                 <Transition
@@ -32,7 +35,7 @@ const DropDownNav = ({ items, buttonTitle, }: Props) => {
                         {items.map((item, index) =>
                             <Menu.Item key={index}>
                                 {({ active }) => (
-                                    <Link href={item.href} className={`${active
+                                    <Link onClick={()=>emitEvent()} href={item.href} className={`${active
                                         ? "bg-text text-interactive_text p-2"
                                         : "text-interactive_text bg-link p-2 dark:text-text"
                                         } first-letter:uppercase`}
