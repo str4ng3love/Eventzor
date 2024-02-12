@@ -149,7 +149,7 @@ const EventCarousel = ({
 
                 <div className="shrink-0 text-sm flex flex-col items-end justify-between">
                   <span className="p-1">
-                    {items[active].eventDate.toLocaleDateString()}
+                    {items[active].eventDate.toDateString()}
                   </span>
                   <div className="flex justify-between w-full">
                     <span className="p-1">

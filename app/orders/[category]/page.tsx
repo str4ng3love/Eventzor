@@ -40,7 +40,7 @@ const page = async ({ params, searchParams }: { params: { category: string }, se
 
     const getOrders = async () => {
 
-      const orders = await prisma.order.findMany({ where: { AND: [{ buyerName: session?.user?.name as string, status: query as StatusOrder }] }, orderBy: { id: order } })
+      const orders = await prisma.order.findMany({ where: { AND: [{ buyerName: session?.user?.name as string, status: query as StatusOrder }] }, orderBy: { id: "desc" } })
       const parsedOrders: ParsedOrder[] = JSON.parse(JSON.stringify(orders))
       return parsedOrders
     }
@@ -49,9 +49,8 @@ const page = async ({ params, searchParams }: { params: { category: string }, se
 
     if (orders.length === 0) {
       return (
-        <div className=" pt-20 w-full flex justify-center">
-          <div className="w-[80%] p-8">
-
+        <div className=" pt-20 w-full flex md:justify-center justify-start">
+           <div className="md:w-[80%] w-full md:p-8 p-1">
             <Heading1 text={`you have no ${category !== 'shipping' ? category : ""} orders ${category === 'shipping' ? "in" + " " + category : ""}`} />
 
           </div>
@@ -59,8 +58,8 @@ const page = async ({ params, searchParams }: { params: { category: string }, se
       )
     }
     return (
-      <div className="pt-20 w-full flex justify-center">
-        <div className="w-[80%] p-8">
+      <div className="pt-20 w-full flex md:justify-center justify-start">
+      <div className="md:w-[80%] w-full md:p-8 p-1">
 
           <MyOrderBrowser ordersArray={orders} email={session?.user?.email as string} />
 

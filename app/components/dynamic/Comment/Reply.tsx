@@ -1,11 +1,11 @@
 "use client";
-import timeDifference from "@/helpers/TimeDifference";
+import timeDifference from "@/helpers/timeDifference";
 import AddComment from "./AddComment";
 import { useEffect, useState } from "react";
 import SpinnerMini from "../../static/SpinnerMini";
 import { BiDotsVerticalRounded, BiDownArrow } from "react-icons/bi";
 import { ReplyProps } from "./CommentComponent";
-import { formatString } from "@/helpers/FormatString";
+import { formatString } from "@/helpers/formatString";
 import DropDownMini from "../DropDownMini";
 import { useSession } from "next-auth/react";
 import { CommentStatus } from "@prisma/client";

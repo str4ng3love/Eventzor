@@ -6,6 +6,7 @@ import Notification from "../../static/Notification";
 import { ParsedOrder } from "@/types/interfaces";
 import Button from "../Button";
 import ConfirmDialog from "../ConfirmDialog";
+import { FaMoneyBill, FaMoneyBillWave, FaShippingFast, FaStop } from "react-icons/fa";
 
 interface Props {
   ordersArray: ParsedOrder[]
@@ -85,29 +86,34 @@ export const MyOrderBrowser = ({ ordersArray, email }: Props) => {
           <div className="flex flex-col">
             <span className="p-1">Ordered&nbsp;:&nbsp;{new Date(o.orderedAt).toISOString().slice(0, -8).replace("T", " ")}</span>
             <div className="flex justify-between items-center">
-              <span className="p-1">Status&nbsp;:&nbsp;{o.status}</span>
+              <span className="p-1 flex items-center gap-2">Status&nbsp;:&nbsp;{o.status}
+              {o.status === "pendingPayment" ? <FaMoneyBillWave />: null}
+              {o.status === "canceled" ? <FaStop/>: null}
+              </span>
             </div>
 
           </div>
           <div className="p-2 pt-5">
-            <div className="p-1 grid grid-cols-6 gap-1 w-full  ring-1 ring-primary first-letter:uppercase">
+            <div className="p-1 grid sm:grid-cols-6 grid-cols-5 gap-1 w-full  ring-1 ring-primary first-letter:uppercase">
               <span className="col-span-3 first-letter:uppercase">item</span>
               <span className="first-letter:uppercase">amount</span>
               <span className="first-letter:uppercase">price</span>
-              <span className="first-letter:uppercase">total</span>
+              <span className="first-letter:uppercase sm:inline-block hidden">total</span>
             </div>
             {o.amounts.map((a, i) =>
-              <div key={i} className="p-1 grid grid-cols-6 gap-1 w-full  ring-1 ring-primary font-normal">
-                <span className="col-span-3 overflow-clip">{a.item}</span>
-                <span className="overflow-clip">{a.amount}</span>
-                <span className="uppercase">{a.price * selectedCurrency.rate}&nbsp;{selectedCurrency.name}</span>
-                <span className="uppercase">{a.amount * a.price}&nbsp;{selectedCurrency.name}</span>
+              <div key={i} className="p-1 grid sm:grid-cols-6 grid-cols-5 gap-1 w-full ring-1 ring-primary font-normal">
+                <span className="col-span-3 overflow-clip md:text-base text-sm">{a.item}</span>
+                <span className="overflow-clip md:text-base text-sm">{a.amount}</span>
+                <span className="uppercase md:text-base text-sm">{a.price * selectedCurrency.rate}&nbsp;{selectedCurrency.name}</span>
+                <span className="uppercase md:text-base text-sm sm:inline-block hidden">{a.amount * a.price}&nbsp;{selectedCurrency.name}</span>
               </div>
             )}
-            <span className="text-lg flex items-center justify-end p-2">Overall&nbsp;{calcTotal(o.amounts)}<span className="uppercase flex items-center">&nbsp;{selectedCurrency.name}</span></span>
+            <span className="flex items-center justify-end p-2 md:text-base text-sm">Overall&nbsp;{calcTotal(o.amounts)}<span className="uppercase flex items-center">&nbsp;{selectedCurrency.name}</span></span>
             <div className={`flex ${o.status !== "canceled" ? "justify-between" : "justify-end items-center"} mt-4`}>
-              {o.status !== "shipping" && o.status !== "canceled" ? <Button text="Cancel Order" title="Cancel Order" fn={() => { setShow(true) }} bgColor="bg-secondary text-sm" /> : <></>}
-              {o.status === "pendingPayment" ? <Button text="proceed to payment" title="pay" link={`/lipps/${o.id}?c=${selectedCurrency.name}`} /> : <></>}
+              {o.status !== "shipping" && o.status !== "canceled" ? 
+              <Button text="Cancel Order" title="Cancel Order" fn={() => { setShow(true) }} bgColor="bg-secondary text-sm" size="md:text-base text-sm" /> : <></>}
+              {o.status === "pendingPayment" ? 
+              <Button text="proceed to payment" title="pay" link={`/lipps/${o.id}?c=${selectedCurrency.name}`} size="md:text-base text-sm" /> : <></>}
             </div>
 
           </div>

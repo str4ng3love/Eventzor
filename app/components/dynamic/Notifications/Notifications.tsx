@@ -143,7 +143,7 @@ const Notifications = () => {
                 <Menu.Item as={`div`} className={`p-1 hover:bg-link cursor-pointer transition-all duration-300 md:text-sm text-xs`} key={k}>
                   {n.action === "comment" ?
 
-                    <div className="overflow-hidden  text-ellipsis whitespace-nowrap" onClick={async () => setSelectedEl(await getComment(n.commentId as string))}>
+                    <div className="overflow-hidden  text-ellipsis whitespace-nowrap" onClick={async () => { setSelectedEl(await getComment(n.commentId as string)); markAsRead(n.id) }}>
                       <span className={`inline-block rounded-full mx-1 h-1 w-1 ${n.read ? "" : "bg-link"}`}></span>
                       <span>
                         {n.initiator} commented on your {n.item ? `item ${n.item.item}` : ''}{n.event ? `event "${n.event.title}"` : ''}
@@ -154,6 +154,7 @@ const Notifications = () => {
 
                     <div className="overflow-hidden  text-ellipsis whitespace-nowrap" onClick={async () => {
                       if (n.comment) {
+                        markAsRead(n.id)
                         setSelectedEl(await getComment(n.targetCommentId as string))
                       } else if (n.event) {
                         router.push(`/event/${n.event?.title}`)

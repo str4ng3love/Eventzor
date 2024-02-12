@@ -70,9 +70,9 @@ const page = async ({ params, searchParams }: { params: { category: string }, se
         return (<div className="mt-12 flex flex-col items-center justify-center">
             <h1 className="font-bold text-xl mb-6">Error Occured:</h1>
             <span className="flex gap-2 flex-col p-8">
-                {badRequestPage ? <span>-&nbsp;Received incorrect amount of requested pages:&nbsp; {searchParams.page? searchParams.page: "nothing"}<br />&nbsp; Expected: positive number</span> : null}
-                {badRequestRange ? <span>-&nbsp;Received incorrect range of requested items:&nbsp; {searchParams.range? searchParams.range: "nothing"}<br />&nbsp; Expected: positive number</span> : null}
-                {badRequestOrder ? <span>-&nbsp;Received incorrect order of requested items:&nbsp; {searchParams.order? searchParams.order : "nothing"}<br />&nbsp; Expected:&apos;asc&apos; or &apos;desc&apos;.</span> : null}
+                {badRequestPage ? <span>-&nbsp;Received incorrect amount of requested pages:&nbsp; {searchParams.page ? searchParams.page : "nothing"}<br />&nbsp; Expected: positive number</span> : null}
+                {badRequestRange ? <span>-&nbsp;Received incorrect range of requested items:&nbsp; {searchParams.range ? searchParams.range : "nothing"}<br />&nbsp; Expected: positive number</span> : null}
+                {badRequestOrder ? <span>-&nbsp;Received incorrect order of requested items:&nbsp; {searchParams.order ? searchParams.order : "nothing"}<br />&nbsp; Expected:&apos;asc&apos; or &apos;desc&apos;.</span> : null}
             </span>
             <div className="flex flex-row gap-2">
                 <Button title="go to home" text="go to Home" link="/" />
@@ -95,7 +95,8 @@ const page = async ({ params, searchParams }: { params: { category: string }, se
                     where: { images: { isEmpty: false } }, skip: range * page, take: range, orderBy: {
                         likes: {
                             _count: order === "desc" ? order : "asc"
-                        }
+                        },
+                       
                     },
                 }
                 queryOptions = queryLiked

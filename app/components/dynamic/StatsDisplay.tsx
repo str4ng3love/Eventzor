@@ -4,7 +4,7 @@ import { IType } from "@/types/enums"
 import { useState } from "react"
 import SpinnerMini from "../static/SpinnerMini"
 import { useRouter } from "next/navigation"
-import { formatString } from "@/helpers/FormatString"
+import { formatString } from "@/helpers/formatString"
 import CommentInPortal from "./Comment/CommentInPortal"
 import Link from "next/link"
 

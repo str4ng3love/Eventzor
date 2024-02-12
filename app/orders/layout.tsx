@@ -20,12 +20,12 @@ export default async function layout({
     <main className="flex flex-col items-center min-h-[calc(100dvh_-_6rem)]">
 
       <div className="mt-[6rem]">
-        <div className="p-2 gap-2 flex">
-          <Button text="All" link="/orders" title="All orders"/>
-          <Button text="Pending" link="/orders/pending" title="Pending orders"/>
-          <Button text="In Shipping" link="/orders/shipping" title="orders in shipping"/>
-          <Button text="completed" link="/orders/completed" title="completed orders"/>
-          <Button text="canceled" link="/orders/canceled" title="canceled orders"/>
+        <div className="p-2 gap-2 grid sm:grid-cols-5 grid-cols-2">
+          <Button text="All" link="/orders" title="All orders" size="text-sm"/>
+          <Button text="Pending" link="/orders/pending" title="Pending orders" size="text-sm"/>
+          <Button text="In Shipping" link="/orders/shipping" title="orders in shipping" size="text-sm"/>
+          <Button text="completed" link="/orders/completed" title="completed orders" size="text-sm"/>
+          <Button text="canceled" link="/orders/canceled" title="canceled orders" size="text-sm sm:col-span-1 col-span-2" bgColor="bg-secondary"/>
 
         </div>
       </div>
