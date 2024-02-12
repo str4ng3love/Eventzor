@@ -3,8 +3,7 @@ import { getServerSession } from "next-auth";
 import { options } from "../../../auth/[...nextauth]/options";
 import { prisma } from "@/lib/ConnectPrisma";
 import { revalidatePath } from "next/cache";
-import { ObjectId } from "bson";
-import { TriggerNotification } from "@/helpers/EventEmitter";
+import { triggerNotification } from "@/helpers/eventEmitter";
 
 
 async function handler(req: Request) {
@@ -70,7 +69,7 @@ async function handler(req: Request) {
 
           await tx.notification.create({ data: { targetLike: { connect: { id: event.likes[0].id } }, action: "like", event: { connect: { id: body.id } }, userRecip: { connect: { name: event.organizerName } }, userInit: { connect: { name: session.user?.name as string } } } })
 
-          TriggerNotification([organizer.name])
+          triggerNotification([organizer.name])
           return event
         })
         if (!event?.title) {

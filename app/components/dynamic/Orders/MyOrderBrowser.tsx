@@ -26,7 +26,7 @@ export const MyOrderBrowser = ({ ordersArray, email }: Props) => {
     const rollback = ordersArr ? [...ordersArr] : []
     setOrdersArr((prev) => prev?.filter(o => o.id !== id))
     try {
-      const resp = await fetch("/api/lipps/my_orders", {
+      const resp = await fetch("/api/orders/my_orders", {
         method: "DELETE",
         body: JSON.stringify({ id }),
         headers: { "Content-Type": "application/json" },

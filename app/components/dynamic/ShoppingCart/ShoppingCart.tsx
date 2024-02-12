@@ -173,7 +173,7 @@ const ShoppingCart = () => {
             setIsOpen(false);
           }}
           as="div"
-          className={"z-50 relative"}
+          className={"relative"}
         >
           <Transition.Child
             enter="ease-out duration-300"
@@ -238,7 +238,7 @@ const ShoppingCart = () => {
                                   setCartItems((prev) => {
                                     if (prev !== null) {
                                       return [...prev.filter((p) => p.id != i.id)]
-                                    } 
+                                    }
                                     return null
                                   });
                                 }}
@@ -387,6 +387,7 @@ const ShoppingCart = () => {
         </Dialog>
       </Transition>
       <>
+
         <Notification error={notify.error} message={notify.message} onAnimEnd={() => { setNotify({ error: false, show: false, message: '' }) }} show={notify.show} />
       </>
     </>

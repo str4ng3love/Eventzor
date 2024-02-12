@@ -4,7 +4,7 @@ import { IType } from "@/types/enums"
 import { useState } from "react"
 import SpinnerMini from "../static/SpinnerMini"
 import { useRouter } from "next/navigation"
-import { FormatString } from "@/helpers/FormatString"
+import { formatString } from "@/helpers/FormatString"
 import CommentInPortal from "./Comment/CommentInPortal"
 import Link from "next/link"
 
@@ -94,7 +94,7 @@ const StatsDisplay = ({ user, type, stats }: Props) => {
                                     }
                                 }}
                                     onClick={() => { setId(e.id as string) }}>
-                                    {FormatString(e.message as string)}
+                                    {formatString(e.message as string)}
                                 </button>
                             </li>)
                     }

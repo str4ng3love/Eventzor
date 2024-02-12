@@ -7,7 +7,7 @@ import { Menu, Transition } from "@headlessui/react";
 import SpinnerMini from "../../static/SpinnerMini";
 import { Notification, StatusOrder } from "@prisma/client";
 import Button from "../Button";
-import { FormatString } from "@/helpers/FormatString";
+import { formatString } from "@/helpers/formatString";
 
 import Portal from "../../Portal";
 import CommentComponent from "../Comment/CommentComponent";
@@ -78,6 +78,20 @@ const Notifications = () => {
       console.log(error)
     }
   }
+  const markAsRead = async (id: string) => {
+    try {
+      const resp = await fetch(`/api/notifications/markAsRead/${id}`)
+      const data = await resp.json()
+      if (data.error) {
+        console.log(data.error)
+      } else {
+        setNotifications(await getNotifications())
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     (async () => {
       const { unread } = await getNumberOfUnreadNotifications()
@@ -86,7 +100,7 @@ const Notifications = () => {
     })()
     const eventSource = new EventSource('/api/sse')
 
-    eventSource.onmessage = (e) => { setEvent(prev => prev + 1) }
+    eventSource.onmessage = (e) => { setEvent(prev => prev + 1); console.log('hit') }
     eventSource.onerror = (e) => eventSource.close()
 
     return () => {
@@ -149,7 +163,7 @@ const Notifications = () => {
                     }}>
                       <span className={`inline-block rounded-full mx-1 h-1 w-1 ${n.read ? "" : "bg-link"}`}></span>
                       <span>
-                        {n.initiator} liked your {n.item ? `item "${n.item.item}"` : ''}{n.event ? `event "${n.event.title}"` : ''}{n.comment ? `comment "${FormatString(n.comment?.message as string)}"` : ""}
+                        {n.initiator} liked your {n.item ? `item "${n.item.item}"` : ''}{n.event ? `event "${n.event.title}"` : ''}{n.comment ? `comment "${formatString(n.comment?.message as string)}"` : ""}
                       </span>
                     </div>
 
@@ -159,16 +173,19 @@ const Notifications = () => {
 
                     <div className="overflow-hidden  text-ellipsis whitespace-nowrap" onClick={async () => {
                       if (n.comment) {
+                        markAsRead(n.id)
                         setSelectedEl(await getComment(n.targetCommentId as string))
                       } else if (n.event) {
+                        markAsRead(n.id)
                         router.push(`/event/${n.event?.title}`)
                       } else {
+                        markAsRead(n.id)
                         router.push(`/item/${n.item?.item}`)
                       }
                     }}>
                       <span className={`inline-block rounded-full mx-1 h-1 w-1 ${n.read ? "" : "bg-link"}`}></span>
                       <span >
-                        {n.initiator} disliked your {n.item ? `item "${n.item.item}"` : ''}{n.event ? `event "${n.event.title}"` : ''}{n.comment ? `comment "${FormatString(n.comment?.message as string)}"` : ""}
+                        {n.initiator} disliked your {n.item ? `item "${n.item.item}"` : ''}{n.event ? `event "${n.event.title}"` : ''}{n.comment ? `comment "${formatString(n.comment?.message as string)}"` : ""}
                       </span>
                     </div>
 
@@ -176,10 +193,10 @@ const Notifications = () => {
                   {n.action === "reply" ?
 
 
-                    <div className="overflow-hidden  text-ellipsis whitespace-nowrap" onClick={async () => setSelectedEl(await getComment(n.targetCommentId as string))}>
+                    <div className="overflow-hidden  text-ellipsis whitespace-nowrap" onClick={async () => { markAsRead(n.id); setSelectedEl(await getComment(n.targetCommentId as string)) }}>
                       <span className={`inline-block rounded-full mx-1 h-1 w-1 ${n.read ? "" : "bg-link"}`}></span>
                       <span>
-                        {n.initiator} replied to your comment &quot;{FormatString(n.comment?.message as string)}&quot;
+                        {n.initiator} replied to your comment &quot;{formatString(n.comment?.message as string)}&quot;
                       </span>
                     </div>
 
@@ -187,7 +204,7 @@ const Notifications = () => {
                   {n.action === "status" ?
 
 
-                    <div className="overflow-hidden  text-ellipsis whitespace-nowrap" onClick={async () => { }}>
+                    <div className="overflow-hidden  text-ellipsis whitespace-nowrap" onClick={async () => { markAsRead(n.id); }}>
                       <span className={`inline-block rounded-full mx-1 h-1 w-1 ${n.read ? "" : "bg-link"}`}></span>
                       <span>
                         Order ID:{n.orderId ? "[...]" + n.orderId.slice(-8) : "??"} is now {n.order?.status === "shipping" ? "in shipping" : ""}{n.order?.status === "pendingPayment" ? "awaiting payment" : ""} {n.order?.status !== "pendingPayment" && n.order?.status !== "shipping" ? n.order?.status : ""}

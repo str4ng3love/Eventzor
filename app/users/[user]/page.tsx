@@ -20,12 +20,12 @@ const page = async ({ params }: { params: { user: string } }) => {
 
     return (
 
-        <div className="w-[80%] mt-20">
+        <div className=" w-full px-4 md:px-0 md:w-[80%] mt-20">
             <div className="bg-bg_interactive p-8 ring-2 ring-primary rounded-md min-h-[16rem]">
                 <h1 className="font-bold text-xl">{userData.name}</h1>
 
-                <div className="mt-8 grid grid-cols-3 text-sm">
-                    <div className="col-span-3 flex h-12">
+                <div className="mt-8 grid  md:grid-cols-3 grid-cols-1 text-sm">
+                    <div className="col-span-1 md:col-span-3 flex h-12">
                         <span className="p-4 text-center items-center inline-flex">Stats :</span>
                     </div>
                     <div className="p-2 border-l-2 border-primary">
@@ -41,7 +41,7 @@ const page = async ({ params }: { params: { user: string } }) => {
                     </div>
                 </div>
             </div>
-            <div className="flex flex-col items-center justify-center my-8">
+            <div className="flex flex-col items-center justify-center my-8  p-0 md:px-2 w-full">
                 {userData.events.length >= 3 ? <EventCarousel heading={`${user}'s top 3 popular events`} items={userData.events} /> : <></>}
                 {userData.marketItems.length >= 3 ? <ItemCarousel heading={`${user}'s top 3 popular items`} items={userData.marketItems} /> : <></>}
             </div>

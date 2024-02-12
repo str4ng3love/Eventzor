@@ -1,11 +1,11 @@
 "use client";
-import TimeDifference from "@/helpers/TimeDifference";
+import timeDifference from "@/helpers/TimeDifference";
 import AddComment from "./AddComment";
 import { useEffect, useState } from "react";
 import SpinnerMini from "../../static/SpinnerMini";
 import { BiDotsVerticalRounded, BiDownArrow } from "react-icons/bi";
 import { ReplyProps } from "./CommentComponent";
-import { FormatString } from "@/helpers/FormatString";
+import { formatString } from "@/helpers/FormatString";
 import DropDownMini from "../DropDownMini";
 import { useSession } from "next-auth/react";
 import { CommentStatus } from "@prisma/client";
@@ -117,7 +117,7 @@ const Reply = ({
     }
   }
   useEffect(() => {
-    setWhenCommented(TimeDifference(
+    setWhenCommented(timeDifference(
       Date.now(),
       Date.parse(reply.createdAt?.toUTCString())
     ))
@@ -239,7 +239,7 @@ const Reply = ({
               onPaste={(e) => setCommentTextEdited(e.currentTarget.innerHTML)}
               className="p-2 mx-2 resize-none text-text_inactive my-8 bg-interactive_text transition-all 500ms break-all ring-2 ring-primary rounded-md text-sm"
             >
-              {FormatString(reply.message)}
+              {formatString(reply.message)}
             </div>
             <div className="flex justify-end gap-2 pt-2">
               <Button
@@ -269,7 +269,7 @@ const Reply = ({
           </div>
         ) : (
           <div className=" p-2 w-full break-words text-sm">
-            {FormatString(reply.message)}
+            {formatString(reply.message)}
           </div>
         )}
         <div className="flex flex-col p-2 w-full gap-2">

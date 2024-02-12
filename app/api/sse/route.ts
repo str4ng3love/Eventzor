@@ -1,4 +1,4 @@
-import { emitter } from "@/helpers/EventEmitter";
+import { emitter } from "@/helpers/eventEmitter";
 import { getServerSession } from "next-auth";
 
 import { NextRequest, NextResponse } from "next/server";
@@ -17,7 +17,7 @@ async function handler(req: NextRequest) {
     }
     const listener = emitter
 
-    let responseSteam = new TransformStream()
+    const responseSteam = new TransformStream()
     const writer = responseSteam.writable.getWriter()
     const encoder = new TextEncoder()
     const eventName = `Notify@${session.user?.name}`

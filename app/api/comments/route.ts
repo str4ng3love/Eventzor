@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { options } from "../auth/[...nextauth]/options";
 import { prisma } from "@/lib/ConnectPrisma";
 import { Prisma } from "@prisma/client";
-import { TriggerNotification } from "@/helpers/EventEmitter";
+import { triggerNotification } from "@/helpers/eventEmitter";
 
 
 async function handler(req: Request) {
@@ -125,7 +125,7 @@ async function handler(req: Request) {
 
         }
 
-        TriggerNotification([recipient])
+        triggerNotification([recipient])
         //  SSE Broadcast
         return NextResponse.json(
           { message: "Comment created successfully" },

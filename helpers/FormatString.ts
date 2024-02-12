@@ -1,4 +1,4 @@
-export const FormatString = (string: string) => {
+export const formatString = (string: string) => {
 
   return string
     .replaceAll("</div>", ``)

@@ -35,7 +35,7 @@ const ItemsBrowser = ({ items, count, selectedCategory = "all items", orderAsc =
   const handleSetRange = (e: React.MouseEvent) => {
     setRange(parseInt(e.currentTarget.innerHTML));
     const searchParams = new URLSearchParams({ page: '1', range: e.currentTarget.innerHTML, order: asc ? "asc" : "desc" });
-    router.push(`/events/${selected?.toLowerCase().replace(" ", "-")}` + "?" + searchParams, { scroll: false })
+    router.push(`/market/${selected?.toLowerCase().replace(" ", "-")}` + "?" + searchParams, { scroll: false })
   }
 
 

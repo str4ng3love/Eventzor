@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { options } from "../../../auth/[...nextauth]/options";
 import { prisma } from "@/lib/ConnectPrisma";
-import { ObjectId } from "bson";
-import { TriggerNotification } from "@/helpers/EventEmitter";
+import { triggerNotification } from "@/helpers/eventEmitter";
+
 async function handler(req: Request) {
   const session = await getServerSession(options);
   if (!session?.user?.name)
@@ -67,7 +67,7 @@ async function handler(req: Request) {
 
           await tx.notification.create({ data: { targetLike: { connect: { id: comment.likes[0].id } }, action: "like", comment: { connect: { id: body.id } }, userRecip: { connect: { name: comment.authorName } }, userInit: { connect: { name: session.user?.name as string } } } })
 
-          TriggerNotification([commenter.authorName])
+          triggerNotification([commenter.authorName])
           return comment
         })
         if (!comment) {

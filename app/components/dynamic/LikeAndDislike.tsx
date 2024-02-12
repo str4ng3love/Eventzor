@@ -159,10 +159,6 @@ const LikeAndDislike = ({
     CheckStatus();
   }, []);
 
-  useEffect(() => {
-console.log(((parentData.amountOfLikes / (parentData.amountOfLikes + parentData.amountOfDislikes)) * 100).toFixed(0))
-
-  }, [parentData.amountOfLikes, parentData.amountOfDislikes])
   return (
     <div className="w-full p-2">
       {typeof liked !== "boolean" ? (

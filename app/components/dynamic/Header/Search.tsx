@@ -1,6 +1,6 @@
 "use client";
 import { Combobox } from "@headlessui/react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
 import Icon from "../../static/Icon";
 import Portal from "../../Portal";
@@ -37,6 +37,10 @@ const Search = ({ minimizeOnLg }: Props) => {
       return;
     }
   };
+  const emitEvent = () => {
+    const event = new Event("closeBurger")
+    window.dispatchEvent(event)
+  }
 
   return (<>
     <button
@@ -51,12 +55,12 @@ const Search = ({ minimizeOnLg }: Props) => {
         Icon={FaSearch}
       />
       <span className={
-        `w-40  text-text ring-0 outline-none bg-bg p-2 rounded-md group-hover:text-white transition-all duration-300 ${minimizeOnLg ? "hidden" : ""}  lg:inline-block`
+        `w-40 z-10 text-text ring-0 outline-none bg-bg p-2 rounded-md group-hover:text-white transition-all duration-300 ${minimizeOnLg ? "hidden" : ""}  lg:inline-block`
       }>Search ...</span>
     </button>
     {show ? <Portal child={
       <Combobox>
-        <div className="relative flex flex-col">
+        <div className="relative flex flex-col z-10">
           <div className="flex">
             <Icon
               textColor="text-text_inactive"
@@ -84,19 +88,19 @@ const Search = ({ minimizeOnLg }: Props) => {
           <Combobox.Options static className={`flex flex-col gap-1w-full bg-bg p-1 ring-2 ring-primary mt-5 h-96 overflow-auto`}>
             {results?.events && results?.events.length > 0 ? <span className={`p-1 pt-4 text-base font-semibold`}>Events :</span> : null}
             {results?.events.map((e) => (
-              <Link key={e.id} onClick={() => setShow(false)} href={`/event/${e.title}`}>
+              <Link key={e.id} onClick={() => { emitEvent(); setShow(false) }} href={`/event/${e.title}`}>
                 <Combobox.Option className={`text-sm indent-2 hover:bg-link transition-all duration-150 cursor-pointer mt-1`} value={e.title}>{e.title}</Combobox.Option>
               </Link>
             ))}
             {results?.items && results?.items.length > 0 ? <span className={`p-1 pt-4 text-base font-semibold`}>Items :</span> : null}
             {results?.items.map((i) => (
-              <Link key={i.id} onClick={() => setShow(false)} href={`/item/${i.item}`}>
+              <Link key={i.id} onClick={() => { emitEvent(); setShow(false) }} href={`/item/${i.item}`}>
                 <Combobox.Option className={`text-sm indent-2 hover:bg-link transition-all duration-150 cursor-pointer mt-1`} value={i.item}>{i.item}</Combobox.Option>
               </Link>
             ))}
             {results?.users && results?.users.length > 0 ? <span className={`p-1 pt-4 text-base font-semibold`}>Users :</span> : null}
             {results?.users.map((u) => (
-              <Link key={u.id} onClick={() => setShow(false)} href={`/users/${u.name}`}>
+              <Link key={u.id} onClick={() => { emitEvent(); setShow(false) }} href={`/users/${u.name}`}>
                 <Combobox.Option className={`text-sm indent-2 hover:bg-link transition-all duration-150 cursor-pointer mt-1`} value={u.name}>{u.name}</Combobox.Option>
               </Link>
             ))}

@@ -85,7 +85,7 @@ const page = async ({ params, searchParams }: { params: { category: string }, se
         switch (category) {
             case "popular":
                 const queryPopular: Prisma.MarketItemFindManyArgs = {
-                    where: { images: { isEmpty: false } }, skip: range * page, take: range, orderBy: { amountSold: order === "asc" ? order : "desc" }
+                    where: { images: { isEmpty: false } }, skip: range * page, take: range, orderBy: { amountSold: order === "desc" ? order : "asc" }
                 }
                 queryOptions = queryPopular
                 break;
@@ -93,7 +93,7 @@ const page = async ({ params, searchParams }: { params: { category: string }, se
                 const queryLiked: Prisma.MarketItemFindManyArgs = {
                     where: { images: { isEmpty: false } }, skip: range * page, take: range, orderBy: {
                         likes: {
-                            _count: order === "asc" ? order : "desc"
+                            _count: order === "desc" ? order : "asc"
                         }
                     },
                 }
@@ -101,7 +101,7 @@ const page = async ({ params, searchParams }: { params: { category: string }, se
                 break;
             case "upcoming":
                 const queryUpcoming: Prisma.MarketItemFindManyArgs = {
-                    where: { images: { isEmpty: false } }, skip: range * page, take: range, orderBy: { releaseDate: order === "asc" ? order : "desc" }
+                    where: { images: { isEmpty: false } }, skip: range * page, take: range, orderBy: { releaseDate: order === "desc" ? order : "asc" }
                 }
                 queryOptions = queryUpcoming
                 break;
@@ -114,7 +114,7 @@ const page = async ({ params, searchParams }: { params: { category: string }, se
             case "all-items":
 
                 const queryAll: Prisma.MarketItemFindManyArgs = {
-                    where: { images: { isEmpty: false } }, skip: range * page, take: range, orderBy: { item: order === "asc" ? order : "desc" }
+                    where: { images: { isEmpty: false } }, skip: range * page, take: range, orderBy: { item: order === "desc" ? order : "asc" }
                 }
                 queryOptions = queryAll
                 break;

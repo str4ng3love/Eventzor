@@ -86,7 +86,7 @@ const page = async ({ params, searchParams }: { params: { category: string }, se
         switch (category) {
             case "popular":
                 const queryPopular: Prisma.EventFindManyArgs = {
-                    where: { images: { isEmpty: false } }, skip: range * page, take: range, orderBy: { ticketsSold: order === "asc" ? order : "desc" }
+                    where: { images: { isEmpty: false } }, skip: range * page, take: range, orderBy: { ticketsSold: order === "desc" ? order : "asc" }
                 }
                 queryOptions = queryPopular
                 break;
@@ -94,7 +94,7 @@ const page = async ({ params, searchParams }: { params: { category: string }, se
                 const queryLiked: Prisma.EventFindManyArgs = {
                     where: { images: { isEmpty: false } }, skip: range * page, take: range, orderBy: {
                         likes: {
-                            _count: order === "asc" ? order : "desc"
+                            _count: order === "desc" ? order : "asc"
                         }
                     },
                 }
@@ -102,20 +102,20 @@ const page = async ({ params, searchParams }: { params: { category: string }, se
                 break;
             case "upcoming":
                 const queryUpcoming: Prisma.EventFindManyArgs = {
-                    where: { images: { isEmpty: false } }, skip: range * page, take: range, orderBy: { eventDate: order === "asc" ? order : "desc" }
+                    where: { images: { isEmpty: false } }, skip: range * page, take: range, orderBy: { eventDate: order === "desc" ? order : "asc" }
                 }
                 queryOptions = queryUpcoming
                 break;
             case "sales-ending":
                 const querySalesEnding: Prisma.EventFindManyArgs = {
-                    where: { images: { isEmpty: false } }, skip: range * page, take: range, orderBy: { closingDate: order === "asc" ? order : "desc" },
+                    where: { images: { isEmpty: false } }, skip: range * page, take: range, orderBy: { closingDate: order === "desc" ? order : "asc" },
                 }
                 queryOptions = querySalesEnding
                 break;
             case "all-items":
 
                 const queryAll: Prisma.EventFindManyArgs = {
-                    where: { images: { isEmpty: false } }, skip: range * page, take: range, orderBy: { title: order === "asc" ? order : "desc" }
+                    where: { images: { isEmpty: false } }, skip: range * page, take: range, orderBy: { title: order === "desc" ? order : "asc" }
                 }
                 queryOptions = queryAll
                 break;

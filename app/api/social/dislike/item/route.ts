@@ -1,7 +1,6 @@
 import { options } from "@/app/api/auth/[...nextauth]/options";
-import { TriggerNotification } from "@/helpers/EventEmitter";
+import { triggerNotification } from "@/helpers/eventEmitter";
 import { prisma } from "@/lib/ConnectPrisma";
-import { ObjectId } from "bson";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
@@ -72,7 +71,7 @@ async function handler(req: Request) {
                     })
                     await tx.notification.create({ data: { targetDislike: { connect: { id: item.dislikes[0].id } }, action: "dislike", item: { connect: { id: body.id } }, userRecip: { connect: { name: item.merchantName } }, userInit: { connect: { name: session.user?.name as string } } } })
 
-                    TriggerNotification([merchant.name])
+                    triggerNotification([merchant.name])
                     return item
                 })
                 if (!item) {

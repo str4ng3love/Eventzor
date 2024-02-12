@@ -15,6 +15,7 @@ const page = async ({ params }: { params: { slug: string } }) => {
 
   const title = decodeURIComponent(params.slug)
   const event = await getEvent(decodeURI(title));
+  console.log(event)
   if (event !== null) {
 
     return (
@@ -44,7 +45,7 @@ const page = async ({ params }: { params: { slug: string } }) => {
                 <DisplayStock amount={event.tickets} amountSold={event.ticketsSold} />
               </div>
 
-              <AddToCart id={event.id} price={event.price} type={'event'} item={event.title} amountLeft={event.tickets} saleEnded={event.closingDate > new Date(Date.now())? false : true}/>
+              <AddToCart id={event.id} price={event.price} type={'event'} item={event.title} amountLeft={event.tickets-event.ticketsSold} saleEnded={event.closingDate > new Date(Date.now())? false : true}/>
             </div>
             <div className="flex flex-col ring-2 rounded-t-none ring-primary rounded-md p-2 text-sm md:text-base mb-7">
               <div title="Tickets are being sold until this date" className="flex justify-between p-1">

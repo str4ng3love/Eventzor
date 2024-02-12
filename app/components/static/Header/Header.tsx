@@ -4,7 +4,6 @@ import ShoppingCart from "../../dynamic/ShoppingCart/ShoppingCart";
 import Notifications from "../../dynamic/Notifications/Notifications";
 import UserMenu from "../../dynamic/UserMenu";
 import Search from "../../dynamic/Header/Search";
-import Link from "next/link";
 import { getServerSession } from "next-auth";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import BurgerMenu from "../../dynamic/Header/BurgerMenu";
@@ -25,9 +24,9 @@ const Header = async () => {
           <Search minimizeOnLg />
           <Currency />
           <UserMenu />
-          <ShoppingCart />
         </div>
         <div className="flex mr-8 gap-4">
+          <ShoppingCart />
           <BurgerMenu />
           {session?.user?.name ? < Notifications /> : <></>}
         </div>

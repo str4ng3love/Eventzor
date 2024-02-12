@@ -13,6 +13,7 @@ interface Props {
 }
 
 const AddToCart = ({ item,type, price, id, amountLeft, saleEnded=false }: Props) => {
+
   const [amount, setAmount] = useState(1);
   const inputEl = useRef<HTMLInputElement>(null);
  
@@ -41,7 +42,7 @@ const AddToCart = ({ item,type, price, id, amountLeft, saleEnded=false }: Props)
       title="Add to cart"
         text="Add to cart"
         fn={() => {
-          if(amountLeft === 0){
+          if(amountLeft === 0 || saleEnded){
             return
           }
           let prev = localStorage.getItem("cart")
