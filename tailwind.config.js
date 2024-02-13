@@ -17,7 +17,7 @@ module.exports = {
         "gradient-grid":
           "linear-gradient(90deg , var(--primary) 1%, transparent 5%), linear-gradient(270deg, var(--primary) 1%, transparent 5%), linear-gradient(180deg , var(--primary) 1%, transparent 5%), linear-gradient(0deg, var(--primary) 1%, transparent 5%)",
       },
-      backgroundSize:{
+      backgroundSize: {
         "3x3": "3rem 3rem",
         "6x6": "6rem 6rem"
       },
@@ -43,8 +43,8 @@ module.exports = {
         link: "var(--shadow-link)",
         omni: "var(--shadow-omni)",
       },
-      dropShadow:{
-        "white_omni":"0px 0px 5px white"
+      dropShadow: {
+        "white_omni": "0px 0px 5px white"
       },
       keyframes: {
         rotateRight: {
@@ -72,6 +72,46 @@ module.exports = {
           "100%": {
             opacity: "0",
           },
+        },
+        fadeInto50: {
+          "0%": {
+            opacity: "0",
+          },
+
+          "50%": {
+            opacity: "100",
+          },
+        },
+        fadeOutto50: {
+          "0%": {
+            opacity: "100",
+          },
+
+          "50%": {
+            opacity: "0",
+          },
+        },
+        translateRight: {
+          "0%": {
+            transform: "translateX(-100%)"
+          },
+          "75%": {
+            transform: "translateX(10%)"
+          },
+          "100%": {
+            transform: "translateX(0%)"
+          }
+        },
+        translateLeft: {
+          "0%": {
+            transform: "translateX(-100%)"
+          },
+          "75%": {
+            transform: "translateX(-210%)"
+          },
+          "100%": {
+            transform: "translateX(-200%)"
+          }
         },
         growAndShrink: {
           "0%, 100%": {
@@ -106,7 +146,7 @@ module.exports = {
           "50%": {
             backgroundPosition: "0% -50%",
           },
-          "75%":{
+          "75%": {
             backgroundPosition: "-50% 0%",
           },
         },
@@ -120,7 +160,7 @@ module.exports = {
           "50%": {
             backgroundPosition: "0% 100%",
           },
-          "75%":{
+          "75%": {
             backgroundPosition: "100% 0%",
           },
         },
@@ -131,11 +171,15 @@ module.exports = {
         fadeOut: "fadeOut ease-in-out 500ms forwards",
         fadeIn300: "fadeIn ease-in-out 300ms forwards",
         fadeOut300: "fadeOut ease-in-out 300ms forwards",
+        fadeInto50: "fadeInto50 ease-in-out 1s forwards",
+        fadeOutto50: "fadeOutto50 ease-in-out 1s forwards",
         growAndShrink: "growAndShrink ease-in-out 5s forwards",
         pingSlower: "ping 6s cubic-bezier(0, 0, 0.2, 1) infinite",
         pingSlower2: "ping 6s 3s cubic-bezier(0, 0, 0.2, 1) infinite",
         gridMove: "gridMove linear 150s infinite",
         gridMoveInverted: "gridMoveInverted linear 150s infinite",
+        translateRight: "translateRight ease-out 200ms forwards",
+        translateLeft: "translateLeft ease-out 200ms forwards",
       },
     },
   },

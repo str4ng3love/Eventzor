@@ -15,7 +15,7 @@ const Footer = () => {
                             <Link className="hover:bg-link transition-all duration-300 p-1 rounded-md text-sm w-[10ch] block text-center" href={`/events`}>Events</Link>
                         </li>
                         <li>
-                            <Link className="hover:bg-link transition-all duration-300 p-1 rounded-md text-sm w-[10ch] block text-center" href={`/items`}>Market</Link>
+                            <Link className="hover:bg-link transition-all duration-300 p-1 rounded-md text-sm w-[10ch] block text-center" href={`/market`}>Market</Link>
                         </li>
                         <li>
                             <Link className="hover:bg-link transition-all duration-300 p-1 rounded-md text-sm w-[10ch] block text-center" href={`/users`}>Users</Link>

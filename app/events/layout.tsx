@@ -28,7 +28,7 @@ export default async function layout({
             fullWidthBlur={true}
           />
           <Image
-            alt="bacground image"
+            alt="background image"
             src={'/images/hero_event.jpeg'}
             fill
             placeholder="blur"

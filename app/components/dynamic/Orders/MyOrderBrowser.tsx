@@ -7,6 +7,8 @@ import { ParsedOrder } from "@/types/interfaces";
 import Button from "../Button";
 import ConfirmDialog from "../ConfirmDialog";
 import { FaMoneyBill, FaMoneyBillWave, FaShippingFast, FaStop } from "react-icons/fa";
+import { MdCancel } from "react-icons/md";
+import { FcCancel } from "react-icons/fc";
 
 interface Props {
   ordersArray: ParsedOrder[]
@@ -86,10 +88,12 @@ export const MyOrderBrowser = ({ ordersArray, email }: Props) => {
           <div className="flex flex-col">
             <span className="p-1">Ordered&nbsp;:&nbsp;{new Date(o.orderedAt).toISOString().slice(0, -8).replace("T", " ")}</span>
             <div className="flex justify-between items-center">
-              <span className="p-1 flex items-center gap-2">Status&nbsp;:&nbsp;{o.status}
-              {o.status === "pendingPayment" ? <FaMoneyBillWave />: null}
-              {o.status === "canceled" ? <FaStop/>: null}
-              </span>
+
+              {o.status === "pendingPayment" ? <span className="p-1 flex items-center gap-2">Status&nbsp;:&nbsp;Awaiting Payment <FaMoneyBillWave /></span> : null}
+              {o.status === "canceled" ? <span className="p-1 flex items-center gap-2">Status&nbsp;:&nbsp;Canceled <FcCancel /></span> : null}
+              {o.status === "shipping" ? <span className="p-1 flex items-center gap-2">Status&nbsp;:&nbsp;In Shipping <FaShippingFast /></span> : null}
+
+
             </div>
 
           </div>
@@ -110,10 +114,10 @@ export const MyOrderBrowser = ({ ordersArray, email }: Props) => {
             )}
             <span className="flex items-center justify-end p-2 md:text-base text-sm">Overall&nbsp;{calcTotal(o.amounts)}<span className="uppercase flex items-center">&nbsp;{selectedCurrency.name}</span></span>
             <div className={`flex ${o.status !== "canceled" ? "justify-between" : "justify-end items-center"} mt-4`}>
-              {o.status !== "shipping" && o.status !== "canceled" ? 
-              <Button text="Cancel Order" title="Cancel Order" fn={() => { setShow(true) }} bgColor="bg-secondary text-sm" size="md:text-base text-sm" /> : <></>}
-              {o.status === "pendingPayment" ? 
-              <Button text="proceed to payment" title="pay" link={`/lipps/${o.id}?c=${selectedCurrency.name}`} size="md:text-base text-sm" /> : <></>}
+              {o.status !== "shipping" && o.status !== "canceled" ?
+                <Button text="Cancel Order" title="Cancel Order" fn={() => { setShow(true) }} bgColor="bg-secondary text-sm" size="md:text-base text-sm" /> : <></>}
+              {o.status === "pendingPayment" ?
+                <Button text="proceed to payment" title="pay" link={`/lipps/${o.id}?c=${selectedCurrency.name}`} size="md:text-base text-sm" /> : <></>}
             </div>
 
           </div>

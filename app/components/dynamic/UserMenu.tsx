@@ -14,6 +14,10 @@ const UserMenu = () => {
   const [showRegister, setShowRegister] = useState(false)
   const { data: session } = useSession();
 
+  const emitEvent = () => {
+    const event = new Event("closeBurger")
+    window.dispatchEvent(event)
+  }
 
   if (session) {
     return (
@@ -31,6 +35,7 @@ const UserMenu = () => {
               <Menu.Item>
                 {({ active }) => (
                   <Link
+                  onClick={()=> emitEvent()}
                     href={"/dashboard"}
                     className={`${active ? "bg-link" : ""
                       } p-2 flex justify-between items-center transition-all duration-300`}
@@ -47,6 +52,7 @@ const UserMenu = () => {
               <Menu.Item>
                 {({ active }) => (
                   <Link
+                  onClick={()=> emitEvent()}
                     href={"/orders"}
                     className={`${active ? "bg-link" : ""
                       } p-2 flex justify-between items-center transition-all duration-300`}
@@ -65,7 +71,7 @@ const UserMenu = () => {
                   <span
                     className={`${active ? "bg-link" : ""
                       } p-2 flex justify-between  items-center transition-all duration-300`}
-                    onClick={() => signOut()}
+                    onClick={() => { emitEvent(); signOut() }}
                   >
                     Logout
                     <span className="ml-4">

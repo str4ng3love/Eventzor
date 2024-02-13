@@ -15,7 +15,6 @@ const page = async ({ params }: { params: { slug: string } }) => {
 
   const title = decodeURIComponent(params.slug)
   const event = await getEvent(decodeURI(title));
-  console.log(event)
   if (event !== null) {
 
     return (
