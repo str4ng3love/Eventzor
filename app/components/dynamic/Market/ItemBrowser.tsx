@@ -78,10 +78,11 @@ const ItemsBrowser = ({ items, count, selectedCategory = "all items", orderAsc =
   }, []);
 
   return (<>
-    <div className="lg:w-[75%] w-full mb-9 bg-gradient-to-bl from-primary to-slate-900 ring-2 ring-primary flex flex-col justify-between shadow-[0rem_0rem_1rem_black] mt-12 pb-20">
-      <div className="bg-black/50 p-4 flex md:justify-start justify-center">
-        <div className="grid md:grid-cols-6 grid-cols-3 gap-2 justify-center">
+    <div className="xl:w-[75%] w-full mb-9 bg-gradient-to-bl from-primary to-slate-900 ring-2 ring-primary flex flex-col justify-between shadow-[0rem_0rem_1rem_black] mt-12 pb-20">
+      <div className="bg-black/50 p-4 flex lg:justify-start justify-center">
+        <div className="grid lg:grid-cols-6 sm:grid-cols-3 grid-cols-2 gap-2 justify-center w-fit">
           <Button
+          setW={`w-[13ch]`}
             title={`All items ${asc ? "ascending" : "descending"}`}
             text={`All Items`}
             Icon={asc ? FaArrowUp : FaArrowDown}
@@ -103,6 +104,7 @@ const ItemsBrowser = ({ items, count, selectedCategory = "all items", orderAsc =
             bgColor="bg-link"
           />
           <Button
+          setW={`w-[13ch]`}
             title={`Popular ${asc ? "ascending" : "descending"}`}
             text="Popular"
             Icon={asc ? FaArrowUp : FaArrowDown}
@@ -122,6 +124,7 @@ const ItemsBrowser = ({ items, count, selectedCategory = "all items", orderAsc =
             bgColor="bg-link"
           />
           <Button
+          setW={`w-[13ch]`}
             title={`Most liked  ${asc ? "ascending" : "descending"}`}
             text="Most Liked"
             Icon={asc ? FaArrowUp : FaArrowDown}
@@ -143,6 +146,7 @@ const ItemsBrowser = ({ items, count, selectedCategory = "all items", orderAsc =
             bgColor="bg-link"
           />
           <Button
+          setW={`w-[13ch]`}
             title={`Upcoming ${asc ? "ascending" : "descending"}`}
             text="Upcoming"
             Icon={asc ? FaArrowUp : FaArrowDown}
@@ -164,6 +168,7 @@ const ItemsBrowser = ({ items, count, selectedCategory = "all items", orderAsc =
             bgColor="bg-link"
           />
           <Button
+          setW={`w-[13ch]`}
             title={`Sales Ending ${asc ? "ascending" : "descending"}`}
             text="Sales Ending"
             Icon={asc ? FaArrowUp : FaArrowDown}

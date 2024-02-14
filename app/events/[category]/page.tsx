@@ -82,7 +82,8 @@ const page = async ({ params, searchParams }: { params: { category: string }, se
     } else {
 
 
-
+        const now = Date.now()
+        const dateNow = new Date(now)
         switch (category) {
             case "popular":
                 const queryPopular: Prisma.EventFindManyArgs = {
@@ -96,20 +97,20 @@ const page = async ({ params, searchParams }: { params: { category: string }, se
                         likes: {
                             _count: order === "desc" ? order : "asc"
                         },
-                       
+
                     },
                 }
                 queryOptions = queryLiked
                 break;
             case "upcoming":
                 const queryUpcoming: Prisma.EventFindManyArgs = {
-                    where: { images: { isEmpty: false } }, skip: range * page, take: range, orderBy: { eventDate: order === "desc" ? order : "asc" }
+                    where: { AND:[{images: { isEmpty: false }}, {eventDate: {gte: dateNow}}] }, skip: range * page, take: range, orderBy: { eventDate: order === "desc" ? order : "asc" }
                 }
                 queryOptions = queryUpcoming
                 break;
             case "sales-ending":
                 const querySalesEnding: Prisma.EventFindManyArgs = {
-                    where: { images: { isEmpty: false } }, skip: range * page, take: range, orderBy: { closingDate: order === "desc" ? order : "asc" },
+                    where: { AND: [{ images: { isEmpty: false } }, { closingDate: { gte: dateNow }}] }, skip: range * page, take: range, orderBy: { closingDate: order === "desc" ? order : "asc" },
                 }
                 queryOptions = querySalesEnding
                 break;

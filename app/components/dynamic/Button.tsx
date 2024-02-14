@@ -12,7 +12,8 @@ interface Props {
   size?: string;
   active?: boolean;
   showIcon?: boolean;
-  Icon?: IconType
+  Icon?: IconType;
+  setW?: string
 }
 const Button = ({
   fn,
@@ -24,7 +25,8 @@ const Button = ({
   size = "text-base",
   active = false,
   Icon,
-  showIcon
+  showIcon,
+  setW,
 
 }: Props) => {
   return (
@@ -33,7 +35,7 @@ const Button = ({
         <Link href={link}>
           <button
             title={title}
-            className={`${bgColor} gap-2 flex items-center justify-center capitalize   ${active ? "dark:text-interactive_text text-text bg-text" : "text-interactive_text dark:text-text"} ${size} whitespace-nowrap cursor-default min-w-[11ch] font-bold p-2 rounded-xl ${interactive ? "cursor-pointer hover:-translate-y-1 hover:scale-105 hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-30"
+            className={`${bgColor} gap-2 flex items-center justify-center capitalize  ${setW} ${active ? "dark:text-interactive_text text-text bg-text" : "text-interactive_text dark:text-text"} ${size} whitespace-nowrap cursor-default min-w-[11ch] font-bold p-2 rounded-xl ${interactive ? "cursor-pointer hover:-translate-y-1 hover:scale-105 hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-30"
               : "bg-slate-500 text-text_inactive dark:bg-slate-500 dark:text-text_inactive"
               }`}
             onClick={(e) => fn(e)}
@@ -47,7 +49,7 @@ const Button = ({
       {fn && !link ? (
         <button
           title={title}
-          className={`${bgColor} gap-2 flex items-center justify-center capitalize   ${active ? "dark:text-interactive_text text-text bg-text" : "text-interactive_text dark:text-text"} ${size} whitespace-nowrap cursor-default min-w-[11ch] font-bold p-2 rounded-xl ${interactive ? "cursor-pointer hover:-translate-y-1 hover:scale-105 hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-300"
+          className={`${bgColor} gap-2 flex items-center justify-center capitalize ${setW}  ${active ? "dark:text-interactive_text text-text bg-text" : "text-interactive_text dark:text-text"} ${size} whitespace-nowrap cursor-default min-w-[11ch] font-bold p-2 rounded-xl ${interactive ? "cursor-pointer hover:-translate-y-1 hover:scale-105 hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-300"
             : "bg-slate-500 text-text_inactive dark:bg-slate-500 dark:text-text_inactive"
             }`}
           onClick={(e) => fn(e)}
@@ -61,7 +63,7 @@ const Button = ({
         <Link
           title={title}
           href={link}
-          className={`${bgColor} gap-2 flex items-center justify-center capitalize   ${active ? "dark:text-interactive_text text-text bg-text" : "text-interactive_text dark:text-text"} ${size} whitespace-nowrap cursor-default min-w-[11ch] font-bold p-2 rounded-xl ${interactive ? "cursor-pointer hover:-translate-y-1 hover:scale-105 hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-30"
+          className={`${bgColor} gap-2 flex items-center justify-center capitalize ${setW}  ${active ? "dark:text-interactive_text text-text bg-text" : "text-interactive_text dark:text-text"} ${size} whitespace-nowrap cursor-default min-w-[11ch] font-bold p-2 rounded-xl ${interactive ? "cursor-pointer hover:-translate-y-1 hover:scale-105 hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-30"
             : "bg-slate-500 text-text_inactive dark:bg-slate-500 dark:text-text_inactive"
             }`}
         >
