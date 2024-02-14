@@ -80,7 +80,7 @@ const EventsBrowser = ({ events, count, selectedCategory = "all items", orderAsc
   return (<>
     <div className="lg:w-[75%] w-full mb-9 bg-gradient-to-bl from-primary to-slate-900 ring-2 ring-primary flex flex-col justify-between shadow-[0rem_0rem_1rem_black] mt-12 pb-20">
       <div className="bg-black/50 p-4 flex justify-center md:justify-start">
-        <div className="grid md:grid-cols-6 sm:grid-cols-3 grid-cols-1 gap-2 justify-center w-fit">
+        <div className="grid md:grid-cols-6 grid-cols-3 gap-2 justify-center w-fit">
           <Button
             title={`All items ${asc ? "ascending" : "descending"}`}
             text={`All Items`}
