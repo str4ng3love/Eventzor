@@ -1,4 +1,4 @@
-import { MyOrderBrowser } from "../../components/dynamic/Orders/MyOrderBrowser"
+
 import { prisma } from "@/lib/ConnectPrisma"
 import { getServerSession } from "next-auth"
 import { options } from "../../api/auth/[...nextauth]/options"
@@ -6,12 +6,12 @@ import { Heading1 } from "../../components/static/Heading"
 import { StatusOrder } from "@prisma/client"
 import { redirect } from "next/navigation"
 import { ParsedOrder } from "@/types/interfaces"
+import { OrderBrowser } from "@/app/components/dynamic/Orders/OrderBrowser"
 
 
 
-const page = async ({ params, searchParams }: { params: { category: string }, searchParams: { [key: string]: string | string[] | undefined } }) => {
+const page = async ({ params }: { params: { category: string }}) => {
   const session = await getServerSession(options)
-  const order = searchParams.order === "desc" ? 'desc' : 'asc'
   const category = params.category
   let query: StatusOrder | null
 
@@ -61,7 +61,7 @@ const page = async ({ params, searchParams }: { params: { category: string }, se
       <div className="pt-20 w-full flex md:justify-center justify-start">
       <div className="md:w-[80%] w-full md:p-8 p-1">
 
-          <MyOrderBrowser ordersArray={orders} email={session?.user?.email as string} />
+          <OrderBrowser ordersArray={orders} email={session?.user?.email as string} />
 
         </div>
       </div>

@@ -10,9 +10,7 @@ import ItemComponent from "./ItemComponent";
 import EditItem from "./EditItem";
 import AddNewItem from "./AddNewItem";
 import SpinnerMini from "../../static/SpinnerMini";
-// interface Props {
-//   items: MarketItem[];
-// }
+
 const MyItemsBrowser = () => {
   const [itemsArr, setItemsArr] = useState<MarketItem[] | null>(null);
   const [optimisticComp, setOptimisticComp] = useState(false);
@@ -133,7 +131,7 @@ const MyItemsBrowser = () => {
   }, []);
   if (itemsArr === null) {
     return (
-      <div className="flex items-center justify-center min-h-[calc(100dvh_-_30%)]">
+      <div className="flex items-center justify-center min-h-[calc(100dvh_-_50%)]">
         <SpinnerMini h="h-32" w="w-32" borderSize="border-[1rem]" />
       </div>
     );

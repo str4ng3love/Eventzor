@@ -114,7 +114,7 @@ const Search = ({ minimizeOnLg }: Props) => {
                 <Combobox.Option className={`text-sm indent-2 hover:bg-link transition-all duration-150 cursor-pointer mt-1`} value={u.name}>{u.name}</Combobox.Option>
               </Link>
             ))}
-            {results?.users.length === 0 && results?.events.length === 0 && results?.items.length === 0 ? <span className="p-1 text-sm font-thin">No results for query "{query}"</span> : null}
+            {results?.users.length === 0 && results?.events.length === 0 && results?.items.length === 0 ? <span className="p-1 text-sm font-thin">No results for query &quot;{query}&quot;</span> : null}
             {!canFetch ?
               <div className="w-full absolute items-center flex justify-center h-full inset-0 backdrop-blur-sm bg-black/20 animate-fadeIn">
                 <SpinnerMini borderSize="border-[16px]" w="w-16" h="h-16" />

@@ -113,7 +113,7 @@ async function handler(req: Request) {
 
 
         const recipients = await Promise.all(orderIds.map(async i => await tx.user.findFirst({ where: { OR: [{ events: { some: { id: i } } }, { marketItems: { some: { id: i } } }] }, select: { name: true } })))
-        const recipientsReduced = [...new Set(recipients.map(r=>r?.name))]
+        const recipientsReduced = [...new Set(recipients.map(r => r?.name))]
 
         triggerNotification(recipientsReduced)
         await Promise.all(recipientsReduced.map(async r => r === undefined ? null : await tx.notification.create({ data: { action: "status", orderId: order.id, initiator: session.user?.name as string, recipient: r } })))
