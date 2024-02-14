@@ -5,30 +5,27 @@ import SpinnerMini from "../../static/SpinnerMini";
 
 interface Props {
     item: {
-        title: string;
-        eventDate: Date;
-        closingDate: Date;
-        location: string;
+        item: string;
         price: number;
-        tickets: number;
-        ticketsSold: number;
+        amount: number;
+        amountSold: number;
         images: string[];
     }
     currency: { name: string, rate: number }
 }
 
-const EventCarouselItem = ({ item, currency }: Props) => {
+const ItemCarouselItem = ({ item, currency }: Props) => {
 
     return (
 
         <div className="flex ring-2 ring-primary bg-black h-[20rem] transition-all duration-150">
             <Link
-                href={"/event/" + encodeURIComponent(item.title)}
-                title={item.title}
+                href={"/item/" + encodeURIComponent(item.item)}
+                title={item.item}
                 className={`flex relative group overflow-hidden w-full h-[20rem]`}
             >
                 <span className="opacity-0 absolute z-50 h-full w-full bg-black/40 flex lg:hidden group-hover:opacity-100 justify-center items-center text-xl font-bold transition-all duration-300">
-                    {item.title}
+                    {item.item}
                 </span>
 
                 <Image
@@ -42,18 +39,16 @@ const EventCarouselItem = ({ item, currency }: Props) => {
             </Link>
             <div className={`hidden  bg-gradient-to-br from-primary to-slate-900 lg:flex flex-col justify-between p-1 min-w-[20%]`}>
                 <h3 className="p-2 first-letter:uppercase font-bold text-xl grow-[1]">
-                    {item.title}
+                    {item.item}
                 </h3>
 
 
-                <div className=" text-sm flex flex-col justify-between">
-                    <span className="p-1">
-                        {item.eventDate.toDateString()}
-                    </span>
+                <div className="text-sm flex flex-col justify-between">
+                
 
                     <span className="p-1">
-                        Tickets Left:&nbsp;
-                        {item.tickets - item.ticketsSold}
+                        In stock:&nbsp;
+                        {item.amount - item.amountSold}
                     </span>
                     <span className="p-1 flex items-center justify-center">
                     </span>
@@ -79,4 +74,4 @@ const EventCarouselItem = ({ item, currency }: Props) => {
     )
 }
 
-export default EventCarouselItem
+export default ItemCarouselItem

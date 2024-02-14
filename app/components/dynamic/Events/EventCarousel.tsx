@@ -3,9 +3,7 @@ import { useEffect, useState } from "react";
 import { Heading1 } from "../../static/Heading";
 import EventCarouselItem from "./EventCarouselItem";
 import { BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi";
-import SpinnerMini from "../../static/SpinnerMini";
-import Image from "next/image";
-import Link from "next/link";
+
 interface Props {
   items: {
     title: string;
@@ -47,8 +45,8 @@ const EventCarousel = ({
       setAnimateLeft(false)
       setActive((prev) => (prev === items.length - 1 ? 0 : prev + 1));
     }, 200)
-
   }
+
   useEffect(() => {
     window.addEventListener("currency", () => {
       const currency = localStorage.getItem("currency");
@@ -96,7 +94,7 @@ const EventCarousel = ({
           } ${darkBgAlpha ? "lg:bg-black/20 " : ""} `}
       >
 
-          <Heading1 text={heading} textShadow={`[text-shadow:_0_0_30px_black]`} />
+        <Heading1 text={heading} textShadow={`[text-shadow:_0_0_30px_black]`} />
         <div className={`flex flex-col items-center lg:w-fit`}>
 
           <div className="flex items-center justify-evenly py-12">
@@ -109,7 +107,7 @@ const EventCarousel = ({
               <BiSolidLeftArrow />
             </span>
             <div className={`overflow-hidden flex md:w-[50dvw] w-[75dvw] max-w-[1280px] transition-all duration-150`}>
-            <div className={`min-w-full -translate-x-[100%] ${animateLeft ? "animate-translateLeft" : ""} ${animateRight ? "animate-translateRight" : ""}`}>
+              <div className={`min-w-full -translate-x-[100%] ${animateLeft ? "animate-translateLeft" : ""} ${animateRight ? "animate-translateRight" : ""}`}>
                 {items[active - 1] === undefined ?
                   <EventCarouselItem currency={currency} item={items[items.length - 1]} /> : <EventCarouselItem currency={currency} item={items[active - 1]} />
                 }
@@ -122,7 +120,7 @@ const EventCarousel = ({
               <div className={`min-w-full -translate-x-[100%]  ${animateLeft ? "animate-translateLeft" : ""} ${animateRight ? "animate-translateRight" : ""}`}>{items[active + 1] === undefined ?
                 <EventCarouselItem currency={currency} item={items[0]} /> : <EventCarouselItem currency={currency} item={items[active + 1]} />}
               </div>
-              </div>
+            </div>
             <span
               onClick={(e) => {
                 showNext()
@@ -133,20 +131,20 @@ const EventCarousel = ({
             </span>
           </div>
         </div>
-          <div className="flex justify-center p-4 w-full">
-            {items.map((c, i) => (
-              <span
-                onClick={(e) => setActive(i)}
-                key={i}
-                className={`h-4 w-4 ${active === i ? "bg-text" : "bg-text_inactive"
-                  } hover:bg-text hover:shadow-link transition-all duration-300 block mx-2 p-2 rounded-sm cursor-pointer`}
-              ></span>
-            ))}
-          </div>
+        <div className="flex justify-center p-4 w-full">
+          {items.map((c, i) => (
+            <span
+              onClick={(e) => setActive(i)}
+              key={i}
+              className={`h-4 w-4 ${active === i ? "bg-text" : "bg-text_inactive"
+                } hover:bg-text hover:shadow-link transition-all duration-300 block mx-2 p-2 rounded-sm cursor-pointer`}
+            ></span>
+          ))}
+        </div>
       </div >
     );
   } else {
-    return <h2>Loading...</h2>;
+    return <span>Loading...</span>;
   }
 };
 
