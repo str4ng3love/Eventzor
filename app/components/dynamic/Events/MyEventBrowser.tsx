@@ -240,7 +240,7 @@ const MyEventBrowser = () => {
                 <tr className="border-b-2 border-black/25 bg-black/40 table-row">
                   <th className="p-2 text-start">Date</th>
                   <th className="p-2 text-start">Event</th>
-                  <th className="p-2 text-start">Tickets Remaining</th>
+                  <th className="p-2 text-start">Tickets / Sold</th>
                   <th className="p-2 text-start">Closing Date</th>
                   <th className="p-2 text-start"></th>
                 </tr>

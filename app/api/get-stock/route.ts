@@ -13,22 +13,20 @@ async function handler(req: Request) {
 
         const lowItemStocks = items.filter((i) => {
 
-            console.log(`${i.amount} / (${i.amount}+${i.amountSold} * 100) = ${(i.amount / (i.amount + i.amountSold)) * 100}` )
-            console.log(((i.amount / (i.amount + i.amountSold)) * 100).toFixed(2))
-            if (((i.amount / (i.amount + i.amountSold)) * 100) <= 10) {
+            if (parseInt((((i.amount - i.amountSold) / i.amount) * 100).toFixed(2)) <= 10) {
                 return i
             }
         })
         const events = await tx.event.findMany({ where: { organizerName: session?.user?.name as string }, orderBy: { id: "asc" }, select: { id: true, title: true, tickets: true, ticketsSold: true } })
 
         const lowTicketStocks = events.filter((i) => {
-            if (((i.tickets / (i.tickets + i.ticketsSold)) * 100) <= 10) {
-                i
+            if (parseInt((((i.tickets - i.ticketsSold) / i.tickets) * 100).toFixed(2)) <= 10) {
+                return i
             }
         })
         return [lowItemStocks, lowTicketStocks]
     })
-    console.log(lowItemStocks, lowTicketStocks)
+
     return NextResponse.json({ lowItemStocks, lowTicketStocks })
 }
 

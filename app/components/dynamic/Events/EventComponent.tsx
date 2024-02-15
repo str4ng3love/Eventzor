@@ -31,7 +31,7 @@ const EventComponent = ({ ...props }: EventProps) => {
           </Link>
         </td>
         <td className="p-2">
-          {props.tickets - props.ticketsSold} / {props.tickets}
+          {props.tickets} / {props.ticketsSold}
         </td>
         <td className="p-2">
           <b>{new Date(props.closingDate).toDateString()}</b> <br />
