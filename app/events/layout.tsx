@@ -7,7 +7,6 @@ import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Eventzor | Events",
-  description: "",
 };
 export default async function layout({
   children,

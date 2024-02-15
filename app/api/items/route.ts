@@ -126,6 +126,7 @@ async function handler(req: Request) {
   } else if (req.method === "PATCH") {
     if (session?.user?.name) {
       const body = await req.json();
+   
       if (!body) {
         return NextResponse.json({ error: "Bad request" }, { status: 400 });
       }
@@ -151,11 +152,10 @@ async function handler(req: Request) {
           data: {
             amount: parseInt(body.amount),
             price: parseFloat(body.price),
-            // type: body.type,
             description: body.description,
             preorder: body.isPreorder,
             item: body.item,
-            releaseDate: body.isPreorder ? body.releaseDate : null,
+            releaseDate: body.isPreorder ? new Date(body.releaseDate) : null,
           },
         });
         if (!updatedItem) {

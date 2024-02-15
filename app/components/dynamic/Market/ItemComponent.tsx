@@ -6,6 +6,7 @@ import { MarketItem } from "@prisma/client";
 import DropDownMini from "../DropDownMini";
 import { BiDotsVertical } from "react-icons/bi";
 import InfoPopover from "../Popover";
+import Link from "next/link";
 
 interface ItemProps extends MarketItem {
   delFn: (e: React.MouseEvent) => void;
@@ -16,7 +17,7 @@ const ItemComponent = ({ ...props }: ItemProps) => {
 
   return (<>
     <tr className="border-b-2 border-black/25 animate-fadeIn ">
-      <td className="p-2">{props.item}</td>
+      <td className="p-2"><Link className="hover:bg-link hover:text-text p-1 w-full flex flex-col rounded-md transition-all duration-200" href={`/item/${props.item}`}>{props.item}</Link></td>
       <td className="p-2">{props.price.toFixed(2)}</td>
       <td className="p-2">
         {props.amountSold}&nbsp;/&nbsp;{props.amount}

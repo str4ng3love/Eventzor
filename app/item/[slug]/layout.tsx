@@ -4,8 +4,7 @@ import { Metadata } from "next";
 
 
 export const metadata: Metadata = {
-  title: "Eventzor",
-  description: "",
+  title: "Eventzor"
 };
 export default async function layout({
   children,

@@ -4,7 +4,6 @@ import Footer from "../components/static/Footer";
 
 export const metadata: Metadata = {
   title: "Eventzor",
-  description: "",
 };
 export default async function layout({
   children,

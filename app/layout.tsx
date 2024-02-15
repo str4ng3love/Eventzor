@@ -11,7 +11,7 @@ const publicSans = Public_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Eventzor",
-  description: "",
+  description: "Post and find all kinds of events.",
 };
 
 export default async function RootLayout({

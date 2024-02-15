@@ -1,0 +1,4 @@
+User-agent:*
+Disallow: /lipps/
+Disallow: /users/
+Disallow: /dashboard/

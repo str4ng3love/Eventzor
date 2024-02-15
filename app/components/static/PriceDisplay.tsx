@@ -26,7 +26,7 @@ const PriceDisplay = ({ price }: Props) => {
       }
     });
     return () => {
-      window.removeEventListener("currency", () => {});
+      window.removeEventListener("currency", () => { });
     };
   }, []);
   useEffect(() => {
@@ -50,7 +50,9 @@ const PriceDisplay = ({ price }: Props) => {
       {currency.name !== "initial" ? (
         (price * currency.rate).toFixed(2)
       ) : (
+
         <SpinnerMini borderSize="border-[4px]" h="h-4" w="w-4" />
+
       )}
       &nbsp;
       {currency.name !== "initial" ? currency.name.toLocaleUpperCase() : ""}
