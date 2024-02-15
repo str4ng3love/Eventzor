@@ -11,10 +11,9 @@ import { FcCancel } from "react-icons/fc";
 
 interface Props {
   ordersArray: ParsedOrder[]
-  email: string
 }
 
-export const OrderBrowser = ({ ordersArray, email }: Props) => {
+export const OrderBrowser = ({ ordersArray }: Props) => {
 
   const [show, setShow] = useState(false);
   const [notify, setNotify] = useState({ message: '', show: false, error: false })

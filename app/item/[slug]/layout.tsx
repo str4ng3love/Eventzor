@@ -16,11 +16,6 @@ export default async function layout({
 
   return (
     <>
-
-
-
-
-
       {children}
       <Footer />
     </>

@@ -41,9 +41,9 @@ const EventCarouselItem = ({ item, currency }: Props) => {
                 />
             </Link>
             <div className={`hidden  bg-gradient-to-br from-primary to-slate-900 lg:flex flex-col justify-between p-1 min-w-[20%]`}>
-                <h3 className="p-2 first-letter:uppercase font-bold text-xl grow-[1]">
+                <h2 className="p-2 first-letter:uppercase font-bold text-xl grow-[1]">
                     {item.title}
-                </h3>
+                </h2>
 
 
                 <div className=" text-sm flex flex-col justify-between">

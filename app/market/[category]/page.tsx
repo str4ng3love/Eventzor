@@ -81,7 +81,8 @@ const page = async ({ params, searchParams }: { params: { category: string }, se
     } else {
 
 
-
+        const now = Date.now()
+        const dateNow = new Date(now)
         switch (category) {
             case "popular":
                 const queryPopular: Prisma.MarketItemFindManyArgs = {
@@ -99,15 +100,9 @@ const page = async ({ params, searchParams }: { params: { category: string }, se
                 }
                 queryOptions = queryLiked
                 break;
-            case "upcoming":
-                const queryUpcoming: Prisma.MarketItemFindManyArgs = {
-                    where: { images: { isEmpty: false } }, skip: range * page, take: range, orderBy: { releaseDate: order === "desc" ? order : "asc" }
-                }
-                queryOptions = queryUpcoming
-                break;
-            case "sales-ending":
+            case "preorders":
                 const querySalesEnding: Prisma.MarketItemFindManyArgs = {
-                    where: { images: { isEmpty: false } }, skip: range * page, take: range, orderBy: {  },
+                    where: { AND:[{images: { isEmpty: false }}, {preorder: true}, {releaseDate: {gte: dateNow}}] }, skip: range * page, take: range, orderBy: {  },
                 }
                 queryOptions = querySalesEnding
                 break;

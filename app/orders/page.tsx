@@ -30,7 +30,7 @@ const page = async () => {
     <div className="pt-20 w-full flex justify-center">
       <div className="md:w-[80%] w-full md:p-8 p-1">
 
-        <OrderBrowser ordersArray={orders} email="" />
+        <OrderBrowser ordersArray={orders} />
 
       </div>
     </div>

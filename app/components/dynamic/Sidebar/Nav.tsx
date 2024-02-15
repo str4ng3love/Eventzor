@@ -1,7 +1,6 @@
 "use client";
 import { FaHouseUser, FaCog } from "react-icons/fa";
 import { BsCalendar3EventFill } from "react-icons/bs";
-import { TbFileSpreadsheet } from "react-icons/tb";
 import { usePathname } from 'next/navigation'
 
 import { useEffect, useState } from "react";
@@ -43,14 +42,6 @@ const Nav = ({ callbackFn }: Props) => {
         fn={(e, href) => { setSelected(href); callbackFn() }}
         selected={selected}
         label="navigate to market page"
-      />
-      <NavItem
-        text="my orders"
-        Icon={TbFileSpreadsheet}
-        href="/dashboard/orders"
-        fn={(e, href) => { setSelected(href); callbackFn() }}
-        selected={selected}
-        label="navigate to orders page"
       />
       <NavItem
         text="settings"

@@ -61,7 +61,7 @@ const page = async ({ params }: { params: { category: string }}) => {
       <div className="pt-20 w-full flex md:justify-center justify-start">
       <div className="md:w-[80%] w-full md:p-8 p-1">
 
-          <OrderBrowser ordersArray={orders} email={session?.user?.email as string} />
+          <OrderBrowser ordersArray={orders}  />
 
         </div>
       </div>

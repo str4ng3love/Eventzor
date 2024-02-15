@@ -147,13 +147,13 @@ const ItemsBrowser = ({ items, count, selectedCategory = "all items", orderAsc =
           />
           <Button
           setW={`w-[13ch]`}
-            title={`Upcoming ${asc ? "ascending" : "descending"}`}
-            text="Upcoming"
+            title={`Preorders ${asc ? "ascending" : "descending"}`}
+            text="Preorders"
             Icon={asc ? FaArrowUp : FaArrowDown}
-            active={selected?.toLowerCase() === "upcoming"}
+            active={selected?.toLocaleLowerCase() === "preorders"}
             fn={(e) => {
               let searchParams
-              if (selected?.toLowerCase() === "upcoming") {
+              if (selected?.toLowerCase() === "preorders") {
 
                 searchParams = new URLSearchParams({ page: `1`, range: `${range}`, order: `${asc ? "desc" : "asc"}` })
                 setAsc(!asc)
@@ -162,29 +162,7 @@ const ItemsBrowser = ({ items, count, selectedCategory = "all items", orderAsc =
                 setAsc(true)
                 searchParams = new URLSearchParams({ page: `1`, range: `${range}`, order: "asc" })
               }
-              router.push("/market/upcoming" + "?" + searchParams, { scroll: false });
-
-            }}
-            bgColor="bg-link"
-          />
-          <Button
-          setW={`w-[13ch]`}
-            title={`Sales Ending ${asc ? "ascending" : "descending"}`}
-            text="Sales Ending"
-            Icon={asc ? FaArrowUp : FaArrowDown}
-            active={selected?.toLocaleLowerCase() === "sales ending"}
-            fn={(e) => {
-              let searchParams
-              if (selected?.toLowerCase() === "sales ending") {
-
-                searchParams = new URLSearchParams({ page: `1`, range: `${range}`, order: `${asc ? "desc" : "asc"}` })
-                setAsc(!asc)
-              } else {
-                setSelected(e.currentTarget.innerHTML.split("<")[0]);
-                setAsc(true)
-                searchParams = new URLSearchParams({ page: `1`, range: `${range}`, order: "asc" })
-              }
-              router.push("/market/sales-ending" + "?" + searchParams, { scroll: false });
+              router.push("/market/preorders" + "?" + searchParams, { scroll: false });
 
             }}
             bgColor="bg-link"
@@ -202,7 +180,7 @@ const ItemsBrowser = ({ items, count, selectedCategory = "all items", orderAsc =
 
             <Link
               href={`/item/${i.item}`}
-              className="ring-2 p-1 my-1 hover:bg-gradient-to-tl from-link via-link_active to-link transition-all duration-300 h-20 flex justify-between "
+              className="relative overflow-hidden ring-2 p-1 my-1 hover:bg-gradient-to-tl from-link via-link_active to-link transition-all duration-300 h-20 flex justify-between "
               key={i.id}
             >
               <div className="flex">
@@ -228,9 +206,9 @@ const ItemsBrowser = ({ items, count, selectedCategory = "all items", orderAsc =
                 </span>
 
               </div>
-              <div className="text-sm flex">
+              <div className="text-sm  hidden sm:flex">
 
-                <span className="justify-end self-center font-semibold  px-2 lg:text-lg overflow-hidden text-ellipsis hidden sm:flex">
+                <span className="justify-end self-center font-semibold  px-2 lg:text-lg overflow-hidden text-ellipsis flex">
                   {currency.name === "initial" ? (
                     <SpinnerMini />
                   ) : (
@@ -242,7 +220,7 @@ const ItemsBrowser = ({ items, count, selectedCategory = "all items", orderAsc =
                     : ""}
                 </span>
               </div>
-              {i.preorder === true && i.releaseDate ? i.releaseDate > new Date(Date.now()) : null ? (
+              {i.preorder === true && i.releaseDate!== null && i.releaseDate >= new Date(Date.now()) ? (
                 <span className="p-1 absolute whitespace-nowrap flex items-center -rotate-[55deg] text-lg translate-x-[-30%] top-1/4 w-[8rem] justify-center left-0 h-8 bg-violet-600">
                   Preorder
                 </span>

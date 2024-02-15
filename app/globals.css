@@ -8,11 +8,11 @@
   --bg-interactive: rgb(250, 250, 250);
   --bg-sidebar:rgb(20, 20, 20);
   --text: rgb(20, 20, 20);
-  --interactive-text: rgb(240, 240, 240);
+  --interactive-text: rgb(230, 230, 230);
   --button-text: rgb(10, 10, 10);
   --inactive-text: rgb(177, 177, 177);
-  --link: #3191ff;
-  --link-active: #53a2fc;
+  --link: #0F478A;
+  --link-active: #0D3C73;
   --primary: #161536;
   --secondary: #E94D41;
   --shadowColor: var(--link);

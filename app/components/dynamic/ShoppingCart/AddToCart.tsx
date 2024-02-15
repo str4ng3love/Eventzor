@@ -27,6 +27,7 @@ const AddToCart = ({ item,type, price, id, amountLeft, saleEnded=false }: Props)
       >
         <label className="p-1 mr-2">Amount&nbsp;:</label>
         <input
+          aria-label="Amount"
           ref={inputEl}
           value={amount}
           className="xl:w-40 w-24  bg-inherit focus:text-text focus:ring-0 focus:outline-none focus:bg-bg p-2 rounded-md transition-all duration-500"

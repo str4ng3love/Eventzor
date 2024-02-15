@@ -116,7 +116,7 @@ const Notifications = () => {
 
 
       <Menu >
-        <Menu.Button className={`group h-8 w-8 flex justify-center items-center cursor-pointer hover:scale-105 hover:-translate-y-1 transition-transform duration-300`}
+        <Menu.Button aria-label="Notifications" className={`group h-8 w-8 flex justify-center items-center cursor-pointer hover:scale-105 hover:-translate-y-1 transition-transform duration-300`}
           onClick={async () => { setEvent(0); if (notifications === null) setNotifications(await getNotifications()) }}
         >
           <Icon padding="" textSize="text-base" textColor="group-hover:text-text transition-all duration-300 text-text_inactive" Icon={FaBell} />
