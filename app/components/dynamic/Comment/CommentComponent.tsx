@@ -13,9 +13,8 @@ import Button from "../Button";
 import Notification from "../../static/Notification";
 import LikeAndDislike from "../LikeAndDislike";
 import { CommentType } from "@/types/enums";
-import TimeDifference from "../../../../helpers/timeDifference";
-import FormatString from "../../../../helpers/formatString";
-
+import FormatString from "@/helpers/formatString";
+import TimeDifference from "@/helpers/timeDifference";
 
 interface Props {
   id: string;

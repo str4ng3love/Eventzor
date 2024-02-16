@@ -12,8 +12,8 @@ import { CommentStatus } from "@prisma/client";
 import Button from "../Button";
 import LikeAndDislike from "../LikeAndDislike";
 import { CommentType } from "@/types/enums";
-import TimeDifference from "../../../../helpers/timeDifference";
-import FormatString from "../../../../helpers/formatString";
+import TimeDifference from "@/helpers/timeDifference";
+import FormatString from "@/helpers/formatString";
 
 interface Props {
   id: string;

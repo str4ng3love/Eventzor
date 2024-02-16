@@ -1,4 +1,4 @@
- const FormatString = (string: string) => {
+ export default function FormatString (string: string){
 
   return string
     .replaceAll("</div>", ``)
@@ -10,4 +10,3 @@
     .replaceAll("&amp;", "&");
 };
 
-export default FormatString
