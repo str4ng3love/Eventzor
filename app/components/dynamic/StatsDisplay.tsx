@@ -6,7 +6,7 @@ import SpinnerMini from "../static/SpinnerMini"
 
 import CommentInPortal from "./Comment/CommentInPortal"
 import Link from "next/link"
-import FormatString from "@/helpers/formatString"
+import FormatString from "../../../helpers/formatString"
 
 
 interface Props {

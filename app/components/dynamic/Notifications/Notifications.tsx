@@ -13,7 +13,8 @@ import CommentComponent from "../Comment/CommentComponent";
 
 import { useRouter } from "next/navigation";
 import { CommentProps } from "@/types/interfaces";
-import FormatString from "@/helpers/FormatString";
+import FormatString from "../../../../helpers/formatString";
+
 
 
 
