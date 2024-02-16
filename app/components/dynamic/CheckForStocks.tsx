@@ -44,8 +44,8 @@ const CheckForStocks = () => {
                     <div className="flex flex-col bg-bg_interactive ring-2 ring-primary p-4">
                         <h2>Items stock below 10%</h2>
                         <div className="flex flex-col justify-start indent-1 w-full  sm:gap-2 gap-4">
-                            {lowItemStocks.length > 0 ? lowItemStocks.map(i =>
-                                <div className="flex justify-between sm:flex-row flex-col">
+                            {lowItemStocks.length > 0 ? lowItemStocks.map((i,index)=>
+                                <div key={index} className="flex justify-between sm:flex-row flex-col">
                                     <Link className="p-1 flex-grow hover:bg-link transition-all duration-150" href={`/item/${i.item}`}>{i.item}</Link>
                                     <div className="flex gap-2">
                                         <span>Amount:&nbsp;{i.amount}</span>
@@ -58,8 +58,8 @@ const CheckForStocks = () => {
                     <div className="flex flex-col bg-bg_interactive ring-2 ring-primary p-4">
                         <h2>Events with tickets below 10%</h2>
                         <div className="flex flex-col justify-start indent-1 w-full  sm:gap-2 gap-4">
-                            {lowTicketStocks.length > 0 ? lowTicketStocks.map(t =>
-                                <div className="flex gap-2 justify-betweent w-full">
+                            {lowTicketStocks.length > 0 ? lowTicketStocks.map((t, index) =>
+                                <div key={index} className="flex gap-2 justify-betweent w-full">
                                     <Link className="p-1 flex-grow hover:bg-link transition-all duration-150" href={`/event/${t.title}`}>{t.title}</Link>
                                     <div className="flex gap-2">
                                         <span>Amount:&nbsp;{t.tickets}</span>

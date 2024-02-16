@@ -215,11 +215,11 @@ const EventsBrowser = ({ events, count, selectedCategory = "all items", orderAsc
                   alt="Event's Image"
                   src={e.images[0]}
                 />
-                <div className="p-2 flex flex-col justify-between">
+                <div className="p-2 flex flex-col justify-start">
                   <span className="md:text-base text-sm sm:text-sm overflow-hidden text-ellipsis">
                     {e.title}
                   </span>
-                  <span className="self-end md:text-sm text-xs sm:inline-block hidden">
+                  <span className=" md:text-sm text-xs sm:inline-block hidden">
                     {new Date(e.eventDate).toUTCString().slice(0, -7)}
                     &nbsp;GMT
                   </span>

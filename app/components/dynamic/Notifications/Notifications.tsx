@@ -25,7 +25,7 @@ interface NotifProps extends Notification {
 }
 
 const Notifications = () => {
-  const [event, setEvent] = useState(0)
+  const [unread, setUnread] = useState(0)
   const [notifications, setNotifications] = useState<NotifProps[] | null>(null)
   const [selectedEl, setSelectedEl] = useState<CommentProps | null>(null)
   const [working, setWorking] = useState(false)
@@ -54,7 +54,21 @@ const Notifications = () => {
       console.log(error)
     }
   }
+  const getNotificationCount = async () => {
+    try {
+      const resp = await fetch('/api/notifications/count', { cache: "no-store" })
+      const count = await resp.json()
 
+      if (count.error) {
+        console.log(count.error)
+      } else {
+        return count.count
+
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
   const getNotifications = async () => {
     try {
       const resp = await fetch('/api/notifications', { cache: "no-store" })
@@ -95,12 +109,12 @@ const Notifications = () => {
   useEffect(() => {
     (async () => {
       const { unread } = await getNumberOfUnreadNotifications()
-      setEvent(unread)
+      setUnread(unread)
 
     })()
     const eventSource = new EventSource('/api/sse')
 
-    eventSource.onmessage = (e) => { setEvent(prev => prev + 1); console.log('hit') }
+    eventSource.onmessage = (e) => { setUnread(prev => prev + 1); console.log('hit') }
     eventSource.onerror = (e) => eventSource.close()
 
     return () => {
@@ -108,7 +122,12 @@ const Notifications = () => {
 
     }
   }, [])
-
+  useEffect(() => {
+    const id = setInterval(async () => {
+      setUnread(await getNotificationCount())
+    }, 60000)
+    return () => clearInterval(id)
+  }, [])
 
   return (
     <div className={`relative`} >
@@ -117,12 +136,12 @@ const Notifications = () => {
 
       <Menu >
         <Menu.Button aria-label="Notifications" className={`group h-8 w-8 flex justify-center items-center cursor-pointer hover:scale-105 hover:-translate-y-1 transition-transform duration-300`}
-          onClick={async () => { setEvent(0); if (notifications === null) setNotifications(await getNotifications()) }}
+          onClick={async () => { setUnread(0); if (notifications === null) setNotifications(await getNotifications()) }}
         >
           <Icon padding="" textSize="text-base" textColor="group-hover:text-text transition-all duration-300 text-text_inactive" Icon={FaBell} />
-          {event > 0 ?
+          {unread > 0 ?
             <span className="absolute bg-secondary flex items-center justify-center rounded-full h-6 w-6 top-0 right-0 -translate-y-2 translate-x-[1rem] text-white">
-              {event}
+              {unread}
             </span> : null}
         </Menu.Button>
         <Transition
@@ -153,8 +172,8 @@ const Notifications = () => {
                   {n.action === "like" ?
 
                     <div className="overflow-hidden  text-ellipsis whitespace-nowrap" onClick={async () => {
+                      markAsRead(n.id)
                       if (n.comment) {
-                        markAsRead(n.id)
                         setSelectedEl(await getComment(n.targetCommentId as string))
                       } else if (n.event) {
                         router.push(`/event/${n.event?.title}`)

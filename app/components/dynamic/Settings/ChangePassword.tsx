@@ -56,7 +56,7 @@ const ChangePassword = () => {
     <>
       <div className="flex flex-col w-fit p-4 my-4">
         <Heading4 text="Change your password" />
-        <div className="p-4 flex gap-2">
+        <div className="p-4 flex gap-2 sm:flex-row flex-col">
           {show.password ? (
             <>
               <label className="p-1 w-[16ch]">Password</label>
@@ -79,7 +79,7 @@ const ChangePassword = () => {
             </>
           )}
         </div>
-        <div className="p-4 flex gap-2">
+        <div className="p-4 flex gap-2 sm:flex-row flex-col">
         {show.newPassword ? (
             <>
               <label className="p-1 w-[16ch]">New Password</label>
@@ -102,7 +102,7 @@ const ChangePassword = () => {
             </>
           )}
         </div>
-        <div className="p-4 flex gap-2">
+        <div className="p-4 flex gap-2 sm:flex-row flex-col">
         {show.confirmPassword ? (
             <>
               <label className="p-1 w-[16ch]">Confirm Password</label>
