@@ -1,6 +1,5 @@
 "use client";
 
-import timeDifference from "@/helpers/timeDifference";
 import AddComment from "./AddComment";
 import { useEffect, useState } from "react";
 import { BiDotsVerticalRounded, BiDownArrow } from "react-icons/bi";
@@ -14,7 +13,9 @@ import Button from "../Button";
 import Notification from "../../static/Notification";
 import LikeAndDislike from "../LikeAndDislike";
 import { CommentType } from "@/types/enums";
+import TimeDifference from "@/helpers/timeDifference";
 import FormatString from "@/helpers/formatString";
+
 
 interface Props {
   id: string;
@@ -141,7 +142,7 @@ const CommentComponent = ({
       likes,
       dislikes,
     });
-    setWhenCommented(timeDifference(
+    setWhenCommented(TimeDifference(
       Date.now(),
       Date.parse(comment.createdAt?.toUTCString())
     ))

@@ -1,4 +1,4 @@
-export default function timeDifference(now:number, date:number){
+export default function TimeDifference(now:number, date:number){
     const seconds = Math.floor((now-date) /1000)
     let interval
     interval = seconds / 31104000
