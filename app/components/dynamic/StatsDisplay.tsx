@@ -4,9 +4,9 @@ import { IType } from "@/types/enums"
 import { useState } from "react"
 import SpinnerMini from "../static/SpinnerMini"
 import { useRouter } from "next/navigation"
-import { formatString } from "@/helpers/formatString"
 import CommentInPortal from "./Comment/CommentInPortal"
 import Link from "next/link"
+import FormatString from "@/helpers/formatString"
 
 
 interface Props {
@@ -94,7 +94,7 @@ const StatsDisplay = ({ user, type, stats }: Props) => {
                                     }
                                 }}
                                     onClick={() => { setId(e.id as string) }}>
-                                    {formatString(e.message as string)}
+                                    {FormatString(e.message as string)}
                                 </button>
                             </li>)
                     }

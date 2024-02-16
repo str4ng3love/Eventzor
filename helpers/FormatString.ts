@@ -1,4 +1,4 @@
-export const formatString = (string: string) => {
+ const FormatString = (string: string) => {
 
   return string
     .replaceAll("</div>", ``)
@@ -10,4 +10,4 @@ export const formatString = (string: string) => {
     .replaceAll("&amp;", "&");
 };
 
-// todo format fn so that it takes br into consideration
+export default FormatString

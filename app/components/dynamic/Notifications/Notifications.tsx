@@ -7,13 +7,13 @@ import { Menu, Transition } from "@headlessui/react";
 import SpinnerMini from "../../static/SpinnerMini";
 import { Notification, StatusOrder } from "@prisma/client";
 import Button from "../Button";
-import { formatString } from "@/helpers/formatString";
 
 import Portal from "../../Portal";
 import CommentComponent from "../Comment/CommentComponent";
 
 import { useRouter } from "next/navigation";
 import { CommentProps } from "@/types/interfaces";
+import FormatString from "@/helpers/formatString";
 
 
 
@@ -183,7 +183,7 @@ const Notifications = () => {
                     }}>
                       <span className={`inline-block rounded-full mx-1 h-1 w-1 ${n.read ? "" : "bg-link"}`}></span>
                       <span>
-                        {n.initiator} liked your {n.item ? `item "${n.item.item}"` : ''}{n.event ? `event "${n.event.title}"` : ''}{n.comment ? `comment "${formatString(n.comment?.message as string)}"` : ""}
+                        {n.initiator} liked your {n.item ? `item "${n.item.item}"` : ''}{n.event ? `event "${n.event.title}"` : ''}{n.comment ? `comment "${FormatString(n.comment?.message as string)}"` : ""}
                       </span>
                     </div>
 
@@ -205,7 +205,7 @@ const Notifications = () => {
                     }}>
                       <span className={`inline-block rounded-full mx-1 h-1 w-1 ${n.read ? "" : "bg-link"}`}></span>
                       <span >
-                        {n.initiator} disliked your {n.item ? `item "${n.item.item}"` : ''}{n.event ? `event "${n.event.title}"` : ''}{n.comment ? `comment "${formatString(n.comment?.message as string)}"` : ""}
+                        {n.initiator} disliked your {n.item ? `item "${n.item.item}"` : ''}{n.event ? `event "${n.event.title}"` : ''}{n.comment ? `comment "${FormatString(n.comment?.message as string)}"` : ""}
                       </span>
                     </div>
 
@@ -216,7 +216,7 @@ const Notifications = () => {
                     <div className="overflow-hidden  text-ellipsis whitespace-nowrap" onClick={async () => { markAsRead(n.id); setSelectedEl(await getComment(n.targetCommentId as string)) }}>
                       <span className={`inline-block rounded-full mx-1 h-1 w-1 ${n.read ? "" : "bg-link"}`}></span>
                       <span>
-                        {n.initiator} replied to your comment &quot;{formatString(n.comment?.message as string)}&quot;
+                        {n.initiator} replied to your comment &quot;{FormatString(n.comment?.message as string)}&quot;
                       </span>
                     </div>
 

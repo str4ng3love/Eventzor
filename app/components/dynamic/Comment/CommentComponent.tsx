@@ -7,13 +7,14 @@ import { BiDotsVerticalRounded, BiDownArrow } from "react-icons/bi";
 import { Comment, CommentStatus } from "@prisma/client";
 import SpinnerMini from "../../static/SpinnerMini";
 import Reply from "./Reply";
-import { formatString } from "@/helpers/formatString";
+
 import DropDownMini from "../DropDownMini";
 import { useSession } from "next-auth/react";
 import Button from "../Button";
 import Notification from "../../static/Notification";
 import LikeAndDislike from "../LikeAndDislike";
 import { CommentType } from "@/types/enums";
+import FormatString from "@/helpers/formatString";
 
 interface Props {
   id: string;
@@ -276,7 +277,7 @@ const CommentComponent = ({
                 onPaste={(e) => setCommentTextEdited(e.currentTarget.innerHTML)}
                 className="p-2 mx-2 resize-none text-text_inactive my-8 bg-interactive_text transition-all 500ms break-all ring-2 ring-primary rounded-md text-sm"
               >
-                {formatString(comment.text)}
+                {FormatString(comment.text)}
               </div>
               <div className="flex justify-end gap-2 pt-2">
                 <Button
@@ -299,7 +300,7 @@ const CommentComponent = ({
             </div>
           ) : (
             <div className=" p-2 w-full break-words text-sm">
-              {formatString(comment.text)}
+              {FormatString(comment.text)}
             </div>
           )}
 
