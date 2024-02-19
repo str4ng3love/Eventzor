@@ -82,10 +82,10 @@ const EventsBrowser = ({ events, count, selectedCategory = "all items", orderAsc
       <div className="bg-black/50 p-4 flex justify-center lg:justify-start">
         <div className="grid lg:grid-cols-6 sm:grid-cols-3 grid-cols-2 gap-2 justify-center w-fit">
           <Button
-          setW={`w-[13ch]`}
+            setW={`w-[13ch]`}
             title={`All items ${asc ? "ascending" : "descending"}`}
             text={`All Items`}
-            Icon={asc ? FaArrowUp : FaArrowDown}
+            Icon={asc ? FaArrowDown : FaArrowUp}
             active={selected?.toLowerCase() === "all items"}
             fn={(e) => {
               let searchParams
@@ -104,11 +104,11 @@ const EventsBrowser = ({ events, count, selectedCategory = "all items", orderAsc
             bgColor="bg-link"
           />
           <Button
-          setW={`w-[13ch]`}
-            
+            setW={`w-[13ch]`}
+
             title={`Popular ${asc ? "ascending" : "descending"}`}
             text="Popular"
-            Icon={asc ? FaArrowUp : FaArrowDown}
+            Icon={asc ? FaArrowDown : FaArrowUp}
             active={selected?.toLowerCase() === "popular"}
             fn={(e) => {
               let searchParams
@@ -125,10 +125,10 @@ const EventsBrowser = ({ events, count, selectedCategory = "all items", orderAsc
             bgColor="bg-link"
           />
           <Button
-          setW={`w-[13ch]`}
+            setW={`w-[13ch]`}
             title={`Most liked  ${asc ? "ascending" : "descending"}`}
             text="Most Liked"
-            Icon={asc ? FaArrowUp : FaArrowDown}
+            Icon={asc ? FaArrowDown : FaArrowUp}
             active={selected?.toLowerCase() === "most liked"}
             fn={(e) => {
               let searchParams
@@ -147,10 +147,10 @@ const EventsBrowser = ({ events, count, selectedCategory = "all items", orderAsc
             bgColor="bg-link"
           />
           <Button
-          setW={`w-[13ch]`}
+            setW={`w-[13ch]`}
             title={`Upcoming ${asc ? "ascending" : "descending"}`}
             text="Upcoming"
-            Icon={asc ? FaArrowUp : FaArrowDown}
+            Icon={asc ? FaArrowDown : FaArrowUp}
             active={selected?.toLowerCase() === "upcoming"}
             fn={(e) => {
               let searchParams
@@ -169,10 +169,10 @@ const EventsBrowser = ({ events, count, selectedCategory = "all items", orderAsc
             bgColor="bg-link"
           />
           <Button
-          setW={`w-[13ch]`}
+            setW={`w-[13ch]`}
             title={`Sales Ending ${asc ? "ascending" : "descending"}`}
             text="Sales Ending"
-            Icon={asc ? FaArrowUp : FaArrowDown}
+            Icon={asc ? FaArrowDown : FaArrowUp}
             active={selected?.toLocaleLowerCase() === "sales ending"}
             fn={(e) => {
               let searchParams

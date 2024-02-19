@@ -25,7 +25,6 @@ const ItemsBrowser = ({ items, count, selectedCategory = "all items", orderAsc =
   const router = useRouter()
 
   const [selected, setSelected] = useState(selectedCategory);
-
   const [page, setPage] = useState(currentPage);
   const [currency, setCurrency] = useState({ name: "initial", rate: 1 });
   const [range, setRange] = useState(currentRange)
@@ -82,10 +81,10 @@ const ItemsBrowser = ({ items, count, selectedCategory = "all items", orderAsc =
       <div className="bg-black/50 p-4 flex lg:justify-start justify-center">
         <div className="grid lg:grid-cols-6 sm:grid-cols-3 grid-cols-2 gap-2 justify-center w-fit">
           <Button
-          setW={`w-[13ch]`}
+            setW={`w-[13ch]`}
             title={`All items ${asc ? "ascending" : "descending"}`}
             text={`All Items`}
-            Icon={asc ? FaArrowUp : FaArrowDown}
+            Icon={asc ? FaArrowDown : FaArrowUp}
             active={selected?.toLowerCase() === "all items"}
             fn={(e) => {
               let searchParams
@@ -104,10 +103,10 @@ const ItemsBrowser = ({ items, count, selectedCategory = "all items", orderAsc =
             bgColor="bg-link"
           />
           <Button
-          setW={`w-[13ch]`}
+            setW={`w-[13ch]`}
             title={`Popular ${asc ? "ascending" : "descending"}`}
             text="Popular"
-            Icon={asc ? FaArrowUp : FaArrowDown}
+            Icon={asc ? FaArrowDown : FaArrowUp}
             active={selected?.toLowerCase() === "popular"}
             fn={(e) => {
               let searchParams
@@ -124,10 +123,10 @@ const ItemsBrowser = ({ items, count, selectedCategory = "all items", orderAsc =
             bgColor="bg-link"
           />
           <Button
-          setW={`w-[13ch]`}
+            setW={`w-[13ch]`}
             title={`Most liked  ${asc ? "ascending" : "descending"}`}
             text="Most Liked"
-            Icon={asc ? FaArrowUp : FaArrowDown}
+            Icon={asc ? FaArrowDown : FaArrowUp}
             active={selected?.toLowerCase() === "most liked"}
             fn={(e) => {
               let searchParams
@@ -146,10 +145,10 @@ const ItemsBrowser = ({ items, count, selectedCategory = "all items", orderAsc =
             bgColor="bg-link"
           />
           <Button
-          setW={`w-[13ch]`}
+            setW={`w-[13ch]`}
             title={`Preorders ${asc ? "ascending" : "descending"}`}
             text="Preorders"
-            Icon={asc ? FaArrowUp : FaArrowDown}
+            Icon={asc ? FaArrowDown : FaArrowUp}
             active={selected?.toLocaleLowerCase() === "preorders"}
             fn={(e) => {
               let searchParams
@@ -220,7 +219,7 @@ const ItemsBrowser = ({ items, count, selectedCategory = "all items", orderAsc =
                     : ""}
                 </span>
               </div>
-              {i.preorder === true && i.releaseDate!== null && i.releaseDate >= new Date(Date.now()) ? (
+              {i.preorder === true && i.releaseDate !== null && i.releaseDate >= new Date(Date.now()) ? (
                 <span className="p-1 absolute whitespace-nowrap flex items-center -rotate-[55deg] text-lg translate-x-[-30%] top-1/4 w-[8rem] justify-center left-0 h-8 bg-violet-600">
                   Preorder
                 </span>

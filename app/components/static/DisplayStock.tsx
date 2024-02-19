@@ -1,9 +1,5 @@
 "use client"
 
-import { useEffect, useState } from "react";
-import SpinnerMini from "./SpinnerMini";
-
-
 
 
 type Props = {
@@ -15,11 +11,6 @@ const DisplayStock = ({ amount, amountSold }: Props) => {
     const stock = `w-[${(((amount - amountSold) / amount) * 100).toFixed(0)}%]`
     const sold = `w-[${((amountSold / amount) * 100).toFixed(0)}%]`
 
-    if (stock === undefined || sold == undefined) {
-        return <div className="w-full flex justify-center items-center">
-            <SpinnerMini borderSize="border-4" w="w-4" h="h-4" />
-        </div>
-    }
     if (amount - amountSold === 0) {
         return <span>Out of Stock</span>
     }
