@@ -89,12 +89,13 @@ const UserMenu = () => {
   } else {
     return (
       <>
-        <div
+        <button aria-label="Log in or register"
+        
           onClick={() => setShowLogin(true)}
           className="p-2 hover:bg-link rounded-md cursor-pointer transition-all duration-300"
         >
           <BiUser />
-        </div>
+        </button>
         {showLogin ?
           <LoginForm show={true} cleanUp={() => setShowLogin(false)} switchFn={() => setShowRegister(true)} />
           :

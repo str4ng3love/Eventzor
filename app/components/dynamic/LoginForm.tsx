@@ -6,6 +6,7 @@ import Button from "./Button";
 import { Dialog, Transition } from "@headlessui/react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { FaCog } from "react-icons/fa";
 
 
 
@@ -19,26 +20,37 @@ const LoginForm = ({ show = false, cleanUp, switchFn }: Props) => {
   const [isOpen, setOpen] = useState(show);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [working, setWorking] = useState(false)
   const [notify, setNotify] = useState<NotificationObj>({
     error: false,
     message: "",
     show: false,
   });
   const router = useRouter()
+
   const handleLogin = async (username: string, password: string) => {
-    const resp = await signIn("credentials", {
-      username,
-      password,
-      redirect: false,
-    });
+    setWorking(true)
+    try {
+      const resp = await signIn("credentials", {
+        username,
+        password,
+        redirect: false,
+      });
 
-    if (resp?.error) {
-      setNotify({ error: true, show: true, message: "Invalid Credentials" });
-    } else {
-
-      router.refresh()
+      if (resp?.error) {
+        setWorking(false)
+        setNotify({ error: true, show: true, message: "Invalid Credentials" });
+      } else {
+        setWorking(false)
+        router.refresh()
+      }
+    } catch (error) {
+      setWorking(false)
+      console.log(error)
     }
+
   };
+
   useEffect(() => {
     if (cleanUp && !isOpen) {
       cleanUp()
@@ -66,7 +78,7 @@ const LoginForm = ({ show = false, cleanUp, switchFn }: Props) => {
             <div className="fixed inset-0 flex items-center justify-center p-4">
               <Dialog.Panel
                 className={
-                  "p-8 bg-bg_interactive text-text dark:bg-bg_interactive shadow-md shadow-black"
+                  "p-8 bg-bg_interactive text-text dark:bg-bg_interactive shadow-md shadow-black animate-fadeIn"
                 }
               >
                 <Dialog.Title className={"p-2 font-bold text-xl text-center"}>
@@ -77,16 +89,18 @@ const LoginForm = ({ show = false, cleanUp, switchFn }: Props) => {
                 </Dialog.Description>
                 <form onSubmit={(e) => e.preventDefault()}>
                   <div className="p-4 flex justify-between">
-                    <label className="p-1 min-w-[10ch] mr-2">Username</label>
+                    <label htmlFor="username" className="p-1 w-[10ch] mr-2">Username</label>
                     <input
+                      id="username"
                       onChange={(e) => setUsername(e.currentTarget.value)}
                       className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text"
                       type="text"
                     />
                   </div>
                   <div className="p-4 flex justify-between">
-                    <label className="p-1 min-w-[10ch] mr-2">Password</label>
+                    <label htmlFor="password" className="p-1 w-[10ch] mr-2">Password</label>
                     <input
+                      id="password"
                       onChange={(e) => setPassword(e.currentTarget.value)}
                       className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text"
                       type="password"
@@ -95,14 +109,30 @@ const LoginForm = ({ show = false, cleanUp, switchFn }: Props) => {
                 </form>
 
 
-                <div className="flex justify-around pt-8">
-                  <Button
-
-                    title="Log in"
-                    text="log in"
-                    fn={() => handleLogin(username, password)}
-                  />
-                  <Button title="Cancel" text="Cancel" fn={() => setOpen(false)}></Button>
+                <div className="flex justify-around py-8">
+                  {working ?
+                    <Button title="Log in"
+                      ariaLabel="Log in"
+                      text="Working..."
+                      Icon={FaCog}
+                      active
+                      spinIcon
+                      interactive={false}
+                      fn={() => {
+                        if (working) {
+                          return
+                        } else {
+                          handleLogin(username, password)
+                        }
+                      }}
+                    />
+                    :
+                    <Button title="Log in"
+                      ariaLabel="Log in"
+                      text="log in"
+                      fn={() => handleLogin(username, password)}
+                    />}
+                  <Button ariaLabel="Cancel log in" bgColor="bg-secondary" title="Cancel" text="Cancel" fn={() => { setOpen(false) }}></Button>
                 </div>
                 <Notification
                   message={notify.message}
@@ -113,10 +143,10 @@ const LoginForm = ({ show = false, cleanUp, switchFn }: Props) => {
                   }
                 />
 
-                <div className="flex flex-col justify-around pt-8 ">
+                <div className="flex flex-col items-center pt-8 border-t-2 border-primary ">
 
-                  <span className="p-4">Don&apos;t have an account?</span>
-                  <Button text="Register" title="Open Register form" fn={() => { if (cleanUp && switchFn) { cleanUp(); switchFn() } }} />
+                  <span className="p-4 self-start">Don&apos;t have an account?</span>
+                  <Button ariaLabel="Open register form" setW="w-fit" size="text-sm" text="Register" title="Open Register form" fn={() => { if (cleanUp && switchFn) { cleanUp(); switchFn() } }} />
                 </div>
               </Dialog.Panel>
 

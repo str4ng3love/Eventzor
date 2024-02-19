@@ -14,6 +14,8 @@ interface Props {
   showIcon?: boolean;
   Icon?: IconType;
   setW?: string
+  spinIcon?: boolean;
+  ariaLabel?: string
 }
 const Button = ({
   fn,
@@ -27,47 +29,48 @@ const Button = ({
   Icon,
   showIcon,
   setW,
+  spinIcon = false,
+  ariaLabel
 
 }: Props) => {
   return (
     <>
       {fn && link ? (
-        <Link href={link}>
-          <button
-            title={title}
-            className={`${bgColor} gap-2 flex items-center justify-center capitalize  ${setW} ${active ? "dark:text-interactive_text text-text bg-text" : "text-interactive_text dark:text-text"} ${size} whitespace-nowrap cursor-default min-w-[11ch] font-bold p-2 rounded-xl ${interactive ? "cursor-pointer hover:-translate-y-1 hover:scale-105 hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-30"
-              : "bg-slate-500 text-text_inactive dark:bg-slate-500 dark:text-text_inactive"
-              }`}
-            onClick={(e) => fn(e)}
-          >
-            {text}{Icon && active ? <Icon /> : null}
-          </button>
+        <Link aria-label={ariaLabel}
+         onClick={(e) => fn(e)} href={link} className={`${bgColor} gap-2 flex items-center justify-center capitalize  ${setW} ${active ? "dark:text-interactive_text text-text bg-text" : "text-interactive_text dark:text-text"} ${size} whitespace-nowrap cursor-default min-w-[11ch] font-bold p-2 rounded-xl ${interactive ? "cursor-pointer hover:-translate-y-1 hover:scale-105 hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-30"
+          : "bg-slate-500 text-text_inactive dark:bg-slate-500 dark:text-text_inactive"
+          }`}>
+
+          {text}{Icon && active ? <Icon className={`${spinIcon ? "animate-spin" : null}`} /> : null}
+
         </Link>
       ) : (
         <></>
       )}
       {fn && !link ? (
         <button
+          aria-label={ariaLabel}
           title={title}
           className={`${bgColor} gap-2 flex items-center justify-center capitalize ${setW}  ${active ? "dark:text-interactive_text text-text bg-text" : "text-interactive_text dark:text-text"} ${size} whitespace-nowrap cursor-default min-w-[11ch] font-bold p-2 rounded-xl ${interactive ? "cursor-pointer hover:-translate-y-1 hover:scale-105 hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-300"
             : "bg-slate-500 text-text_inactive dark:bg-slate-500 dark:text-text_inactive"
             }`}
           onClick={(e) => fn(e)}
         >
-          {text}{Icon && active || Icon && showIcon ? <Icon /> : null}
+          {text}{Icon && active || Icon && showIcon ? <Icon className={`${spinIcon ? "animate-spin" : null}`} /> : null}
         </button>
       ) : (
         <></>
       )}
       {link && !fn ? (
         <Link
+        aria-label={ariaLabel}
           title={title}
           href={link}
           className={`${bgColor} gap-2 flex items-center justify-center capitalize ${setW}  ${active ? "dark:text-interactive_text text-text bg-text" : "text-interactive_text dark:text-text"} ${size} whitespace-nowrap cursor-default min-w-[11ch] font-bold p-2 rounded-xl ${interactive ? "cursor-pointer hover:-translate-y-1 hover:scale-105 hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-30"
             : "bg-slate-500 text-text_inactive dark:bg-slate-500 dark:text-text_inactive"
             }`}
         >
-          {text}{Icon && active ? <Icon /> : null}
+          {text}{Icon && active ? <Icon className={`${spinIcon ? "animate-spin" : null}`} /> : null}
         </Link>
       ) : (
         <></>
