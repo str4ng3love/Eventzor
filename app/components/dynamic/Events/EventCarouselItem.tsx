@@ -21,7 +21,7 @@ const EventCarouselItem = ({ item, currency }: Props) => {
 
     return (
 
-        <div className="flex ring-2 ring-primary bg-black h-[20rem] transition-all duration-150">
+        <div className="flex ring-2 ring-primary bg-black h-[20rem] transition-all duration-150 animate-fadeIn">
             <Link
                 href={"/event/" + encodeURIComponent(item.title)}
                 title={item.title}
@@ -33,6 +33,7 @@ const EventCarouselItem = ({ item, currency }: Props) => {
 
                 <Image
                     fill
+                    sizes="(max-width: 1000px) 80vw,(max-width: 600px) 50wv, 33wv"
                     style={{ objectFit: "cover", }}
                     placeholder="blur"
                     blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
@@ -40,7 +41,7 @@ const EventCarouselItem = ({ item, currency }: Props) => {
                     src={item.images[0]}
                 />
             </Link>
-            <div className={`hidden  bg-gradient-to-br from-primary to-slate-900 lg:flex flex-col justify-between p-1 min-w-[20%]`}>
+            <div className={`hidden  bg-gradient-to-br from-primary to-slate-900 lg:flex flex-col justify-between p-1 w-[50%]`}>
                 <h2 className="p-2 first-letter:uppercase font-bold text-xl grow-[1]">
                     {item.title}
                 </h2>

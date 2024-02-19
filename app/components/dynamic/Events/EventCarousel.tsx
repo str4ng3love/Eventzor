@@ -33,18 +33,14 @@ const EventCarousel = ({
   const [animateRight, setAnimateRight] = useState(false)
 
   const showPrevious = () => {
-    setAnimateRight(true)
-    setTimeout(() => {
-      setAnimateRight(false)
-      setActive((prev) => (prev === 0 ? items.length - 1 : prev - 1))
-    }, 200);
+
+    setActive((prev) => (prev === 0 ? items.length - 1 : prev - 1))
+
   }
   const showNext = () => {
-    setAnimateLeft(true)
-    setTimeout(() => {
-      setAnimateLeft(false)
-      setActive((prev) => (prev === items.length - 1 ? 0 : prev + 1));
-    }, 200)
+
+    setActive((prev) => (prev === items.length - 1 ? 0 : prev + 1));
+
   }
 
   useEffect(() => {
@@ -107,18 +103,12 @@ const EventCarousel = ({
               <BiSolidLeftArrow />
             </span>
             <div className={`overflow-hidden flex md:w-[50dvw] w-[75dvw] max-w-[1280px] transition-all duration-150`}>
-              <div className={`min-w-full -translate-x-[100%] ${animateLeft ? "animate-translateLeft" : ""} ${animateRight ? "animate-translateRight" : ""}`}>
-                {items[active - 1] === undefined ?
-                  <EventCarouselItem currency={currency} item={items[items.length - 1]} /> : <EventCarouselItem currency={currency} item={items[active - 1]} />
-                }
-              </div>
 
-              <div className={`min-w-full -translate-x-[100%] ${animateLeft ? "animate-translateLeft" : ""} ${animateRight ? "animate-translateRight" : ""}`}>
+                  {/* TODO animate the carousel */}
+
+              <div className="min-w-full">
                 <EventCarouselItem currency={currency} item={items[active]} />
-              </div>
 
-              <div className={`min-w-full -translate-x-[100%]  ${animateLeft ? "animate-translateLeft" : ""} ${animateRight ? "animate-translateRight" : ""}`}>{items[active + 1] === undefined ?
-                <EventCarouselItem currency={currency} item={items[0]} /> : <EventCarouselItem currency={currency} item={items[active + 1]} />}
               </div>
             </div>
             <span
