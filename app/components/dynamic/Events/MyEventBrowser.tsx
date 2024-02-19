@@ -8,7 +8,7 @@ import { sortEvents } from "@/helpers/sort";
 import ResetFilter from "./ResetFilter";
 import Notification from "../../static/Notification";
 import { NotificationObj } from "../../static/Notification";
-import EventComponent from "./EventComponent";
+import MyEventComponent from "./MyEventComponent";
 import EditEvent from "./EditEvent";
 import EventSkeleton from "../../static/EventSkeleton";
 import SpinnerMini from "../../static/SpinnerMini";
@@ -248,7 +248,7 @@ const MyEventBrowser = () => {
             <tbody className="">
               {filtered
                 ? filtered.map((event) => (
-                  <EventComponent
+                  <MyEventComponent
                     key={event.id}
                     {...event}
                     delFn={() => {
@@ -260,7 +260,7 @@ const MyEventBrowser = () => {
                   />
                 ))
                 : eventsArr.map((event) => (
-                  <EventComponent
+                  <MyEventComponent
                     key={event.id}
                     {...event}
                     delFn={() => {

@@ -37,9 +37,6 @@ export default async function layout({
             className={`-z-10`}
           />
         </div>
-
-
-
         {children}
       </main>
       <Footer />

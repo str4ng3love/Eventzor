@@ -11,7 +11,7 @@ interface EventProps extends Event {
   editFn: (e: React.MouseEvent) => void;
   isEmpty?: boolean
 }
-const EventComponent = ({ ...props }: EventProps) => {
+const MyEventComponent = ({ ...props }: EventProps) => {
 
   return (
     <>
@@ -65,4 +65,4 @@ const EventComponent = ({ ...props }: EventProps) => {
   );
 };
 
-export default EventComponent;
+export default MyEventComponent;
