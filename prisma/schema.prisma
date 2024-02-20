@@ -193,6 +193,7 @@ model Notification {
   targetCommentId String?            @db.ObjectId
   read            Boolean            @default(false)
   markedAsDeleted Boolean            @default(false)
+  markedAsSeen    Boolean            @default(false)
 }
 
 enum NotificationAction {

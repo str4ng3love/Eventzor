@@ -17,6 +17,13 @@ git clone URL
 npm install
 ```
 
+- Add environmental variables for MongoDB connection string and NextAuth.js secret
+
+```
+MONGODB_URI=YOUR_MONGODB_CONNECTION_STRIG
+NEXTAUTH_SECRET=YOUR_SECRET
+```
+
 - Run developement server ...
 
 

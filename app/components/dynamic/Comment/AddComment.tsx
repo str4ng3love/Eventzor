@@ -110,9 +110,9 @@ const AddComment = ({
             }`}
         >
           {reply ? (
-            <h4 className="p-1 text-sm">Leave a Reply</h4>
+            <span className="p-1 text-sm">Leave a Reply</span>
           ) : (
-            <h4 className="p-1">Leave a Comment</h4>
+            <span className="p-1">Leave a Comment</span>
           )}
           <div
             ref={divEl}

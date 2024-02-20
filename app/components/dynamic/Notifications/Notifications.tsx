@@ -26,18 +26,23 @@ interface NotifProps extends Notification {
 }
 
 const Notifications = () => {
-  const [unread, setUnread] = useState(0)
+  const [unseen, setUnseen] = useState<{ id: string }[]>([])
   const [notifications, setNotifications] = useState<NotifProps[] | null>(null)
   const [selectedEl, setSelectedEl] = useState<CommentProps | null>(null)
   const [working, setWorking] = useState(false)
-
+  const [SSEError, setSSEError] = useState(false)
   const router = useRouter()
 
-  const getNumberOfUnreadNotifications = async () => {
+  const getNotSeenNotifications = async () => {
     try {
-      const resp = await fetch('/api/notifications/unread', { cache: "no-store" })
-      const amountUnread = await resp.json()
-      return amountUnread
+      const resp = await fetch('/api/notifications/notseen', { cache: "no-store" })
+      const data = await resp.json()
+      const unseenNotifications: { id: string }[] = data.unseenNotifications
+      const setOfUnseen = new Set([...unseen, ...unseenNotifications])
+
+      const arrayUnseen = Array.from(setOfUnseen)
+
+      return arrayUnseen
     } catch (error) {
       console.log(error)
     }
@@ -55,27 +60,24 @@ const Notifications = () => {
       console.log(error)
     }
   }
-  const getNotificationCount = async () => {
-    try {
-      const resp = await fetch('/api/notifications/count', { cache: "no-store" })
-      const count = await resp.json()
 
-      if (count.error) {
-        console.log(count.error)
-      } else {
-        return count.count
-
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
   const getNotifications = async () => {
     try {
       const resp = await fetch('/api/notifications', { cache: "no-store" })
       const notifications = await resp.json()
 
       return notifications.notifications
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const markAsSeen = async () => {
+    try {
+      const resp = await fetch('/api/notifications/markAsSeen')
+      const data = await resp.json()
+      if (data.message) {
+        return
+      }
     } catch (error) {
       console.log(error)
     }
@@ -109,14 +111,24 @@ const Notifications = () => {
 
   useEffect(() => {
     (async () => {
-      const { unread } = await getNumberOfUnreadNotifications()
-      setUnread(unread)
+      const unseenNotifications = await getNotSeenNotifications()
+      if (unseenNotifications)
+        setUnseen(unseenNotifications)
 
     })()
     const eventSource = new EventSource('/api/sse')
 
-    eventSource.onmessage = (e) => { setUnread(prev => prev + 1); console.log('hit') }
-    eventSource.onerror = (e) => eventSource.close()
+    eventSource.onmessage = async (e) => {
+
+      const unseenNotifications = await getNotSeenNotifications()
+      if (unseenNotifications)
+        setUnseen(unseenNotifications)
+    }
+    eventSource.onerror = (e) => {
+
+      setSSEError(true)
+      eventSource.close()
+    }
 
     return () => {
       eventSource.close()
@@ -124,11 +136,17 @@ const Notifications = () => {
     }
   }, [])
   useEffect(() => {
-    const id = setInterval(async () => {
-      setUnread(await getNotificationCount())
-    }, 60000)
-    return () => clearInterval(id)
-  }, [])
+
+    if (SSEError === true) {
+
+      const id = setInterval(async () => {
+        const notSeenNotifications = await getNotSeenNotifications()
+        if (notSeenNotifications)
+          setUnseen(notSeenNotifications)
+      }, 6000)
+      return () => clearInterval(id)
+    }
+  }, [SSEError])
 
   return (
     <div className={`relative`} >
@@ -137,13 +155,14 @@ const Notifications = () => {
 
       <Menu >
         <Menu.Button aria-label="Notifications" className={`group h-8 w-8 flex justify-center items-center cursor-pointer hover:scale-105 hover:-translate-y-1 transition-transform duration-300`}
-          onClick={async () => { setUnread(0); if (notifications === null) setNotifications(await getNotifications()) }}
+          onClick={async () => { setUnseen([]); if (notifications === null) setNotifications(await getNotifications()); await markAsSeen() }}
         >
           <Icon padding="" textSize="text-base" textColor="group-hover:text-text transition-all duration-300 text-text_inactive" Icon={FaBell} />
-          {unread > 0 ?
-            <span className="absolute bg-secondary flex items-center justify-center rounded-full h-6 w-6 top-0 right-0 -translate-y-2 translate-x-[1rem] text-white animate-fadeIn">
-              {unread}
-            </span> : null}
+          {/* {unseen.length > 0 ? */}
+          <span className="absolute bg-secondary flex items-center justify-center rounded-full h-6 w-6 top-0 right-0 -translate-y-2 translate-x-[1rem] text-white animate-fadeIn">
+            {unseen.length}
+          </span>
+          {/* : null} */}
         </Menu.Button>
         <Transition
           as={Fragment}

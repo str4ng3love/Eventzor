@@ -9,7 +9,7 @@ async function handler(req: Request) {
     if (!session?.user?.name) {
         return NextResponse.json({ message: "Not Authorized. Please login in to get notifications" })
     } else {
-        const count = await prisma.notification.count({ where: { AND: [{ userRecip: { name: session.user.name } }, {markedAsDeleted:false}] }})
+        const count = await prisma.notification.count({ where: { AND: [{ userRecip: { name: session.user.name } }, {read:false}] }})
  
         return NextResponse.json({ count })
     }
