@@ -143,7 +143,7 @@ const Notifications = () => {
         const notSeenNotifications = await getNotSeenNotifications()
         if (notSeenNotifications)
           setUnseen(notSeenNotifications)
-      }, 6000)
+      }, 60000)
       return () => clearInterval(id)
     }
   }, [SSEError])
@@ -158,11 +158,11 @@ const Notifications = () => {
           onClick={async () => { setUnseen([]); if (notifications === null) setNotifications(await getNotifications()); await markAsSeen() }}
         >
           <Icon padding="" textSize="text-base" textColor="group-hover:text-text transition-all duration-300 text-text_inactive" Icon={FaBell} />
-          {/* {unseen.length > 0 ? */}
+          {unseen.length > 0 ?
           <span className="absolute bg-secondary flex items-center justify-center rounded-full h-6 w-6 top-0 right-0 -translate-y-2 translate-x-[1rem] text-white animate-fadeIn">
             {unseen.length}
           </span>
-          {/* : null} */}
+          : null}
         </Menu.Button>
         <Transition
           as={Fragment}

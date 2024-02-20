@@ -1,10 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Heading1, Heading3, Heading4 } from "../../static/Heading";
-import Image from "next/image";
+import { Heading1} from "../../static/Heading";
 import { BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi";
-import Link from "next/link";
-import SpinnerMini from "../../static/SpinnerMini";
+
+
 import { MarketItem } from "@prisma/client";
 import ItemCarouselItem from "./ItemCarouselItem";
 interface Props {
@@ -22,9 +21,8 @@ const ItemCarousel = ({
 
   const [active, setActive] = useState(0);
   const [currency, setCurrency] = useState({ name: "initial", rate: 1 });
-  const [animateLeft, setAnimateLeft] = useState(false)
-  const [animateRight, setAnimateRight] = useState(false)
 
+ 
   const showPrevious = () => {
     setActive((prev) => (prev === 0 ? items.length - 1 : prev - 1))
   }

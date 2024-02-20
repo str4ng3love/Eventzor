@@ -29,8 +29,6 @@ const EventCarousel = ({
 
   const [active, setActive] = useState(0);
   const [currency, setCurrency] = useState({ name: "initial", rate: 1 });
-  const [animateLeft, setAnimateLeft] = useState(false)
-  const [animateRight, setAnimateRight] = useState(false)
 
   const showPrevious = () => {
 

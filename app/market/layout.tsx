@@ -33,7 +33,7 @@ export default async function layout({
           placeholder="blur"
           blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
           style={{ objectFit: "cover" }}
-          sizes="(max-width: 750px"
+          sizes="(max-width: 750px) 100dvw"
           className={`-z-10`}
         />
       </div>
