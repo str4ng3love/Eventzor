@@ -25,8 +25,9 @@ const AddToCart = ({ item,type, price, id, amountLeft, saleEnded=false }: Props)
           inputEl.current?.focus();
         }}
       >
-        <label className="p-1 mr-2">Amount&nbsp;:</label>
+        <label htmlFor="amountOfProducts" className="p-1 mr-2">Amount&nbsp;:</label>
         <input
+        id="amountOfProducts"
           aria-label="Amount"
           ref={inputEl}
           value={amount}
