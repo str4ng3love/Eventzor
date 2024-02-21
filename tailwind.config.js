@@ -25,6 +25,7 @@ module.exports = {
         smoothLT: "1rem 0rem 0rem 0rem",
         smoothL: "1rem 0rem 0rem 1rem",
         smoothR: "0rem 0.3rem 0.3rem 0rem",
+        smoothLR: "0.3rem 0.3rem 0.3rem 0.3rem"
       },
       colors: {
         link: "var(--link)",
@@ -45,6 +46,10 @@ module.exports = {
       },
       dropShadow: {
         "white_omni": "0px 0px 5px white"
+      },
+      minHeight: {
+        screenReducedBy6Rem: ["calc(100vh - 6rem)" , "calc(100dvh - 6rem)"],
+        screenReducedBy50percent : ["calc(100vh - 50%)", "calc(100dvh - 50%)"],
       },
       keyframes: {
         rotateRight: {

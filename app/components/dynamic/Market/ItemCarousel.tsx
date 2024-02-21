@@ -92,7 +92,7 @@ const ItemCarousel = ({
               <BiSolidLeftArrow />
             </span>
             <div className={`overflow-hidden flex md:w-[50dvw] w-[75dvw] max-w-[1280px] transition-all duration-150`}>
-              <div className="min-w-full">
+              <div className="w-80 min-w-full">
                 <ItemCarouselItem currency={currency} item={items[active]} />
               </div>
             </div>

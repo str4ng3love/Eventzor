@@ -17,7 +17,7 @@ export default async function layout({
 
   return (
     <>
-    <main className="flex flex-col items-center min-h-[calc(100dvh_-_6rem)]">
+    <main className="flex flex-col items-center min-h-screenReducedBy6Rem">
 
       <div className="mt-[6rem]">
         <div className="p-2 gap-2 grid sm:grid-cols-5 grid-cols-2">

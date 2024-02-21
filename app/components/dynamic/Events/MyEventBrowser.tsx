@@ -155,7 +155,7 @@ const MyEventBrowser = () => {
   }, []);
   if (eventsArr === null) {
     return (
-      <div className="flex items-center justify-center min-h-[calc(100dvh_-_50%)]">
+      <div className="flex items-center justify-center min-h-screenReducedBy50percent">
         <SpinnerMini borderSize="border-[1rem]" h="h-32" w="w-32" />
       </div>
     );

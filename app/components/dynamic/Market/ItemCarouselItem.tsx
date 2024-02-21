@@ -29,12 +29,13 @@ const ItemCarouselItem = ({ item, currency }: Props) => {
                 </span>
 
                 <Image
-                    fill
-                    style={{ objectFit: "cover", }}
-                    placeholder="blur"
-                    blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                    alt="event's image"
-                    src={item.images[0]}
+                  fill
+                  sizes="(max-width: 1000px) 80vw,(max-width: 600px) 50wv, 33wv"
+                  style={{ objectFit: "cover", }}
+                  placeholder="blur"
+                  blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+                  alt="event's image"
+                  src={item.images[0]}
                 />
             </Link>
             <div className={`hidden  bg-gradient-to-br from-primary to-slate-900 lg:flex flex-col justify-between p-1 w-[50%]`}>

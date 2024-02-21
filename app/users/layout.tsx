@@ -15,7 +15,7 @@ export default async function layout({
 
 
     return (<>
-        <main className="flex flex-col items-center min-h-[calc(100dvh_-_6rem)]">
+        <main className="flex flex-col items-center min-h-screenReducedBy6Rem">
 
             {children}
 

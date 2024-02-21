@@ -17,6 +17,7 @@ const CartButton = ({ Icon, fn, size, bgColor, title, newEntries }: Props) => {
           title={title}
           className={`z-40 cursor-pointer  relative first-letter:capitalize hover:-translate-y-1  hover:scale-105 font-bold p-2 text-interactive_text dark:text-text rounded-xl hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-300 ${bgColor} `}
           onClick={(e) => fn(e)}
+          aria-label="Button opens shopping cart"
         >
           <Icon size={size} />
         </button>
@@ -27,6 +28,7 @@ const CartButton = ({ Icon, fn, size, bgColor, title, newEntries }: Props) => {
           className={`z-40 cursor-pointer relative first-letter:capitalize hover:-translate-y-1  hover:scale-105 font-bold p-2 text-interactive_text dark:text-text rounded-xl hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-300 ${bgColor} 
           `}
           onClick={(e) => fn(e)}
+          aria-label="Button opens shopping cart"
         >
           <span className="z-40 absolute bg-secondary flex items-center justify-center rounded-full h-6 w-6 top-0 right-0 -translate-y-[0.5rem] translate-x-[1rem] text-white">
             {newEntries}

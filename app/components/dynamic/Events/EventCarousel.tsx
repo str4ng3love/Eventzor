@@ -89,7 +89,7 @@ const EventCarousel = ({
       >
 
         <Heading1 text={heading} textShadow={`[text-shadow:_0_0_30px_black]`} />
-        <div className={`flex flex-col items-center lg:w-fit`}>
+        <div className={`flex flex-col items-center w-fit`}>
 
           <div className="flex items-center justify-evenly py-12">
             <span
@@ -104,7 +104,8 @@ const EventCarousel = ({
 
                   {/* TODO animate the carousel */}
 
-              <div className="min-w-full">
+              <div className="w-80 min-w-full">
+              
                 <EventCarouselItem currency={currency} item={items[active]} />
 
               </div>

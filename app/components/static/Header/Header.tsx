@@ -8,6 +8,7 @@ import { getServerSession } from "next-auth";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import BurgerMenu from "../../dynamic/Header/BurgerMenu";
 import DropDownNav from "../../dynamic/DropDownNav";
+import ThemeProvider from "../../ThemeProvider";
 
 
 const Header = async () => {
@@ -24,6 +25,7 @@ const Header = async () => {
           <Search minimizeOnLg />
           <Currency />
           <UserMenu />
+          <ThemeProvider />
         </div>
         <div className="flex mr-8 gap-4">
           <ShoppingCart />

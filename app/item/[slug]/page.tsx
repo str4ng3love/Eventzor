@@ -17,7 +17,7 @@ const page = async ({ params }: { params: { slug: string } }) => {
   const item = await getItem(decodeURI(name));
   if (item !== null) {
     return (
-      <main className="flex flex-col items-center min-h-[calc(100dvh_-_4rem)] pt-20">
+      <main className="flex flex-col items-center min-h-screenReducedBy6Rem pt-20">
         <div className="grid md:grid-cols-3 grid-cols-1 lg:w-[80%] lg:gap-4 gap-2 w-full p-4 transition-all duration-300 ">
           <div className="p-4 flex flex-col rounded-md bg-bg_interactive dark:bg-black/20 md:col-span-2 md:row-span-2 ">
             <h2 className="p-4 font-bold text-2xl">{item.item}</h2>
@@ -60,7 +60,7 @@ const page = async ({ params }: { params: { slug: string } }) => {
     );
   } else {
     return (
-      <main className="flex flex-col justify-center gap-2 items-center min-h-[calc(100dvh_-_4rem)]">
+      <main className="flex flex-col justify-center gap-2 items-center min-h-screenReducedBy6Rem">
 
         <Heading2 text={name} />
         <Heading3 text="Item not found" />
