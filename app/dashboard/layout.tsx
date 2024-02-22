@@ -22,7 +22,7 @@ export default async function Layout({
     );
   } else {
     return (
-      <main className="flex flex-col justify-center items-center min-h-screenReducedBy6Rem bg-black/20 dark:bg-inherit">
+      <main className="flex flex-col justify-center items-center min-h-screen bg-black/20 dark:bg-inherit">
         <h2 className="text-xl font-bold mb-8">You need to be authenticated.</h2>
         <Authenticate />
       </main>
