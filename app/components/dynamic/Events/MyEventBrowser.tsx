@@ -155,14 +155,14 @@ const MyEventBrowser = () => {
   }, []);
   if (eventsArr === null) {
     return (
-      <div className="flex items-center justify-center min-h-screenReducedBy50percent">
+      <div className="flex items-center justify-center">
         <SpinnerMini borderSize="border-[1rem]" h="h-32" w="w-32" />
       </div>
     );
   } else {
     return (
       <>
-        <div className="my-4 px-8 flex flex-col">
+        <div className="my-4 px-8 flex flex-col py-4">
           <div className="flex justify-end gap-4 text-sm items-center">
             {/* todo filter component and sort */}
             {filtered ? (

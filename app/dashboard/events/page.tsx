@@ -8,14 +8,13 @@ const page = async () => {
 
 
   return (
-    <>
-      <div className="flex flex-col pl-10">
-        <Heading1 text="events" />
-        <Heading2 text="Browse and manage events" />
-      </div>
+
+    <div className="flex flex-col pl-10 dark:bg-inherit bg-black/20 min-h-screenReducedBy4p5Rem">
+      <Heading1 text="events" />
+      <Heading2 text="Browse and manage events" />
       <MyEventBrowser />
-   
-    </>
+    </div>
+
   );
 };
 

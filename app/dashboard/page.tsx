@@ -14,9 +14,9 @@ const page = async () => {
 
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col min-h-screenReducedBy4p5Rem dark:bg-inherit bg-black/20">
       <div className="w-full pl-8">
-        <Heading1 text={`Hello, ${user}`} />
+        <Heading1 text={`Hello, ${user}`}/>
       </div>
       <CheckForStocks />
       <div className="flex justify-center gap-4 p-8">

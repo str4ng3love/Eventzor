@@ -20,7 +20,7 @@ export default async function layout({
     <main className="flex flex-col items-center min-h-screenReducedBy6Rem">
 
       <div className="mt-[6rem]">
-        <div className="p-2 gap-2 grid sm:grid-cols-5 grid-cols-2">
+        <div className="p-2 gap-2 grid sm:grid-cols-5 grid-cols-2 bg-black/20">
           <Button text="All" link="/orders" title="All orders" size="text-sm"/>
           <Button text="Pending" link="/orders/pending" title="Pending orders" size="text-sm"/>
           <Button text="In Shipping" link="/orders/shipping" title="orders in shipping" size="text-sm"/>

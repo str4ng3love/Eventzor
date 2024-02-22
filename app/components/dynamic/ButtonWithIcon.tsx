@@ -8,7 +8,8 @@ interface Props {
   size?: string;
   bgColor?: string;
   title?: string;
-  text?:string;
+  text?: string;
+  ariaLabel?:string
 }
 const ButtonWithIcon = ({
   title = "",
@@ -17,32 +18,36 @@ const ButtonWithIcon = ({
   link,
   size = "2em",
   bgColor = "bg-link",
-  text=""
+  text = "",
+  ariaLabel
 }: Props) => {
   return (
     <>
       {fn ? (
         <button
+          aria-label={ariaLabel}
           title={title}
-          className={`flex items-center gap-1 cursor-pointer relative first-letter:capitalize hover:-translate-y-1 hover:scale-105 font-bold p-2 text-text dark:text-text rounded-xl hover:bg-link_active hover:text-contrast dark:hover:bg-text dark:hover:shadow-link dark:hover:text-contrast transition-all duration-300 ${bgColor} `}
+          className={`w-fit h-fit flex items-center gap-1 cursor-pointer relative first-letter:capitalize hover:-translate-y-1 hover:scale-105 font-bold p-2 text-text dark:text-text rounded-xl hover:bg-link_active hover:text-contrast dark:hover:bg-text dark:hover:shadow-link dark:hover:text-contrast transition-all duration-300 ${bgColor} `}
           onClick={(e) => fn(e)}
         >
-          <Icon size={size} />{text? text:""}
+          <Icon size={size} />{text ? text : ""}
         </button>
       ) : link ? (
         <Link
+          aria-label={ariaLabel}
           href={link}
-          className={`flex items-center gap-1 cursor-pointer relative first-letter:capitalize hover:-translate-y-1 hover:scale-105 font-bold p-2 text-contrast dark:text-text rounded-xl hover:bg-link_active hover:text-contrast dark:hover:bg-text dark:hover:shadow-link dark:hover:text-contrast transition-all duration-300 ${bgColor}`}
+          className={`w-fit h-fit flex items-center gap-1 cursor-pointer relative first-letter:capitalize hover:-translate-y-1 hover:scale-105 font-bold p-2 text-contrast dark:text-text rounded-xl hover:bg-link_active hover:text-contrast dark:hover:bg-text dark:hover:shadow-link dark:hover:text-contrast transition-all duration-300 ${bgColor}`}
         >
-          <Icon size={size} />{text? text:""}
+          <Icon size={size} />{text ? text : ""}
         </Link>
       ) : (
         <>
           <button
+            aria-label={ariaLabel}
             title={title}
-            className={`flex items-center gap-1 cursor-pointer first-letter:capitalize hover:-translate-y-1 hover:scale-105 font-bold p-2 text-contrast dark:text-text rounded-xl hover:bg-link_active hover:text-contrast dark:hover:bg-text dark:hover:shadow-link dark:hover:text-contrast transition-all duration-300 ${bgColor}`}
+            className={`w-fit h-fit flex items-center gap-1 cursor-pointer first-letter:capitalize hover:-translate-y-1 hover:scale-105 font-bold p-2 text-contrast dark:text-text rounded-xl hover:bg-link_active hover:text-contrast dark:hover:bg-text dark:hover:shadow-link dark:hover:text-contrast transition-all duration-300 ${bgColor}`}
           >
-            <Icon size={size} />{text? text:""}
+            <Icon size={size} />{text ? text : ""}
           </button>
         </>
       )}

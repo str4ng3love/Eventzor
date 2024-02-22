@@ -40,7 +40,7 @@ const RegisterForm = ({ cleanUp, show = false, switchFn }: Props) => {
       });
       if (resp?.error) {
         setLoginWorking(false)
-        setNotify({error:true, show:true, message:"Something went wrong, please try again later"})
+        setNotify({ error: true, show: true, message: "Something went wrong, please try again later" })
       }
       else if (resp?.ok) {
         setLoginWorking(false)
@@ -108,7 +108,7 @@ const RegisterForm = ({ cleanUp, show = false, switchFn }: Props) => {
             <div className="fixed inset-0 flex items-center justify-center p-4">
               <Dialog.Panel
                 className={
-                  "p-8 bg-bg_interactive text-text dark:bg-bg_interactive max-w-md w-[28rem]  shadow-md shadow-black animate-fadeIn"
+                  "p-8 bg-interactive dark:bg-sidebar text-text dark:bg-bg_interactive max-w-md w-[28rem]  shadow-md shadow-black animate-fadeIn"
                 }
 
               >
@@ -177,42 +177,46 @@ const RegisterForm = ({ cleanUp, show = false, switchFn }: Props) => {
                       }}
                     /> : <Button
                       ariaLabel="register"
+                      setW="w-[10ch]"
                       title="Register"
                       text="register"
                       fn={() => {
                         handleRegister(username, password, confirm, email);
                       }}
                     />}
-                    <Button ariaLabel="cancel registration" bgColor="bg-secondary" title="Cancel registration" text="Cancel" fn={() => setOpen(false)}></Button>
+                    <Button ariaLabel="cancel registration"
+                      setW="w-[10ch]" bgColor="bg-secondary" title="Cancel registration" text="Cancel" fn={() => setOpen(false)}></Button>
                   </div>
                   <div className="flex flex-col items-center pt-8 border-t-2 border-primary">
 
                     <span className="p-4 self-start">Already have an account?</span>
-                    <Button ariaLabel="Open log in form" text="Login" setW="w-fit" size="text-sm" title="Open Login form" fn={() => { if (cleanUp && switchFn) { cleanUp(); switchFn() } }} />
+                    <Button ariaLabel="Open log in form"
+                      setW="w-[10ch]" text="Login" size="text-sm" title="Open Login form" fn={() => { if (cleanUp && switchFn) { cleanUp(); switchFn() } }} />
                   </div>
                 </>
                   :
                   <div className="flex flex-col items-center animate-fadeIn">
                     <h1 className="text-xl font-semibold pb-16">Registration Completed</h1>
-                  
-                    <Button text="Log In" title="Log in" Icon={loginWorking ? FaCog : BiLogIn} showIcon ariaLabel="Log in" interactive={!loginWorking} active={loginWorking} spinIcon={loginWorking} fn={async () => {
-                      if (loginWorking) {
-                        return
-                      } else {
-                        handleLogin()
-                      }
-                    }} />
+
+                    <Button text="Log In" title="Log in"
+                      setW="w-[10ch]" Icon={loginWorking ? FaCog : BiLogIn} showIcon ariaLabel="Log in" interactive={!loginWorking} active={loginWorking} spinIcon={loginWorking} fn={async () => {
+                        if (loginWorking) {
+                          return
+                        } else {
+                          handleLogin()
+                        }
+                      }} />
                   </div>
                 }
 
               </Dialog.Panel>
               <Notification
-                    message={notify.message}
-                    show={notify.show}
-                    error={notify.error}
-                    onAnimEnd={() => { setNotify({ error: false, message: "", show: false }); }
-                    }
-                  />
+                message={notify.message}
+                show={notify.show}
+                error={notify.error}
+                onAnimEnd={() => { setNotify({ error: false, message: "", show: false }); }
+                }
+              />
             </div>
 
           </Transition.Child>

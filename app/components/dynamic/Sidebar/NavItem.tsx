@@ -25,7 +25,7 @@ const NavItem = ({
       href={href}
       aria-label={label}
       className={`${textColor} w-full md:mb-1 mb-3 flex items-center under ${href === selected ? "after:opacity-100 text-white" : "after:opacity-0" }
-      after:bg-white after:h-5 after:rounded-smoothR hover:text-white text-lg  md:text-sm after:absolute after:content-[''] after:w-2 hover:rounded-smoothR
+      after:bg-white after:h-5 after:rounded-smoothR hover:text-link dark:hover:text-white text-lg  md:text-sm after:absolute after:content-[''] after:w-2 hover:rounded-smoothR
 after:-translate-x-8`}
     >
       <span className={"text-xl p-2"}>

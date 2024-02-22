@@ -1,7 +1,7 @@
 "use client";
 import { BiHide, BiShow } from "react-icons/bi";
 import { useState } from "react";
-import { Heading4 } from "../../static/Heading";
+import { Heading2 } from "../../static/Heading";
 import Button from "../Button";
 import Notification from "../../static/Notification";
 import ButtonWithIcon from "../ButtonWithIcon";
@@ -32,103 +32,130 @@ const ChangePassword = () => {
         message: "Password has to be at least 8 characters long.",
       });
       setCanChangePass(true)
-      
+
     }
     try {
-      const resp = await fetch('/api/user/password', {method: "POST", headers: {
-        "Content-Type":"Application/Json"
-      }, body: JSON.stringify({password, newPassword, confirmPassword})})
+      const resp = await fetch('/api/user/password', {
+        method: "POST", headers: {
+          "Content-Type": "Application/Json"
+        }, body: JSON.stringify({ password, newPassword, confirmPassword })
+      })
       const data = await resp.json()
-      if(data.error){
+      if (data.error) {
         setCanChangePass(true)
-        setNotify({error: true, show: true, message: data.error})
+        setNotify({ error: true, show: true, message: data.error })
       } else {
         setCanChangePass(true)
-        setNotify({error: false, show: true, message: data.message})
+        setNotify({ error: false, show: true, message: data.message })
       }
     } catch (error) {
       setCanChangePass(true)
       console.log(error)
     }
-   
+
   };
   return (
     <>
       <div className="flex flex-col w-fit p-4 my-4">
-        <Heading4 text="Change your password" />
+        <Heading2 text="Change your password" />
         <div className="p-4 flex gap-2 sm:flex-row flex-col">
           {show.password ? (
             <>
-              <label className="p-1 w-[16ch]">Password</label>
-              <input
-                className="p-1 dark:text-interactive_text text-text"
-                type="text"
-                onInput={(e) => setPassword(e.currentTarget.value)}
-              />
-              <ButtonWithIcon Icon={BiHide} size="1em" fn={()=>setShow((prev)=>({...prev, password: false}))}/>
+              <label htmlFor="password" className="p-1 w-[16ch]">Password</label>
+              <div className="flex flex-row gap-2">
+                <input
+                  id="password"
+                  className="p-1 dark:text-contrast text-text"
+                  type="text"
+                  onInput={(e) => setPassword(e.currentTarget.value)}
+                />
+                <ButtonWithIcon ariaLabel="show content" Icon={BiHide} size="1em" fn={() => setShow((prev) => ({ ...prev, password: false }))} />
+              </div>
+
             </>
           ) : (
             <>
-              <label className="p-1 w-[16ch]">Password</label>
-              <input
-                className="p-1 dark:text-interactive_text text-text"
-                type="password"
-                onInput={(e) => setPassword(e.currentTarget.value)}
-              />
-              <ButtonWithIcon Icon={BiShow} size="1em" fn={()=>setShow((prev)=>({...prev, password: true}))}/>
+              <label htmlFor="password" className="p-1 w-[16ch]">Password</label>
+              <div className="flex flex-row gap-2">
+                <input
+                  id="password"
+                  className="p-1 dark:text-contrast text-text"
+                  type="password"
+                  onInput={(e) => setPassword(e.currentTarget.value)}
+                />
+                <ButtonWithIcon ariaLabel="hide content" Icon={BiShow} size="1em" fn={() => setShow((prev) => ({ ...prev, password: true }))} />
+              </div>
             </>
           )}
         </div>
         <div className="p-4 flex gap-2 sm:flex-row flex-col">
-        {show.newPassword ? (
+          {show.newPassword ? (
             <>
-              <label className="p-1 w-[16ch]">New Password</label>
-              <input
-                className="p-1 dark:text-interactive_text text-text"
-                type="text"
-                onInput={(e) => setNewPassword(e.currentTarget.value)}
-              />
-              <ButtonWithIcon Icon={BiHide} size="1em" fn={()=>setShow((prev)=>({...prev, newPassword: false}))}/>
+              <label htmlFor="newpassword" className="p-1 w-[16ch]">New Password</label>
+              <div className="flex flex-row gap-2">
+
+                <input
+                  id="newpassword"
+                  className="p-1 dark:text-contrast text-text"
+                  type="text"
+                  onInput={(e) => setNewPassword(e.currentTarget.value)}
+                />
+                <ButtonWithIcon ariaLabel="show content" Icon={BiHide} size="1em" fn={() => setShow((prev) => ({ ...prev, newPassword: false }))} />
+              </div>
             </>
           ) : (
             <>
-              <label className="p-1 w-[16ch]">New Password</label>
-              <input
-                className="p-1 dark:text-interactive_text text-text"
-                type="password"
-                onInput={(e) => setNewPassword(e.currentTarget.value)}
-              />
-              <ButtonWithIcon Icon={BiShow} size="1em" fn={()=>setShow((prev)=>({...prev, newPassword: true}))}/>
+              <label htmlFor="newpassword" className="p-1 w-[16ch]">New Password</label>
+              <div className="flex flex-row gap-2">
+
+                <input
+                  id="newpassword"
+                  className="p-1 dark:text-contrast text-text"
+                  type="password"
+                  onInput={(e) => setNewPassword(e.currentTarget.value)}
+                />
+                <ButtonWithIcon ariaLabel="hide content" Icon={BiShow} size="1em" fn={() => setShow((prev) => ({ ...prev, newPassword: true }))} />
+              </div>
             </>
           )}
         </div>
         <div className="p-4 flex gap-2 sm:flex-row flex-col">
-        {show.confirmPassword ? (
+          {show.confirmPassword ? (
             <>
-              <label className="p-1 w-[16ch]">Confirm Password</label>
-              <input
-                className="p-1 dark:text-interactive_text text-text"
-                type="text"
-                onInput={(e) => setConfirmPassword(e.currentTarget.value)}
-              />
-              <ButtonWithIcon Icon={BiHide} size="1em" fn={()=>setShow((prev)=>({...prev, confirmPassword: false}))}/>
+              <label htmlFor="confirmpassword" className="p-1 w-[16ch]">Confirm Password</label>
+              <div className="flex flex-row gap-2">
+
+                <input
+                  id="confirmpassword"
+                  className="p-1 dark:text-contrast text-text"
+                  type="text"
+                  onInput={(e) => setConfirmPassword(e.currentTarget.value)}
+                />
+                <ButtonWithIcon ariaLabel="show content" Icon={BiHide} size="1em" fn={() => setShow((prev) => ({ ...prev, confirmPassword: false }))} />
+              </div>
             </>
           ) : (
             <>
-              <label className="p-1 w-[16ch]">Confirm Password</label>
-              <input
-                className="p-1 dark:text-interactive_text text-text"
-                type="password"
-                onInput={(e) => setConfirmPassword(e.currentTarget.value)}
-              />
-              <ButtonWithIcon Icon={BiShow} size="1em" fn={()=>setShow((prev)=>({...prev, confirmPassword: true}))}/>
+              <label htmlFor="confirmpassword" className="p-1 w-[16ch]">Confirm Password</label>
+              <div className="flex flex-row gap-2">
+
+                <input
+                  id="confirmpassword"
+                  className="p-1 dark:text-contrast text-text"
+                  type="password"
+                  onInput={(e) => setConfirmPassword(e.currentTarget.value)}
+                />
+                <ButtonWithIcon ariaLabel="hide content" Icon={BiShow} size="1em" fn={() => setShow((prev) => ({ ...prev, confirmPassword: true }))} />
+              </div>
             </>
           )}
         </div>
         <div className="flex p-8 justify-center">
           {canChangePass ? (
             <Button
-            title="Update your password"
+              setW="w-[10ch]"
+              ariaLabel="update your password"
+              title="Update your password"
               text="Update"
               fn={() => {
                 setCanChangePass(false)
@@ -136,7 +163,7 @@ const ChangePassword = () => {
               }}
             />
           ) : (
-            <Button title="Working" text="Updating..." fn={() => {}} bgColor={'bg-bg'} interactive={false} />
+            <Button title="Working" text="Updating..." fn={() => { }} bgColor={'bg-bg'} interactive={false} />
           )}
         </div>
         <Notification
@@ -147,7 +174,7 @@ const ChangePassword = () => {
             setNotify({ error: false, show: false, message: "" })
           }
         />
-      </div>
+      </div >
     </>
   );
 };

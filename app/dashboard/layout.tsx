@@ -13,9 +13,9 @@ export default async function Layout({
   const user = session?.user;
   if (user) {
     return (
-      <main className="flex bg-bg_sidebar dark:bg-black min-h-screen pt-16">
+      <main className="flex bg-sidebar dark:bg-black min-h-screen pt-16">
         <Sidebar />
-        <section className="ring-2 ring-slate-600 dark:ring-primary bg-bg w-full mt-2  rounded-smoothLT">
+        <section className="ring-2 ring-slate-600 dark:ring-primary bg-bg w-full mt-2 rounded-smoothLT min-h-screenReducedBy4p5Rem ">
           {children}
         </section>
       </main>

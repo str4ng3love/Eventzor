@@ -204,7 +204,7 @@ const AddNewEvent = ({ optimisticFn, optimisticFnClnUp, refetchTrigger }: Props)
             <div className="fixed inset-0 flex items-center justify-center p-4 backdrop-blur-sm">
               <Dialog.Panel
                 className={
-                  "relative p-8 bg-bg_interactive text-text dark:bg-bg_interactive max-h-[85%] md:w-[50%] shadow-md shadow-black overflow-y-scroll"
+                  "relative p-8 bg-interactive dark:bg-sidebar text-text dark:bg-bg_interactive max-h-[85%] md:w-[50%] shadow-md shadow-black overflow-y-scroll"
                 }
               >
                 <Dialog.Title className={"p-2 font-bold text-xl text-center"}>
@@ -224,7 +224,7 @@ const AddNewEvent = ({ optimisticFn, optimisticFnClnUp, refetchTrigger }: Props)
                           payload: e.currentTarget.value,
                         })
                       }
-                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
+                      className="p-1 min-w-[15ch] ring-1 dark:text-contrast ring-primary active:ring-link dark:text-interactive_text w-full  h-8"
                       type="text"
                     />
                   </div>
@@ -239,7 +239,7 @@ const AddNewEvent = ({ optimisticFn, optimisticFnClnUp, refetchTrigger }: Props)
                           payload: e.currentTarget.value,
                         })
                       }
-                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-24 resize-none "
+                      className="p-1 min-w-[15ch] ring-1 dark:text-contrast ring-primary active:ring-link dark:text-interactive_text w-full  h-24 resize-none "
                     />
                   </div>
                   <div className="p-4 flex justify-between ">
@@ -253,7 +253,7 @@ const AddNewEvent = ({ optimisticFn, optimisticFnClnUp, refetchTrigger }: Props)
                           payload: e.currentTarget.value,
                         })
                       }
-                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
+                      className="p-1 min-w-[15ch] ring-1 dark:text-contrast ring-primary active:ring-link dark:text-interactive_text w-full  h-8"
                       type="datetime-local"
                     />
                   </div>
@@ -271,7 +271,7 @@ const AddNewEvent = ({ optimisticFn, optimisticFnClnUp, refetchTrigger }: Props)
                           payload: e.currentTarget.value,
                         });
                       }}
-                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
+                      className="p-1 min-w-[15ch] ring-1 dark:text-contrast ring-primary active:ring-link dark:text-interactive_text w-full  h-8"
                       type="datetime-local"
                     />
                   </div>
@@ -284,7 +284,7 @@ const AddNewEvent = ({ optimisticFn, optimisticFnClnUp, refetchTrigger }: Props)
                           payload: e.currentTarget.value,
                         })
                       }
-                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
+                      className="p-1 min-w-[15ch] ring-1 dark:text-contrast ring-primary active:ring-link dark:text-interactive_text w-full  h-8"
                       type="text"
                     />
                   </div>
@@ -299,7 +299,7 @@ const AddNewEvent = ({ optimisticFn, optimisticFnClnUp, refetchTrigger }: Props)
                           payload: e.currentTarget.value,
                         })
                       }
-                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
+                      className="p-1 min-w-[15ch] ring-1 dark:text-contrast ring-primary active:ring-link dark:text-interactive_text w-full  h-8"
                       type="number"
                       defaultValue={0}
                       min={0}
@@ -316,7 +316,7 @@ const AddNewEvent = ({ optimisticFn, optimisticFnClnUp, refetchTrigger }: Props)
                           payload: e.currentTarget.value,
                         })
                       }
-                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
+                      className="p-1 min-w-[15ch] ring-1 dark:text-contrast ring-primary active:ring-link dark:text-interactive_text w-full  h-8"
                       type="number"
                       step="0.01"
                       defaultValue={0}
@@ -329,7 +329,7 @@ const AddNewEvent = ({ optimisticFn, optimisticFnClnUp, refetchTrigger }: Props)
                         Image URL
                       </label>
                       <input
-                        className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
+                        className="p-1 min-w-[15ch] ring-1 dark:text-contrast ring-primary active:ring-link dark:text-interactive_text w-full  h-8"
                         type="text"
                         value={image}
                         onChange={(e) => setImage(e.currentTarget.value)}
@@ -337,6 +337,7 @@ const AddNewEvent = ({ optimisticFn, optimisticFnClnUp, refetchTrigger }: Props)
                       />
                     </div>
                     <Button
+                    setW="w-[10ch]"
                       title="add picture"
                       text="add"
                       fn={async () => {
@@ -380,19 +381,22 @@ const AddNewEvent = ({ optimisticFn, optimisticFnClnUp, refetchTrigger }: Props)
                   </div>
                   <div className="p-4 mt-4 flex justify-evenly ">
                     <Button
+                    setW="w-[10ch]"
                       title="Cancel adding new event"
                       text="Cancel" 
                       fn={() => setShow(false)}
                       bgColor="bg-secondary"
                     />
                     {canPost ?
-                      <Button title="Create"
+                      <Button
+                      setW="w-[10ch]" title="Create"
                         text="Create"
                         fn={(e) => {
                           optimisticFn(e);
                           handleCreate(state);
                         }}
                       /> : <Button
+                      setW="w-[10ch]"
                         title="Working..."
                         text="Adding..."
                         interactive={false}

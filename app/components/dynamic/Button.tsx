@@ -37,7 +37,7 @@ const Button = ({
     <>
       {fn && link ? (
         <Link aria-label={ariaLabel}
-          onClick={(e) => fn(e)} href={link} className={`${bgColor} gap-2 flex items-center justify-center capitalize  ${setW} ${active ? "text-text bg-contrast dark:bg-text" : "text-contrast "} ${size} whitespace-nowrap cursor-default font-bold p-2 rounded-xl ${interactive ? "cursor-pointer hover:-translate-y-1 hover:scale-105 hover:bg-bg hover:shadow-link hover:text-text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-text_button transition-all duration-30"
+          onClick={(e) => fn(e)} href={link} className={`${bgColor} gap-2 flex items-center justify-center capitalize  ${setW} ${active ? "dark:text-text_button text-text bg-contrast dark:bg-text" : "text-contrast dark:text-text"} ${size} whitespace-nowrap cursor-default font-bold p-2 rounded-xl ${interactive ? "cursor-pointer hover:-translate-y-1 hover:scale-105 hover:bg-bg hover:shadow-link hover:text-text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-text_button transition-all duration-30"
             : "bg-slate-500 text-text_inactive dark:bg-slate-500 dark:text-text_inactive"
             }`}>
 

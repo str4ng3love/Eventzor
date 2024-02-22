@@ -33,7 +33,7 @@ const Informer = ({ data, interval = 1000 }: Props) => {
             {data.map((d, i) => <Fragment key={i}>
                 {current === i ?
                     <div className={`animate-fadeIn ${out ? 'animate-fadeOut' : ""} md:text-2xl text-xl`}>
-                        <span className="font-semibold text-teal-300">{d.target}&nbsp;</span>
+                        <span className="font-semibold text-teal-600 dark:text-teal-300">{d.target}&nbsp;</span>
                         <span>{d.text}</span>
                     </div> : null}</Fragment>)
 

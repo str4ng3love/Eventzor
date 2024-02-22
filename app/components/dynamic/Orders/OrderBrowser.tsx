@@ -69,7 +69,7 @@ export const OrderBrowser = ({ ordersArray }: Props) => {
   });
 
   return (<>
-    <div className="p-4 flex flex-col gap-2">
+    <div className="p-4 flex flex-col gap-2 bg-black/20">
       {ordersArr.map(o =>
         <div key={o.id} className="p-4 bg-bg_interactive rounded-md text-sm">
           <div className="flex justify-between items-center">

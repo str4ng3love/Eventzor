@@ -23,19 +23,24 @@ export default async function Home() {
           <div className="w-[60%]">
 
             <h1 className="md:text-7xl font-bold py-5 uppercase drop-shadow-white_omni text-5xl">Eventzor</h1>
-            <h2 className="ma:text-3xl text-2xl font-semibold py-4 pt-8">Your place to <Link className="text-link hover:text-link_active transition-all duration-300 hover:underline" href={'/events'}>find</Link> and <Link className="text-link hover:text-link_active  transition-all duration-300 hover:underline" href={'/dashboard/events'}>post</Link> hot events!</h2>
+            <h2 className="ma:text-3xl text-2xl font-semibold py-4 pt-8">Your place to
+              find
+              and
+              post hot events!</h2>
+
             <div className="flex flex-col items-center pt-14">
               <Informer interval={8000} data={[{ target: users, text: "users registered" }, { target: events, text: 'events in database' }, { target: items, text: 'items on market' }, { target: comments, text: "comments left by users" }]} />
             </div>
+  
           </div>
         </div>
         <div className="bg-bg w-full flex justify-center border-y-2 border-black">
           <div className="py-24 flex justify-evenly w-[80%] gap-2 md:flex-row flex-col items-center">
 
             <span className="py-8">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab, inventore.</span>
-        
-              <Button text="CTA" title="CTA" link="#" setW="w-[10ch]" />
-            
+
+            <Button text="CTA" title="CTA" link="#" setW="w-[10ch]" />
+
           </div>
         </div>
       </div>

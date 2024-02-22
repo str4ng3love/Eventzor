@@ -41,11 +41,11 @@ const ShippingForm = ({ fn, method, address, phone }: Props) => {
           </label>
           <Listbox value={selected} onChange={setSelected}>
             <Listbox.Button
-              className={`p-2 cursor-pointer w-fit relative hover:bg-link transition-all duration-300`}
+              className={`p-2 cursor-pointer w-fit relative hover:bg-link transition-all duration-300 text-text`}
             >
               {selected}
             </Listbox.Button>
-            <Listbox.Options className={`bg-black flex flex-row`}>
+            <Listbox.Options className={`bg-interactive dark:bg-inherit flex flex-row`}>
               <Listbox.Option
                 onClick={(e) => {
                   setShippingMethod(ShippingMethod.postal);

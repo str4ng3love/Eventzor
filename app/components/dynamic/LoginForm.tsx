@@ -78,7 +78,7 @@ const LoginForm = ({ show = false, cleanUp, switchFn }: Props) => {
             <div className="fixed inset-0 flex items-center justify-center p-4">
               <Dialog.Panel
                 className={
-                  "p-8 bg-bg_interactive text-text dark:bg-bg_interactive shadow-md shadow-black animate-fadeIn"
+                  "p-8 bg-interactive dark:bg-sidebar text-text dark:bg-bg_interactive shadow-md shadow-black animate-fadeIn"
                 }
               >
                 <Dialog.Title className={"p-2 font-bold text-xl text-center"}>
@@ -112,6 +112,7 @@ const LoginForm = ({ show = false, cleanUp, switchFn }: Props) => {
                 <div className="flex justify-around py-8">
                   {working ?
                     <Button title="Log in"
+                    setW="w-[10ch]"
                       ariaLabel="Log in"
                       text="Working..."
                       Icon={FaCog}
@@ -128,11 +129,12 @@ const LoginForm = ({ show = false, cleanUp, switchFn }: Props) => {
                     />
                     :
                     <Button title="Log in"
+                    setW="w-[10ch]"
                       ariaLabel="Log in"
                       text="log in"
                       fn={() => handleLogin(username, password)}
                     />}
-                  <Button ariaLabel="Cancel log in" bgColor="bg-secondary" title="Cancel" text="Cancel" fn={() => { setOpen(false) }}></Button>
+                  <Button ariaLabel="Cancel log in" bgColor="bg-secondary" title="Cancel" setW="w-[10ch]" text="Cancel" fn={() => { setOpen(false) }}></Button>
                 </div>
                 <Notification
                   message={notify.message}
@@ -146,7 +148,7 @@ const LoginForm = ({ show = false, cleanUp, switchFn }: Props) => {
                 <div className="flex flex-col items-center pt-8 border-t-2 border-primary ">
 
                   <span className="p-4 self-start">Don&apos;t have an account?</span>
-                  <Button ariaLabel="Open register form" setW="w-fit" size="text-sm" text="Register" title="Open Register form" fn={() => { if (cleanUp && switchFn) { cleanUp(); switchFn() } }} />
+                  <Button ariaLabel="Open register form" setW="w-[10ch]" size="text-sm" text="Register" title="Open Register form" fn={() => { if (cleanUp && switchFn) { cleanUp(); switchFn() } }} />
                 </div>
               </Dialog.Panel>
 

@@ -18,7 +18,7 @@ const Nav = ({ callbackFn }: Props) => {
     setSelected(currentPath)
   }, [currentPath])
   return (
-    <nav className="flex flex-col items-center justify-start w-full py-8">
+    <nav className="text-interactive flex flex-col items-center justify-start w-full py-8">
       <NavItem
         text="home"
         Icon={FaHouseUser}

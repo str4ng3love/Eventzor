@@ -50,7 +50,7 @@ const page = async ({ params }: { params: { category: string }}) => {
     if (orders.length === 0) {
       return (
         <div className=" pt-20 w-full flex md:justify-center justify-start">
-           <div className="md:w-[80%] w-full md:p-8 p-1">
+           <div className="md:w-[80%] w-full md:p-8 p-1 bg-black/20">
             <Heading1 text={`you have no ${category !== 'shipping' ? category : ""} orders ${category === 'shipping' ? "in" + " " + category : ""}`} />
 
           </div>

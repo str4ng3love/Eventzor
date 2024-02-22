@@ -78,7 +78,7 @@ const ItemCarousel = ({
       >
 
 
-        <Heading1 text={heading} textShadow={`[text-shadow:_0_0_30px_black]`} />
+        <Heading1 text={heading} textColor="text-contrast dark:text-text" textShadow={`[text-shadow:_0_0_30px_black]`} />
         <div className={`flex flex-col items-center w-fit`}>
 
 

@@ -49,6 +49,7 @@ module.exports = {
         "white_omni": "0px 0px 5px white"
       },
       minHeight: {
+        screenReducedBy4p5Rem: ["calc(100vh - 4.5rem)", "calc(100dvh - 4.5rem)"],
         screenReducedBy6Rem: ["calc(100vh - 6rem)", "calc(100dvh - 6rem)"],
         screenReducedBy50percent: ["calc(100vh - 50%)", "calc(100dvh - 50%)"],
       },

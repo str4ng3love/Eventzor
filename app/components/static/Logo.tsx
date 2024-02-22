@@ -7,7 +7,7 @@ interface Props {
 
 const Logo = ({ text, Icon,padding='p-4' }: Props) => {
   return (
-    <div className={`${padding} flex items-center gap-4 text-2xl dark:text-text font-bold`}>
+    <div className={`${padding} flex items-center gap-4 text-2xl text-contrast dark:text-text font-bold`}>
       <Icon />
       {text}
     </div>

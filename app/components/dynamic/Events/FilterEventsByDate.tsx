@@ -42,7 +42,7 @@ const FilterEventsByDate = ({passDates,defaultDates,fn, title}:Props) => {
             <div className="fixed inset-0 flex items-center justify-center p-4 backdrop-blur-sm">
               <Dialog.Panel
                 className={
-                  "relative p-8 bg-bg_interactive text-text dark:bg-bg_interactive  w-[30rem] shadow-md shadow-black"
+                  "relative p-8 bg-bg_interactive text-text  bg-interactive dark:bg-sidebar w-[30rem] shadow-md shadow-black"
                 }
               >
                 <Dialog.Title className={"p-2 font-bold text-xl text-center"}>
@@ -67,7 +67,7 @@ const FilterEventsByDate = ({passDates,defaultDates,fn, title}:Props) => {
                             };})
                         }
                         }
-                        className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
+                        className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-contrast w-full  h-8"
                         type="datetime-local"
                       />
                     </div>
@@ -76,6 +76,7 @@ const FilterEventsByDate = ({passDates,defaultDates,fn, title}:Props) => {
                         To
                       </label>
                       <input
+                      
                       value={dates.endDate}
                         min={
                           dates.startDate
@@ -93,7 +94,7 @@ const FilterEventsByDate = ({passDates,defaultDates,fn, title}:Props) => {
                               endDate: target,
                             };})
                         }}
-                        className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text w-full  h-8"
+                        className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-contrast w-full  h-8"
                         type="datetime-local"
                       />
                     </div>
