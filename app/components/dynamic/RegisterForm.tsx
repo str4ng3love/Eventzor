@@ -88,7 +88,7 @@ const RegisterForm = ({ cleanUp, show = false, switchFn }: Props) => {
   }, [isOpen])
   return (
     <>
-      {show ? <></> : <Button title="Register an account" text="register" fn={() => setOpen(true)} />}
+      {show ? <></> : <Button setW="w-[10ch]" title="Register an account" text="register" fn={() => setOpen(true)} />}
 
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog

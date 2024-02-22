@@ -58,7 +58,7 @@ const LoginForm = ({ show = false, cleanUp, switchFn }: Props) => {
   }, [isOpen])
   return (
     <>
-      {show ? <></> : <Button title="Log in" text="log in" fn={() => { setOpen(true) }} />}
+      {show ? <></> : <Button setW="w-[10ch]" title="Log in" text="log in" fn={() => { setOpen(true) }} />}
 
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog
