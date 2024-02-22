@@ -1,6 +1,13 @@
 # Eventzor
 
 
+
+## Technologies
+
+- Nextjs
+- Tailwind
+- MONGODB
+- Prisma
 _________________
 
 ## Instalation
@@ -20,7 +27,7 @@ npm install
 - Add environmental variables for MongoDB connection string and NextAuth.js secret
 
 ```
-MONGODB_URI=YOUR_MONGODB_CONNECTION_STRIG
+MONGODB_URI=YOUR_MONGODB_CONNECTION_STRING
 NEXTAUTH_SECRET=YOUR_SECRET
 ```
 

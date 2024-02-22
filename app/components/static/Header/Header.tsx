@@ -18,7 +18,7 @@ const Header = async () => {
     <header className="relative">
       <nav className="px-10 z-50 h-[4rem] dark:text-text text-contrast bg-black/50 flex justify-between items-center fixed w-full backdrop-blur-sm">
 
-        <DropDownNav buttonTitle="Eventzor" items={[{ href: "/", label: "home" }, { href: "/events", label: "events" }, { href: "/market", label: "market" }, { href: "/users", label: "users" }]} />
+        <DropDownNav buttonTitle="Eventzor" items={[{ href: "/", label: "home" }, { href: "/events", label: "events" }, { href: "/market", label: "market" }, { href: "/users", label: "users" },{href: '/dashboard', label: "dashboard"}]} />
 
 
         <div className="gap-4 items-center pr-8 md:flex hidden">
