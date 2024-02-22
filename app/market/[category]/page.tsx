@@ -86,7 +86,7 @@ const page = async ({ params, searchParams }: { params: { category: string }, se
         switch (category) {
             case "popular":
                 const queryPopular: Prisma.MarketItemFindManyArgs = {
-                    where: { images: { isEmpty: false } }, skip: range * page, take: range, orderBy: { amountSold: order === "desc" ? order : "asc" }
+                    where: { images: { isEmpty: false } }, skip: range * page, take: range, orderBy: { amountSold: order === "desc" ?  "asc":"desc" }
                 }
                 queryOptions = queryPopular
                 break;
@@ -94,7 +94,7 @@ const page = async ({ params, searchParams }: { params: { category: string }, se
                 const queryLiked: Prisma.MarketItemFindManyArgs = {
                     where: { images: { isEmpty: false } }, skip: range * page, take: range, orderBy: {
                         likes: {
-                            _count: order === "desc" ? order : "asc"
+                            _count: order === "desc" ? "asc": "desc"
                         }
                     },
                 }

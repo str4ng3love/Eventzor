@@ -6,7 +6,7 @@ import ItemsBrowser from "../components/dynamic/Market/ItemBrowser";
 
 const getItemsAndAmount = async () => {
   const query: Prisma.MarketItemFindManyArgs = {
-    where: { images: { isEmpty: false } }, take: 10
+    where: { images: { isEmpty: false } }, take: 10, orderBy: { item: 'asc' }
   }
   const [items, count] = await prisma.$transaction([
     prisma.marketItem.findMany(query), prisma.marketItem.count({ where: query.where })

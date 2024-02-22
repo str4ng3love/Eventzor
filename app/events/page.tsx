@@ -6,7 +6,7 @@ import { Prisma } from "@prisma/client";
 
 const getEventsAndAmount = async () => {
   const query: Prisma.EventFindManyArgs = {
-    where: { images: { isEmpty: false } }, take: 10
+    where: { images: { isEmpty: false } }, take: 10, orderBy: { title: "asc" }
   }
   const [events, count] = await prisma.$transaction([
     prisma.event.findMany(query), prisma.event.count({ where: query.where })

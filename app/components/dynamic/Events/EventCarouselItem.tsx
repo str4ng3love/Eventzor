@@ -33,7 +33,7 @@ const EventCarouselItem = ({ item, currency }: Props) => {
 
                 <Image
                     fill
-                    sizes="(max-width: 1000px) 80vw,(max-width: 600px) 50wv, 33wv"
+                    sizes="(max-width: 720px) 100vw, (max-width: 720px) 50vw"
                     style={{ objectFit: "cover", }}
                     placeholder="blur"
                     blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
