@@ -21,7 +21,7 @@ const ImageBrowser = ({ images }: Props) => {
     }, 150);
   };
   return (
-    <div className="w-full h-[400px] relative shadow-omni dark:shadow-none ring-2 ring-primary bg-primary">
+    <div className="w-full h-[400px] relative ring-2 ring-primary bg-primary dark:shadow-none shadow-lg">
 
       <Image
         onClick={() => {}}

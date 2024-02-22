@@ -29,7 +29,7 @@ export default async function Home() {
             </div>
           </div>
         </div>
-        <div className="bg-black w-full flex justify-center">
+        <div className="bg-bg w-full flex justify-center border-y-2 border-black">
           <div className="py-24 flex justify-evenly w-[80%] gap-2 md:flex-row flex-col items-center">
 
             <span className="py-8">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab, inventore.</span>

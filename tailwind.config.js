@@ -33,11 +33,12 @@ module.exports = {
         primary: "var(--primary)",
         secondary: "var(--secondary)",
         bg: "var(--bg)",
-        bg_interactive: "var(--bg-interactive)",
-        bg_sidebar: "var(--bg-sidebar)",
+        interactive: "var(--interactive)",
+        sidebar: "var(--sidebar)",
         text: "var(--text)",
-        interactive_text: "var(--interactive-text)",
-        text_inactive: "var(--inactive-text)",
+        contrast: "var(--contrast)",
+        interactive: "var(--interactive)",
+        inactive: "var(--inactive)",
         text_button: "var(--button-text)"
       },
       boxShadow: {
@@ -48,8 +49,8 @@ module.exports = {
         "white_omni": "0px 0px 5px white"
       },
       minHeight: {
-        screenReducedBy6Rem: ["calc(100vh - 6rem)" , "calc(100dvh - 6rem)"],
-        screenReducedBy50percent : ["calc(100vh - 50%)", "calc(100dvh - 50%)"],
+        screenReducedBy6Rem: ["calc(100vh - 6rem)", "calc(100dvh - 6rem)"],
+        screenReducedBy50percent: ["calc(100vh - 50%)", "calc(100dvh - 50%)"],
       },
       keyframes: {
         rotateRight: {

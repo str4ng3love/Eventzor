@@ -31,7 +31,7 @@ const AddToCart = ({ item,type, price, id, amountLeft, saleEnded=false }: Props)
           aria-label="Amount"
           ref={inputEl}
           value={amount}
-          className="xl:w-40 w-24  bg-inherit focus:text-text focus:ring-0 focus:outline-none focus:bg-bg p-2 rounded-md transition-all duration-500"
+          className="xl:w-40 w-24 bg-interactive dark:bg-sidebar focus:text-text focus:ring-0 focus:outline-none focus:bg-bg p-2 rounded-md transition-all duration-500"
           type="number"
           min={1}
           onChange={(e) => setAmount(parseInt(e.currentTarget.value))}

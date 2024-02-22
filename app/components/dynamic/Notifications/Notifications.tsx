@@ -154,10 +154,10 @@ const Notifications = () => {
 
 
       <Menu >
-        <Menu.Button aria-label="Notifications" className={`group h-8 w-8 flex justify-center items-center cursor-pointer hover:scale-105 hover:-translate-y-1 transition-transform duration-300`}
+        <Menu.Button aria-label="Notifications" className={`dark:hover:drop-shadow-white_omni group h-8 w-8 flex justify-center items-center cursor-pointer hover:scale-105 hover:-translate-y-1 transition-transform duration-300`}
           onClick={async () => { setUnseen([]); if (notifications === null) setNotifications(await getNotifications()); await markAsSeen() }}
         >
-          <Icon padding="" textSize="text-base" textColor="group-hover:text-text transition-all duration-300 text-text_inactive" Icon={FaBell} />
+          <Icon padding="" textSize="text-base" textColor="group-hover:text-contrast dark:group-hover:text-text transition text-interactive" Icon={FaBell} />
           {unseen.length > 0 ?
           <span className="absolute bg-secondary flex items-center justify-center rounded-full h-6 w-6 top-0 right-0 -translate-y-2 translate-x-[1rem] text-white animate-fadeIn">
             {unseen.length}
@@ -174,8 +174,8 @@ const Notifications = () => {
           leaveTo="transform scale-95 opacity-0"
           afterLeave={() => setNotifications(null)}
         >
-          <div className="absolute flex flex-col bg-bg ring-2 ring-bg_interactive right-0 mt-4 translate-x-16">
-            <Menu.Items className={`md:w-[50ch] sm:w-[40ch] w-[30ch] h-64 overflow-y-scroll overflow-x-hidden bg-gradient-radial from-bg_sidebar to-bg_interactive `} >
+          <div className="absolute flex flex-col bg-bg dark:ring-2 dark:ring-primary right-0 mt-4 translate-x-16 shadow-lg">
+            <Menu.Items className={`md:w-[50ch] sm:w-[40ch] w-[30ch] h-64 overflow-y-scroll overflow-x-hidden bg-sidebar dark:bg-gradient-radial from-bg_sidebar to-bg_interactive `} >
 
               {notifications ? notifications.map((n, k) =>
 
@@ -265,7 +265,7 @@ const Notifications = () => {
 
 
             </Menu.Items>
-            <div className="p-4 bg-gradient-to-br from-primary to-slate-900 flex justify-center">
+            <div className="p-4 dark:bg-gradient-to-br dark:from-primary dark:to-slate-900 bg-interactive flex justify-center">
               <Button text="mark all as read" title="mark notifications as read" fn={async () => { await markAllAsRead() }} size="text-xs" />
             </div>
           </div>

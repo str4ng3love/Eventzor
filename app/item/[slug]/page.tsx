@@ -18,28 +18,28 @@ const page = async ({ params }: { params: { slug: string } }) => {
   if (item !== null) {
     return (
       <main className="flex flex-col items-center min-h-screenReducedBy6Rem pt-20">
-        <div className="grid md:grid-cols-3 grid-cols-1 lg:w-[80%] lg:gap-4 gap-2 w-full p-4 transition-all duration-300 ">
-          <div className="p-4 flex flex-col rounded-md bg-bg_interactive dark:bg-black/20 md:col-span-2 md:row-span-2 ">
+      <div className="grid md:grid-cols-3 grid-cols-1 lg:w-[80%] lg:gap-4 gap-2 w-full p-4 transition-all duration-300">
+        <div className="p-4 flex flex-col rounded-md bg-interactive dark:bg-black/20 md:col-span-2 md:row-span-2 dark:shadow-none shadow-lg">
             <h2 className="p-4 font-bold text-2xl">{item.item}</h2>
             <ImageBrowser images={item.images} />
           </div>
-          <div className="p-4 flex flex-col justify-start rounded-md bg-bg_interactive dark:bg-black/20 md:row-start-3 md:col-span-3 ">
+          <div className="p-4 flex flex-col justify-start rounded-md bg-interactive dark:bg-black/20 md:row-start-3 md:col-span-3 dark:shadow-none shadow-lg">
             <p className="indent-4">{item.description}</p>
           </div>
-          <div className="p-4 flex flex-col justify-center rounded-md bg-bg_interactive dark:bg-black/20 h-fit md:row-start-1 md:col-start-3 place-self-auto md:mx-0 sm:mx-20">
+          <div className="p-4 flex flex-col justify-center rounded-md bg-interactive dark:bg-black/20 h-fit md:row-start-1 md:col-start-3 place-self-auto md:mx-0 sm:mx-20 dark:shadow-none shadow-lg">
             <div className="bg-primary ring-2 ring-primary rounded-t-md p-2">
-              <div className="flex flex-col sm:flex-row justify-between p-1 text-interactive_text dark:text-text">
+              <div className="flex justify-between p-1 text-interactive_text dark:text-text">
                 <span>Price&nbsp;:</span>
                 <PriceDisplay price={item.price} />
               </div>
-              <div className="flex sm:flex-row flex-col justify-between p-1 text-interactive_text dark:text-text">
+              <div className="flex justify-between p-1 text-interactive_text dark:text-text">
                 <span>Stock&nbsp;:</span>
                 <DisplayStock amount={item.amount} amountSold={item.amountSold} />
               </div>
               <AddToCart price={item.price} type={'market'} item={item.item} id={item.id} amountLeft={item.amount}
               />
             </div>
-            <div className="flex flex-col ring-2 rounded-t-none ring-primary rounded-md p-2 lg:text-sm md:text-base mb-7">
+            <div className="flex flex-col ring-2 rounded-t-none ring-primary rounded-md p-2 text-sm md:text-base mb-7 dark:shadow-none shadow-lg">
               {item.preorder && item.releaseDate && item.releaseDate > new Date(Date.now()) ? <div title="Tickets are being sold until this date" className="flex justify-between p-1">
                 <span>Coming :</span>
                 <span>{item.releaseDate?.toUTCString().slice(0, -7)}</span>
@@ -60,7 +60,7 @@ const page = async ({ params }: { params: { slug: string } }) => {
     );
   } else {
     return (
-      <main className="flex flex-col justify-center gap-2 items-center min-h-screenReducedBy6Rem">
+      <main className="flex flex-col justify-center gap-2 items-center min-h-screenReducedBy6Rem p-20 bg-interactive dark:bg-inherit">
 
         <Heading2 text={name} />
         <Heading3 text="Item not found" />

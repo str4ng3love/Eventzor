@@ -56,7 +56,7 @@ const Comments = async ({ eventId, itemId }: Props) => {
 
   return (
     <div className="flex my-8 w-[85%] justify-between">
-      <div className="p-2  bg-black/20 w-full">
+      <div className="p-2  bg-black/20 w-full dark:shadow-none shadow-lg">
         <AddComment title="Add a comment" type={eventId ? CommentType.event : CommentType.item} id={itemId? itemId as string : eventId as string} />
       {/* hacky way to pass vars ↑ */}
         {comments ? (

@@ -37,9 +37,9 @@ const Button = ({
     <>
       {fn && link ? (
         <Link aria-label={ariaLabel}
-         onClick={(e) => fn(e)} href={link} className={`${bgColor} gap-2 flex items-center justify-center capitalize  ${setW} ${active ? "dark:text-interactive_text text-text bg-text" : "text-interactive_text dark:text-text"} ${size} whitespace-nowrap cursor-default font-bold p-2 rounded-xl ${interactive ? "cursor-pointer hover:-translate-y-1 hover:scale-105 hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-30"
-          : "bg-slate-500 text-text_inactive dark:bg-slate-500 dark:text-text_inactive"
-          }`}>
+          onClick={(e) => fn(e)} href={link} className={`${bgColor} gap-2 flex items-center justify-center capitalize  ${setW} ${active ? "text-text bg-contrast dark:bg-text" : "text-contrast "} ${size} whitespace-nowrap cursor-default font-bold p-2 rounded-xl ${interactive ? "cursor-pointer hover:-translate-y-1 hover:scale-105 hover:bg-bg hover:shadow-link hover:text-text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-text_button transition-all duration-30"
+            : "bg-slate-500 text-text_inactive dark:bg-slate-500 dark:text-text_inactive"
+            }`}>
 
           {text}{Icon && active ? <Icon className={`${spinIcon ? "animate-spin" : null}`} /> : null}
 
@@ -51,7 +51,7 @@ const Button = ({
         <button
           aria-label={ariaLabel}
           title={title}
-          className={`${bgColor} gap-2 flex items-center justify-center capitalize ${setW}  ${active ? "dark:text-interactive_text text-text bg-text" : "text-interactive_text dark:text-text"} ${size} whitespace-nowrap cursor-default font-bold p-2 rounded-xl ${interactive ? "cursor-pointer hover:-translate-y-1 hover:scale-105 hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-300"
+          className={`${bgColor} gap-2 flex items-center justify-center capitalize ${setW}  ${active ? "dark:text-text_button text-text bg-contrast dark:bg-text" : "text-contrast dark:text-text"} ${size} whitespace-nowrap cursor-default font-bold p-2 rounded-xl ${interactive ? "cursor-pointer hover:-translate-y-1 hover:scale-105 hover:bg-bg hover:shadow-link hover:text-text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-text_button transition-all duration-300"
             : "bg-slate-500 text-text_inactive dark:bg-slate-500 dark:text-text_inactive"
             }`}
           onClick={(e) => fn(e)}
@@ -63,10 +63,10 @@ const Button = ({
       )}
       {link && !fn ? (
         <Link
-        aria-label={ariaLabel}
+          aria-label={ariaLabel}
           title={title}
           href={link}
-          className={`${bgColor} gap-2 flex items-center justify-center capitalize ${setW}  ${active ? "dark:text-interactive_text text-text bg-text" : "text-interactive_text dark:text-text"} ${size} whitespace-nowrap cursor-default font-bold p-2 rounded-xl ${interactive ? "cursor-pointer hover:-translate-y-1 hover:scale-105 hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-30"
+          className={`${bgColor} gap-2 flex items-center justify-center capitalize ${setW}  ${active ? "dark:text-text_button text-text bg-contrast dark:bg-text" : "text-contrast dark:text-text"} ${size} whitespace-nowrap cursor-default font-bold p-2 rounded-xl ${interactive ? "cursor-pointer hover:-translate-y-1 hover:scale-105 hover:bg-bg hover:shadow-link hover:text-text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-text_button transition-all duration-30"
             : "bg-slate-500 text-text_inactive dark:bg-slate-500 dark:text-text_inactive"
             }`}
         >

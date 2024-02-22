@@ -187,7 +187,7 @@ const ShoppingCart = () => {
             <div className="fixed inset-0 flex items-center justify-center p-4">
               <Dialog.Panel
                 className={
-                  "p-8 bg-bg_interactive text-text dark:bg-bg_interactive shadow-md shadow-black min-w-1/3  min-h-[20rem] min-w-[30rem]"
+                  "p-8 bg-interactive text-text dark:bg-sidebar shadow-md shadow-black min-w-1/3  min-h-[20rem] min-w-[30rem]"
                 }
               >
                 <Dialog.Title className={"font-bold text-xl text-start pb-2"}>

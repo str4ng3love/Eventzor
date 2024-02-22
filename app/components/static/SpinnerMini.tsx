@@ -7,7 +7,7 @@ interface Props {
 }
 const SpinnerMini = ({h="h-8",w="w-8",borderSize="border-[6px]"}:Props) => {
   return (
-    <div className={`animate-spin ${h} ${w} ${borderSize} rounded-[50%] border-solid border-[#fff_transparent_#fff_transparent]`}>
+    <div className={`animate-spin ${h} ${w} ${borderSize} rounded-[50%] border-solid border-[var(--text)_transparent_var(--text)_transparent] `}>
        
     </div>
   )

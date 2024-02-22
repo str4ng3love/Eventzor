@@ -18,7 +18,7 @@ const DisplayStock = ({ amount, amountSold }: Props) => {
     return (
 
         <span className={`group w-[100%] min-w-[5rem] flex justify-between items-center sm:mx-4  ring-1 ring-text px-1 rounded-sm relative`}>
-            <span className="bg-black/30 absolute w-full text-center text-sm group-hover:animate-fadeIn animate-fadeOut">{amount} / {amountSold}</span>
+            <span className="bg-black/30 absolute w-full text-center text-contrast dark:text-text text-sm group-hover:animate-fadeIn animate-fadeOut">{amount} / {amountSold}</span>
             <span className={`block ${stock} bg-link h-4`} />
             <span className={`block ${sold} h-4`} />
         </span>

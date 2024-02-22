@@ -21,7 +21,7 @@ const EventCarouselItem = ({ item, currency }: Props) => {
 
     return (
 
-        <div className="flex ring-2 ring-primary bg-black h-[20rem] transition-all duration-150 animate-fadeIn">
+        <div className="flex ring-2 ring-primary bg-black h-[20rem] transition-all duration-150 animate-fadeIn ">
             <Link
                 href={"/event/" + encodeURIComponent(item.title)}
                 title={item.title}
@@ -41,7 +41,7 @@ const EventCarouselItem = ({ item, currency }: Props) => {
                     src={item.images[0]}
                 />
             </Link>
-            <div className={`hidden  bg-gradient-to-br from-primary to-slate-900 lg:flex flex-col justify-between p-1 w-[50%]`}>
+            <div className={`hidden  bg-gradient-to-br from-primary dark:to-slate-900 to-slate-300 lg:flex flex-col justify-between p-1 w-[50%]`}>
                 <h2 className="p-2 first-letter:uppercase font-bold text-xl grow-[1]">
                     {item.title}
                 </h2>

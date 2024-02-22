@@ -79,13 +79,13 @@ const EventCarousel = ({
     }
   }, []);
 
-  if (items.length > 0) {
+
     return (
       <div
         className={`${fullWidthBlur
           ? "w-full flex flex-col items-center justify-center backdrop-blur-sm shadow-[inset_0rem_0rem_3rem_black] pb-4 pt-20"
           : ""
-          } ${darkBgAlpha ? "lg:bg-black/20 " : ""} `}
+          } ${darkBgAlpha ? "lg:bg-black/40 " : ""} `}
       >
 
         <Heading1 text={heading} textShadow={`[text-shadow:_0_0_30px_black]`} />
@@ -96,7 +96,7 @@ const EventCarousel = ({
               onClick={(e) =>
                 showPrevious()
               }
-              className="p-2 text-3xl text-text_inactive hover:text-text transition-all duration-300 cursor-pointer z-30"
+              className="p-2 text-3xl text-contrast dark:text-text hover:text-contrast transition-all duration-300 cursor-pointer z-30 hover:animate-pulse"
             >
               <BiSolidLeftArrow />
             </span>
@@ -114,7 +114,7 @@ const EventCarousel = ({
               onClick={(e) => {
                 showNext()
               }}
-              className="p-2 text-3xl text-text_inactive hover:text-text transition-all duration-300 cursor-pointer z-30"
+              className="p-2 text-3xl text-contrast dark:text-text hover:text-contrast transition-all duration-300 cursor-pointer z-30 hover:animate-pulse"
             >
               <BiSolidRightArrow />
             </span>
@@ -125,16 +125,14 @@ const EventCarousel = ({
             <span
               onClick={(e) => setActive(i)}
               key={i}
-              className={`h-4 w-4 ${active === i ? "bg-text" : "bg-text_inactive"
-                } hover:bg-text hover:shadow-link transition-all duration-300 block mx-2 p-2 rounded-sm cursor-pointer`}
+              className={`h-4 w-4 ${active === i ? "bg-link" : "bg-interactive"
+                } dark:hover:bg-text hover:bg-bg hover:shadow-link transition-all duration-300 block mx-2 p-2 rounded-sm cursor-pointer`}
             ></span>
           ))}
         </div>
       </div >
     );
-  } else {
-    return <span>Loading...</span>;
-  }
+ 
 };
 
 export default EventCarousel;

@@ -38,7 +38,7 @@ const ItemCarouselItem = ({ item, currency }: Props) => {
                   src={item.images[0]}
                 />
             </Link>
-            <div className={`hidden  bg-gradient-to-br from-primary to-slate-900 lg:flex flex-col justify-between p-1 w-[50%]`}>
+            <div className={`hidden  bg-gradient-to-br from-primary dark:to-slate-900 to-slate-300 lg:flex flex-col justify-between p-1 w-[50%]`}>
                 <h2 className="p-2 first-letter:uppercase font-bold text-xl grow-[1]">
                     {item.item}
                 </h2>

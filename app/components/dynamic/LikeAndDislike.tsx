@@ -245,7 +245,7 @@ const LikeAndDislike = ({
             </>
           )}
 
-          <div className={`relative bg-bg_interactive w-[100%] flex justify-between h-1 ${hidden ? "hidden" : ""}`}>
+          <div className={`relative w-[100%] mt-4 flex justify-between h-1 ${hidden ? "hidden" : ""}`}>
 
 
 

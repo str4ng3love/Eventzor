@@ -20,7 +20,7 @@ const page = async ({ params }: { params: { slug: string } }) => {
     return (
       <main className="flex flex-col items-center min-h-screenReducedBy6Rem pt-20">
         <div className="grid md:grid-cols-3 grid-cols-1 lg:w-[80%] lg:gap-4 gap-2 w-full p-4 transition-all duration-300">
-          <div className="p-4 flex flex-col rounded-md bg-bg_interactive dark:bg-black/20 md:col-span-2 md:row-span-2">
+          <div className="p-4 flex flex-col rounded-md bg-interactive dark:bg-black/20 md:col-span-2 md:row-span-2 dark:shadow-none shadow-lg">
             <h2 className="p-4 font-bold text-2xl">{event.title}</h2>
             <div className="flex flex-col p-2 my-8">
               <span>{event.eventDate.toUTCString().slice(0, -7)}&nbsp;GMT</span>
@@ -30,10 +30,10 @@ const page = async ({ params }: { params: { slug: string } }) => {
             <ImageBrowser images={event.images} />
           </div>
       
-          <div className="p-4 flex flex-col justify-start rounded-md bg-bg_interactive dark:bg-black/20 md:row-start-3 md:col-span-3">
+          <div className="p-4 flex flex-col justify-start rounded-md bg-interactive dark:bg-black/20 md:row-start-3 md:col-span-3 dark:shadow-none shadow-lg">
             <p className="indent-4">{event.description}</p>
           </div>
-          <div className="p-4 flex flex-col justify-center rounded-md bg-bg_interactive dark:bg-black/20 h-fit md:row-start-1 md:col-start-3 place-self-auto md:mx-0 sm:mx-20">
+          <div className="p-4 flex flex-col justify-center rounded-md bg-interactive dark:bg-black/20 h-fit md:row-start-1 md:col-start-3 place-self-auto md:mx-0 sm:mx-20 dark:shadow-none shadow-lg">
             <div className=" bg-primary ring-2 ring-primary rounded-t-md p-2">
               <div className="flex justify-between p-1 text-interactive_text dark:text-text">
                 <span>Price&nbsp;:</span>
@@ -46,7 +46,7 @@ const page = async ({ params }: { params: { slug: string } }) => {
 
               <AddToCart id={event.id} price={event.price} type={'event'} item={event.title} amountLeft={event.tickets-event.ticketsSold} saleEnded={event.closingDate > new Date(Date.now())? false : true}/>
             </div>
-            <div className="flex flex-col ring-2 rounded-t-none ring-primary rounded-md p-2 text-sm md:text-base mb-7">
+            <div className="flex flex-col ring-2 rounded-t-none ring-primary rounded-md p-2 text-sm md:text-base mb-7 dark:shadow-none shadow-lg">
               <div title="Tickets are being sold until this date" className="flex justify-between p-1">
                 <span>Sold until&nbsp;:&nbsp;</span>
                 <span>

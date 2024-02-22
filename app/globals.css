@@ -3,40 +3,44 @@
 @tailwind utilities;
 
 :root {
-  --bg-start: rgb(245, 245, 245);
   --bg: rgb(235, 235, 235);
-  --bg-interactive: rgb(250, 250, 250);
-  --bg-sidebar:rgb(20, 20, 20);
+  --interactive: rgb(200, 200, 200);
+  --sidebar: rgb(20, 20, 20);
   --text: rgb(20, 20, 20);
-  --interactive-text: rgb(230, 230, 230);
-  --button-text: rgb(10, 10, 10);
-  --inactive-text: rgb(177, 177, 177);
-  --link: #0F478A;
-  --link-active: #0D3C73;
-  --primary: #161536;
+  --contrast: rgb(235, 235, 235);
+  --link: #85b1e7;
+  --link-active: #7eabdf;
+  --primary: #d4d3fc;
   --secondary: #ad1e13;
-  --shadowColor: var(--link);
-  --shadow-link: 0rem 0rem 1rem var(--shadowColor);
-  --shadow-omni: 0rem 0rem 1rem black;
+  --shadow-link: 0rem 0rem 1rem var(--bg)
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg-start: rgb(10, 10, 10);
+
     --bg: rgb(20, 20, 20);
-    --bg-interactive: rgb(10, 10, 10);
+    --interactive: rgb(200, 200, 200);
+    --sidebar: rgb(20, 20, 20);
     --text: rgb(235, 235, 235);
-    --interactive-text: rgb(20, 20, 20);
-    --shadowColor:var(--text);
+    --contrast:rgb(20, 20, 20);
+    --link: #0F478A;
+    --link-active: #0D3C73;
+    --primary: #161536;
+    --secondary: #ad1e13;
+
+    --button-text: rgb(10, 10, 10);
     --inactive-text: rgb(165, 165, 165);
+    --shadowColor: var(--text);
+    --shadow-link: 0rem 0rem 1rem var(--shadowColor);
+    --shadow-omni: 0rem 0rem 1rem black;
   }
 }
 
 body {
   color: var(--text);
   background: var(--bg);
-  
 }
+
 button {
   cursor: default;
 }

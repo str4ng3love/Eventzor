@@ -8,7 +8,7 @@ import { getServerSession } from "next-auth";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import BurgerMenu from "../../dynamic/Header/BurgerMenu";
 import DropDownNav from "../../dynamic/DropDownNav";
-import ThemeProvider from "../../ThemeProvider";
+
 
 
 const Header = async () => {
@@ -16,7 +16,7 @@ const Header = async () => {
 
   return (
     <header className="relative">
-      <nav className="px-10 z-50 h-[4rem] bg-bg_sidebar text-interactive_text dark:text-text dark:bg-black/50 flex justify-between items-center fixed w-full backdrop-blur-sm">
+      <nav className="px-10 z-50 h-[4rem] dark:text-text text-contrast bg-black/50 flex justify-between items-center fixed w-full backdrop-blur-sm">
 
         <DropDownNav buttonTitle="Eventzor" items={[{ href: "/", label: "home" }, { href: "/events", label: "events" }, { href: "/market", label: "market" }, { href: "/users", label: "users" }]} />
 
@@ -25,7 +25,6 @@ const Header = async () => {
           <Search minimizeOnLg />
           <Currency />
           <UserMenu />
-          <ThemeProvider />
         </div>
         <div className="flex mr-8 gap-4">
           <ShoppingCart />

@@ -4,7 +4,7 @@ const Footer = () => {
 
 
     return (
-        <footer className="h-36 bg-black/50 flex items-center justify-around pb-6">
+        <footer className="h-36 dark:bg-black bg-interactive flex items-center justify-around pb-6">
             <div className="relative flex justify-evenly items-center w-full flex-col sm:flex-row gap-2">
                 <nav>
                     <ul className="grid sm:grid-cols-4 lg:gap-4 gap-1 grid-cols-2">

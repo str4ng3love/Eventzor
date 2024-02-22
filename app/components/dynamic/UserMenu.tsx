@@ -30,57 +30,57 @@ const UserMenu = () => {
             {session?.user?.name}
           </Menu.Button>
 
-          <Menu.Items className={` absolute z-50 mt-2 bg-black`}>
-            <div className="my-1 flex justify-start items-center ">
-              <Menu.Item>
-                {({ active }) => (
-                  <Link
-                  onClick={()=> emitEvent()}
-                    href={"/dashboard"}
-                    className={`${active ? "bg-link" : ""
-                      } p-2 flex justify-between items-center transition-all duration-300`}
-                  >
-                    Dashboard{" "}
-                    <span className="ml-4">
-                      <BiSolidDashboard />
-                    </span>
-                  </Link>
-                )}
-              </Menu.Item>
-            </div>
-            <div className="my-1">
-              <Menu.Item>
-                {({ active }) => (
-                  <Link
-                  onClick={()=> emitEvent()}
-                    href={"/orders"}
-                    className={`${active ? "bg-link" : ""
-                      } p-2 flex justify-between items-center transition-all duration-300`}
+          <Menu.Items className={` absolute z-50 mt-1 bg-bg text-text dark:ring-2 dark:ring-primary`}>
 
-                  >
-                    Orders
-                    <span className="ml-4">
-                      <TbFileSpreadsheet />
-                    </span>
-                  </Link>
-                )}
-              </Menu.Item>
-            </div><div className="my-1">
-              <Menu.Item>
-                {({ active }) => (
-                  <span
-                    className={`${active ? "bg-link" : ""
-                      } p-2 flex justify-between  items-center transition-all duration-300`}
-                    onClick={() => { emitEvent(); signOut() }}
-                  >
-                    Logout
-                    <span className="ml-4">
-                      <BiLogOut />
-                    </span>
+            <Menu.Item>
+              {({ active }) => (
+                <Link
+                  onClick={() => emitEvent()}
+                  href={"/dashboard"}
+                  className={`${active ? "bg-link text-contrast dark:hover:text-text" : ""
+                    } p-2 flex justify-between items-center transition-all duration-300`}
+                >
+                  Dashboard{" "}
+                  <span className="ml-4">
+                    <BiSolidDashboard />
                   </span>
-                )}
-              </Menu.Item>
-            </div>
+                </Link>
+              )}
+            </Menu.Item>
+
+
+            <Menu.Item>
+              {({ active }) => (
+                <Link
+                  onClick={() => emitEvent()}
+                  href={"/orders"}
+                  className={`${active ? "bg-link text-contrast dark:hover:text-text" : ""
+                    } p-2 flex justify-between items-center transition-all duration-300`}
+
+                >
+                  Orders
+                  <span className="ml-4">
+                    <TbFileSpreadsheet />
+                  </span>
+                </Link>
+              )}
+            </Menu.Item>
+
+            <Menu.Item>
+              {({ active }) => (
+                <span
+                className={`${active ? "bg-link text-contrast dark:hover:text-text" : ""
+                    } p-2 flex justify-between  items-center transition-all duration-300 cursor-pointer`}
+                  onClick={() => { emitEvent(); signOut() }}
+                >
+                  Logout
+                  <span className="ml-4">
+                    <BiLogOut />
+                  </span>
+                </span>
+              )}
+            </Menu.Item>
+
           </Menu.Items>
 
         </Menu>
@@ -90,7 +90,7 @@ const UserMenu = () => {
     return (
       <>
         <button aria-label="Log in or register"
-        
+
           onClick={() => setShowLogin(true)}
           className="p-2 hover:bg-link rounded-md cursor-pointer transition-all duration-300"
         >

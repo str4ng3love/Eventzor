@@ -6,10 +6,11 @@ import DropDown from "../DropDown";
 import { sortItems } from "@/helpers/sort";
 import Notification, { NotificationObj } from "../../static/Notification";
 import OrderSkeleton from "../../static/OrderSkeleton";
-import ItemComponent from "./ItemComponent";
+
 import EditItem from "./EditItem";
 import AddNewItem from "./AddNewItem";
 import SpinnerMini from "../../static/SpinnerMini";
+import MyItemComponent from "./MyItemComponent";
 
 const MyItemsBrowser = () => {
   const [itemsArr, setItemsArr] = useState<MarketItem[] | null>(null);
@@ -171,7 +172,7 @@ const MyItemsBrowser = () => {
 
             <tbody className="">
               {itemsArr?.map((item, i) => (
-                <ItemComponent
+                <MyItemComponent
                   isEmpty={item.images.length === 0}
                   key={i}
                   {...item}

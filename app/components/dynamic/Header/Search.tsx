@@ -54,18 +54,18 @@ const Search = ({ minimizeOnLg }: Props) => {
   }, [query])
   return (<>
     <button
-      className="relative group text-text_inactive flex py-2 text-start cursor-pointer"
+      className="relative group flex py-2 text-start cursor-pointer"
       onClick={() => {
         setShow(true)
         inputEl.current?.focus();
       }}
     >
       <Icon
-        textColor="text-text_inactive group-hover:text-white transition-all duration-300"
+        textColor="lg:dark:group-hover:text-text md:group-hover:text-link transition"
         Icon={FaSearch}
       />
       <span className={
-        `w-40 z-10 text-text ring-0 outline-none bg-bg p-2 rounded-md group-hover:text-white transition-all duration-300 ${minimizeOnLg ? "hidden" : ""}  lg:inline-block`
+        `w-40 z-10 text-text ring-0 outline-none bg-bg p-2 rounded-md group-hover:bg-link transition ${minimizeOnLg ? "hidden" : ""}  lg:inline-block`
       }>Search ...</span>
     </button>
     {show ? <Portal child={
@@ -73,13 +73,13 @@ const Search = ({ minimizeOnLg }: Props) => {
         <div className="relative flex flex-col z-10">
           <div className="flex">
             <Icon
-              textColor="text-text_inactive"
+              textColor="text-text"
               Icon={FaSearch}
             />
             <Combobox.Input
               ref={inputEl}
               className={
-                "w-full bg-inherit group-hover:text-white focus:ring-0 focus:outline-none focus:bg-bg p-2 rounded-md"
+                "w-full bg-inherit focus:ring-0 focus:outline-none focus:bg-bg p-2 rounded-md"
               }
               placeholder="Search ..."
               displayValue={(query: string) => query ?? ""}
