@@ -18,11 +18,11 @@ const DropDownMini = ({
   bgColor = " bg-link",
 }: Props) => {
   return (
-    <div className="flex min-h-[4rem] relative items-center justify-center ">
+    <div className="relative flex min-h-[4rem] items-center justify-center ">
       {/* Prop `id` did not match. Server: "headlessui-menu-button-:R6crb9mcq:" Client: "headlessui-menu-button-:Rpjdd6pj9:"  || Next.js Error as of 10.08.23, should be fixed in upcoming release.||Resolved */}
       <Menu>
         <Menu.Button
-          className={` hover:-translate-y-1 hover:scale-105 font-bold p-2 ${bgColor} text-interactive_text dark:text-text rounded-xl hover:bg-link_active hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-300`}
+          className={` p-2 font-bold hover:-translate-y-1 hover:scale-105 ${bgColor} text-interactive_text hover:text-interactive_text dark:hover:text-interactive_text rounded-xl transition-all duration-300 hover:bg-link_active hover:shadow-link dark:text-text dark:hover:bg-text dark:hover:shadow-link`}
         >
           <Icon size={size} />
         </Menu.Button>
@@ -37,30 +37,28 @@ const DropDownMini = ({
           leaveTo="transform scale-95 opacity-0"
         >
           <Menu.Items
-            className={`z-50 absolute flex flex-col origin-top-right w-[10ch] bg-white shadow-bg_sidebar shadow-lg rounded-md focus:outline-none `}
+            className={`shadow-bg_sidebar absolute z-50 flex w-[10ch] origin-top-right flex-col rounded-md bg-white shadow-lg focus:outline-none `}
           >
-            {items ? (
-              items.map((item, i) => (
-                <Menu.Item key={i}>
-                  {({ active }) => (
-                    <span
-                      onClick={(e) => {
-                        item.fn(e);
-                      }}
-                      className={`${
-                        active
-                          ? "bg-text text-interactive_text p-2"
-                          : "text-interactive_text bg-link p-2 dark:text-text"
-                      } first-letter:uppercase`}
-                    >
-                      {item.text}
-                    </span>
-                  )}
-                </Menu.Item>
-              ))
-            ) : (
-              null
-            )}
+            {items
+              ? items.map((item, i) => (
+                  <Menu.Item key={i}>
+                    {({ active }) => (
+                      <span
+                        onClick={(e) => {
+                          item.fn(e);
+                        }}
+                        className={`${
+                          active
+                            ? "text-interactive_text bg-text p-2"
+                            : "text-interactive_text bg-link p-2 dark:text-text"
+                        } first-letter:uppercase`}
+                      >
+                        {item.text}
+                      </span>
+                    )}
+                  </Menu.Item>
+                ))
+              : null}
           </Menu.Items>
         </Transition>
       </Menu>

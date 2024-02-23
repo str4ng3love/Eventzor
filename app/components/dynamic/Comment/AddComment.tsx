@@ -22,7 +22,7 @@ const AddComment = ({
   reply = false,
   title,
   callback,
-  triggerRefetchFN
+  triggerRefetchFN,
 }: Props) => {
   const [notify, setNotify] = useState({
     error: false,
@@ -33,13 +33,13 @@ const AddComment = ({
   const [show, setShow] = useState(false);
   const [comment, setComment] = useState("");
   const { data: session } = useSession();
-  const [isWorking, setIsWorking] = useState(false)
+  const [isWorking, setIsWorking] = useState(false);
   const [isPending, startTransition] = useTransition();
   // ↑ ??
   const router = useRouter();
 
   const handleCreate = async () => {
-    setIsWorking(true)
+    setIsWorking(true);
     try {
       const resp = await fetch("/api/comments", {
         method: "POST",
@@ -48,15 +48,15 @@ const AddComment = ({
           id: id,
           comment: comment,
         }),
-      })
+      });
       const data = await resp.json();
 
       if (data.error) {
-        setIsWorking(false)
+        setIsWorking(false);
         setNotify({ message: data.error, show: true, error: true });
       } else {
         startTransition(() => {
-          setIsWorking(false)
+          setIsWorking(false);
           setNotify({ message: data.message, show: true, error: false });
           router.refresh();
           setShow(false);
@@ -67,25 +67,25 @@ const AddComment = ({
     }
   };
   const handleCreateReply = async () => {
-    setIsWorking(true)
+    setIsWorking(true);
     try {
       const resp = await fetch("/api/comments", {
         method: "POST",
         body: JSON.stringify({
           comment: comment,
           type: type,
-          id: id
+          id: id,
         }),
       });
       const data = await resp.json();
       //todo optimistic mount
 
       if (data.error) {
-        setIsWorking(false)
+        setIsWorking(false);
         setNotify({ message: data.error, show: true, error: true });
       } else {
         startTransition(() => {
-          setIsWorking(false)
+          setIsWorking(false);
           triggerRefetchFN ? triggerRefetchFN() : null;
           callback ? callback() : null;
           setNotify({ message: data.message, show: true, error: false });
@@ -106,8 +106,9 @@ const AddComment = ({
     <>
       {show ? (
         <div
-          className={`w-full px-4 ${reply ? "border-t-2 border-primary pt-4 border-dashed mt-4" : ""
-            }`}
+          className={`w-full px-4 ${
+            reply ? "mt-4 border-t-2 border-dashed border-primary pt-4" : ""
+          }`}
         >
           {reply ? (
             <span className="p-1 text-sm">Leave a Reply</span>
@@ -118,16 +119,17 @@ const AddComment = ({
             ref={divEl}
             onInput={(e) => setComment(e.currentTarget.innerHTML)}
             onPaste={(e) => setComment(e.currentTarget.innerHTML)}
-            className="p-2 resize-none text-text_inactive my-8 bg-interactive_text transition-all 500ms break-all ring-2 ring-primary rounded-md text-sm"
+            className="text-text_inactive bg-interactive_text 500ms my-8 resize-none break-all rounded-md p-2 text-sm ring-2 ring-primary transition-all"
             placeholder="Add a comment..."
             contentEditable
           />
 
           <div
-            className={`flex items-center ${reply ? "justify-between" : "justify-end "
-              } gap-2`}
+            className={`flex items-center ${
+              reply ? "justify-between" : "justify-end "
+            } gap-2`}
           >
-            <div className="p-2 flex gap-2">
+            <div className="flex gap-2 p-2">
               <Button
                 size="text-sm"
                 title="Cancel comment creation"
@@ -145,7 +147,7 @@ const AddComment = ({
                   interactive={isWorking ? false : true}
                   fn={() => {
                     if (isWorking) {
-                      return
+                      return;
                     }
                     handleCreateReply();
                   }}
@@ -156,10 +158,9 @@ const AddComment = ({
                   title="Submit your comment"
                   text={`${isWorking ? "Working..." : "Add"}`}
                   interactive={isWorking ? false : true}
-
                   fn={() => {
                     if (isWorking) {
-                      return
+                      return;
                     }
                     handleCreate();
                   }}
@@ -200,7 +201,7 @@ const AddComment = ({
               )}
             </>
           ) : (
-            <div className="flex items-center my-4 justify-center">
+            <div className="my-4 flex items-center justify-center">
               {session?.user?.name ? (
                 <Button
                   title={title}

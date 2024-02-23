@@ -4,7 +4,6 @@ import { getNewestEvents } from "@/helpers/getEvent";
 import Footer from "../components/static/Footer";
 import Image from "next/image";
 
-
 export const metadata: Metadata = {
   title: "Eventzor | Events",
 };
@@ -13,13 +12,12 @@ export default async function layout({
 }: {
   children: React.ReactNode;
 }) {
-  const { events } = await getNewestEvents()
+  const { events } = await getNewestEvents();
 
   return (
     <>
-      <main className="flex flex-col items-center min-h-screen">
-
-        <div className="relative lg:before:hidden before:absolute before:top-0 before:bg-gradient-radial before:to-transparent before:via-transparent before:h-full before:w-full before:from-slate-900 w-full bg-cover bg-center bg-no-repeat transition-all">
+      <main className="flex min-h-screen flex-col items-center">
+        <div className="relative w-full bg-cover bg-center bg-no-repeat transition-all before:absolute before:top-0 before:h-full before:w-full before:bg-gradient-radial before:from-slate-900 before:via-transparent before:to-transparent lg:before:hidden">
           <EventCarousel
             heading="Newest Events"
             items={events}
@@ -28,7 +26,7 @@ export default async function layout({
           />
           <Image
             alt="background image"
-            src={'/images/hero_event.jpeg'}
+            src={"/images/hero_event.jpeg"}
             fill
             placeholder="blur"
             blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="

@@ -6,26 +6,27 @@ async function handler(req: Request) {
     const { searchParams } = new URL(req.url);
     const skip = searchParams.get("skip");
     const take = searchParams.get("take");
- 
 
     try {
       const events = await prisma.event.findMany({
-        orderBy: { likes: {
-            _count: "desc"
-        }},
+        orderBy: {
+          likes: {
+            _count: "desc",
+          },
+        },
         skip: skip ? parseInt(skip) : 0,
         take: take ? parseInt(take) : 20,
       });
-      if(events){
-        return NextResponse.json(events)
+      if (events) {
+        return NextResponse.json(events);
       } else {
-        return NextResponse.json({error: 'Something went wrong'})
+        return NextResponse.json({ error: "Something went wrong" });
       }
     } catch (error) {
       console.log(error);
       return NextResponse.json(
         { error: "Internal server error" },
-        { status: 500 }
+        { status: 500 },
       );
     }
   } else {

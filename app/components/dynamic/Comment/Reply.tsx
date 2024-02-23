@@ -36,12 +36,12 @@ const Reply = ({
   status,
   amountOfReplies,
   amountOfLikes,
-  amountOfDislikes
+  amountOfDislikes,
 }: Props) => {
   const [commentTextEdited, setCommentTextEdited] = useState("");
   const [fallbackText, setFallbackText] = useState("");
   const [edit, setEdit] = useState(false);
-  const [whenCommented, setWhenCommented] = useState<string>()
+  const [whenCommented, setWhenCommented] = useState<string>();
   const [reply, setReply] = useState({
     authorName,
     id,
@@ -51,7 +51,7 @@ const Reply = ({
     amountOfReplies,
     status,
     amountOfLikes,
-    amountOfDislikes
+    amountOfDislikes,
   });
   const [showReplies, setShowReplies] = useState(false);
   const [notify, setNotify] = useState({
@@ -65,7 +65,7 @@ const Reply = ({
   const getReplies = async (parentId: string) => {
     try {
       const resp = await fetch(
-        "/api/comments/replies?" + new URLSearchParams({ id: parentId })
+        "/api/comments/replies?" + new URLSearchParams({ id: parentId }),
       );
       const data = await resp.json();
 
@@ -98,52 +98,51 @@ const Reply = ({
     }
   };
   const handleDelete = async (id: string) => {
-
     try {
       const resp = await fetch("/api/comments", {
         method: "DELETE",
         body: JSON.stringify({ id }),
       });
-      const data: { message?: string, error?: string } = await resp.json();
+      const data: { message?: string; error?: string } = await resp.json();
       if (data.error) {
         setNotify({ show: true, error: true, message: data.error });
       }
 
-      if (data.message?.includes('successfully')) {
-
-        setReply((prev) => ({ ...prev, status: "flaggedAsDeleted" }))
+      if (data.message?.includes("successfully")) {
+        setReply((prev) => ({ ...prev, status: "flaggedAsDeleted" }));
         setNotify({ show: true, error: false, message: data.message });
       }
     } catch (error) {
       console.log(error);
     }
-  }
+  };
   useEffect(() => {
-    setWhenCommented(TimeDifference(
-      Date.now(),
-      Date.parse(reply.createdAt?.toUTCString())
-    ))
-  }, [])
+    setWhenCommented(
+      TimeDifference(Date.now(), Date.parse(reply.createdAt?.toUTCString())),
+    );
+  }, []);
 
   if (reply.status === "flaggedAsDeleted") {
-
-
     return (
-      <div className="border-l-4 border-primary border-solid flex w-full flex-col my-2 pl-2">
+      <div className="my-2 flex w-full flex-col border-l-4 border-solid border-primary pl-2">
         <div className="flex items-center  justify-between">
           <div className="flex items-center">
             <span>{reply.authorName}</span>
-            <span className="text-sm pl-4">
-              {whenCommented ? whenCommented : <SpinnerMini borderSize="border-2" h="h-2" w="w-2" />}
+            <span className="pl-4 text-sm">
+              {whenCommented ? (
+                whenCommented
+              ) : (
+                <SpinnerMini borderSize="border-2" h="h-2" w="w-2" />
+              )}
             </span>
           </div>
         </div>
 
-        <div className=" p-2 w-full break-words text-sm text-text_inactive">
+        <div className=" text-text_inactive w-full break-words p-2 text-sm">
           Comment deleted
         </div>
         {reply.amountOfReplies && reply.amountOfReplies > 0 ? (
-          <div className="flex flex-col p-2 w-full gap-2">
+          <div className="flex w-full flex-col gap-2 p-2">
             <div
               onClick={(e) => {
                 if (!showReplies) {
@@ -151,11 +150,12 @@ const Reply = ({
                 }
                 setShowReplies(!showReplies);
               }}
-              className="cursor-pointer flex items-center text-link rounded-md transition-all duration-300"
+              className="flex cursor-pointer items-center rounded-md text-link transition-all duration-300"
             >
               <span
-                className={`${showReplies ? "-rotate-180" : "rotate-0"
-                  } transition-all duration-300`}
+                className={`${
+                  showReplies ? "-rotate-180" : "rotate-0"
+                } transition-all duration-300`}
               >
                 <BiDownArrow />
               </span>
@@ -179,10 +179,7 @@ const Reply = ({
                     />
                   ))
                 ) : (
-                  <div
-
-                    className="w-full flex justify-center py-2"
-                  >
+                  <div className="flex w-full justify-center py-2">
                     <SpinnerMini />
                   </div>
                 )}
@@ -196,17 +193,21 @@ const Reply = ({
         )}
       </div>
     );
-
   } else {
     return (
-      <div className={`border-l-4 ${reply.authorName === session?.user?.name ? "border-primary" : "border-bg_interactive"} border-solid flex w-full flex-col my-2 pl-2`}>
+      <div
+        className={`border-l-4 ${reply.authorName === session?.user?.name ? "border-primary" : "border-bg_interactive"} my-2 flex w-full flex-col border-solid pl-2`}
+      >
         <div className="flex items-center  justify-between">
           <div className="flex items-center">
-
             <span>{reply.authorName}</span>
-            <span className="text-sm pl-4">
+            <span className="pl-4 text-sm">
               {reply.updatedAt ? "(edited) " : ""}
-              {whenCommented ? whenCommented : <SpinnerMini borderSize="border-2" h="h-2" w="w-2" />}
+              {whenCommented ? (
+                whenCommented
+              ) : (
+                <SpinnerMini borderSize="border-2" h="h-2" w="w-2" />
+              )}
             </span>
           </div>
           <div>
@@ -214,7 +215,12 @@ const Reply = ({
               <div>
                 <DropDownMini
                   items={[
-                    { text: "delete", fn: () => { handleDelete(reply.id) } },
+                    {
+                      text: "delete",
+                      fn: () => {
+                        handleDelete(reply.id);
+                      },
+                    },
                     {
                       text: "Edit",
                       fn: () => {
@@ -239,7 +245,7 @@ const Reply = ({
               suppressContentEditableWarning
               onInput={(e) => setCommentTextEdited(e.currentTarget.innerHTML)}
               onPaste={(e) => setCommentTextEdited(e.currentTarget.innerHTML)}
-              className="p-2 mx-2 resize-none text-text_inactive my-8 bg-interactive_text transition-all 500ms break-all ring-2 ring-primary rounded-md text-sm"
+              className="text-text_inactive bg-interactive_text 500ms mx-2 my-8 resize-none break-all rounded-md p-2 text-sm ring-2 ring-primary transition-all"
             >
               {FormatString(reply.message)}
             </div>
@@ -266,20 +272,35 @@ const Reply = ({
                   setEdit(false);
                 }}
               />
-
             </div>
           </div>
         ) : (
-          <div className=" p-2 w-full break-words text-sm">
+          <div className=" w-full break-words p-2 text-sm">
             {FormatString(reply.message)}
           </div>
         )}
-        <div className="flex flex-col p-2 w-full gap-2">
-          <LikeAndDislike commentId={reply.id} amountOfLikes={reply.amountOfLikes} amountOfDislikes={reply.amountOfDislikes} hidden />
-          <AddComment title="Reply" reply id={reply.id} callback={() => setReply((prev) => ({ ...prev, amountOfReplies: amountOfReplies + 1 }))} type={CommentType.parent} />
+        <div className="flex w-full flex-col gap-2 p-2">
+          <LikeAndDislike
+            commentId={reply.id}
+            amountOfLikes={reply.amountOfLikes}
+            amountOfDislikes={reply.amountOfDislikes}
+            hidden
+          />
+          <AddComment
+            title="Reply"
+            reply
+            id={reply.id}
+            callback={() =>
+              setReply((prev) => ({
+                ...prev,
+                amountOfReplies: amountOfReplies + 1,
+              }))
+            }
+            type={CommentType.parent}
+          />
         </div>
         {reply.amountOfReplies && reply.amountOfReplies > 0 ? (
-          <div className="flex flex-col p-2 w-full gap-2">
+          <div className="flex w-full flex-col gap-2 p-2">
             <div
               onClick={(e) => {
                 if (!showReplies) {
@@ -287,11 +308,12 @@ const Reply = ({
                 }
                 setShowReplies(!showReplies);
               }}
-              className="cursor-pointer flex items-center text-link rounded-md transition-all duration-300"
+              className="flex cursor-pointer items-center rounded-md text-link transition-all duration-300"
             >
               <span
-                className={`${showReplies ? "-rotate-180" : "rotate-0"
-                  } transition-all duration-300`}
+                className={`${
+                  showReplies ? "-rotate-180" : "rotate-0"
+                } transition-all duration-300`}
               >
                 <BiDownArrow />
               </span>
@@ -315,9 +337,7 @@ const Reply = ({
                     />
                   ))
                 ) : (
-                  <div
-                    className="w-full flex justify-center py-2"
-                  >
+                  <div className="flex w-full justify-center py-2">
                     <SpinnerMini />
                   </div>
                 )}

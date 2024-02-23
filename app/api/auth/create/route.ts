@@ -11,7 +11,7 @@ const handler = async (req: Request) => {
   if (!body.username) {
     return NextResponse.json(
       { error: "Please provide a username", field: "username" },
-      { status: 400 }
+      { status: 400 },
     );
   }
   if (body.username.length <= 2) {
@@ -20,7 +20,7 @@ const handler = async (req: Request) => {
         error: "Username should be atleast 3 characters long",
         field: "username",
       },
-      { status: 400 }
+      { status: 400 },
     );
   }
   if (body.username.match(/[^a-zA-Z0-9]/g)) {
@@ -30,13 +30,13 @@ const handler = async (req: Request) => {
           "No special characters allowed, please use only letters and digits.",
         field: "username",
       },
-      { status: 400 }
+      { status: 400 },
     );
   }
   if (!body.password) {
     return NextResponse.json(
       { error: "Please provide a password", field: "password" },
-      { status: 400 }
+      { status: 400 },
     );
   }
   if (body.password.length <= 7) {
@@ -45,7 +45,7 @@ const handler = async (req: Request) => {
         error: "Password should be atleast 8 characters long",
         field: "password",
       },
-      { status: 400 }
+      { status: 400 },
     );
   }
   if (body.password.match(/[^a-zA-Z0-9]/g)) {
@@ -55,7 +55,7 @@ const handler = async (req: Request) => {
           "No special characters allowed, please use only letters and digits.",
         field: "password",
       },
-      { status: 400 }
+      { status: 400 },
     );
   }
   if (body.password !== body.confirm) {
@@ -64,7 +64,7 @@ const handler = async (req: Request) => {
         error: "Please confirm password",
         field: "confirm",
       },
-      { status: 400 }
+      { status: 400 },
     );
   }
   try {
@@ -79,7 +79,7 @@ const handler = async (req: Request) => {
     if (!user) {
       return NextResponse.json(
         { message: `Cannot create user` },
-        { status: 500 }
+        { status: 500 },
       );
     }
     const account = await prisma.account.create({
@@ -98,7 +98,7 @@ const handler = async (req: Request) => {
           email: user.email,
           message: "Account Created",
         },
-        { status: 200 }
+        { status: 200 },
       );
     }
   } catch (error) {
@@ -110,7 +110,7 @@ const handler = async (req: Request) => {
 
       return NextResponse.json(
         { message: `Internal Server Error` },
-        { status: 500 }
+        { status: 500 },
       );
     }
   }

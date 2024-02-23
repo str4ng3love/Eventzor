@@ -7,16 +7,16 @@ import Button from "./Button";
 import { Dialog, Transition } from "@headlessui/react";
 
 export enum CallType {
-  event="events",
-  item='market'
+  event = "events",
+  item = "market",
 }
 interface Props {
   images: string[];
   id: string;
-  triggerRefetch:()=>void
+  triggerRefetch: () => void;
   type: CallType;
 }
-const EditImages = ({type, triggerRefetch, images, id }: Props) => {
+const EditImages = ({ type, triggerRefetch, images, id }: Props) => {
   const [show, setShow] = useState(false);
   const [imgArr, setImgArr] = useState(images);
   const [canEdit, setCanEdit] = useState(true);
@@ -41,7 +41,7 @@ const EditImages = ({type, triggerRefetch, images, id }: Props) => {
       setNotify({ error: true, show: true, message: dat.error });
     } else {
       setCanEdit(true);
-      triggerRefetch()
+      triggerRefetch();
       setNotify({ error: false, show: true, message: dat.message });
     }
   };
@@ -64,24 +64,23 @@ const EditImages = ({type, triggerRefetch, images, id }: Props) => {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="bg-black/80 fixed inset-0" aria-hidden />
+            <div className="fixed inset-0 bg-black/80" aria-hidden />
             <div className="fixed inset-0 flex items-center justify-center p-4 backdrop-blur-sm">
               <Dialog.Panel
                 className={
-                  "relative p-8 bg-bg_interactive text-text dark:bg-bg_interactive  w-[30rem] shadow-md shadow-black overflow-y-scroll"
+                  "bg-bg_interactive dark:bg-bg_interactive relative w-[30rem] overflow-y-scroll  p-8 text-text shadow-md shadow-black"
                 }
               >
-                <Dialog.Title className={"p-2 font-bold text-xl text-center"}>
+                <Dialog.Title className={"p-2 text-center text-xl font-bold"}>
                   Edit Images
                 </Dialog.Title>
-                <div className="flex flex-col justify-center items-center">
-                  <div className="p-4 flex justify-between z-20 gap-2 ">
+                <div className="flex flex-col items-center justify-center">
+                  <div className="z-20 flex justify-between gap-2 p-4 ">
                     {imgArr ? (
                       imgArr.map((im, index) => (
                         <div key={index}>
                           {selected === index && confirm ? (
                             <>
-                             
                               <div className="flex flex-col items-center justify-evenly gap-2 p-4">
                                 <Button
                                   title="Confirm changes"
@@ -89,7 +88,7 @@ const EditImages = ({type, triggerRefetch, images, id }: Props) => {
                                   bgColor="bg-red-600"
                                   fn={() => {
                                     setImgArr((prev) =>
-                                      prev.filter((i) => i !== im)
+                                      prev.filter((i) => i !== im),
                                     );
 
                                     setConfirm(false);
@@ -114,7 +113,7 @@ const EditImages = ({type, triggerRefetch, images, id }: Props) => {
                                 setConfirm(true);
                                 setSelected(index);
                               }}
-                              className="flex items-center relative after:flex after:items-center after:justify-center hover:after:content-['Delete'] hover:after:absolute after:top-0 after:left-0 after:bg-black/50 after:w-full after:h-full "
+                              className="relative flex items-center after:left-0 after:top-0 after:flex after:h-full after:w-full after:items-center after:justify-center after:bg-black/50 hover:after:absolute hover:after:content-['Delete'] "
                             >
                               <Image
                                 loading="eager"

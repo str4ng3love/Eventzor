@@ -10,21 +10,21 @@ async function handler(req: Request, { params }: { params: { slug: string } }) {
     if (!item) {
       return NextResponse.json(
         { error: `No item with id of ${slug}` },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     return NextResponse.json(item);
   } catch (error) {
     console.log(error);
-    if(error instanceof PrismaClientKnownRequestError){
-        return NextResponse.json(
-                { error: `Prisma client error, code: ${error.code}. ${error.message.toString().replaceAll('\n', '')}`},   
-              );
+    if (error instanceof PrismaClientKnownRequestError) {
+      return NextResponse.json({
+        error: `Prisma client error, code: ${error.code}. ${error.message.toString().replaceAll("\n", "")}`,
+      });
     }
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

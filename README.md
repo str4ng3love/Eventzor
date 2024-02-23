@@ -1,14 +1,13 @@
 # Eventzor
 
-
-
 ## Technologies
 
 - Nextjs
 - Tailwind
 - MONGODB
 - Prisma
-_________________
+
+---
 
 ## Instalation
 
@@ -33,20 +32,18 @@ NEXTAUTH_SECRET=YOUR_SECRET
 
 - Run developement server ...
 
-
 ```properties
 npm run dev
 ```
 
 ... or build and serve the app
 
-
 ```properties
 npm run build
 ```
 
-
 ```properties
 npm run start
 ```
+
 ---

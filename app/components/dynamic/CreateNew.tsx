@@ -1,17 +1,23 @@
-'use client'
+"use client";
 
-import AddNewEvent from "./Events/AddNewEvent"
-import AddNewItem from "./Market/AddNewItem"
+import AddNewEvent from "./Events/AddNewEvent";
+import AddNewItem from "./Market/AddNewItem";
 
 const CreateNew = () => {
+  return (
+    <>
+      <AddNewEvent
+        optimisticFn={() => {}}
+        optimisticFnClnUp={() => {}}
+        refetchTrigger={() => {}}
+      />
+      <AddNewItem
+        optimisticFn={() => {}}
+        optimisticFnClnUp={() => {}}
+        refetchTrigger={() => {}}
+      />
+    </>
+  );
+};
 
-
-    return(
-        <>
-         <AddNewEvent optimisticFn={() => { }} optimisticFnClnUp={() => { }} refetchTrigger={() => { }} />
-        <AddNewItem optimisticFn={() => { }} optimisticFnClnUp={() => { }} refetchTrigger={() => { }} />
-        </>
-    )
-}
-
-export default CreateNew
+export default CreateNew;

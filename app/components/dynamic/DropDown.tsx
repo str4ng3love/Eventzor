@@ -11,12 +11,18 @@ interface Props {
   bgColor?: string;
 }
 
-const DropDown = ({ items, title, fn, bgColor = "bg-link", size='text-base' }: Props) => {
+const DropDown = ({
+  items,
+  title,
+  fn,
+  bgColor = "bg-link",
+  size = "text-base",
+}: Props) => {
   return (
     <div className="">
       <Menu>
         <Menu.Button
-          className={`text-contrast dark:text-text hover:text-text dark:hover:text-text_button  first-letter:capitalize min-w-[10ch] hover:-translate-y-1 hover:scale-105 font-bold p-2 ${size} ${bgColor} dark:text-text rounded-xl hover:bg-bg hover:shadow-link hover:text-interactive_text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-interactive_text transition-all duration-300`}
+          className={`min-w-[10ch] p-2 font-bold text-contrast  first-letter:capitalize hover:-translate-y-1 hover:scale-105 hover:text-text dark:text-text dark:hover:text-text_button ${size} ${bgColor} hover:text-interactive_text dark:hover:text-interactive_text rounded-xl transition-all duration-300 hover:bg-bg hover:shadow-link dark:text-text dark:hover:bg-text dark:hover:shadow-link`}
         >
           <>{title}</>
         </Menu.Button>
@@ -30,7 +36,7 @@ const DropDown = ({ items, title, fn, bgColor = "bg-link", size='text-base' }: P
           leaveTo="transform scale-95 opacity-0"
         >
           <Menu.Items
-            className={`z-50 absolute flex mt-1 flex-col origin-top-right w-56 shadow-bg_sidebar shadow-lg rounded-md focus:outline-none dark:ring-2 dark:ring-primary `}
+            className={`shadow-bg_sidebar absolute z-50 mt-1 flex w-56 origin-top-right flex-col rounded-md shadow-lg focus:outline-none dark:ring-2 dark:ring-primary `}
           >
             {items.map((item, i) => (
               <Menu.Item key={i}>
@@ -41,8 +47,8 @@ const DropDown = ({ items, title, fn, bgColor = "bg-link", size='text-base' }: P
                     }}
                     className={`${
                       active
-                        ? "bg-link text-contrast dark:text-text p-2"
-                        : "text-text bg-bg p-2 dark:text-text"
+                        ? "bg-link p-2 text-contrast dark:text-text"
+                        : "bg-bg p-2 text-text dark:text-text"
                     } first-letter:uppercase`}
                   >
                     {item}

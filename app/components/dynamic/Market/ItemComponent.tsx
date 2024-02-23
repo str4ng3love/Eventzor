@@ -1,12 +1,12 @@
-'use client'
+"use client";
 
-import { MarketItem } from "@prisma/client"
-import Image from "next/image"
-import Link from "next/link"
-import SpinnerMini from "../../static/SpinnerMini"
-import { useEffect, useState } from "react"
+import { MarketItem } from "@prisma/client";
+import Image from "next/image";
+import Link from "next/link";
+import SpinnerMini from "../../static/SpinnerMini";
+import { useEffect, useState } from "react";
 interface Props {
-  item: MarketItem
+  item: MarketItem;
 }
 const ItemComponent = ({ item }: Props) => {
   const [currency, setCurrency] = useState({ name: "initial", rate: 1 });
@@ -28,7 +28,7 @@ const ItemComponent = ({ item }: Props) => {
       }
     });
     return () => {
-      window.removeEventListener("currency", () => { });
+      window.removeEventListener("currency", () => {});
     };
   }, []);
 
@@ -49,11 +49,9 @@ const ItemComponent = ({ item }: Props) => {
     }
   }, []);
   return (
-
-
     <Link
       href={`/item/${item.item}`}
-      className="relative overflow-hidden ring-2 p-1 my-1 hover:bg-gradient-to-tl from-link via-link_active to-link transition-all duration-300 h-20 flex justify-between "
+      className="relative my-1 flex h-20 justify-between overflow-hidden from-link via-link_active to-link p-1 ring-2 transition-all duration-300 hover:bg-gradient-to-tl "
     >
       <div className="flex">
         <Image
@@ -61,47 +59,49 @@ const ItemComponent = ({ item }: Props) => {
           width={500}
           height={500}
           placeholder="blur"
-          blurDataURL={"data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkOAMAANIAzr59FiYAAAAASUVORK5CYII="}
+          blurDataURL={
+            "data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkOAMAANIAzr59FiYAAAAASUVORK5CYII="
+          }
           alt="Item's Image"
           src={item.images[0]}
         />
-        <div className="p-2 flex flex-col justify-between">
-          <span className="md:text-base text-sm sm:text-sm overflow-hidden text-ellipsis">
+        <div className="flex flex-col justify-between p-2">
+          <span className="overflow-hidden text-ellipsis text-sm sm:text-sm md:text-base">
             {item.item}
           </span>
-          <span className="self-end md:text-sm text-xs sm:inline-block hidden">
-            {item.preorder && item.releaseDate && item.releaseDate > new Date(Date.now()) ? `Available from: ${item.releaseDate.toUTCString().slice(0, -7)}` : ""}
+          <span className="hidden self-end text-xs sm:inline-block md:text-sm">
+            {item.preorder &&
+            item.releaseDate &&
+            item.releaseDate > new Date(Date.now())
+              ? `Available from: ${item.releaseDate.toUTCString().slice(0, -7)}`
+              : ""}
           </span>
         </div>
-        <span className="self-end text-sm w-40 p-2 h-full hidden md:block overflow-clip text-ellipsis">
+        <span className="hidden h-full w-40 self-end overflow-clip text-ellipsis p-2 text-sm md:block">
           {item.amount ? "In stock" : "out of stock"}
         </span>
-
       </div>
-      <div className="text-sm  hidden sm:flex">
-
-        <span className="justify-end self-center font-semibold  px-2 lg:text-lg overflow-hidden text-ellipsis flex">
+      <div className="hidden  text-sm sm:flex">
+        <span className="flex justify-end self-center  overflow-hidden text-ellipsis px-2 font-semibold lg:text-lg">
           {currency.name === "initial" ? (
             <SpinnerMini />
           ) : (
             (item.price * currency.rate).toFixed(2)
           )}
           &nbsp;
-          {currency.name !== "initial"
-            ? currency.name.toLocaleUpperCase()
-            : ""}
+          {currency.name !== "initial" ? currency.name.toLocaleUpperCase() : ""}
         </span>
       </div>
-      {item.preorder === true && item.releaseDate !== null && item.releaseDate >= new Date(Date.now()) ? (
-        <span className="p-1 absolute whitespace-nowrap flex items-center -rotate-[55deg] text-lg translate-x-[-30%] top-1/4 w-[8rem] justify-center left-0 h-8 bg-violet-600">
+      {item.preorder === true &&
+      item.releaseDate !== null &&
+      item.releaseDate >= new Date(Date.now()) ? (
+        <span className="absolute left-0 top-1/4 flex h-8 w-[8rem] translate-x-[-30%] -rotate-[55deg] items-center justify-center whitespace-nowrap bg-violet-600 p-1 text-lg">
           Preorder
         </span>
       ) : (
         <></>
       )}
     </Link>
-
-
-  )
-}
-export default ItemComponent
+  );
+};
+export default ItemComponent;

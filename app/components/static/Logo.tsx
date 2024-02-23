@@ -2,12 +2,14 @@ import { IconType } from "react-icons";
 interface Props {
   text: string;
   Icon: IconType;
-  padding?:string;
+  padding?: string;
 }
 
-const Logo = ({ text, Icon,padding='p-4' }: Props) => {
+const Logo = ({ text, Icon, padding = "p-4" }: Props) => {
   return (
-    <div className={`${padding} flex items-center gap-4 text-2xl text-contrast dark:text-text font-bold`}>
+    <div
+      className={`${padding} flex items-center gap-4 text-2xl font-bold text-contrast dark:text-text`}
+    >
       <Icon />
       {text}
     </div>

@@ -12,19 +12,18 @@
   --link-active: #7eabdf;
   --primary: #d4d3fc;
   --secondary: #ad1e13;
-  --shadow-link: 0rem 0rem 1rem var(--bg)
+  --shadow-link: 0rem 0rem 1rem var(--bg);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-
     --bg: rgb(20, 20, 20);
     --interactive: rgb(200, 200, 200);
     --sidebar: rgb(20, 20, 20);
     --text: rgb(235, 235, 235);
-    --contrast:rgb(20, 20, 20);
-    --link: #0F478A;
-    --link-active: #0D3C73;
+    --contrast: rgb(20, 20, 20);
+    --link: #0f478a;
+    --link-active: #0d3c73;
     --primary: #161536;
     --secondary: #ad1e13;
 

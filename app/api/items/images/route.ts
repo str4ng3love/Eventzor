@@ -1,5 +1,3 @@
-
-
 import { NextResponse } from "next/server";
 import { options } from "../../auth/[...nextauth]/options";
 import { getServerSession } from "next-auth";
@@ -13,21 +11,24 @@ async function handler(req: Request) {
       if (!body) {
         return NextResponse.json({ error: "Bad request" }, { status: 400 });
       }
-      const imagesArr = [...new Set(body.images)]
-
+      const imagesArr = [...new Set(body.images)];
 
       const updatedEventImages = await prisma.marketItem.update({
         where: {
           id: body.id,
-        },data:{
-            images: imagesArr as string[]
-        }
+        },
+        data: {
+          images: imagesArr as string[],
+        },
       });
-      if(!updatedEventImages){
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+      if (!updatedEventImages) {
+        return NextResponse.json(
+          { error: "Internal server error" },
+          { status: 500 },
+        );
       } else {
-        revalidatePath("/dashboard/market", 'page')
-        return NextResponse.json({message: 'Images updated successfully'});
+        revalidatePath("/dashboard/market", "page");
+        return NextResponse.json({ message: "Images updated successfully" });
       }
     } else {
       return NextResponse.json({ error: "Not authorized" }, { status: 401 });
@@ -37,4 +38,4 @@ async function handler(req: Request) {
   }
 }
 
-export {handler as PATCH}
+export { handler as PATCH };

@@ -1,8 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Heading1} from "../../static/Heading";
+import { Heading1 } from "../../static/Heading";
 import { BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi";
-
 
 import { MarketItem } from "@prisma/client";
 import ItemCarouselItem from "./ItemCarouselItem";
@@ -18,19 +17,15 @@ const ItemCarousel = ({
   darkBgAlpha = false,
   fullWidthBlur = false,
 }: Props) => {
-
   const [active, setActive] = useState(0);
   const [currency, setCurrency] = useState({ name: "initial", rate: 1 });
 
- 
   const showPrevious = () => {
-    setActive((prev) => (prev === 0 ? items.length - 1 : prev - 1))
-  }
+    setActive((prev) => (prev === 0 ? items.length - 1 : prev - 1));
+  };
   const showNext = () => {
-
     setActive((prev) => (prev === items.length - 1 ? 0 : prev + 1));
-
-  }
+  };
 
   useEffect(() => {
     window.addEventListener("currency", () => {
@@ -49,7 +44,7 @@ const ItemCarousel = ({
       }
     });
     return () => {
-      window.removeEventListener("currency", () => { });
+      window.removeEventListener("currency", () => {});
     };
   }, []);
   useEffect(() => {
@@ -69,57 +64,57 @@ const ItemCarousel = ({
     }
   }, []);
 
-
-
-    return (
-      <div
-        className={`${fullWidthBlur ? "w-full flex flex-col items-center justify-center backdrop-blur-sm shadow-[inset_0rem_0rem_3rem_black] pb-4 pt-20" : ""
-          } ${darkBgAlpha ? "lg:bg-black/40 " : ""}`}
-      >
-
-
-        <Heading1 text={heading} textColor="text-contrast dark:text-text" textShadow={`[text-shadow:_0_0_30px_black]`} />
-        <div className={`flex flex-col items-center w-fit`}>
-
-
-          <div className="flex items-center justify-evenly py-12">
-            <span
-              onClick={(e) =>
-                showPrevious()
-              }
-              className="p-2 text-3xl text-contrast dark:text-text hover:text-contrast transition-all duration-300 cursor-pointer z-30 hover:animate-pulse"
-            >
-              <BiSolidLeftArrow />
-            </span>
-            <div className={`overflow-hidden flex md:w-[50dvw] w-[75dvw] max-w-[1280px] transition-all duration-150`}>
-              <div className="w-80 min-w-full">
-                <ItemCarouselItem currency={currency} item={items[active]} />
-              </div>
+  return (
+    <div
+      className={`${
+        fullWidthBlur
+          ? "flex w-full flex-col items-center justify-center pb-4 pt-20 shadow-[inset_0rem_0rem_3rem_black] backdrop-blur-sm"
+          : ""
+      } ${darkBgAlpha ? "lg:bg-black/40 " : ""}`}
+    >
+      <Heading1
+        text={heading}
+        textColor="text-contrast dark:text-text"
+        textShadow={`[text-shadow:_0_0_30px_black]`}
+      />
+      <div className={`flex w-fit flex-col items-center`}>
+        <div className="flex items-center justify-evenly py-12">
+          <span
+            onClick={(e) => showPrevious()}
+            className="z-30 cursor-pointer p-2 text-3xl text-contrast transition-all duration-300 hover:animate-pulse hover:text-contrast dark:text-text"
+          >
+            <BiSolidLeftArrow />
+          </span>
+          <div
+            className={`flex w-[75dvw] max-w-[1280px] overflow-hidden transition-all duration-150 md:w-[50dvw]`}
+          >
+            <div className="w-80 min-w-full">
+              <ItemCarouselItem currency={currency} item={items[active]} />
             </div>
+          </div>
+          <span
+            onClick={(e) => {
+              showNext();
+            }}
+            className="z-30 cursor-pointer p-2 text-3xl text-contrast transition-all duration-300 hover:animate-pulse hover:text-contrast dark:text-text"
+          >
+            <BiSolidRightArrow />
+          </span>
+        </div>
+        <div className="flex w-full justify-center p-4">
+          {items.map((c, i) => (
             <span
-              onClick={(e) => {
-                showNext()
-              }}
-              className="p-2 text-3xl text-contrast dark:text-text hover:text-contrast transition-all duration-300 cursor-pointer z-30 hover:animate-pulse"
-            >
-              <BiSolidRightArrow />
-            </span>
-          </div>
-          <div className="flex justify-center p-4 w-full">
-            {items.map((c, i) => (
-              <span
-                onClick={(e) => setActive(i)}
-                key={i}
-                className={`h-4 w-4 ${active === i ? "bg-link" : "bg-interactive"
-              } dark:hover:bg-text hover:bg-bg hover:shadow-link transition-all duration-300 block mx-2 p-2 rounded-sm cursor-pointe`}
-              ></span>
-            ))}
-          </div>
+              onClick={(e) => setActive(i)}
+              key={i}
+              className={`h-4 w-4 ${
+                active === i ? "bg-link" : "bg-interactive"
+              } cursor-pointe mx-2 block rounded-sm p-2 transition-all duration-300 hover:bg-bg hover:shadow-link dark:hover:bg-text`}
+            ></span>
+          ))}
         </div>
       </div>
-    );
-
-
+    </div>
+  );
 };
 
 export default ItemCarousel;

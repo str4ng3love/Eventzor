@@ -9,7 +9,7 @@ module.exports = {
     extend: {
       backgroundImage: {
         "item-hero": 'url("/images/hero_item.jpeg")',
-        "lips": 'url("/images/lips.svg")',
+        lips: 'url("/images/lips.svg")',
         "event-hero": 'url("/images/hero_event.jpeg")',
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
@@ -19,13 +19,13 @@ module.exports = {
       },
       backgroundSize: {
         "3x3": "3rem 3rem",
-        "6x6": "6rem 6rem"
+        "6x6": "6rem 6rem",
       },
       borderRadius: {
         smoothLT: "1rem 0rem 0rem 0rem",
         smoothL: "1rem 0rem 0rem 1rem",
         smoothR: "0rem 0.3rem 0.3rem 0rem",
-        smoothLR: "0.3rem 0.3rem 0.3rem 0.3rem"
+        smoothLR: "0.3rem 0.3rem 0.3rem 0.3rem",
       },
       colors: {
         link: "var(--link)",
@@ -39,17 +39,20 @@ module.exports = {
         contrast: "var(--contrast)",
         interactive: "var(--interactive)",
         inactive: "var(--inactive)",
-        text_button: "var(--button-text)"
+        text_button: "var(--button-text)",
       },
       boxShadow: {
         link: "var(--shadow-link)",
         omni: "var(--shadow-omni)",
       },
       dropShadow: {
-        "white_omni": "0px 0px 5px white"
+        white_omni: "0px 0px 5px white",
       },
       minHeight: {
-        screenReducedBy4p5Rem: ["calc(100vh - 4.5rem)", "calc(100dvh - 4.5rem)"],
+        screenReducedBy4p5Rem: [
+          "calc(100vh - 4.5rem)",
+          "calc(100dvh - 4.5rem)",
+        ],
         screenReducedBy6Rem: ["calc(100vh - 6rem)", "calc(100dvh - 6rem)"],
         screenReducedBy50percent: ["calc(100vh - 50%)", "calc(100dvh - 50%)"],
       },
@@ -100,25 +103,25 @@ module.exports = {
         },
         translateRight: {
           "0%": {
-            transform: "translateX(-100%)"
+            transform: "translateX(-100%)",
           },
           "75%": {
-            transform: "translateX(10%)"
+            transform: "translateX(10%)",
           },
           "100%": {
-            transform: "translateX(0%)"
-          }
+            transform: "translateX(0%)",
+          },
         },
         translateLeft: {
           "0%": {
-            transform: "translateX(-100%)"
+            transform: "translateX(-100%)",
           },
           "75%": {
-            transform: "translateX(-210%)"
+            transform: "translateX(-210%)",
           },
           "100%": {
-            transform: "translateX(-200%)"
-          }
+            transform: "translateX(-200%)",
+          },
         },
         growAndShrink: {
           "0%, 100%": {

@@ -22,7 +22,7 @@ async function handler(req: Request) {
   if (!body)
     return NextResponse.json(
       { error: "Provide dislike data" },
-      { status: 400 }
+      { status: 400 },
     );
 
   if (req.method === "POST") {
@@ -45,15 +45,12 @@ async function handler(req: Request) {
         const comment = await prisma.$transaction(async (tx) => {
           const commenter = await tx.comment.findFirst({
             where: {
-              id: body.id
-            }
-
-
-          })
-
+              id: body.id,
+            },
+          });
 
           if (!commenter) {
-            return
+            return;
           }
           const comment = await tx.comment.update({
             where: { id: body.id },
@@ -64,29 +61,47 @@ async function handler(req: Request) {
                 },
               },
               likes: { deleteMany: { userName: session.user?.name as string } },
-            }, select: { authorName: true, id: true, dislikes: { where: { AND: [{ userName: { equals: session.user?.name as string } }, { commentId: body.id }] } } }
+            },
+            select: {
+              authorName: true,
+              id: true,
+              dislikes: {
+                where: {
+                  AND: [
+                    { userName: { equals: session.user?.name as string } },
+                    { commentId: body.id },
+                  ],
+                },
+              },
+            },
+          });
+          await tx.notification.create({
+            data: {
+              targetDislike: { connect: { id: comment.dislikes[0].id } },
+              action: "dislike",
+              comment: { connect: { id: body.id } },
+              userRecip: { connect: { name: comment.authorName } },
+              userInit: { connect: { name: session.user?.name as string } },
+            },
+          });
 
-          })
-          await tx.notification.create({ data: { targetDislike: { connect: { id: comment.dislikes[0].id } }, action: "dislike", comment: { connect: { id: body.id } }, userRecip: { connect: { name: comment.authorName } }, userInit: { connect: { name: session.user?.name as string } } } })
-
-          triggerNotification([commenter.authorName])
-          return comment
-        })
+          triggerNotification([commenter.authorName]);
+          return comment;
+        });
         if (!comment) {
-          return NextResponse.json({ error: "Something went wrong." })
+          return NextResponse.json({ error: "Something went wrong." });
         }
 
         // SSE Broadcast
         return NextResponse.json({
           message: "Dislike created successfully",
         });
-
       }
     } catch (error) {
       console.log(error);
       return NextResponse.json(
         { error: "Something went wrong" },
-        { status: 500 }
+        { status: 500 },
       );
     }
   }
@@ -95,20 +110,31 @@ async function handler(req: Request) {
       await prisma.$transaction(async (tx) => {
         tx.comment.update({
           where: { id: body.id },
-          data: { dislikes: { deleteMany: { userName: session?.user?.name as string } } },
-        })
+          data: {
+            dislikes: {
+              deleteMany: { userName: session?.user?.name as string },
+            },
+          },
+        });
 
-        await tx.notification.deleteMany({ where: { AND: [{ comment: { id: body.id } }, { initiator: session.user?.name as string }, { action: "dislike" }] } })
-        return
+        await tx.notification.deleteMany({
+          where: {
+            AND: [
+              { comment: { id: body.id } },
+              { initiator: session.user?.name as string },
+              { action: "dislike" },
+            ],
+          },
+        });
+        return;
       });
-
 
       return NextResponse.json({ message: "Disike deleted successfully" });
     } catch (error) {
       console.log(error);
       return NextResponse.json(
         { error: "Something went wrong" },
-        { status: 500 }
+        { status: 500 },
       );
     }
   }

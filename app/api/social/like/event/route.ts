@@ -5,7 +5,6 @@ import { prisma } from "@/lib/ConnectPrisma";
 import { revalidatePath } from "next/cache";
 import { triggerNotification } from "@/helpers/eventEmitter";
 
-
 async function handler(req: Request) {
   const session = await getServerSession(options);
   if (!session?.user?.name)
@@ -40,20 +39,19 @@ async function handler(req: Request) {
       });
 
       if (comment) {
-
         return NextResponse.json({ message: "Event already liked" });
       } else {
         const event = await prisma.$transaction(async (tx) => {
           const organizer = await tx.user.findFirst({
             where: {
               events: {
-                some: { id: body.id }
-              }
-            }
-          })
+                some: { id: body.id },
+              },
+            },
+          });
           if (!organizer) {
             // need to handle it better
-            return
+            return;
           }
           const event = await tx.event.update({
             where: { id: body.id },
@@ -63,22 +61,45 @@ async function handler(req: Request) {
                   user: { connect: { name: session.user?.name as string } },
                 },
               },
-              dislikes: { deleteMany: { userName: session.user?.name as string } },
-            }, select: { organizerName: true, title: true, id: true, likes: { where: { AND: [{ userName: { equals: session.user?.name as string } }, { eventId: body.id }] } } }
-          })
+              dislikes: {
+                deleteMany: { userName: session.user?.name as string },
+              },
+            },
+            select: {
+              organizerName: true,
+              title: true,
+              id: true,
+              likes: {
+                where: {
+                  AND: [
+                    { userName: { equals: session.user?.name as string } },
+                    { eventId: body.id },
+                  ],
+                },
+              },
+            },
+          });
 
-          await tx.notification.create({ data: { targetLike: { connect: { id: event.likes[0].id } }, action: "like", event: { connect: { id: body.id } }, userRecip: { connect: { name: event.organizerName } }, userInit: { connect: { name: session.user?.name as string } } } })
+          await tx.notification.create({
+            data: {
+              targetLike: { connect: { id: event.likes[0].id } },
+              action: "like",
+              event: { connect: { id: body.id } },
+              userRecip: { connect: { name: event.organizerName } },
+              userInit: { connect: { name: session.user?.name as string } },
+            },
+          });
 
-          triggerNotification([organizer.name])
-          return event
-        })
+          triggerNotification([organizer.name]);
+          return event;
+        });
         if (!event?.title) {
-          return NextResponse.json({ error: "Something went wrong." })
+          return NextResponse.json({ error: "Something went wrong." });
         }
         // SSE Broadcast
-        revalidatePath(`/events/${event?.title}`, "page")
+        revalidatePath(`/events/${event?.title}`, "page");
         return NextResponse.json({
-          message: "Like created successfully"
+          message: "Like created successfully",
         });
       }
     } catch (error) {
@@ -91,15 +112,24 @@ async function handler(req: Request) {
       const event = await prisma.$transaction(async (tx) => {
         const event = tx.event.update({
           where: { id: body.id },
-          data: { likes: { deleteMany: { userName: session?.user?.name as string } } },
-        })
-        await tx.notification.deleteMany({ where: { AND: [{ eventId: body.id }, { initiator: session.user?.name as string }, { action: "like" }] } })
-        return event
+          data: {
+            likes: { deleteMany: { userName: session?.user?.name as string } },
+          },
+        });
+        await tx.notification.deleteMany({
+          where: {
+            AND: [
+              { eventId: body.id },
+              { initiator: session.user?.name as string },
+              { action: "like" },
+            ],
+          },
+        });
+        return event;
       });
 
-
       // SSE Broadcast
-      revalidatePath(`/events/${event.title}`, "page")
+      revalidatePath(`/events/${event.title}`, "page");
       return NextResponse.json({ message: "Like deleted successfully" });
     } catch (error) {
       console.log(error);

@@ -8,7 +8,7 @@ interface Props {
   fn: (e: React.MouseEvent, href: string) => void;
   textColor?: string;
   selected?: string;
-  label:string;
+  label: string;
 }
 const NavItem = ({
   Icon,
@@ -24,15 +24,13 @@ const NavItem = ({
       onClick={(e) => fn(e, href)}
       href={href}
       aria-label={label}
-      className={`${textColor} w-full md:mb-1 mb-3 flex items-center under ${href === selected ? "after:opacity-100 text-white" : "after:opacity-0" }
-      after:bg-white after:h-5 after:rounded-smoothR hover:text-link dark:hover:text-white text-lg  md:text-sm after:absolute after:content-[''] after:w-2 hover:rounded-smoothR
-after:-translate-x-8`}
+      className={`${textColor} under mb-3 flex w-full items-center md:mb-1 ${href === selected ? "text-white after:opacity-100" : "after:opacity-0"}
+      text-lg after:absolute after:h-5 after:w-2 after:-translate-x-8 after:rounded-smoothR  after:bg-white after:content-[''] hover:rounded-smoothR hover:text-link dark:hover:text-white
+md:text-sm`}
     >
-      <span className={"text-xl p-2"}>
-        {Icon? <Icon />: <></>}
-      </span>
+      <span className={"p-2 text-xl"}>{Icon ? <Icon /> : <></>}</span>
 
-      <span className="capitalize p-2">{text}</span>
+      <span className="p-2 capitalize">{text}</span>
     </Link>
   );
 };

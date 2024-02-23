@@ -31,15 +31,14 @@ async function handler(req: Request) {
           console.log(error);
           return NextResponse.json(
             { error: "Internal server error" },
-            { status: 500 }
+            { status: 500 },
           );
         }
       }
-  }
-  else {
+  } else {
     return NextResponse.json(
       { error: "Methond not supported" },
-      { status: 405 }
+      { status: 405 },
     );
   }
 }

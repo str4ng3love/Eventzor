@@ -20,7 +20,7 @@ const LikeAndDislike = ({
   itemId,
   amountOfLikes,
   amountOfDislikes,
-  hidden = false
+  hidden = false,
 }: Props) => {
   const [parentData, setParentData] = useState({
     commentId,
@@ -63,7 +63,6 @@ const LikeAndDislike = ({
     }
   };
   const handleLike = async () => {
-
     try {
       setWorking(true);
       if (!liked && disliked) {
@@ -73,13 +72,11 @@ const LikeAndDislike = ({
           amountOfLikes: (prev.amountOfLikes += 1),
         }));
       } else if (liked) {
-
         setParentData((prev) => ({
           ...prev,
           amountOfLikes: (prev.amountOfLikes -= 1),
         }));
       } else {
-
         setParentData((prev) => ({
           ...prev,
           amountOfLikes: (prev.amountOfLikes += 1),
@@ -93,7 +90,7 @@ const LikeAndDislike = ({
       const { urlPart, id } = getIDType(
         parentData.commentId,
         parentData.eventId,
-        parentData.itemId
+        parentData.itemId,
       );
 
       const resp = await fetch(`/api/social/like/${urlPart}`, {
@@ -137,7 +134,7 @@ const LikeAndDislike = ({
       const { urlPart, id } = getIDType(
         parentData.commentId,
         parentData.eventId,
-        parentData.itemId
+        parentData.itemId,
       );
 
       const resp = await fetch(`/api/social/dislike/${urlPart}`, {
@@ -155,7 +152,6 @@ const LikeAndDislike = ({
   };
 
   useEffect(() => {
-
     CheckStatus();
   }, []);
 
@@ -245,16 +241,16 @@ const LikeAndDislike = ({
             </>
           )}
 
-          <div className={`relative w-[100%] mt-4 flex justify-between h-1 ${hidden ? "hidden" : ""}`}>
-
-
-
-            <div className={`h-1 w-[${((parentData.amountOfLikes / (parentData.amountOfLikes + parentData.amountOfDislikes)) * 100).toFixed(0)}%] bg-primary`} />
-            <div className={`h-1 w-[${((parentData.amountOfDislikes / (parentData.amountOfLikes + parentData.amountOfDislikes)) * 100).toFixed(0)}%] bg-secondary`} />
-
-
+          <div
+            className={`relative mt-4 flex h-1 w-[100%] justify-between ${hidden ? "hidden" : ""}`}
+          >
+            <div
+              className={`h-1 w-[${((parentData.amountOfLikes / (parentData.amountOfLikes + parentData.amountOfDislikes)) * 100).toFixed(0)}%] bg-primary`}
+            />
+            <div
+              className={`h-1 w-[${((parentData.amountOfDislikes / (parentData.amountOfLikes + parentData.amountOfDislikes)) * 100).toFixed(0)}%] bg-secondary`}
+            />
           </div>
-
         </>
       )}
       {showLogin ? (
@@ -262,7 +258,6 @@ const LikeAndDislike = ({
       ) : (
         <></>
       )}
-
     </div>
   );
 };

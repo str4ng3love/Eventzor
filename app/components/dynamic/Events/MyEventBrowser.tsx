@@ -40,28 +40,28 @@ const MyEventBrowser = () => {
       if (data) {
         id
           ? setEventsArr((prev) =>
-            prev
-              ? prev.map((e) =>
-                e.id === id
-                  ? {
-                    id,
-                    closingDate: data.closingDate,
-                    price: data.price,
-                    images: data.images,
-                    description: data.description,
-                    eventDate: data.eventDate,
-                    location: data.location,
-                    organizerName: data.organizerName,
-                    status: data.status,
-                    tickets: data.tickets,
-                    ticketsSold: data.ticketsSold,
-                    title: data.title,
-                    orders: data.orders,
-                  }
-                  : e
-              )
-              : null
-          )
+              prev
+                ? prev.map((e) =>
+                    e.id === id
+                      ? {
+                          id,
+                          closingDate: data.closingDate,
+                          price: data.price,
+                          images: data.images,
+                          description: data.description,
+                          eventDate: data.eventDate,
+                          location: data.location,
+                          organizerName: data.organizerName,
+                          status: data.status,
+                          tickets: data.tickets,
+                          ticketsSold: data.ticketsSold,
+                          title: data.title,
+                          orders: data.orders,
+                        }
+                      : e,
+                  )
+                : null,
+            )
           : setEventsArr((prev) => (prev ? [...prev, data] : null));
 
         setOptimisticComp(false);
@@ -122,7 +122,7 @@ const MyEventBrowser = () => {
     try {
       const cachedEntry = eventsArr?.filter((e) => e.id == id);
       setEventsArr((prev) =>
-        prev ? [...prev.filter((e) => e.id != id)] : null
+        prev ? [...prev.filter((e) => e.id != id)] : null,
       );
 
       const resp = await fetch("/api/events", {
@@ -137,7 +137,7 @@ const MyEventBrowser = () => {
         setNotify({ error: false, show: true, message: message.message });
       } else if (message.error) {
         setEventsArr((prev) =>
-          prev && cachedEntry ? [...prev, ...cachedEntry] : null
+          prev && cachedEntry ? [...prev, ...cachedEntry] : null,
         );
         setNotify({ error: true, show: true, message: message.error });
       }
@@ -162,11 +162,11 @@ const MyEventBrowser = () => {
   } else {
     return (
       <>
-        <div className="my-4 px-8 flex flex-col py-4">
-          <div className="flex justify-end gap-4 text-sm items-center">
+        <div className="my-4 flex flex-col px-8 py-4">
+          <div className="flex items-center justify-end gap-4 text-sm">
             {/* todo filter component and sort */}
             {filtered ? (
-              <div className="flex bg-link rounded-xl gap-2">
+              <div className="flex gap-2 rounded-xl bg-link">
                 <ResetFilter
                   fn={(e) => {
                     setFiltered(null);
@@ -235,46 +235,46 @@ const MyEventBrowser = () => {
               }}
             />
           </div>
-          <table className="my-8  w-full text-xs table">
-              <thead className="">
-                <tr className="border-b-2 border-black/25 bg-black/40 table-row">
-                  <th className="p-2 text-start">Date</th>
-                  <th className="p-2 text-start">Event</th>
-                  <th className="p-2 text-start">Tickets / Sold</th>
-                  <th className="p-2 text-start">Closing Date</th>
-                  <th className="p-2 text-start"></th>
-                </tr>
-              </thead>
+          <table className="my-8  table w-full text-xs">
+            <thead className="">
+              <tr className="table-row border-b-2 border-black/25 bg-black/40">
+                <th className="p-2 text-start">Date</th>
+                <th className="p-2 text-start">Event</th>
+                <th className="p-2 text-start">Tickets / Sold</th>
+                <th className="p-2 text-start">Closing Date</th>
+                <th className="p-2 text-start"></th>
+              </tr>
+            </thead>
             <tbody className="">
               {filtered
                 ? filtered.map((event) => (
-                  <MyEventComponent
-                    key={event.id}
-                    {...event}
-                    delFn={() => {
-                      deleteEvent(event.id);
-                    }}
-                    editFn={() => {
-                      setEdit({ show: true, event: event });
-                    }}
-                  />
-                ))
+                    <MyEventComponent
+                      key={event.id}
+                      {...event}
+                      delFn={() => {
+                        deleteEvent(event.id);
+                      }}
+                      editFn={() => {
+                        setEdit({ show: true, event: event });
+                      }}
+                    />
+                  ))
                 : eventsArr.map((event) => (
-                  <MyEventComponent
-                    key={event.id}
-                    {...event}
-                    delFn={() => {
-                      deleteEvent(event.id);
-                    }}
-                    editFn={() => {
-                      setEdit({ show: true, event: event });
-                    }}
-                  />
-                ))}
+                    <MyEventComponent
+                      key={event.id}
+                      {...event}
+                      delFn={() => {
+                        deleteEvent(event.id);
+                      }}
+                      editFn={() => {
+                        setEdit({ show: true, event: event });
+                      }}
+                    />
+                  ))}
               {optimisticComp ? <EventSkeleton /> : <></>}
 
               {eventsArr.length === 0 ? (
-                <tr className="w-full flex justify-center p-8">
+                <tr className="flex w-full justify-center p-8">
                   <td>No Events in Database</td>
                 </tr>
               ) : (

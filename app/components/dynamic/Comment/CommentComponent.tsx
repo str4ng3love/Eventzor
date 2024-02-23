@@ -26,7 +26,7 @@ interface Props {
   amountOfReplies?: number;
   likes: number;
   dislikes: number;
-  triggerRefetchFN?: () => void
+  triggerRefetchFN?: () => void;
 }
 export interface ReplyProps extends Comment {
   _count: { children: number; likes: number; dislikes: number };
@@ -41,7 +41,7 @@ const CommentComponent = ({
   amountOfReplies,
   likes,
   dislikes,
-  triggerRefetchFN
+  triggerRefetchFN,
 }: Props) => {
   const [comment, setComment] = useState({
     text,
@@ -63,13 +63,13 @@ const CommentComponent = ({
   const [replies, setReplies] = useState<ReplyProps[]>([]);
   const [showReplies, setShowReplies] = useState(false);
   const [edit, setEdit] = useState(false);
-  const [whenCommented, setWhenCommented] = useState<string>()
+  const [whenCommented, setWhenCommented] = useState<string>();
   const { data: session } = useSession();
 
   const getReplies = async (parentId: string) => {
     try {
       const resp = await fetch(
-        "/api/comments/replies?" + new URLSearchParams({ id: parentId })
+        "/api/comments/replies?" + new URLSearchParams({ id: parentId }),
       );
       const data = await resp.json();
 
@@ -141,30 +141,31 @@ const CommentComponent = ({
       likes,
       dislikes,
     });
-    setWhenCommented(TimeDifference(
-      Date.now(),
-      Date.parse(comment.createdAt?.toUTCString())
-    ))
-
+    setWhenCommented(
+      TimeDifference(Date.now(), Date.parse(comment.createdAt?.toUTCString())),
+    );
   }, []);
   if (status === "flaggedAsDeleted") {
-
     return (
       <>
-        <div className="flex w-full flex-col my-4 hover:ring-2 ring-primary rounded-md">
-          <div className=" p-2 w-full flex items-center justify-between">
+        <div className="my-4 flex w-full flex-col rounded-md ring-primary hover:ring-2">
+          <div className=" flex w-full items-center justify-between p-2">
             <div className="flex items-center">
               <span>{comment.author}</span>
-              <span className="text-sm pl-4">
-                {whenCommented ? whenCommented : <SpinnerMini borderSize="border-2" h="h-2" w="w-2" />}
+              <span className="pl-4 text-sm">
+                {whenCommented ? (
+                  whenCommented
+                ) : (
+                  <SpinnerMini borderSize="border-2" h="h-2" w="w-2" />
+                )}
               </span>
             </div>
           </div>
-          <div className=" p-2 w-full break-words text-sm text-text_inactive">
+          <div className=" text-text_inactive w-full break-words p-2 text-sm">
             Comment deleted
           </div>
           {amountOfReplies && amountOfReplies > 0 ? (
-            <div className="flex flex-col p-2 w-full gap-2">
+            <div className="flex w-full flex-col gap-2 p-2">
               <div
                 onClick={(e) => {
                   if (!showReplies) {
@@ -172,11 +173,12 @@ const CommentComponent = ({
                   }
                   setShowReplies(!showReplies);
                 }}
-                className="cursor-pointer flex items-center text-link rounded-md transition-all duration-300"
+                className="flex cursor-pointer items-center rounded-md text-link transition-all duration-300"
               >
                 <span
-                  className={`${showReplies ? "-rotate-180" : "rotate-0"
-                    } transition-all duration-300`}
+                  className={`${
+                    showReplies ? "-rotate-180" : "rotate-0"
+                  } transition-all duration-300`}
                 >
                   <BiDownArrow />
                 </span>
@@ -184,7 +186,6 @@ const CommentComponent = ({
                   {amountOfReplies}&nbsp;
                   {amountOfReplies > 1 ? "replies" : "reply"}
                 </span>
-
               </div>
               {showReplies ? (
                 <>
@@ -201,10 +202,7 @@ const CommentComponent = ({
                       />
                     ))
                   ) : (
-                    <div
-
-                      className="w-full flex justify-center py-2"
-                    >
+                    <div className="flex w-full justify-center py-2">
                       <SpinnerMini />
                     </div>
                   )}
@@ -233,13 +231,17 @@ const CommentComponent = ({
   } else {
     return (
       <>
-        <div className="flex w-full flex-col hover:ring-2 ring-primary rounded-md">
-          <div className="p-2 w-full flex items-center justify-between">
+        <div className="flex w-full flex-col rounded-md ring-primary hover:ring-2">
+          <div className="flex w-full items-center justify-between p-2">
             <div className="flex items-center">
               <span>{comment.author}</span>
-              <span className="text-sm pl-4 flex items-center">
+              <span className="flex items-center pl-4 text-sm">
                 {comment.updatedAt ? "(edited) " : ""}
-                {whenCommented ? whenCommented : <SpinnerMini borderSize="border-2" h="h-2" w="w-2" />}
+                {whenCommented ? (
+                  whenCommented
+                ) : (
+                  <SpinnerMini borderSize="border-2" h="h-2" w="w-2" />
+                )}
               </span>
             </div>
             <div>
@@ -275,7 +277,7 @@ const CommentComponent = ({
                 suppressContentEditableWarning
                 onInput={(e) => setCommentTextEdited(e.currentTarget.innerHTML)}
                 onPaste={(e) => setCommentTextEdited(e.currentTarget.innerHTML)}
-                className="p-2 mx-2 resize-none text-text_inactive my-8 bg-interactive_text transition-all 500ms break-all ring-2 ring-primary rounded-md text-sm"
+                className="text-text_inactive bg-interactive_text 500ms mx-2 my-8 resize-none break-all rounded-md p-2 text-sm ring-2 ring-primary transition-all"
               >
                 {FormatString(comment.text)}
               </div>
@@ -299,12 +301,12 @@ const CommentComponent = ({
               </div>
             </div>
           ) : (
-            <div className=" p-2 w-full break-words text-sm">
+            <div className=" w-full break-words p-2 text-sm">
               {FormatString(comment.text)}
             </div>
           )}
 
-          <div className="flex p-2 w-full gap-2 flex-col">
+          <div className="flex w-full flex-col gap-2 p-2">
             <LikeAndDislike
               hidden={true}
               commentId={id}
@@ -312,10 +314,18 @@ const CommentComponent = ({
               amountOfDislikes={comment.dislikes}
             />
 
-            <AddComment triggerRefetchFN={() => { triggerRefetchFN ? triggerRefetchFN() : null }} title="Reply" reply id={id} type={CommentType.parent} />
+            <AddComment
+              triggerRefetchFN={() => {
+                triggerRefetchFN ? triggerRefetchFN() : null;
+              }}
+              title="Reply"
+              reply
+              id={id}
+              type={CommentType.parent}
+            />
           </div>
           {amountOfReplies && amountOfReplies > 0 ? (
-            <div className="flex flex-col p-2 w-full gap-2">
+            <div className="flex w-full flex-col gap-2 p-2">
               <button
                 onClick={(e) => {
                   if (!showReplies) {
@@ -323,11 +333,12 @@ const CommentComponent = ({
                   }
                   setShowReplies(!showReplies);
                 }}
-                className="cursor-pointer flex items-center text-link rounded-md transition-all duration-300"
+                className="flex cursor-pointer items-center rounded-md text-link transition-all duration-300"
               >
                 <span
-                  className={`${showReplies ? "-rotate-180" : "rotate-0"
-                    } transition-all duration-300`}
+                  className={`${
+                    showReplies ? "-rotate-180" : "rotate-0"
+                  } transition-all duration-300`}
                 >
                   <BiDownArrow />
                 </span>
@@ -351,10 +362,7 @@ const CommentComponent = ({
                       />
                     ))
                   ) : (
-                    <div
-
-                      className="w-full flex justify-center py-2"
-                    >
+                    <div className="flex w-full justify-center py-2">
                       <SpinnerMini />
                     </div>
                   )}

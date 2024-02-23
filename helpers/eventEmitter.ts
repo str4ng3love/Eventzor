@@ -1,23 +1,17 @@
 import EventEmitter from "events";
 
-
-const emitter = new EventEmitter
+const emitter = new EventEmitter();
 
 const triggerNotification = async (recipients: (string | undefined)[]) => {
+  recipients.map((r) => {
+    if (r === undefined) {
+      return;
+    }
 
-    recipients.map(r => {
+    let eventName = `Notify@${r}`;
 
-        if (r === undefined) {
-            return
-        }
+    emitter.emit(eventName);
+  });
+};
 
-        let eventName = `Notify@${r}`
-
-        emitter.emit(eventName)
-    })
-}
-
-
-
-
-export { emitter, triggerNotification }
+export { emitter, triggerNotification };

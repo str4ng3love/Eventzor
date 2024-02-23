@@ -18,14 +18,14 @@ const Notification = ({ show, error, message, onAnimEnd }: Props) => {
           {error ? (
             <div
               onAnimationEnd={() => onAnimEnd()}
-              className="px-2 shadow-md shadow-black absolute min-w-[400px] left-[50%] translate-x-[-50%] top-0 translate-y-[100%] text-center flex justify-center items-center bg-secondary rounded-md animate-growAndShrink font-semibold"
+              className="absolute left-[50%] top-0 flex min-w-[400px] translate-x-[-50%] translate-y-[100%] animate-growAndShrink items-center justify-center rounded-md bg-secondary px-2 text-center font-semibold shadow-md shadow-black"
             >
               {message}
             </div>
           ) : (
             <div
               onAnimationEnd={() => onAnimEnd()}
-              className="px-2 shadow-md shadow-black absolute min-w-[400px] left-[50%] translate-x-[-50%] top-0 translate-y-[100%] text-center flex justify-center items-center bg-link rounded-md animate-growAndShrink font-semibold"
+              className="absolute left-[50%] top-0 flex min-w-[400px] translate-x-[-50%] translate-y-[100%] animate-growAndShrink items-center justify-center rounded-md bg-link px-2 text-center font-semibold shadow-md shadow-black"
             >
               {message}
             </div>

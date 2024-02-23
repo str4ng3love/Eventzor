@@ -23,7 +23,7 @@ async function handler(req: Request) {
   if (!body)
     return NextResponse.json(
       { error: "Provide dislike data" },
-      { status: 400 }
+      { status: 400 },
     );
 
   if (req.method === "POST") {
@@ -44,20 +44,19 @@ async function handler(req: Request) {
       if (event) {
         return NextResponse.json({
           message: "Event already disliked",
-
         });
       } else {
         const event = await prisma.$transaction(async (tx) => {
           const organizer = await tx.user.findFirst({
             where: {
               events: {
-                some: { id: body.id }
-              }
-            }
-          })
+                some: { id: body.id },
+              },
+            },
+          });
 
           if (!organizer) {
-            return
+            return;
           }
           const event = await tx.event.update({
             where: { id: body.id },
@@ -68,16 +67,35 @@ async function handler(req: Request) {
                 },
               },
               likes: { deleteMany: { userName: session.user?.name as string } },
-            }, select: { organizerName: true, id: true, dislikes: { where: { AND: [{ userName: { equals: session.user?.name as string } }, { eventId: body.id }] } } }
+            },
+            select: {
+              organizerName: true,
+              id: true,
+              dislikes: {
+                where: {
+                  AND: [
+                    { userName: { equals: session.user?.name as string } },
+                    { eventId: body.id },
+                  ],
+                },
+              },
+            },
+          });
+          await tx.notification.create({
+            data: {
+              targetDislike: { connect: { id: event.dislikes[0].id } },
+              action: "dislike",
+              event: { connect: { id: body.id } },
+              userRecip: { connect: { name: event.organizerName } },
+              userInit: { connect: { name: session.user?.name as string } },
+            },
+          });
 
-          })
-          await tx.notification.create({ data: { targetDislike: { connect: { id: event.dislikes[0].id } }, action: "dislike", event: { connect: { id: body.id } }, userRecip: { connect: { name: event.organizerName } }, userInit: { connect: { name: session.user?.name as string } } } })
-
-          triggerNotification([organizer.name])
-          return event
-        })
+          triggerNotification([organizer.name]);
+          return event;
+        });
         if (!event) {
-          return NextResponse.json({ error: "Something went wrong." })
+          return NextResponse.json({ error: "Something went wrong." });
         }
         // SSE Broadcast
 
@@ -89,7 +107,7 @@ async function handler(req: Request) {
       console.log(error);
       return NextResponse.json(
         { error: "Something went wrong" },
-        { status: 500 }
+        { status: 500 },
       );
     }
   }
@@ -98,22 +116,33 @@ async function handler(req: Request) {
       const event = await prisma.$transaction(async (tx) => {
         const event = tx.event.update({
           where: { id: body.id },
-          data: { dislikes: { deleteMany: { userName: session?.user?.name as string } } },
-        })
-        await tx.notification.deleteMany({ where: { AND: [{ eventId: body.id }, { initiator: session.user?.name as string }, { action: "dislike" }] } })
+          data: {
+            dislikes: {
+              deleteMany: { userName: session?.user?.name as string },
+            },
+          },
+        });
+        await tx.notification.deleteMany({
+          where: {
+            AND: [
+              { eventId: body.id },
+              { initiator: session.user?.name as string },
+              { action: "dislike" },
+            ],
+          },
+        });
 
-        return event
+        return event;
       });
 
-
       // SSE Broadcast
-      revalidatePath(`/events/${event.title}`, 'page')
+      revalidatePath(`/events/${event.title}`, "page");
       return NextResponse.json({ message: "Disike deleted successfully" });
     } catch (error) {
       console.log(error);
       return NextResponse.json(
         { error: "Something went wrong" },
-        { status: 500 }
+        { status: 500 },
       );
     }
   }

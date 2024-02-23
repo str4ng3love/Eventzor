@@ -1,5 +1,4 @@
- export default function FormatString (string: string){
-
+export default function FormatString(string: string) {
   return string
     .replaceAll("</div>", ``)
     .replaceAll("<div>", "")
@@ -8,5 +7,4 @@
     .replaceAll("&lt;", "<")
     .replaceAll("&gt;", ">")
     .replaceAll("&amp;", "&");
-};
-
+}

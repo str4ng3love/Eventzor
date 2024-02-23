@@ -14,15 +14,19 @@ async function handler(req: Request) {
       const updatedEventImages = await prisma.event.update({
         where: {
           id: body.id,
-        },data:{
-            images: body.images
-        }
+        },
+        data: {
+          images: body.images,
+        },
       });
-      if(!updatedEventImages){
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+      if (!updatedEventImages) {
+        return NextResponse.json(
+          { error: "Internal server error" },
+          { status: 500 },
+        );
       } else {
-        revalidatePath("/dashboard/events", 'page')
-        return NextResponse.json({message: 'Images updated successfully'});
+        revalidatePath("/dashboard/events", "page");
+        return NextResponse.json({ message: "Images updated successfully" });
       }
     } else {
       return NextResponse.json({ error: "Not authorized" }, { status: 401 });
@@ -32,4 +36,4 @@ async function handler(req: Request) {
   }
 }
 
-export {handler as PATCH}
+export { handler as PATCH };

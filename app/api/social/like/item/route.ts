@@ -45,15 +45,14 @@ async function handler(req: Request) {
           const organizer = await tx.user.findFirst({
             where: {
               marketItems: {
-                some: { id: body.id }
-              }
-            }
-          })
-
+                some: { id: body.id },
+              },
+            },
+          });
 
           if (!organizer) {
             // need to handle it better
-            return
+            return;
           }
           const item = await tx.marketItem.update({
             where: { id: body.id },
@@ -63,25 +62,44 @@ async function handler(req: Request) {
                   user: { connect: { name: session.user?.name as string } },
                 },
               },
-              dislikes: { deleteMany: { userName: session.user?.name as string } },
-            }, select: {
-              merchantName: true, item: true, id: true, likes: {
-                where: { AND: [{ userName: { equals: session.user?.name as string } }, { MarketItemId: body.id }] }
-              }
-            }
-          })
-          await tx.notification.create({ data: { targetLike: { connect: { id: item.likes[0].id } }, action: "like", item: { connect: { id: body.id } }, userRecip: { connect: { name: item.merchantName } }, userInit: { connect: { name: session.user?.name as string } } } })
+              dislikes: {
+                deleteMany: { userName: session.user?.name as string },
+              },
+            },
+            select: {
+              merchantName: true,
+              item: true,
+              id: true,
+              likes: {
+                where: {
+                  AND: [
+                    { userName: { equals: session.user?.name as string } },
+                    { MarketItemId: body.id },
+                  ],
+                },
+              },
+            },
+          });
+          await tx.notification.create({
+            data: {
+              targetLike: { connect: { id: item.likes[0].id } },
+              action: "like",
+              item: { connect: { id: body.id } },
+              userRecip: { connect: { name: item.merchantName } },
+              userInit: { connect: { name: session.user?.name as string } },
+            },
+          });
 
-          triggerNotification([organizer.name])
-          return item
-        })
+          triggerNotification([organizer.name]);
+          return item;
+        });
         if (!item?.item) {
-          return NextResponse.json({ error: "Something went wrong." })
+          return NextResponse.json({ error: "Something went wrong." });
         }
-        // SSE Broadcast 
-        revalidatePath(`/market/${item?.item}`, "page")
+        // SSE Broadcast
+        revalidatePath(`/market/${item?.item}`, "page");
         return NextResponse.json({
-          message: "Like created successfully"
+          message: "Like created successfully",
         });
       }
     } catch (error) {
@@ -94,15 +112,24 @@ async function handler(req: Request) {
       const item = await prisma.$transaction(async (tx) => {
         const item = tx.marketItem.update({
           where: { id: body.id },
-          data: { likes: { deleteMany: { userName: session?.user?.name as string } } },
-        })
-        await tx.notification.deleteMany({ where: { AND: [{ item: { id: body.id } }, { initiator: session.user?.name as string }, { action: 'like' }] } })
-        return item
+          data: {
+            likes: { deleteMany: { userName: session?.user?.name as string } },
+          },
+        });
+        await tx.notification.deleteMany({
+          where: {
+            AND: [
+              { item: { id: body.id } },
+              { initiator: session.user?.name as string },
+              { action: "like" },
+            ],
+          },
+        });
+        return item;
       });
 
-
       // SSE Broadcast
-      revalidatePath(`/market/${item.item}`, "page")
+      revalidatePath(`/market/${item.item}`, "page");
       return NextResponse.json({ message: "Like deleted successfully" });
     } catch (error) {
       console.log(error);

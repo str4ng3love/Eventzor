@@ -7,7 +7,7 @@ async function handler(req: Request) {
   if (!path) {
     return NextResponse.json(
       { message: "Missing path param" },
-      { status: 400 }
+      { status: 400 },
     );
   }
   console.log(path);

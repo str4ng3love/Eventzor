@@ -5,7 +5,6 @@ import { Dialog, Transition } from "@headlessui/react";
 import Button from "../Button";
 import Image from "next/image";
 
-
 enum FormActionKind {
   INPUT_TITLE = "Input event title",
   INPUT_DESC = "Input event description",
@@ -15,7 +14,7 @@ enum FormActionKind {
   INPUT_ESTART = "Events starting date",
   INPUT_PRICE = "Ticket price",
   INPUT_IMAGE = "Image for promotion",
-  DELETE_IMAGE = "Delete a image"
+  DELETE_IMAGE = "Delete a image",
 }
 interface InputAction {
   type: FormActionKind;
@@ -90,7 +89,7 @@ const reducer = (state: InputState, action: InputAction) => {
 
         image: [
           ...state.image.filter(
-            (image, index) => index !== (payload as number)
+            (image, index) => index !== (payload as number),
           ),
         ],
       };
@@ -100,25 +99,27 @@ const reducer = (state: InputState, action: InputAction) => {
   }
 };
 interface Props {
-
   refetchTrigger: () => void;
   optimisticFn: (e: React.MouseEvent) => void;
   optimisticFnClnUp: () => void;
-
 }
-const AddNewEvent = ({ optimisticFn, optimisticFnClnUp, refetchTrigger }: Props) => {
+const AddNewEvent = ({
+  optimisticFn,
+  optimisticFnClnUp,
+  refetchTrigger,
+}: Props) => {
   const [show, setShow] = useState(false);
-  const [canPost, setCanPost] = useState(true)
-  const [image, setImage] = useState('')
+  const [canPost, setCanPost] = useState(true);
+  const [image, setImage] = useState("");
   const [notify, setNotify] = useState({
     show: false,
     message: "",
     error: false,
   });
-  const closingDate = new Date()
-  const eventDate = new Date()
-  closingDate.setUTCMonth(closingDate.getUTCMonth() + 1)
-  eventDate.setUTCMonth(eventDate.getUTCMonth() + 3)
+  const closingDate = new Date();
+  const eventDate = new Date();
+  closingDate.setUTCMonth(closingDate.getUTCMonth() + 1);
+  eventDate.setUTCMonth(eventDate.getUTCMonth() + 3);
   const [state, dispatch] = useReducer(reducer, {
     title: "",
     description: "",
@@ -127,25 +128,33 @@ const AddNewEvent = ({ optimisticFn, optimisticFnClnUp, refetchTrigger }: Props)
     closingDate: closingDate,
     eventDate: eventDate,
     price: 0,
-    image: []
+    image: [],
   });
   const checkIfImageExists = async (url: string) => {
     try {
-      const resp = await fetch(url, { method: "HEAD" })
-      const contentType = resp.headers.get("content-type")
+      const resp = await fetch(url, { method: "HEAD" });
+      const contentType = resp.headers.get("content-type");
 
-      if (contentType?.includes('image')) {
-        return true
+      if (contentType?.includes("image")) {
+        return true;
       } else {
-        setNotify({ error: true, message: "Provided URL does not point to a valid image resource", show: true })
-        return false
+        setNotify({
+          error: true,
+          message: "Provided URL does not point to a valid image resource",
+          show: true,
+        });
+        return false;
       }
     } catch (error) {
-      setNotify({ error: true, message: "Provided URL does not point to a valid image resource", show: true })
-      console.log(error)
-      return false
+      setNotify({
+        error: true,
+        message: "Provided URL does not point to a valid image resource",
+        show: true,
+      });
+      console.log(error);
+      return false;
     }
-  }
+  };
   const handleCreate = async (state: InputState) => {
     if (state.tickets < 0) {
       return setNotify({
@@ -173,14 +182,13 @@ const AddNewEvent = ({ optimisticFn, optimisticFnClnUp, refetchTrigger }: Props)
       });
       const data = await resp.json();
 
-
       setCanPost(true);
       if (data.error) {
         setNotify({ error: true, show: true, message: data.error });
-        optimisticFnClnUp()
+        optimisticFnClnUp();
       } else {
         setNotify({ error: false, show: true, message: data.message });
-        refetchTrigger()
+        refetchTrigger();
       }
     } catch (error) {
       console.log(error);
@@ -200,22 +208,22 @@ const AddNewEvent = ({ optimisticFn, optimisticFnClnUp, refetchTrigger }: Props)
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="bg-black/20 fixed inset-0" aria-hidden />
+            <div className="fixed inset-0 bg-black/20" aria-hidden />
             <div className="fixed inset-0 flex items-center justify-center p-4 backdrop-blur-sm">
               <Dialog.Panel
                 className={
-                  "relative p-8 bg-interactive dark:bg-sidebar text-text dark:bg-bg_interactive max-h-[85%] md:w-[50%] shadow-md shadow-black overflow-y-scroll"
+                  "dark:bg-bg_interactive relative max-h-[85%] overflow-y-scroll bg-interactive p-8 text-text shadow-md shadow-black dark:bg-sidebar md:w-[50%]"
                 }
               >
-                <Dialog.Title className={"p-2 font-bold text-xl text-center"}>
+                <Dialog.Title className={"p-2 text-center text-xl font-bold"}>
                   Add new Event
                 </Dialog.Title>
                 <Dialog.Description className={"p-8 text-lg font-semibold"}>
                   Create new Event
                 </Dialog.Description>
                 <form onSubmit={(e) => e.preventDefault()}>
-                  <div className="p-4 flex justify-between z-20 ">
-                    <label className="p-1 min-w-[10ch] mr-2">Title</label>
+                  <div className="z-20 flex justify-between p-4 ">
+                    <label className="mr-2 min-w-[10ch] p-1">Title</label>
                     <input
                       min={new Date().toDateString().slice(0, -8)}
                       onChange={(e) =>
@@ -224,12 +232,12 @@ const AddNewEvent = ({ optimisticFn, optimisticFnClnUp, refetchTrigger }: Props)
                           payload: e.currentTarget.value,
                         })
                       }
-                      className="p-1 min-w-[15ch] ring-1 dark:text-contrast ring-primary active:ring-link dark:text-interactive_text w-full  h-8"
+                      className="dark:text-interactive_text h-8 w-full min-w-[15ch] p-1 ring-1 ring-primary active:ring-link  dark:text-contrast"
                       type="text"
                     />
                   </div>
-                  <div className="p-4 flex justify-between ">
-                    <label className="p-1 min-w-[10ch] mr-2 ">
+                  <div className="flex justify-between p-4 ">
+                    <label className="mr-2 min-w-[10ch] p-1 ">
                       Description
                     </label>
                     <textarea
@@ -239,11 +247,13 @@ const AddNewEvent = ({ optimisticFn, optimisticFnClnUp, refetchTrigger }: Props)
                           payload: e.currentTarget.value,
                         })
                       }
-                      className="p-1 min-w-[15ch] ring-1 dark:text-contrast ring-primary active:ring-link dark:text-interactive_text w-full  h-24 resize-none "
+                      className="dark:text-interactive_text h-24 w-full min-w-[15ch] resize-none p-1 ring-1 ring-primary  active:ring-link dark:text-contrast "
                     />
                   </div>
-                  <div className="p-4 flex justify-between ">
-                    <label className="p-1 min-w-[10ch] mr-2">Closing Date</label>
+                  <div className="flex justify-between p-4 ">
+                    <label className="mr-2 min-w-[10ch] p-1">
+                      Closing Date
+                    </label>
                     <input
                       min={new Date().toISOString().slice(0, -8)}
                       defaultValue={closingDate.toISOString().slice(0, -8)}
@@ -253,30 +263,30 @@ const AddNewEvent = ({ optimisticFn, optimisticFnClnUp, refetchTrigger }: Props)
                           payload: e.currentTarget.value,
                         })
                       }
-                      className="p-1 min-w-[15ch] ring-1 dark:text-contrast ring-primary active:ring-link dark:text-interactive_text w-full  h-8"
+                      className="dark:text-interactive_text h-8 w-full min-w-[15ch] p-1 ring-1 ring-primary active:ring-link  dark:text-contrast"
                       type="datetime-local"
                     />
                   </div>
 
-                  <div className="p-4 flex justify-between ">
-                    <label className="p-1 min-w-[10ch] mr-2">
-                      Event Date
-                    </label>
+                  <div className="flex justify-between p-4 ">
+                    <label className="mr-2 min-w-[10ch] p-1">Event Date</label>
                     <input
                       min={new Date().toISOString().slice(0, -8)}
-                      defaultValue={new Date(eventDate).toISOString().slice(0, -8)}
+                      defaultValue={new Date(eventDate)
+                        .toISOString()
+                        .slice(0, -8)}
                       onChange={(e) => {
                         dispatch({
                           type: FormActionKind.INPUT_ESTART,
                           payload: e.currentTarget.value,
                         });
                       }}
-                      className="p-1 min-w-[15ch] ring-1 dark:text-contrast ring-primary active:ring-link dark:text-interactive_text w-full  h-8"
+                      className="dark:text-interactive_text h-8 w-full min-w-[15ch] p-1 ring-1 ring-primary active:ring-link  dark:text-contrast"
                       type="datetime-local"
                     />
                   </div>
-                  <div className="p-4 flex justify-between ">
-                    <label className="p-1 min-w-[10ch] mr-2">Location</label>
+                  <div className="flex justify-between p-4 ">
+                    <label className="mr-2 min-w-[10ch] p-1">Location</label>
                     <input
                       onChange={(e) =>
                         dispatch({
@@ -284,12 +294,12 @@ const AddNewEvent = ({ optimisticFn, optimisticFnClnUp, refetchTrigger }: Props)
                           payload: e.currentTarget.value,
                         })
                       }
-                      className="p-1 min-w-[15ch] ring-1 dark:text-contrast ring-primary active:ring-link dark:text-interactive_text w-full  h-8"
+                      className="dark:text-interactive_text h-8 w-full min-w-[15ch] p-1 ring-1 ring-primary active:ring-link  dark:text-contrast"
                       type="text"
                     />
                   </div>
-                  <div className="p-4 flex justify-between ">
-                    <label className="p-1 min-w-[10ch] mr-2">
+                  <div className="flex justify-between p-4 ">
+                    <label className="mr-2 min-w-[10ch] p-1">
                       Available tickets
                     </label>
                     <input
@@ -299,14 +309,14 @@ const AddNewEvent = ({ optimisticFn, optimisticFnClnUp, refetchTrigger }: Props)
                           payload: e.currentTarget.value,
                         })
                       }
-                      className="p-1 min-w-[15ch] ring-1 dark:text-contrast ring-primary active:ring-link dark:text-interactive_text w-full  h-8"
+                      className="dark:text-interactive_text h-8 w-full min-w-[15ch] p-1 ring-1 ring-primary active:ring-link  dark:text-contrast"
                       type="number"
                       defaultValue={0}
                       min={0}
                     />
                   </div>
-                  <div className="p-4 flex justify-between ">
-                    <label className="p-1 min-w-[10ch] mr-2">
+                  <div className="flex justify-between p-4 ">
+                    <label className="mr-2 min-w-[10ch] p-1">
                       Ticket Price
                     </label>
                     <input
@@ -316,20 +326,18 @@ const AddNewEvent = ({ optimisticFn, optimisticFnClnUp, refetchTrigger }: Props)
                           payload: e.currentTarget.value,
                         })
                       }
-                      className="p-1 min-w-[15ch] ring-1 dark:text-contrast ring-primary active:ring-link dark:text-interactive_text w-full  h-8"
+                      className="dark:text-interactive_text h-8 w-full min-w-[15ch] p-1 ring-1 ring-primary active:ring-link  dark:text-contrast"
                       type="number"
                       step="0.01"
                       defaultValue={0}
                       min={0}
                     />
                   </div>
-                  <div className="flex p-4 flex-col justify-center items-center">
-                    <div className="pb-8 flex justify-between w-full ">
-                      <label className="p-1 min-w-[10ch] mr-2">
-                        Image URL
-                      </label>
+                  <div className="flex flex-col items-center justify-center p-4">
+                    <div className="flex w-full justify-between pb-8 ">
+                      <label className="mr-2 min-w-[10ch] p-1">Image URL</label>
                       <input
-                        className="p-1 min-w-[15ch] ring-1 dark:text-contrast ring-primary active:ring-link dark:text-interactive_text w-full  h-8"
+                        className="dark:text-interactive_text h-8 w-full min-w-[15ch] p-1 ring-1 ring-primary active:ring-link  dark:text-contrast"
                         type="text"
                         value={image}
                         onChange={(e) => setImage(e.currentTarget.value)}
@@ -337,13 +345,12 @@ const AddNewEvent = ({ optimisticFn, optimisticFnClnUp, refetchTrigger }: Props)
                       />
                     </div>
                     <Button
-                    setW="w-[10ch]"
+                      setW="w-[10ch]"
                       title="add picture"
                       text="add"
                       fn={async () => {
                         if (image.length === 0) return;
                         if (await checkIfImageExists(image)) {
-
                           dispatch({
                             type: FormActionKind.INPUT_IMAGE,
                             payload: image,
@@ -358,7 +365,7 @@ const AddNewEvent = ({ optimisticFn, optimisticFnClnUp, refetchTrigger }: Props)
                       state.image.map((i, index) => (
                         <span
                           key={index}
-                          className="flex items-center relative after:flex after:items-center after:justify-center hover:after:content-['Delete'] hover:after:absolute after:top-0 after:left-0 after:bg-black/50 w-fit h-fit after:w-full after:h-full"
+                          className="relative flex h-fit w-fit items-center after:left-0 after:top-0 after:flex after:h-full after:w-full after:items-center after:justify-center after:bg-black/50 hover:after:absolute hover:after:content-['Delete']"
                           onClick={() =>
                             dispatch({
                               type: FormActionKind.DELETE_IMAGE,
@@ -379,33 +386,34 @@ const AddNewEvent = ({ optimisticFn, optimisticFnClnUp, refetchTrigger }: Props)
                       <></>
                     )}
                   </div>
-                  <div className="p-4 mt-4 flex justify-evenly ">
+                  <div className="mt-4 flex justify-evenly p-4 ">
                     <Button
-                    setW="w-[10ch]"
+                      setW="w-[10ch]"
                       title="Cancel adding new event"
-                      text="Cancel" 
+                      text="Cancel"
                       fn={() => setShow(false)}
                       bgColor="bg-secondary"
                     />
-                    {canPost ?
+                    {canPost ? (
                       <Button
-                      setW="w-[10ch]" title="Create"
+                        setW="w-[10ch]"
+                        title="Create"
                         text="Create"
                         fn={(e) => {
                           optimisticFn(e);
                           handleCreate(state);
                         }}
-                      /> : <Button
-                      setW="w-[10ch]"
+                      />
+                    ) : (
+                      <Button
+                        setW="w-[10ch]"
                         title="Working..."
                         text="Adding..."
                         interactive={false}
                         bgColor="bg-bg"
-                        fn={(e) => {
-
-                        }}
-                      />}
-
+                        fn={(e) => {}}
+                      />
+                    )}
                   </div>
                 </form>
               </Dialog.Panel>

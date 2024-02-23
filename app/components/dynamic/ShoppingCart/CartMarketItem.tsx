@@ -12,16 +12,16 @@ interface Props {
   delFn: (e: React.MouseEvent, id: string) => void;
   closeFn: (e: React.MouseEvent) => void;
 }
-    
+
 const CartMarketItem = ({ ...props }: Props) => {
   const [amount, setAmount] = useState(props.amount);
 
   return (
-    <div className="flex justify-between p-2 items-center w-full">
+    <div className="flex w-full items-center justify-between p-2">
       <Link
         onClick={(e) => props.closeFn(e)}
         href={`/events/${props.item}`}
-        className="p-2 m-r1 w-[25ch] overflow-hidden text-ellipsis whitespace-nowrap"
+        className="m-r1 w-[25ch] overflow-hidden text-ellipsis whitespace-nowrap p-2"
       >
         {props.item}
       </Link>
@@ -37,22 +37,22 @@ const CartMarketItem = ({ ...props }: Props) => {
             setAmount(parseInt(e.currentTarget.value));
           }
         }}
-        className="w-20 bg-inherit focus:text-text focus:ring-0 focus:outline-none focus:bg-bg p-2 rounded-md transition-all duration-500"
+        className="w-20 rounded-md bg-inherit p-2 transition-all duration-500 focus:bg-bg focus:text-text focus:outline-none focus:ring-0"
       />
 
-      <div className="p-2 m-r1 w-[16ch] hidden justify-between whitespace-nowrap lg:flex text-sm">
+      <div className="m-r1 hidden w-[16ch] justify-between whitespace-nowrap p-2 text-sm lg:flex">
         <span>Per :&nbsp;</span>
         <span className="mr-1">
           {(props.price * props.currency.rate).toFixed(2)}
         </span>
       </div>
-      <div className="p-2 m-r1 w-[18ch] flex justify-between whitespace-nowrap text-sm">
+      <div className="m-r1 flex w-[18ch] justify-between whitespace-nowrap p-2 text-sm">
         <span>Total :&nbsp;</span>
         <span className="mr-1">
           {(props.price * amount * props.currency.rate).toFixed(2)}
         </span>
       </div>
-      <span className="p-2 m-r1">
+      <span className="m-r1 p-2">
         <ButtonWithIcon
           Icon={BiX}
           size="1em"

@@ -25,7 +25,7 @@ const ChangeEmail = () => {
       if (dat.error) {
         setNotify({ error: true, show: true, message: dat.error });
       } else {
-        console.log(dat)
+        console.log(dat);
         setNotify({ error: false, show: true, message: dat.message });
         setShowEdit(false);
       }
@@ -35,15 +35,17 @@ const ChangeEmail = () => {
   };
   return (
     <>
-      <div className="flex flex-col w-fit p-4 my-4">
+      <div className="my-4 flex w-fit flex-col p-4">
         <Heading2 text="Change your email address" />
-        <div className="p-4 flex md:flex-row flex-col gap-2 items-start">
-          <label htmlFor="emailaddress" className="p-1 w-[16ch]">Email</label>
+        <div className="flex flex-col items-start gap-2 p-4 md:flex-row">
+          <label htmlFor="emailaddress" className="w-[16ch] p-1">
+            Email
+          </label>
           {showEdit ? (
             <>
               <input
                 id="emailaddress"
-                className="p-1 dark:text-contrast w-full"
+                className="w-full p-1 dark:text-contrast"
                 type="email"
                 onInput={(e) => setEmail(e.currentTarget.value)}
               />
@@ -55,7 +57,11 @@ const ChangeEmail = () => {
                     if (email) {
                       handleEmailChange(email);
                     } else {
-                      setNotify({ error: true, show: true, message: 'Email field is empty' })
+                      setNotify({
+                        error: true,
+                        show: true,
+                        message: "Email field is empty",
+                      });
                     }
                   }}
                   size="1em"
@@ -81,15 +87,16 @@ const ChangeEmail = () => {
             </>
           )}
         </div>
-        <div className="flex p-8 justify-center"></div>
+        <div className="flex justify-center p-8"></div>
         <Notification
           error={notify.error}
           message={notify.message}
           show={notify.show}
-          onAnimEnd={() => setNotify({ error: false, show: false, message: "" })}
+          onAnimEnd={() =>
+            setNotify({ error: false, show: false, message: "" })
+          }
         />
       </div>
-
     </>
   );
 };

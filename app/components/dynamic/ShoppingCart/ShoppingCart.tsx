@@ -19,7 +19,7 @@ export interface CartItemData {
   item: string;
 }
 const ShoppingCart = () => {
-  const router = useRouter()
+  const router = useRouter();
   const [notify, setNotify] = useState({
     error: false,
     show: false,
@@ -48,25 +48,22 @@ const ShoppingCart = () => {
   };
 
   const updateCart = (data: CartItemData[]) => {
-
     if (data.length > 0) {
-
       localStorage.setItem("cart", JSON.stringify(data));
     } else {
-      localStorage.removeItem("cart")
+      localStorage.removeItem("cart");
     }
   };
 
   // TO DO: something is removing cookie from local storage -> fix it
 
   const clearCartAndComponent = () => {
-
-    setIsWorking(false)
-    setIsOpen(false)
-    localStorage.removeItem('cart')
-    window.dispatchEvent(new Event('storage'))
-    router.push("/orders")
-  }
+    setIsWorking(false);
+    setIsOpen(false);
+    localStorage.removeItem("cart");
+    window.dispatchEvent(new Event("storage"));
+    router.push("/orders");
+  };
   const createOrder = async () => {
     setIsWorking(true);
     try {
@@ -79,8 +76,8 @@ const ShoppingCart = () => {
       });
       const message = await resp.json();
       if (message.message) {
-        clearCartAndComponent()
-        router.push(`/lipps/${message.id}`)
+        clearCartAndComponent();
+        router.push(`/lipps/${message.id}`);
       } else {
         setIsWorking(false);
         setNotify({
@@ -121,8 +118,8 @@ const ShoppingCart = () => {
     });
 
     return () => {
-      window.removeEventListener("storage", () => { });
-      window.removeEventListener("currency", () => { });
+      window.removeEventListener("storage", () => {});
+      window.removeEventListener("currency", () => {});
     };
   }, []);
   useEffect(() => {
@@ -183,14 +180,14 @@ const ShoppingCart = () => {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="bg-black/20 fixed inset-0" aria-hidden />
+            <div className="fixed inset-0 bg-black/20" aria-hidden />
             <div className="fixed inset-0 flex items-center justify-center p-4">
               <Dialog.Panel
                 className={
-                  "p-8 bg-interactive text-text dark:bg-sidebar shadow-md shadow-black min-w-1/3  min-h-[20rem] min-w-[30rem]"
+                  "min-w-1/3 min-h-[20rem] min-w-[30rem] bg-interactive p-8 text-text shadow-md  shadow-black dark:bg-sidebar"
                 }
               >
-                <Dialog.Title className={"font-bold text-xl text-start pb-2"}>
+                <Dialog.Title className={"pb-2 text-start text-xl font-bold"}>
                   {showShipping ? "Shipping Info" : "Shopping Cart"}
                 </Dialog.Title>
                 <Dialog.Description className={"text-sm font-semibold"}>
@@ -204,7 +201,7 @@ const ShoppingCart = () => {
                     }}
                   />
                 </div>
-                <div className="flex flex-col p-4 mt-8">
+                <div className="mt-8 flex flex-col p-4">
                   {isLoadingItems ? (
                     <h3>Loading ...</h3>
                   ) : (
@@ -237,9 +234,11 @@ const ShoppingCart = () => {
                                 delFn={() => {
                                   setCartItems((prev) => {
                                     if (prev !== null) {
-                                      return [...prev.filter((p) => p.id != i.id)]
+                                      return [
+                                        ...prev.filter((p) => p.id != i.id),
+                                      ];
                                     }
-                                    return null
+                                    return null;
                                   });
                                 }}
                               />
@@ -252,12 +251,13 @@ const ShoppingCart = () => {
                     </>
                   )}
                 </div>
-                {cartItems !== null && cartItems.length === 0 || showShipping ? (
+                {(cartItems !== null && cartItems.length === 0) ||
+                showShipping ? (
                   <></>
                 ) : (
                   <>
                     <div className="flex justify-between">
-                      <div className="flex flex-col w-full ">
+                      <div className="flex w-full flex-col ">
                         <span className="p-1 text-lg">Shipping</span>
                         <div className="flex">
                           <span className="w-[16ch] p-1 first-letter:uppercase">
@@ -288,7 +288,7 @@ const ShoppingCart = () => {
                           </>
                         ) : (
                           <>
-                            <span className="p-1 first-letter:uppercase mt-2 mr-2">
+                            <span className="mr-2 mt-2 p-1 first-letter:uppercase">
                               We&apos;ll use the email address provided at
                               registration.
                             </span>
@@ -306,13 +306,15 @@ const ShoppingCart = () => {
                   </>
                 )}
 
-                {!isLoadingItems && cartItems !== null && cartItems.length > 0 ? (
+                {!isLoadingItems &&
+                cartItems !== null &&
+                cartItems.length > 0 ? (
                   <>
                     {showShipping ? (
                       <></>
                     ) : (
                       <div className="flex justify-end">
-                        <div className=" ring-4 ring-primary p-2 text-xl font-bold">
+                        <div className=" p-2 text-xl font-bold ring-4 ring-primary">
                           <span className="mr-1">Total :</span>
                           <span className="mr-1">{total}</span>
                           <span>{currency.name.toLocaleUpperCase()}</span>
@@ -324,8 +326,7 @@ const ShoppingCart = () => {
                   <></>
                 )}
                 {cartItems !== null && cartItems.length > 0 ? (
-                  <div className="flex items-center justify-end h-full pt-10 gap-2">
-
+                  <div className="flex h-full items-center justify-end gap-2 pt-10">
                     <>
                       <Button
                         title="Open Orders"
@@ -348,7 +349,7 @@ const ShoppingCart = () => {
                               <Button
                                 title="Working..."
                                 text="Working..."
-                                fn={() => { }}
+                                fn={() => {}}
                                 interactive={false}
                                 bgColor="bg-bg"
                               />
@@ -357,7 +358,6 @@ const ShoppingCart = () => {
                                 title="Continue"
                                 text="Continue"
                                 fn={() => createOrder()}
-
                               />
                             )}
                           </>
@@ -366,7 +366,7 @@ const ShoppingCart = () => {
                     </>
                   </div>
                 ) : (
-                  <div className="flex items-center justify-end h-full pt-10 gap-2">
+                  <div className="flex h-full items-center justify-end gap-2 pt-10">
                     <Button
                       title="Open Orders"
                       text="Open Orders"
@@ -381,14 +381,19 @@ const ShoppingCart = () => {
                   </div>
                 )}
               </Dialog.Panel>
-
             </div>
           </Transition.Child>
         </Dialog>
       </Transition>
       <>
-
-        <Notification error={notify.error} message={notify.message} onAnimEnd={() => { setNotify({ error: false, show: false, message: '' }) }} show={notify.show} />
+        <Notification
+          error={notify.error}
+          message={notify.message}
+          onAnimEnd={() => {
+            setNotify({ error: false, show: false, message: "" });
+          }}
+          show={notify.show}
+        />
       </>
     </>
   );

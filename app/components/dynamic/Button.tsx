@@ -13,9 +13,9 @@ interface Props {
   active?: boolean;
   showIcon?: boolean;
   Icon?: IconType;
-  setW?: string
+  setW?: string;
   spinIcon?: boolean;
-  ariaLabel?: string
+  ariaLabel?: string;
 }
 const Button = ({
   fn,
@@ -30,19 +30,25 @@ const Button = ({
   showIcon,
   setW,
   spinIcon = false,
-  ariaLabel
-
+  ariaLabel,
 }: Props) => {
   return (
     <>
       {fn && link ? (
-        <Link aria-label={ariaLabel}
-          onClick={(e) => fn(e)} href={link} className={`${bgColor} gap-2 flex items-center justify-center capitalize  ${setW} ${active ? "dark:text-text_button text-text bg-contrast dark:bg-text" : "text-contrast dark:text-text"} ${size} whitespace-nowrap cursor-default font-bold p-2 rounded-xl ${interactive ? "cursor-pointer hover:-translate-y-1 hover:scale-105 hover:bg-bg hover:shadow-link hover:text-text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-text_button transition-all duration-30"
-            : "bg-slate-500 text-text_inactive dark:bg-slate-500 dark:text-text_inactive"
-            }`}>
-
-          {text}{Icon && active ? <Icon className={`${spinIcon ? "animate-spin" : null}`} /> : null}
-
+        <Link
+          aria-label={ariaLabel}
+          onClick={(e) => fn(e)}
+          href={link}
+          className={`${bgColor} flex items-center justify-center gap-2 capitalize  ${setW} ${active ? "bg-contrast text-text dark:bg-text dark:text-text_button" : "text-contrast dark:text-text"} ${size} cursor-default whitespace-nowrap rounded-xl p-2 font-bold ${
+            interactive
+              ? "duration-30 cursor-pointer transition-all hover:-translate-y-1 hover:scale-105 hover:bg-bg hover:text-text hover:shadow-link dark:hover:bg-text dark:hover:text-text_button dark:hover:shadow-link"
+              : "text-text_inactive dark:text-text_inactive bg-slate-500 dark:bg-slate-500"
+          }`}
+        >
+          {text}
+          {Icon && active ? (
+            <Icon className={`${spinIcon ? "animate-spin" : null}`} />
+          ) : null}
         </Link>
       ) : (
         <></>
@@ -51,12 +57,17 @@ const Button = ({
         <button
           aria-label={ariaLabel}
           title={title}
-          className={`${bgColor} gap-2 flex items-center justify-center capitalize ${setW}  ${active ? "dark:text-text_button text-text bg-contrast dark:bg-text" : "text-contrast dark:text-text"} ${size} whitespace-nowrap cursor-default font-bold p-2 rounded-xl ${interactive ? "cursor-pointer hover:-translate-y-1 hover:scale-105 hover:bg-bg hover:shadow-link hover:text-text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-text_button transition-all duration-300"
-            : "bg-slate-500 text-text_inactive dark:bg-slate-500 dark:text-text_inactive"
-            }`}
+          className={`${bgColor} flex items-center justify-center gap-2 capitalize ${setW}  ${active ? "bg-contrast text-text dark:bg-text dark:text-text_button" : "text-contrast dark:text-text"} ${size} cursor-default whitespace-nowrap rounded-xl p-2 font-bold ${
+            interactive
+              ? "cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:scale-105 hover:bg-bg hover:text-text hover:shadow-link dark:hover:bg-text dark:hover:text-text_button dark:hover:shadow-link"
+              : "text-text_inactive dark:text-text_inactive bg-slate-500 dark:bg-slate-500"
+          }`}
           onClick={(e) => fn(e)}
         >
-          {text}{Icon && active || Icon && showIcon ? <Icon className={`${spinIcon ? "animate-spin" : null}`} /> : null}
+          {text}
+          {(Icon && active) || (Icon && showIcon) ? (
+            <Icon className={`${spinIcon ? "animate-spin" : null}`} />
+          ) : null}
         </button>
       ) : (
         <></>
@@ -66,11 +77,16 @@ const Button = ({
           aria-label={ariaLabel}
           title={title}
           href={link}
-          className={`${bgColor} gap-2 flex items-center justify-center capitalize ${setW}  ${active ? "dark:text-text_button text-text bg-contrast dark:bg-text" : "text-contrast dark:text-text"} ${size} whitespace-nowrap cursor-default font-bold p-2 rounded-xl ${interactive ? "cursor-pointer hover:-translate-y-1 hover:scale-105 hover:bg-bg hover:shadow-link hover:text-text dark:hover:bg-text dark:hover:shadow-link dark:hover:text-text_button transition-all duration-30"
-            : "bg-slate-500 text-text_inactive dark:bg-slate-500 dark:text-text_inactive"
-            }`}
+          className={`${bgColor} flex items-center justify-center gap-2 capitalize ${setW}  ${active ? "bg-contrast text-text dark:bg-text dark:text-text_button" : "text-contrast dark:text-text"} ${size} cursor-default whitespace-nowrap rounded-xl p-2 font-bold ${
+            interactive
+              ? "duration-30 cursor-pointer transition-all hover:-translate-y-1 hover:scale-105 hover:bg-bg hover:text-text hover:shadow-link dark:hover:bg-text dark:hover:text-text_button dark:hover:shadow-link"
+              : "text-text_inactive dark:text-text_inactive bg-slate-500 dark:bg-slate-500"
+          }`}
         >
-          {text}{Icon && active ? <Icon className={`${spinIcon ? "animate-spin" : null}`} /> : null}
+          {text}
+          {Icon && active ? (
+            <Icon className={`${spinIcon ? "animate-spin" : null}`} />
+          ) : null}
         </Link>
       ) : (
         <></>

@@ -15,7 +15,7 @@ const CartButton = ({ Icon, fn, size, bgColor, title, newEntries }: Props) => {
       {newEntries === 0 ? (
         <button
           title={title}
-          className={`z-40 cursor-pointer relative first-letter:capitalize hover:-translate-y-1 hover:text-text hover:bg-white hover:shadow-link hover:scale-105 font-bold p-2 text-contrast dark:text-text rounded-xl dark:hover:bg-text dark:hover:shadow-link dark:hover:text-contrast transition-all duration-300 ${bgColor} 
+          className={`relative z-40 cursor-pointer rounded-xl p-2 font-bold text-contrast transition-all duration-300 first-letter:capitalize hover:-translate-y-1 hover:scale-105 hover:bg-white hover:text-text hover:shadow-link dark:text-text dark:hover:bg-text dark:hover:text-contrast dark:hover:shadow-link ${bgColor} 
           `}
           onClick={(e) => fn(e)}
           aria-label="Button opens shopping cart"
@@ -26,12 +26,12 @@ const CartButton = ({ Icon, fn, size, bgColor, title, newEntries }: Props) => {
         <button
           id="cart-btn"
           title={title}
-          className={`z-40 cursor-pointer relative first-letter:capitalize hover:-translate-y-1 hover:text-text hover:bg-white hover:shadow-link hover:scale-105 font-bold p-2 text-contrast dark:text-text rounded-xl dark:hover:bg-text dark:hover:shadow-link dark:hover:text-contrast transition-all duration-300 ${bgColor} 
+          className={`relative z-40 cursor-pointer rounded-xl p-2 font-bold text-contrast transition-all duration-300 first-letter:capitalize hover:-translate-y-1 hover:scale-105 hover:bg-white hover:text-text hover:shadow-link dark:text-text dark:hover:bg-text dark:hover:text-contrast dark:hover:shadow-link ${bgColor} 
           `}
           onClick={(e) => fn(e)}
           aria-label="Button opens shopping cart"
         >
-          <span className="z-40 absolute bg-secondary flex items-center justify-center rounded-full h-6 w-6 top-0 right-0 -translate-y-[0.5rem] translate-x-[1rem] text-white">
+          <span className="absolute right-0 top-0 z-40 flex h-6 w-6 -translate-y-[0.5rem] translate-x-[1rem] items-center justify-center rounded-full bg-secondary text-white">
             {newEntries}
           </span>
           <Icon size={size} />

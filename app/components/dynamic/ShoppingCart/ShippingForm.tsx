@@ -13,8 +13,8 @@ interface Props {
     address?: string;
   }) => void;
   method: ShippingMethod;
-  address?:string;
-  phone?:number;
+  address?: string;
+  phone?: number;
 }
 export enum ShippingMethod {
   postal = "Postal",
@@ -35,17 +35,19 @@ const ShippingForm = ({ fn, method, address, phone }: Props) => {
   return (
     <>
       <div className="flex flex-col">
-        <div className="flex my-1 items-center">
+        <div className="my-1 flex items-center">
           <label className="w-[14ch] whitespace-nowrap p-1">
             Shipping method
           </label>
           <Listbox value={selected} onChange={setSelected}>
             <Listbox.Button
-              className={`p-2 cursor-pointer w-fit relative hover:bg-link transition-all duration-300 text-text`}
+              className={`relative w-fit cursor-pointer p-2 text-text transition-all duration-300 hover:bg-link`}
             >
               {selected}
             </Listbox.Button>
-            <Listbox.Options className={`bg-interactive dark:bg-inherit flex flex-row`}>
+            <Listbox.Options
+              className={`flex flex-row bg-interactive dark:bg-inherit`}
+            >
               <Listbox.Option
                 onClick={(e) => {
                   setShippingMethod(ShippingMethod.postal);
@@ -53,7 +55,7 @@ const ShippingForm = ({ fn, method, address, phone }: Props) => {
                 }}
                 className={`${
                   selected === "Postal" ? "hidden" : "block"
-                } hover:bg-link p-2 transition-all duration-300`}
+                } p-2 transition-all duration-300 hover:bg-link`}
                 value={"Postal"}
               >
                 Postal
@@ -66,7 +68,7 @@ const ShippingForm = ({ fn, method, address, phone }: Props) => {
                 }}
                 className={`${
                   selected === "Priority Mail" ? "hidden" : "block"
-                } hover:bg-link p-2 transition-all duration-300`}
+                } p-2 transition-all duration-300 hover:bg-link`}
                 value={"Priority Mail"}
               >
                 Priority Mail
@@ -78,7 +80,7 @@ const ShippingForm = ({ fn, method, address, phone }: Props) => {
                 }}
                 className={`${
                   selected === "Email" ? "hidden" : "block"
-                } hover:bg-link p-2 transition-all duration-300`}
+                } p-2 transition-all duration-300 hover:bg-link`}
                 value={"Email"}
               >
                 Email
@@ -88,24 +90,24 @@ const ShippingForm = ({ fn, method, address, phone }: Props) => {
         </div>
         {shippingMethod !== ShippingMethod.email ? (
           <>
-            <div className="flex my-1">
+            <div className="my-1 flex">
               <label className="w-[14ch] whitespace-nowrap p-1">
                 Mailing Address
               </label>
               <textarea
                 placeholder="00-234 Imagineville Warden st. 200/2"
-                className="p-1 w-[24ch] text-black resize-none h-[10rem]"
+                className="h-[10rem] w-[24ch] resize-none p-1 text-black"
                 onInput={(e) => setAddress(e.currentTarget.value)}
                 value={shippingAddress}
               />
             </div>
-            <div className="flex my-1 ">
+            <div className="my-1 flex ">
               <label className="w-[14ch] whitespace-nowrap p-1">
                 Phone Number
               </label>
               <input
                 value={shippingPhone}
-                className="p-1 w-[24ch] h-fit text-black"
+                className="h-fit w-[24ch] p-1 text-black"
                 type="number"
                 onInvalid={() =>
                   setNotify({
@@ -132,7 +134,6 @@ const ShippingForm = ({ fn, method, address, phone }: Props) => {
             title="Confirm"
             text="Confirm"
             fn={() => {
-           
               if (shippingMethod === ShippingMethod.email) {
                 fn({
                   method: shippingMethod,
@@ -140,12 +141,27 @@ const ShippingForm = ({ fn, method, address, phone }: Props) => {
                   phoneNumber: phone,
                 });
               } else {
-                if ((shippingPhone === undefined) || shippingAddress === undefined) {
-                  setNotify({ error: true, message: "Please provide missing values", show: true });
-                } else if(typeof(shippingPhone) !== 'number'){
-                  setNotify({ error: true, message: "Phone number has to be a number", show: true });
-                }else {
-                  fn({method:shippingMethod, address:shippingAddress, phoneNumber:shippingPhone})
+                if (
+                  shippingPhone === undefined ||
+                  shippingAddress === undefined
+                ) {
+                  setNotify({
+                    error: true,
+                    message: "Please provide missing values",
+                    show: true,
+                  });
+                } else if (typeof shippingPhone !== "number") {
+                  setNotify({
+                    error: true,
+                    message: "Phone number has to be a number",
+                    show: true,
+                  });
+                } else {
+                  fn({
+                    method: shippingMethod,
+                    address: shippingAddress,
+                    phoneNumber: shippingPhone,
+                  });
                 }
               }
             }}

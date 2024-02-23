@@ -1,13 +1,9 @@
-
 import "./globals.css";
 import type { Metadata } from "next";
 import { Public_Sans } from "next/font/google";
 import Header from "./components/static/Header/Header";
 import { getServerSession } from "next-auth";
 import SessionProvider from "./components/SessionProvider";
-
-
-
 
 const publicSans = Public_Sans({ subsets: ["latin"] });
 
@@ -24,8 +20,7 @@ export default async function RootLayout({
   const session = await getServerSession();
   return (
     <html lang="en">
-      <head>
-      </head>
+      <head></head>
       <body className={`${publicSans.className} relative`}>
         <SessionProvider session={session}>
           <Header />

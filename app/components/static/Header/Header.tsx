@@ -9,29 +9,33 @@ import { options } from "@/app/api/auth/[...nextauth]/options";
 import BurgerMenu from "../../dynamic/Header/BurgerMenu";
 import DropDownNav from "../../dynamic/DropDownNav";
 
-
-
 const Header = async () => {
-  const session = await getServerSession(options)
+  const session = await getServerSession(options);
 
   return (
     <header className="relative">
-      <nav className="px-10 z-50 h-[4rem] dark:text-text text-contrast bg-black/50 flex justify-between items-center fixed w-full backdrop-blur-sm">
+      <nav className="fixed z-50 flex h-[4rem] w-full items-center justify-between bg-black/50 px-10 text-contrast backdrop-blur-sm dark:text-text">
+        <DropDownNav
+          buttonTitle="Eventzor"
+          items={[
+            { href: "/", label: "home" },
+            { href: "/events", label: "events" },
+            { href: "/market", label: "market" },
+            { href: "/users", label: "users" },
+            { href: "/dashboard", label: "dashboard" },
+          ]}
+        />
 
-        <DropDownNav buttonTitle="Eventzor" items={[{ href: "/", label: "home" }, { href: "/events", label: "events" }, { href: "/market", label: "market" }, { href: "/users", label: "users" },{href: '/dashboard', label: "dashboard"}]} />
-
-
-        <div className="gap-4 items-center pr-8 md:flex hidden">
+        <div className="hidden items-center gap-4 pr-8 md:flex">
           <Search minimizeOnLg />
           <Currency />
           <UserMenu />
         </div>
-        <div className="flex mr-8 gap-4">
+        <div className="mr-8 flex gap-4">
           <ShoppingCart />
           <BurgerMenu />
-          {session?.user?.name ? < Notifications /> : <></>}
+          {session?.user?.name ? <Notifications /> : <></>}
         </div>
-
       </nav>
     </header>
   );

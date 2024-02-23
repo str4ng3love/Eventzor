@@ -1,9 +1,9 @@
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 
 import { options } from "../api/auth/[...nextauth]/options";
 import Authenticate from "../components/Authenticate";
 import Sidebar from "../components/dynamic/Sidebar/Sidebar";
-import {getServerSession} from "next-auth";
+import { getServerSession } from "next-auth";
 export default async function Layout({
   children,
 }: {
@@ -13,17 +13,19 @@ export default async function Layout({
   const user = session?.user;
   if (user) {
     return (
-      <main className="flex bg-sidebar dark:bg-black min-h-screen pt-16">
+      <main className="flex min-h-screen bg-sidebar pt-16 dark:bg-black">
         <Sidebar />
-        <section className="ring-2 ring-slate-600 dark:ring-primary bg-bg w-full mt-2 rounded-smoothLT min-h-screenReducedBy4p5Rem ">
+        <section className="mt-2 min-h-screenReducedBy4p5Rem w-full rounded-smoothLT bg-bg ring-2 ring-slate-600 dark:ring-primary ">
           {children}
         </section>
       </main>
     );
   } else {
     return (
-      <main className="flex flex-col justify-center items-center min-h-screen bg-black/20 dark:bg-inherit">
-        <h2 className="text-xl font-bold mb-8">You need to be authenticated.</h2>
+      <main className="flex min-h-screen flex-col items-center justify-center bg-black/20 dark:bg-inherit">
+        <h2 className="mb-8 text-xl font-bold">
+          You need to be authenticated.
+        </h2>
         <Authenticate />
       </main>
     );

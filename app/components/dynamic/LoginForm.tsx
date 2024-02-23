@@ -8,28 +8,25 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FaCog } from "react-icons/fa";
 
-
-
 interface Props {
   show?: boolean;
   cleanUp?: () => void;
   switchFn?: () => void;
 }
 const LoginForm = ({ show = false, cleanUp, switchFn }: Props) => {
-
   const [isOpen, setOpen] = useState(show);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [working, setWorking] = useState(false)
+  const [working, setWorking] = useState(false);
   const [notify, setNotify] = useState<NotificationObj>({
     error: false,
     message: "",
     show: false,
   });
-  const router = useRouter()
+  const router = useRouter();
 
   const handleLogin = async (username: string, password: string) => {
-    setWorking(true)
+    setWorking(true);
     try {
       const resp = await signIn("credentials", {
         username,
@@ -38,33 +35,45 @@ const LoginForm = ({ show = false, cleanUp, switchFn }: Props) => {
       });
 
       if (resp?.error) {
-        setWorking(false)
+        setWorking(false);
         setNotify({ error: true, show: true, message: "Invalid Credentials" });
       } else {
-        setWorking(false)
-        router.refresh()
+        setWorking(false);
+        router.refresh();
       }
     } catch (error) {
-      setWorking(false)
-      console.log(error)
+      setWorking(false);
+      console.log(error);
     }
-
   };
 
   useEffect(() => {
     if (cleanUp && !isOpen) {
-      cleanUp()
+      cleanUp();
     }
-  }, [isOpen])
+  }, [isOpen]);
   return (
     <>
-      {show ? <></> : <Button setW="w-[10ch]" title="Log in" text="log in" fn={() => { setOpen(true) }} />}
+      {show ? (
+        <></>
+      ) : (
+        <Button
+          setW="w-[10ch]"
+          title="Log in"
+          text="log in"
+          fn={() => {
+            setOpen(true);
+          }}
+        />
+      )}
 
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog
-          onClose={() => { setOpen(false); }}
+          onClose={() => {
+            setOpen(false);
+          }}
           as="div"
-          className={"z-50 relative"}
+          className={"relative z-50"}
         >
           <Transition.Child
             enter="ease-out duration-300"
@@ -74,45 +83,49 @@ const LoginForm = ({ show = false, cleanUp, switchFn }: Props) => {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="bg-black/20 fixed inset-0" aria-hidden />
+            <div className="fixed inset-0 bg-black/20" aria-hidden />
             <div className="fixed inset-0 flex items-center justify-center p-4">
               <Dialog.Panel
                 className={
-                  "p-8 bg-interactive dark:bg-sidebar text-text dark:bg-bg_interactive shadow-md shadow-black animate-fadeIn"
+                  "dark:bg-bg_interactive animate-fadeIn bg-interactive p-8 text-text shadow-md shadow-black dark:bg-sidebar"
                 }
               >
-                <Dialog.Title className={"p-2 font-bold text-xl text-center"}>
+                <Dialog.Title className={"p-2 text-center text-xl font-bold"}>
                   Log In
                 </Dialog.Title>
                 <Dialog.Description className={"p-8 text-lg font-semibold"}>
                   Log in to your account
                 </Dialog.Description>
                 <form onSubmit={(e) => e.preventDefault()}>
-                  <div className="p-4 flex justify-between">
-                    <label htmlFor="username" className="p-1 w-[10ch] mr-2">Username</label>
+                  <div className="flex justify-between p-4">
+                    <label htmlFor="username" className="mr-2 w-[10ch] p-1">
+                      Username
+                    </label>
                     <input
                       id="username"
                       onChange={(e) => setUsername(e.currentTarget.value)}
-                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text"
+                      className="dark:text-interactive_text min-w-[15ch] p-1 ring-1 ring-text active:ring-link"
                       type="text"
                     />
                   </div>
-                  <div className="p-4 flex justify-between">
-                    <label htmlFor="password" className="p-1 w-[10ch] mr-2">Password</label>
+                  <div className="flex justify-between p-4">
+                    <label htmlFor="password" className="mr-2 w-[10ch] p-1">
+                      Password
+                    </label>
                     <input
                       id="password"
                       onChange={(e) => setPassword(e.currentTarget.value)}
-                      className="p-1 min-w-[15ch] ring-1 ring-text active:ring-link dark:text-interactive_text"
+                      className="dark:text-interactive_text min-w-[15ch] p-1 ring-1 ring-text active:ring-link"
                       type="password"
                     />
                   </div>
                 </form>
 
-
                 <div className="flex justify-around py-8">
-                  {working ?
-                    <Button title="Log in"
-                    setW="w-[10ch]"
+                  {working ? (
+                    <Button
+                      title="Log in"
+                      setW="w-[10ch]"
                       ariaLabel="Log in"
                       text="Working..."
                       Icon={FaCog}
@@ -121,20 +134,31 @@ const LoginForm = ({ show = false, cleanUp, switchFn }: Props) => {
                       interactive={false}
                       fn={() => {
                         if (working) {
-                          return
+                          return;
                         } else {
-                          handleLogin(username, password)
+                          handleLogin(username, password);
                         }
                       }}
                     />
-                    :
-                    <Button title="Log in"
-                    setW="w-[10ch]"
+                  ) : (
+                    <Button
+                      title="Log in"
+                      setW="w-[10ch]"
                       ariaLabel="Log in"
                       text="log in"
                       fn={() => handleLogin(username, password)}
-                    />}
-                  <Button ariaLabel="Cancel log in" bgColor="bg-secondary" title="Cancel" setW="w-[10ch]" text="Cancel" fn={() => { setOpen(false) }}></Button>
+                    />
+                  )}
+                  <Button
+                    ariaLabel="Cancel log in"
+                    bgColor="bg-secondary"
+                    title="Cancel"
+                    setW="w-[10ch]"
+                    text="Cancel"
+                    fn={() => {
+                      setOpen(false);
+                    }}
+                  ></Button>
                 </div>
                 <Notification
                   message={notify.message}
@@ -145,16 +169,27 @@ const LoginForm = ({ show = false, cleanUp, switchFn }: Props) => {
                   }
                 />
 
-                <div className="flex flex-col items-center pt-8 border-t-2 border-primary ">
-
-                  <span className="p-4 self-start">Don&apos;t have an account?</span>
-                  <Button ariaLabel="Open register form" setW="w-[10ch]" size="text-sm" text="Register" title="Open Register form" fn={() => { if (cleanUp && switchFn) { cleanUp(); switchFn() } }} />
+                <div className="flex flex-col items-center border-t-2 border-primary pt-8 ">
+                  <span className="self-start p-4">
+                    Don&apos;t have an account?
+                  </span>
+                  <Button
+                    ariaLabel="Open register form"
+                    setW="w-[10ch]"
+                    size="text-sm"
+                    text="Register"
+                    title="Open Register form"
+                    fn={() => {
+                      if (cleanUp && switchFn) {
+                        cleanUp();
+                        switchFn();
+                      }
+                    }}
+                  />
                 </div>
               </Dialog.Panel>
-
             </div>
           </Transition.Child>
-
         </Dialog>
       </Transition>
     </>

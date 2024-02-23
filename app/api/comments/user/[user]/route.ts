@@ -1,19 +1,24 @@
-import { prisma } from "@/lib/ConnectPrisma"
-import { NextResponse } from "next/server"
-
-
+import { prisma } from "@/lib/ConnectPrisma";
+import { NextResponse } from "next/server";
 
 async function handler(req: Request, { params }: { params: { user: string } }) {
-    const user = params.user
+  const user = params.user;
 
+  if (!user) {
+    return NextResponse.json({ error: "Must provide a user name" });
+  }
+  const comments = await prisma.comment.findMany({
+    where: {
+      AND: [
+        { authorName: user },
+        { status: { not: { equals: "flaggedAsDeleted" } } },
+      ],
+    },
+    select: { message: true, id: true },
+    orderBy: { message: "desc" },
+  });
 
-    if (!user) {
-        return NextResponse.json({ error: 'Must provide a user name' })
-    }
-    const comments = await prisma.comment.findMany({ where: { AND: [{ authorName: user }, { status: { not: { equals: "flaggedAsDeleted" } } }] }, select: { message: true, id: true }, orderBy: { message: "desc" } })
-
-    return NextResponse.json({ comments })
-
+  return NextResponse.json({ comments });
 }
 
-export { handler as GET }
+export { handler as GET };

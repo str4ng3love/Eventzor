@@ -34,10 +34,10 @@ const MyItemsBrowser = () => {
       if (data && itemsArr) {
         id
           ? setItemsArr((prev) =>
-            prev
-              ? prev.map((i) => (i.id === id ? { ...i, ...data } : i))
-              : null
-          )
+              prev
+                ? prev.map((i) => (i.id === id ? { ...i, ...data } : i))
+                : null,
+            )
           : setItemsArr((prev) => (prev ? [...prev, data] : null));
 
         setOptimisticComp(false);
@@ -98,7 +98,7 @@ const MyItemsBrowser = () => {
       const cachedEntry = itemsArr?.filter((i) => i.id == id);
 
       setItemsArr((prev) =>
-        prev ? [...prev.filter((i) => i.id !== id)] : null
+        prev ? [...prev.filter((i) => i.id !== id)] : null,
       );
 
       const resp = await fetch("/api/items", {
@@ -113,14 +113,13 @@ const MyItemsBrowser = () => {
         setNotify({ error: false, show: true, message: message.message });
       } else if (message.error) {
         setItemsArr((prev) =>
-          prev && cachedEntry ? [...prev, ...cachedEntry] : null
+          prev && cachedEntry ? [...prev, ...cachedEntry] : null,
         );
         setNotify({ error: true, show: true, message: message.error });
       }
     } catch (error) {
       setNotify({ error: true, show: true, message: "Something went wrong" });
     }
-
   };
 
   useEffect(() => {
@@ -128,19 +127,19 @@ const MyItemsBrowser = () => {
       const items = await getItems();
       setItemsArr(items);
     };
-    fetch()
+    fetch();
   }, []);
   if (itemsArr === null) {
     return (
-      <div className="flex items-center justify-center min-h-screenReducedBy50percent">
+      <div className="flex min-h-screenReducedBy50percent items-center justify-center">
         <SpinnerMini h="h-32" w="w-32" borderSize="border-[1rem]" />
       </div>
     );
   } else {
     return (
       <>
-        <div className="my-4 px-8 flex flex-col">
-          <div className="flex justify-end gap-4 text-sm items-center">
+        <div className="my-4 flex flex-col px-8">
+          <div className="flex items-center justify-end gap-4 text-sm">
             <DropDown
               title="Sort by"
               fn={(e) => {
@@ -159,16 +158,16 @@ const MyItemsBrowser = () => {
             />
           </div>
 
-          <table className="my-8  w-full text-sm table">
-              <thead>
-                <tr className="border-b-2 border-black/25 bg-black/40 table-row">
-                  <th className="p-2 text-start">Item</th>
-                  <th className="p-2 text-start">Price</th>
-                  <th className="p-2 text-start">Sold&nbsp;/&nbsp;Amount</th>
-                  <th className="p-2 text-start"></th>
-                  <th className="p-2 text-start"></th>
-                </tr>
-              </thead>
+          <table className="my-8  table w-full text-sm">
+            <thead>
+              <tr className="table-row border-b-2 border-black/25 bg-black/40">
+                <th className="p-2 text-start">Item</th>
+                <th className="p-2 text-start">Price</th>
+                <th className="p-2 text-start">Sold&nbsp;/&nbsp;Amount</th>
+                <th className="p-2 text-start"></th>
+                <th className="p-2 text-start"></th>
+              </tr>
+            </thead>
 
             <tbody className="">
               {itemsArr?.map((item, i) => (
@@ -185,7 +184,7 @@ const MyItemsBrowser = () => {
                 />
               ))}
               {itemsArr.length === 0 ? (
-                <tr className="w-full flex justify-center p-8">
+                <tr className="flex w-full justify-center p-8">
                   <td>No Items in Database</td>
                 </tr>
               ) : (
