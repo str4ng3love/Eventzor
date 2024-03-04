@@ -103,11 +103,9 @@ const StatsDisplay = ({ user, type, stats }: Props) => {
           className={`flex flex-col ${isOpen && elements === null ? "h-full items-center justify-center" : ""} bg-interactive_text mt-4 max-h-52 overflow-y-auto py-1 shadow-inner shadow-black ring-2 ring-slate-900`}
         >
           {elements.map((e, i) => (
-            <li
-              className="cursor-pointer p-1 transition-all duration-300 hover:bg-link"
-              key={i}
-            >
+            <li key={i}>
               <button
+                className="w-full cursor-pointer p-1 text-start  transition-all duration-300 hover:bg-link"
                 onKeyDown={(event) => {
                   if (event.key === "Enter") {
                     setId(e.id as string);
