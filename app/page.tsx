@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/ConnectPrisma";
-import Link from "next/link";
 import Informer from "./components/static/Informer";
 import Button from "./components/dynamic/Button";
 import Footer from "./components/static/Footer";
@@ -56,7 +55,7 @@ export default async function Home() {
               <h3 className="py-8 text-lg">Browse Our Market</h3>
               <span>
                 Our users regularly place sell orders of miscellaneous items,
-                don't miss on any special ware.
+                don&apos;t miss on any special ware.
               </span>
             </div>
             <Button

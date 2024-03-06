@@ -7,7 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaArrowDown, FaArrowUp } from "react-icons/fa";
 
-export default function layout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   const path = usePathname();
   const choppedPath = [...path.split("/")];
   const [selected, setSelected] = useState(
