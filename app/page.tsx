@@ -52,12 +52,21 @@ export default async function Home() {
         </div>
         <div className="flex w-full justify-center border-y-2 border-black bg-bg">
           <div className="flex w-[80%] flex-col items-center justify-evenly gap-2 py-24 md:flex-row">
-            <span className="py-8">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab,
-              inventore.
-            </span>
-
-            <Button text="CTA" title="CTA" link="#" setW="w-[10ch]" />
+            <div className="p-4 pb-8 md:pb-4 md:pr-8">
+              <h3 className="py-8 text-lg">Browse Our Market</h3>
+              <span>
+                Our users regularly place sell orders of miscellaneous items,
+                don't miss on any special ware.
+              </span>
+            </div>
+            <Button
+              text="Browse Items"
+              title="Browse Items"
+              link="/market"
+              size="text-xl"
+              setW="w-fit"
+              ariaLabel="Open Item Broser"
+            />
           </div>
         </div>
       </div>

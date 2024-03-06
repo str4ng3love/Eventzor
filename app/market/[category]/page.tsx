@@ -177,14 +177,7 @@ const page = async ({
       return (
         <>
           {/* TODO: Event browser with sorting, pagination etc */}
-          <ItemsBrowser
-            items={items}
-            count={count}
-            currentPage={page + 1}
-            currentRange={range}
-            selectedCategory={category.replace("-", " ")}
-            orderAsc={order === "asc" ? true : false}
-          />
+          <ItemsBrowser items={items} count={count} />
         </>
       );
     }
