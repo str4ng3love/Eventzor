@@ -17,7 +17,7 @@ export default async function Home() {
 
   return (
     <>
-      <div className="flex animate-gridMove flex-col items-center justify-start bg-gradient-grid bg-3x3 bg-fixed before:absolute before:min-h-screenReducedBy6Rem before:w-full before:bg-slate-700/20 before:bg-fixed  before:blur-lg before:content-[''] after:absolute after:-z-10 after:block after:min-h-screenReducedBy6Rem after:w-full after:animate-gridMoveInverted  after:bg-gradient-grid after:bg-6x6 after:bg-fixed after:hue-rotate-30 after:content-['']">
+      <div className="flex animate-gridMove flex-col items-center justify-start bg-gradient-grid bg-3x3 bg-fixed before:absolute  before:min-h-screenReducedBy6Rem before:w-full before:bg-slate-700/20 before:bg-fixed before:blur-lg before:content-[''] after:absolute after:-z-10 after:block after:min-h-screenReducedBy6Rem after:w-full after:animate-gridMoveInverted after:bg-gradient-grid after:bg-6x6 after:bg-fixed after:hue-rotate-30 after:content-['']">
         <div className="mx-10 flex min-h-screenReducedBy6Rem w-full items-center justify-center shadow-inner shadow-black after:blur-sm">
           <div className="w-[60%]">
             <h1 className="py-5 text-5xl font-bold uppercase drop-shadow-white_omni md:text-7xl">
@@ -36,6 +36,16 @@ export default async function Home() {
                   { target: items, text: "items on market" },
                   { target: comments, text: "comments left by users" },
                 ]}
+              />
+            </div>
+            <div className="absolute z-50 ml-4 mt-8">
+              <Button
+                size="text-xl"
+                setW="w-fit"
+                text="Browse Events"
+                title="Browse Events"
+                ariaLabel="Open Event Browser"
+                link="/events"
               />
             </div>
           </div>
