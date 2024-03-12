@@ -34,7 +34,9 @@
     --shadow-omni: 0rem 0rem 1rem black;
   }
 }
-
+html {
+  scrollbar-gutter: stable;
+}
 body {
   color: var(--text);
   background: var(--bg);
