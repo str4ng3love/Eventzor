@@ -32,20 +32,20 @@ const BurgerMenu = () => {
     <>
       <button
         aria-label="Burger Menu for smaller screens"
-        className={`group z-10 flex flex-col items-center justify-center gap-1 rounded-md p-2 transition-all duration-150 md:hidden ${isOpen ? "bg-interactive hover:bg-white" : ""}`}
+        className={`group z-10 flex flex-col items-center justify-center gap-1 rounded-md p-2 transition md:hidden ${isOpen ? "bg-interactive hover:bg-white" : ""}`}
         onClick={() => setIsOpen(!isOpen)}
       >
         <span
           aria-hidden
-          className={`h-1 w-6 transition-all duration-150 ${isOpen ? "translate-y-2 -rotate-45 bg-black" : "rotate-0  bg-interactive group-hover:bg-white"}`}
+          className={`h-1 w-6 transition ${isOpen ? "translate-y-2 -rotate-45 bg-black" : "rotate-0  bg-interactive group-hover:bg-white"}`}
         ></span>
         <span
           aria-hidden
-          className={`h-1 w-6 transition-all duration-150 ${isOpen ? "bg-black " : "bg-interactive group-hover:bg-white"} `}
+          className={`h-1 w-6 transition ${isOpen ? "bg-black " : "bg-interactive group-hover:bg-white"} `}
         ></span>
         <span
           aria-hidden
-          className={`h-1 w-6 transition-all duration-150 ${isOpen ? "-translate-y-2 rotate-45 bg-black" : "rotate-0  bg-interactive group-hover:bg-white"}`}
+          className={`h-1 w-6 transition ${isOpen ? "-translate-y-2 rotate-45 bg-black" : "rotate-0  bg-interactive group-hover:bg-white"}`}
         ></span>
       </button>
       {isOpen ? (

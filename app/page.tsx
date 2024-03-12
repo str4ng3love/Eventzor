@@ -37,7 +37,7 @@ export default async function Home() {
                 ]}
               />
             </div>
-            <div className="absolute z-50 ml-4 mt-8">
+            <div className="absolute ml-4 mt-8">
               <Button
                 size="text-xl"
                 setW="w-fit"
