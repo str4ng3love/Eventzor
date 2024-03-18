@@ -145,7 +145,9 @@ const page = async ({
           },
           skip: range * page,
           take: range,
-          orderBy: {},
+          orderBy: {
+            releaseDate: order === "desc" ? order : "asc",
+          },
         };
         queryOptions = querySalesEnding;
         break;
