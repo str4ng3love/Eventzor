@@ -7,6 +7,7 @@ import LoginForm from "../LoginForm";
 import Notification from "../../static/Notification";
 import { useRouter } from "next/navigation";
 import { CommentType } from "@/types/enums";
+import RegisterForm from "../RegisterForm";
 
 interface Props {
   title: string;
@@ -30,6 +31,7 @@ const AddComment = ({
     show: false,
   });
   const [showLogin, setShowLogin] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
   const [show, setShow] = useState(false);
   const [comment, setComment] = useState("");
   const { data: session } = useSession();
@@ -225,10 +227,19 @@ const AddComment = ({
         </>
       )}
       {showLogin ? (
-        <LoginForm cleanUp={() => setShowLogin(false)} show={true} />
-      ) : (
-        <></>
-      )}
+        <LoginForm
+          show={true}
+          cleanUp={() => setShowLogin(false)}
+          switchFn={() => setShowRegister(true)}
+        />
+      ) : null}
+      {showRegister ? (
+        <RegisterForm
+          show={true}
+          cleanUp={() => setShowRegister(false)}
+          switchFn={() => setShowLogin(true)}
+        />
+      ) : null}
 
       {notify.show ? (
         <Notification

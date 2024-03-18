@@ -6,6 +6,7 @@ import ButtonSkeleton from "../static/ButtonSkeleton";
 import { getIDType } from "@/helpers/getIDtype";
 import { useSession } from "next-auth/react";
 import LoginForm from "./LoginForm";
+import RegisterForm from "./RegisterForm";
 interface Props {
   commentId?: string;
   eventId?: string;
@@ -36,6 +37,7 @@ const LikeAndDislike = ({
   const [disliked, setDisliked] = useState<unknown>();
   const [working, setWorking] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
   const CheckStatus = async () => {
     if (session?.user) {
       try {
@@ -254,10 +256,19 @@ const LikeAndDislike = ({
         </>
       )}
       {showLogin ? (
-        <LoginForm show cleanUp={() => setShowLogin(false)} />
-      ) : (
-        <></>
-      )}
+        <LoginForm
+          show={true}
+          cleanUp={() => setShowLogin(false)}
+          switchFn={() => setShowRegister(true)}
+        />
+      ) : null}
+      {showRegister ? (
+        <RegisterForm
+          show={true}
+          cleanUp={() => setShowRegister(false)}
+          switchFn={() => setShowLogin(true)}
+        />
+      ) : null}
     </div>
   );
 };
