@@ -18,7 +18,7 @@ const DropDownNav = ({ items, buttonTitle }: Props) => {
     <div className="z-50">
       <Menu>
         <Menu.Button
-          className={`block w-[12ch] p-4 font-bold uppercase transition-all duration-300 hover:bg-link`}
+          className={`block w-[12ch] cursor-pointer p-4 font-bold uppercase transition-all duration-300 hover:bg-link`}
         >
           {buttonTitle}
         </Menu.Button>

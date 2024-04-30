@@ -108,7 +108,7 @@ const ItemCarousel = ({
               key={i}
               className={`h-4 w-4 ${
                 active === i ? "bg-link" : "bg-interactive"
-              } cursor-pointe mx-2 block rounded-sm p-2 transition-all duration-300 hover:bg-bg hover:shadow-link dark:hover:bg-text`}
+              } mx-2 block cursor-pointer rounded-sm p-2 transition-all duration-300 hover:bg-bg hover:shadow-link dark:hover:bg-text`}
             ></span>
           ))}
         </div>
