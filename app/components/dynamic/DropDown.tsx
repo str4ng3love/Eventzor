@@ -22,7 +22,7 @@ const DropDown = ({
     <div className="">
       <Menu>
         <Menu.Button
-          className={`min-w-[10ch] p-2 font-bold text-contrast  first-letter:capitalize hover:-translate-y-1 hover:scale-105 hover:text-text dark:text-text dark:hover:text-text_button ${size} ${bgColor} hover:text-interactive_text dark:hover:text-interactive_text rounded-xl transition-all duration-300 hover:bg-bg hover:shadow-link dark:text-text dark:hover:bg-text dark:hover:shadow-link`}
+          className={`min-w-[10ch] cursor-pointer p-2 font-bold text-contrast  first-letter:capitalize hover:-translate-y-1 hover:scale-105 hover:text-text dark:text-text dark:hover:text-text_button ${size} ${bgColor} hover:text-interactive_text dark:hover:text-interactive_text rounded-xl transition-all duration-300 hover:bg-bg hover:shadow-link dark:text-text dark:hover:bg-text dark:hover:shadow-link`}
         >
           <>{title}</>
         </Menu.Button>
