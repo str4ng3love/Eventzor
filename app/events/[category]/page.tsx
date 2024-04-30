@@ -114,7 +114,7 @@ const page = async ({
     switch (category) {
       case "popular":
         const queryPopular: Prisma.EventFindManyArgs = {
-          where: { images: { isEmpty: false } },
+          where: { images: { isEmpty: false }, eventDate: { gt: dateNow } },
           skip: range * page,
           take: range,
           orderBy: { ticketsSold: order === "desc" ? "asc" : "desc" },
@@ -123,7 +123,7 @@ const page = async ({
         break;
       case "most-liked":
         const queryLiked: Prisma.EventFindManyArgs = {
-          where: { images: { isEmpty: false } },
+          where: { images: { isEmpty: false }, eventDate: { gt: dateNow } },
           skip: range * page,
           take: range,
           orderBy: {
@@ -138,7 +138,7 @@ const page = async ({
         const queryUpcoming: Prisma.EventFindManyArgs = {
           where: {
             AND: [
-              { images: { isEmpty: false } },
+              { images: { isEmpty: false }, eventDate: { gt: dateNow } },
               { eventDate: { gte: dateNow } },
             ],
           },
@@ -152,7 +152,7 @@ const page = async ({
         const querySalesEnding: Prisma.EventFindManyArgs = {
           where: {
             AND: [
-              { images: { isEmpty: false } },
+              { images: { isEmpty: false }, eventDate: { gt: dateNow } },
               { closingDate: { gte: dateNow } },
             ],
           },
@@ -164,7 +164,7 @@ const page = async ({
         break;
       case "all-items":
         const queryAll: Prisma.EventFindManyArgs = {
-          where: { images: { isEmpty: false } },
+          where: { images: { isEmpty: false }, eventDate: { gt: dateNow } },
           skip: range * page,
           take: range,
           orderBy: { title: order === "desc" ? order : "asc" },
