@@ -232,7 +232,7 @@ const AddNewEvent = ({
                           payload: e.currentTarget.value,
                         })
                       }
-                      className="dark:text-interactive_text h-8 w-full min-w-[15ch] p-1 ring-1 ring-primary active:ring-link  dark:text-contrast"
+                      className=" h-8  w-full min-w-[15ch] p-1 text-black ring-1 ring-primary active:ring-link  dark:text-contrast"
                       type="text"
                     />
                   </div>
@@ -263,7 +263,7 @@ const AddNewEvent = ({
                           payload: e.currentTarget.value,
                         })
                       }
-                      className="dark:text-interactive_text h-8 w-full min-w-[15ch] p-1 ring-1 ring-primary active:ring-link  dark:text-contrast"
+                      className="h-8  w-full min-w-[15ch] p-1 text-black ring-1 ring-primary active:ring-link  dark:text-contrast"
                       type="datetime-local"
                     />
                   </div>
@@ -281,7 +281,7 @@ const AddNewEvent = ({
                           payload: e.currentTarget.value,
                         });
                       }}
-                      className="dark:text-interactive_text h-8 w-full min-w-[15ch] p-1 ring-1 ring-primary active:ring-link  dark:text-contrast"
+                      className="h-8 w-full min-w-[15ch] p-1 text-black ring-1 ring-primary active:ring-link  dark:text-contrast"
                       type="datetime-local"
                     />
                   </div>
@@ -294,7 +294,7 @@ const AddNewEvent = ({
                           payload: e.currentTarget.value,
                         })
                       }
-                      className="dark:text-interactive_text h-8 w-full min-w-[15ch] p-1 ring-1 ring-primary active:ring-link  dark:text-contrast"
+                      className="h-8  w-full min-w-[15ch] p-1 text-black ring-1 ring-primary active:ring-link  dark:text-contrast"
                       type="text"
                     />
                   </div>
@@ -309,7 +309,7 @@ const AddNewEvent = ({
                           payload: e.currentTarget.value,
                         })
                       }
-                      className="dark:text-interactive_text h-8 w-full min-w-[15ch] p-1 ring-1 ring-primary active:ring-link  dark:text-contrast"
+                      className="h-8  w-full min-w-[15ch] p-1 text-black ring-1 ring-primary active:ring-link  dark:text-contrast"
                       type="number"
                       defaultValue={0}
                       min={0}
@@ -326,7 +326,7 @@ const AddNewEvent = ({
                           payload: e.currentTarget.value,
                         })
                       }
-                      className="dark:text-interactive_text h-8 w-full min-w-[15ch] p-1 ring-1 ring-primary active:ring-link  dark:text-contrast"
+                      className="h-8 w-full min-w-[15ch] p-1 text-black ring-1 ring-primary active:ring-link  dark:text-contrast"
                       type="number"
                       step="0.01"
                       defaultValue={0}
@@ -337,7 +337,7 @@ const AddNewEvent = ({
                     <div className="flex w-full justify-between pb-8 ">
                       <label className="mr-2 min-w-[10ch] p-1">Image URL</label>
                       <input
-                        className="dark:text-interactive_text h-8 w-full min-w-[15ch] p-1 ring-1 ring-primary active:ring-link  dark:text-contrast"
+                        className="dtext-black h-8 w-full min-w-[15ch] p-1 ring-1 ring-primary active:ring-link  dark:text-contrast"
                         type="text"
                         value={image}
                         onChange={(e) => setImage(e.currentTarget.value)}

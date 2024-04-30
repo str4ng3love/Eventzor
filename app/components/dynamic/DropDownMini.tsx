@@ -15,14 +15,14 @@ const DropDownMini = ({
   items,
   Icon,
   size = "2em",
-  bgColor = " bg-link",
+  bgColor = "bg-link",
 }: Props) => {
   return (
     <div className="relative flex min-h-[4rem] items-center justify-center ">
       {/* Prop `id` did not match. Server: "headlessui-menu-button-:R6crb9mcq:" Client: "headlessui-menu-button-:Rpjdd6pj9:"  || Next.js Error as of 10.08.23, should be fixed in upcoming release.||Resolved */}
       <Menu>
         <Menu.Button
-          className={` p-2 font-bold hover:-translate-y-1 hover:scale-105 ${bgColor} text-interactive_text hover:text-interactive_text dark:hover:text-interactive_text rounded-xl transition-all duration-300 hover:bg-link_active hover:shadow-link dark:text-text dark:hover:bg-text dark:hover:shadow-link`}
+          className={`p-2 font-bold hover:-translate-y-1 hover:scale-105 ${bgColor} rounded-xl transition-all duration-300 hover:bg-link_active hover:shadow-link dark:text-text dark:hover:bg-text dark:hover:text-black dark:hover:shadow-link`}
         >
           <Icon size={size} />
         </Menu.Button>
@@ -49,9 +49,9 @@ const DropDownMini = ({
                         }}
                         className={`${
                           active
-                            ? "text-interactive_text bg-text p-2"
-                            : "text-interactive_text bg-link p-2 dark:text-text"
-                        } first-letter:uppercase`}
+                            ? "bg-white p-2 text-black"
+                            : "bg-link p-2 dark:text-text"
+                        }  first-letter:uppercase`}
                       >
                         {item.text}
                       </span>

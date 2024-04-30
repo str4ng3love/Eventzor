@@ -32,7 +32,7 @@ const DropDownNav = ({ items, buttonTitle }: Props) => {
           leaveTo="transform scale-95 opacity-0"
         >
           <Menu.Items
-            className={`shadow-bg_sidebar absolute z-20 mt-1 flex w-56 origin-top-right flex-col rounded-md shadow-lg focus:outline-none dark:ring-2 dark:ring-primary`}
+            className={`shadow-bg_sidebar absolute z-20 mt-1 flex w-56 origin-top-right flex-col rounded-md shadow-lg ring-2 ring-primary focus:outline-none`}
           >
             {items.map((item, index) => (
               <Menu.Item key={index}>

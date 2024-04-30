@@ -174,7 +174,7 @@ const EditItem = ({ ...props }: Props) => {
                           payload: e.currentTarget.value,
                         })
                       }
-                      className="dark:text-interactive_text h-8 w-full min-w-[15ch] p-1 ring-1 ring-text  active:ring-link"
+                      className="h-8 w-full min-w-[15ch] p-1 text-black ring-1 ring-text  active:ring-link"
                       type="text"
                     />
                   </div>
@@ -190,7 +190,7 @@ const EditItem = ({ ...props }: Props) => {
                           payload: e.currentTarget.value,
                         })
                       }
-                      className="dark:text-interactive_text h-24 w-full min-w-[15ch] resize-none p-1 ring-1  ring-text active:ring-link "
+                      className="h-24 w-full min-w-[15ch] resize-none p-1 text-black ring-1  ring-text active:ring-link "
                     />
                   </div>{" "}
                   <div className="flex justify-between p-4 ">
@@ -237,7 +237,7 @@ const EditItem = ({ ...props }: Props) => {
                           payload: e.currentTarget.value,
                         })
                       }
-                      className="dark:text-interactive_text h-8 w-full min-w-[15ch] p-1 ring-1 ring-text  active:ring-link"
+                      className="h-8 w-full min-w-[15ch] p-1 text-black ring-1 ring-text  active:ring-link"
                       type="number"
                       step="0.01"
                     />
@@ -253,7 +253,7 @@ const EditItem = ({ ...props }: Props) => {
                           payload: e.currentTarget.value,
                         })
                       }
-                      className="dark:text-interactive_text h-8 w-full min-w-[15ch] p-1 ring-1 ring-text  active:ring-link"
+                      className="h-8 w-full min-w-[15ch] p-1 text-black ring-1 ring-text  active:ring-link"
                       type="number"
                     />
                   </div>
@@ -267,7 +267,7 @@ const EditItem = ({ ...props }: Props) => {
                           payload: !state.isPreorder,
                         })
                       }
-                      className="dark:text-interactive_text  w-full p-1 ring-1 ring-text active:ring-link  "
+                      className="w-full  p-1 text-black ring-1 ring-text active:ring-link  "
                       type="checkbox"
                     />
                   </div>
@@ -300,7 +300,7 @@ const EditItem = ({ ...props }: Props) => {
                             payload: e.currentTarget.value,
                           })
                         }
-                        className="dark:text-interactive_text h-8 w-full min-w-[15ch] p-1 ring-1 ring-text  active:ring-link"
+                        className="h-8 w-full min-w-[15ch] p-1 text-black ring-1 ring-text  active:ring-link"
                         type="datetime-local"
                       />
                     </div>

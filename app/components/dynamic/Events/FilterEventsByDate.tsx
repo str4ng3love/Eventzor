@@ -77,7 +77,7 @@ const FilterEventsByDate = ({ passDates, defaultDates, fn, title }: Props) => {
                             };
                           });
                         }}
-                        className="h-8 w-full min-w-[15ch] p-1 ring-1 ring-text active:ring-link  dark:text-contrast"
+                        className="h-8 w-full min-w-[15ch] p-1 ring-1 ring-text active:ring-link dark:text-contrast"
                         type="datetime-local"
                       />
                     </div>

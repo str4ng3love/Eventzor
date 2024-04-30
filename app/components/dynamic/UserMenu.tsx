@@ -30,7 +30,7 @@ const UserMenu = () => {
           </Menu.Button>
 
           <Menu.Items
-            className={` absolute z-50 mt-1 bg-bg text-text dark:ring-2 dark:ring-primary`}
+            className={` absolute z-50 mt-1 bg-bg text-text ring-2 ring-primary`}
           >
             <Menu.Item>
               {({ active }) => (

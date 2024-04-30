@@ -15,7 +15,7 @@ export default async function Layout({
     return (
       <main className="flex min-h-screen bg-sidebar pt-16 dark:bg-black">
         <Sidebar />
-        <section className="mt-2 min-h-screenReducedBy4p5Rem w-full rounded-smoothLT bg-bg ring-2 ring-slate-600 dark:ring-primary ">
+        <section className="mt-2 min-h-screenReducedBy4p5Rem w-full overflow-hidden rounded-smoothLT bg-bg ring-2 ring-slate-600 dark:ring-primary">
           {children}
         </section>
       </main>

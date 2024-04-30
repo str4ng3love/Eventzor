@@ -45,7 +45,7 @@ const ChangeEmail = () => {
             <>
               <input
                 id="emailaddress"
-                className="w-full p-1 dark:text-contrast"
+                className="w-full p-1 text-black"
                 type="email"
                 onInput={(e) => setEmail(e.currentTarget.value)}
               />

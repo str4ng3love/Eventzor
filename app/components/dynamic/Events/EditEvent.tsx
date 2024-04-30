@@ -186,7 +186,7 @@ const EditEvent = ({ ...props }: Props) => {
                           payload: e.currentTarget.value,
                         })
                       }
-                      className="dark:text-interactive_text h-8 w-full min-w-[15ch] p-1 ring-1 ring-text  active:ring-link"
+                      className="text-black h-8 w-full min-w-[15ch] p-1 ring-1 ring-text  active:ring-link"
                       type="text"
                     />
                   </div>
@@ -220,7 +220,7 @@ const EditEvent = ({ ...props }: Props) => {
                           payload: e.currentTarget.value,
                         })
                       }
-                      className="dark:text-interactive_text h-8 w-full min-w-[15ch] p-1 ring-1 ring-text  active:ring-link"
+                      className="text-black h-8 w-full min-w-[15ch] p-1 ring-1 ring-text  active:ring-link"
                       type="datetime-local"
                     />
                   </div>
@@ -238,7 +238,7 @@ const EditEvent = ({ ...props }: Props) => {
                           payload: e.currentTarget.value,
                         });
                       }}
-                      className="dark:text-interactive_text h-8 w-full min-w-[15ch] p-1 ring-1 ring-text  active:ring-link"
+                      className="text-black h-8 w-full min-w-[15ch] p-1 ring-1 ring-text  active:ring-link"
                       type="datetime-local"
                     />
                   </div>
@@ -252,7 +252,7 @@ const EditEvent = ({ ...props }: Props) => {
                           payload: e.currentTarget.value,
                         })
                       }
-                      className="dark:text-interactive_text h-8 w-full min-w-[15ch] p-1 ring-1 ring-text  active:ring-link"
+                      className="text-black h-8 w-full min-w-[15ch] p-1 ring-1 ring-text  active:ring-link"
                       type="text"
                     />
                   </div>
@@ -268,7 +268,7 @@ const EditEvent = ({ ...props }: Props) => {
                           payload: e.currentTarget.value,
                         })
                       }
-                      className="dark:text-interactive_text h-8 w-full min-w-[15ch] p-1 ring-1 ring-text  active:ring-link"
+                      className="text-black h-8 w-full min-w-[15ch] p-1 ring-1 ring-text  active:ring-link"
                       type="number"
                       min={0}
                     />
@@ -284,7 +284,7 @@ const EditEvent = ({ ...props }: Props) => {
                           payload: e.currentTarget.value,
                         })
                       }
-                      className="dark:text-interactive_text h-8 w-full min-w-[15ch] p-1 ring-1 ring-text  active:ring-link"
+                      className="text-black h-8 w-full min-w-[15ch] p-1 ring-1 ring-text  active:ring-link"
                       type="number"
                       step="0.01"
                       value={state.price}

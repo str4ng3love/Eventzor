@@ -67,7 +67,7 @@ const ChangePassword = () => {
               <div className="flex flex-row gap-2">
                 <input
                   id="password"
-                  className="p-1 text-text dark:text-contrast"
+                  className="p-1  text-black"
                   type="text"
                   onInput={(e) => setPassword(e.currentTarget.value)}
                 />
@@ -87,7 +87,7 @@ const ChangePassword = () => {
               <div className="flex flex-row gap-2">
                 <input
                   id="password"
-                  className="p-1 text-text dark:text-contrast"
+                  className="p-1  text-black"
                   type="password"
                   onInput={(e) => setPassword(e.currentTarget.value)}
                 />
@@ -110,7 +110,7 @@ const ChangePassword = () => {
               <div className="flex flex-row gap-2">
                 <input
                   id="newpassword"
-                  className="p-1 text-text dark:text-contrast"
+                  className="p-1  text-black"
                   type="text"
                   onInput={(e) => setNewPassword(e.currentTarget.value)}
                 />
@@ -132,7 +132,7 @@ const ChangePassword = () => {
               <div className="flex flex-row gap-2">
                 <input
                   id="newpassword"
-                  className="p-1 text-text dark:text-contrast"
+                  className="p-1  text-black"
                   type="password"
                   onInput={(e) => setNewPassword(e.currentTarget.value)}
                 />
@@ -155,7 +155,7 @@ const ChangePassword = () => {
               <div className="flex flex-row gap-2">
                 <input
                   id="confirmpassword"
-                  className="p-1 text-text dark:text-contrast"
+                  className="p-1  text-black"
                   type="text"
                   onInput={(e) => setConfirmPassword(e.currentTarget.value)}
                 />
@@ -177,7 +177,7 @@ const ChangePassword = () => {
               <div className="flex flex-row gap-2">
                 <input
                   id="confirmpassword"
-                  className="p-1 text-text dark:text-contrast"
+                  className="p-1  text-black"
                   type="password"
                   onInput={(e) => setConfirmPassword(e.currentTarget.value)}
                 />

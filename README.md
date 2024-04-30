@@ -51,4 +51,7 @@ npm run start
 ## Possible Improvements
 
 - Event and Market Browser could display some kind of loading indicator while loading an already open route, with new search params.
-- Image optimization
+- Image optimization.
+- Better light mode color scheme.
+- Rework Search component.
+- Add "selected" state for buttons in /orders.

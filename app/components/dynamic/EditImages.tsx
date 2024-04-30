@@ -146,7 +146,7 @@ const EditImages = ({ type, triggerRefetch, images, id }: Props) => {
                         onPaste={(e) => setUrl(e.currentTarget.value)}
                         placeholder="URL..."
                         type="text"
-                        className="text-interactive_text p-1"
+                        className="p-1 text-black "
                       />
                     </div>
                     <div className="flex justify-center p-2">

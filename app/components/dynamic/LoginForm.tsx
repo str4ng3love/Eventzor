@@ -104,7 +104,7 @@ const LoginForm = ({ show = false, cleanUp, switchFn }: Props) => {
                     <input
                       id="username"
                       onChange={(e) => setUsername(e.currentTarget.value)}
-                      className="dark:text-interactive_text min-w-[15ch] p-1 ring-1 ring-text active:ring-link"
+                      className="min-w-[15ch] p-1 text-black ring-1 ring-text active:ring-link"
                       type="text"
                     />
                   </div>
@@ -115,7 +115,7 @@ const LoginForm = ({ show = false, cleanUp, switchFn }: Props) => {
                     <input
                       id="password"
                       onChange={(e) => setPassword(e.currentTarget.value)}
-                      className="dark:text-interactive_text min-w-[15ch] p-1 ring-1 ring-text active:ring-link"
+                      className="min-w-[15ch] p-1 text-black ring-1 ring-text active:ring-link"
                       type="password"
                     />
                   </div>

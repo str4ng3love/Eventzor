@@ -143,7 +143,7 @@ const RegisterForm = ({ cleanUp, show = false, switchFn }: Props) => {
                         <input
                           id="emailaddress"
                           onChange={(e) => setEmail(e.currentTarget.value)}
-                          className="dark:text-interactive_text h-fit min-w-[15ch] p-1 ring-1 ring-text active:ring-link"
+                          className=" h-fit  min-w-[15ch] p-1 text-black ring-1 ring-text active:ring-link"
                           type="text"
                         />
                       </div>
@@ -154,7 +154,7 @@ const RegisterForm = ({ cleanUp, show = false, switchFn }: Props) => {
                         <input
                           id="username"
                           onChange={(e) => setUsername(e.currentTarget.value)}
-                          className="dark:text-interactive_text h-fit min-w-[15ch] p-1 ring-1 ring-text active:ring-link"
+                          className=" h-fit  min-w-[15ch] p-1 text-black ring-1 ring-text active:ring-link"
                           type="text"
                         />
                       </div>
@@ -165,7 +165,7 @@ const RegisterForm = ({ cleanUp, show = false, switchFn }: Props) => {
                         <input
                           id="password"
                           onChange={(e) => setPassword(e.currentTarget.value)}
-                          className="dark:text-interactive_text h-fit min-w-[15ch] p-1 ring-1 ring-text active:ring-link"
+                          className=" h-fit  min-w-[15ch] p-1 text-black ring-1 ring-text active:ring-link"
                           type="password"
                         />
                       </div>
@@ -179,7 +179,7 @@ const RegisterForm = ({ cleanUp, show = false, switchFn }: Props) => {
                         <input
                           id="passwordconfirm"
                           onChange={(e) => setConfirm(e.currentTarget.value)}
-                          className="dark:text-interactive_text h-fit min-w-[15ch] p-1 ring-1 ring-text active:ring-link"
+                          className=" h-fit  min-w-[15ch] p-1 text-black ring-1 ring-text active:ring-link"
                           type="password"
                         />
                       </div>

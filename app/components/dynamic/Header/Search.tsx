@@ -54,6 +54,7 @@ const Search = ({ minimizeOnLg }: Props) => {
   return (
     <>
       <button
+        aria-label="Search site"
         className="group relative flex cursor-pointer py-2 text-start"
         onClick={() => {
           setShow(true);
@@ -80,7 +81,7 @@ const Search = ({ minimizeOnLg }: Props) => {
                   <Combobox.Input
                     ref={inputEl}
                     className={
-                      "w-full rounded-md bg-inherit p-2 focus:bg-bg focus:outline-none focus:ring-0"
+                      "w-full rounded-md bg-bg p-2 transition focus:outline-none focus:ring-2 focus:ring-primary dark:focus:bg-black/10"
                     }
                     placeholder="Search ..."
                     displayValue={(query: string) => query ?? ""}
